@@ -13,7 +13,7 @@
 		value="{{ value }}"
 		class="input"
 		autocomplete="off"
-		disabled
+		readonly
 		{% for item in data %}
 			{% for key in item %}
 				data-{{ key }}={{ item[key] }}
