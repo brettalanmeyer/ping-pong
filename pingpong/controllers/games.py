@@ -58,9 +58,18 @@ def games_score_update(id):
 	})
 	return redirect("/games/%d/play/" % game.id)
 
-
 @app.route("/games/<int:id>/play/", methods = ["GET"])
 def games_play(id):
 	game = model.Model().selectById(gameModel.Game, id)
 	teams = model.Model().select(teamModel.Team).filter_by(gameId = game.id)
 	return render_template("games/play.html", game = game,  teams = teams)
+
+@app.route("/games/<int:id>/play/score/", methods = ["POST"])
+def games_play_score(id):
+	model.Model().update(teamModel.Team, request.form["teamId"], { "score": request.form["score"] })
+	return Response(json.dumps({ "score": request.form["score"] }), status = 200, mimetype = "application/json")
+
+@app.route("/games/<int:id>/play/complete/", methods = ["POST"])
+def games_complete(id):
+	model.Model().update(gameModel.Game, id, { "complete": True })
+	return Response(json.dumps({ "id": id }), status = 200, mimetype = "application/json")

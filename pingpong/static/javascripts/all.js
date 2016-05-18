@@ -13,18 +13,22 @@ $(function(){
 		var interval = data("interval");
 
 		up.on("click", function(){
+			enable();
 			value += interval;
-			if(value > max){
+			if(value >= max){
 				value = max;
+				up.addClass("disabled");
 			}
 			update();
 			return false;
 		});
 
 		down.on("click", function(){
+			enable();
 			value -= interval;
-			if(value < min){
+			if(value <= min){
 				value = min;
+				down.addClass("disabled");
 			}
 			update();
 			return false;
@@ -35,7 +39,12 @@ $(function(){
 		}
 
 		function update(){
-			input.val(value);
+			input.val(value).trigger("change");
+		}
+
+		function enable(){
+			up.removeClass("disabled");
+			down.removeClass("disabled");
 		}
 
 	});
@@ -75,6 +84,32 @@ $(function(){
 
 			});
 
+		});
+
+	});
+
+
+	$(".games-play").each(function(){
+
+		var source = $(this);
+		var gameId = source.data("gameid");
+		var playTo = parseInt(source.data("playto"));
+
+		var inputs = source.find(".input");
+
+		inputs.on("change", function(){
+			var input = $(this);
+			var data = {
+				teamId: input.data("teamid"),
+				score: input.val()
+			};
+			$.post("/games/" + gameId + "/play/score/", data, function(){
+
+				if(input.val() >= playTo){
+					alert("You Win!");
+					$.post("/games/" + gameId + "/play/complete/");
+				}
+			});
 		});
 
 	});

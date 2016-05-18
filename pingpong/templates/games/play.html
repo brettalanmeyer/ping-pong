@@ -4,13 +4,13 @@
 
 {% block body %}
 
-	<div class="games-play">
+	<div class="games-play" data-gameid="{{ game.id }}" data-playto="{{ game.playTo }}">
 
-		<div>
+		<div class="teams">
 
 			{% for team in teams %}
 
-				<div class="pull-left" style="width: 50%;">
+				<div class="team">
 
 					{% for teamPlayer in team.teamPlayers %}
 
@@ -24,17 +24,25 @@
 
 		</div>
 
-		{% for team in teams %}
+		<div class="scores">
 
-			<div class="pull-left" style="width: 50%;">
+			{% for team in teams %}
 
-				{% with name = "team-" ~ team.id, value = 0, min = 0, max = game.playTo, interval = 1, data = [{ "teamid": team.id }] %}
-					{% include 'tools/_value-picker.html' %}
-				{% endwith %}
+				<div class="score">
 
-			</div>
+					{% with name = "team-" ~ team.id, value = team.score, min = 0, max = game.playTo, interval = 1, data = [{ "teamid": team.id }] %}
+						{% include 'tools/_value-picker.html' %}
+					{% endwith %}
 
-		{% endfor %}
+				</div>
+
+			{% endfor %}
+
+		</div>
+
+		<div class="max-score">
+			Play To {{ game.playTo }}
+		</div>
 
 	</div>
 
