@@ -56,7 +56,7 @@ $(function(){
 
 			var data = {
 				gameId: gameId,
-				team: teamPlayer.data("team"),
+				teamId: teamPlayer.data("teamid"),
 				playerId: player.data("playerid")
 			};
 

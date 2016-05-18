@@ -1,5 +1,16 @@
 
-<div class="value-picker" data-value="{{ value }}" data-min="{{ min }}" data-max="{{ max }}" data-interval="{{ interval }}">
+<div
+	class="value-picker"
+	data-value="{{ value }}"
+	data-min="{{ min }}"
+	data-max="{{ max }}"
+	data-interval="{{ interval }}"
+	{% for item in data %}
+		{% for key in item %}
+			data-{{ key }}={{ item[key] }}
+		{% endfor %}
+	{% endfor %}
+>
 
 	<input type="text" name="{{ name }}" value="{{ value }}" class="input" />
 

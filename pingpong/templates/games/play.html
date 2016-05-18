@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Ping Pong{% endblock %}
+
+{% block body %}
+
+	<div class="games-play">
+
+		<div>
+
+			{% for team in teams %}
+
+				<div class="pull-left" style="width: 50%;">
+
+					{% for teamPlayer in team.teamPlayers %}
+
+						<div>{{ teamPlayer.player.name }}</div>
+
+					{% endfor %}
+
+				</div>
+
+			{% endfor %}
+
+		</div>
+
+		{% for team in teams %}
+
+			<div class="pull-left" style="width: 50%;">
+
+				{% with name = "team-" ~ team.id, value = 0, min = 0, max = game.playTo, interval = 1, data = [{ "teamid": team.id }] %}
+					{% include 'tools/_value-picker.html' %}
+				{% endwith %}
+
+			</div>
+
+		{% endfor %}
+
+	</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Select Score{% endblock %}
+
+{% block body %}
+
+	<div class="container-fluid games-score">
+
+		<h1>Select Score</h1>
+
+		<form action="/games/{{ game.id }}/score/" method="POST">
+
+			{% with name = "playTo", value = 11, min = 1, max = 100, interval = 1 %}
+				{% include 'tools/_value-picker.html' %}
+			{% endwith %}
+
+			<br />
+
+			<button class="btn btn-primary btn-lg btn-block">Play</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}
