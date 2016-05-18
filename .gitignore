@@ -1,0 +1,5 @@
+*.pyc
+/pingpong/config_file.cfg
+/pingpong/config_mail.cfg
+/pingpong/static/.webassets-cache/
+/pingpong/static/gen/

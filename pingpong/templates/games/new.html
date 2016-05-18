@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}New Game{% endblock %}
+
+{% block body %}
+
+	<div class="container-fluid games-new">
+
+		<h1>Number of Players</h1>
+
+		<form action="/games/" method="POST">
+
+			{% with name = "players", value = 2, min = 2, max = 4, interval = 2 %}
+				{% include 'tools/_value-picker.html' %}
+			{% endwith %}
+
+			<br />
+
+			<button class="btn btn-primary btn-lg btn-block">Pick Teams</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}

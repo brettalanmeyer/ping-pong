@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		{% block head %}
+
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+			<title>Ping Pong | {% block title %}{% endblock %}</title>
+			<link rel="shortcut icon" href="/static/images/pingpong.png" type="image/x-icon" />
+			<link href="{{ url_for('static', filename='libraries/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+			{% assets filters="cssmin", output="gen/layout.css", "stylesheets/all.css" %}
+				<link href="{{ ASSET_URL }}" rel="stylesheet">
+			{% endassets %}
+
+		{% endblock %}
+
+	</head>
+	<body>
+
+		<a class="header" href="/">Ping Pong</a>
+
+		{% block body %}{% endblock %}
+
+		{% assets filters="jsmin", output="gen/layout.js", "libraries/jquery/jquery.min.js", "javascripts/all.js" %}
+			<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+
+		{% block footer %}{% endblock %}
+
+	</body>
+</html>

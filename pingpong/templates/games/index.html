@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}Games{% endblock %}
+
+{% block body %}
+
+	<div class="container-fluid games">
+
+		<a class="btn btn-default btn-sm action" href="/games/new/">
+			<span class="glyphicon glyphicon-star"></span>
+			New Game
+		</a>
+
+		<h1 class="with-action">Games</h1>
+
+		<table class="table">
+
+			<tbody>
+
+				{% for game in games %}
+
+					<tr>
+
+						<td>
+							<a href="/games/{{ games.id }}/">Game</a>
+						</td>
+
+					</tr>
+
+				{% endfor %}
+
+				{% if games.count() == 0 %}
+
+					<tr>
+						<td class="text-center">No games have been played.</td>
+					</tr>
+
+				{% endif %}
+
+			</tbody>
+
+		</table>
+
+	</div>
+
+{% endblock %}
