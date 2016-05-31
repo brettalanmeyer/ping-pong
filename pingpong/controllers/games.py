@@ -10,8 +10,16 @@ import json
 
 @app.route("/games/", methods = ["GET"])
 def games_index():
-	games = model.Model().select(gameModel.Game)
-	return render_template("games/index.html", games = games)
+	games = model.Model().select(gameModel.Game).filter_by(complete = 1)
+
+	dates = {}
+	for game in games:
+		dates[game.id] = {
+			"date": "{:%b %d, %Y} ".format(game.createdAt),
+			"time": "{:%I:%M %p}".format(game.createdAt).lower()
+		}
+
+	return render_template("games/index.html", games = games, dates = dates)
 
 @app.route("/games/new/", methods = ["GET"])
 def games_new():
