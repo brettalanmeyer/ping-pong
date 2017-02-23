@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+
+{% block title %}Buttons{% endblock %}
+
+{% block body %}
+
+	<style>
+
+		.container {
+			width: 500px;
+			margin: auto;
+			overflow: hidden;
+			padding-top: 100px;
+		}
+
+		.group {
+			float: left;
+			width: 250px;
+		}
+
+		ul {
+			list-style: none;
+			padding: 30px;
+			margin: 0;
+			display: inline-block;
+			border-radius: 24px;
+		}
+
+		li {
+			cursor: pointer;
+			padding: 2px 6px;
+			margin: 1px;
+			border: solid 2px #fff;
+			border-radius: 2px;
+			text-align: center;
+		}
+
+		.red {
+			background: red;
+			color: #fff;
+		}
+
+		.green {
+			background: green;
+			color: #fff;
+		}
+
+		.blue {
+			background: blue;
+			color: #fff;
+		}
+
+		.yellow {
+			background: yellow;
+		}
+		.yellow li {
+			border-color: #999;
+		}
+
+	</style>
+
+	<div class="container">
+
+		<div class="group">
+
+			<ul class="red">
+				<li>score</li>
+				<li>undo</li>
+				<li>new</li>
+			</ul>
+
+			<br /><br />
+
+			<ul class="green">
+				<li>score</li>
+				<li>undo</li>
+				<li>new</li>
+			</ul>
+
+		</div>
+
+		<div class="group">
+
+			<ul class="blue">
+				<li>score</li>
+				<li>undo</li>
+				<li>new</li>
+			</ul>
+
+			<br /><br />
+
+			<ul class="yellow">
+				<li>score</li>
+				<li>undo</li>
+				<li>new</li>
+			</ul>
+
+		</div>
+
+	</div>
+
+{% endblock %}
+
+{% block footer %}
+
+	<script>
+
+		$(function(){
+
+			$("li").on("click", function(){
+
+				var source = $(this);
+				var data = {};
+
+				if(source.html() == "score"){
+					data["button"] = source.parent("ul").attr("class");
+				}
+
+				$.post("/buttons/" + source.html(), data);
+			});
+
+		});
+
+	</script>
+
+{% endblock %}

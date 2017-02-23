@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+	<h1>Players</h1>
+
+	<a href="/players/new">Create Player</a>
+
+	<ul>
+		{% for player in players %}
+
+			<li>
+				{{ player.name }}
+
+				<a href="/players/{{ player.id }}/edit" class="btn btn-default btn-sm">
+					<span class="glyphicon glyphicon-pencil"></span>
+					Edit
+				</a>
+			</li>
+
+		{% endfor %}
+	</ul>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}Update Player{% endblock %}
+
+{% block body %}
+
+	<h1>Update Player</h1>
+
+	{% if error %}
+		<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>
+	{% endif %}
+
+	<form action="/players/{{ player.id }}" method="POST">
+
+		<div class="form-group">
+
+			<label for="name-field">Name</label>
+			<input id="name-field" name="name" value="{{ player.name }}" class="form-control" />
+
+		</div>
+
+		<button class="btn btn-default">Update Player</button>
+
+	</form>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+
+{% extends "layout.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+
+<hr />
+
+<div class="doubles-container">
+
+	<div class="table-container">
+
+		<div class="color-buttons-container">
+			<div class="color-buttons">
+				<div class="color-button yellow"></div>
+			</div>
+			<div class="color-buttons">
+				<div class="color-button green"></div>
+			</div>
+		</div>
+
+		<div class="ping-pong-table">
+			<span class="quadrant"></span>
+			<span class="net"></span>
+			<span class="quadrant"></span>
+
+			<span class="quadrant"></span>
+			<span class="net"></span>
+			<span class="quadrant"></span>
+		</div>
+
+		<div class="color-buttons-container">
+			<div class="color-buttons">
+				<div class="color-button blue"></div>
+			</div>
+			<div class="color-buttons">
+				<div class="color-button red"></div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="player-list-container">
+
+		<div class="player-list list-group">
+			{% for player in players %}
+				<div class="player list-group-item" data-id="{{ player.id }}">{{ player.name }}</div>
+			{% endfor %}
+		</div>
+
+		<form id="players-form" action="/games/{{ game.id }}" method="POST">
+			<input type="hidden" name="yellow" />
+			<input type="hidden" name="blue" />
+			<input type="hidden" name="green" />
+			<input type="hidden" name="red" />
+
+			<button id="players-form-play" class="players-form-play btn btn-lg btn-block btn-primary" style="display: none;">Play</button>
+		</form>
+
+		<button id="players-form-random" class="players-form-random btn btn-block btn-warning">Randomize</button>
+		<button id="players-form-redo" class="players-form-redo btn btn-block btn-info">Redo</button>
+
+	</div>
+
+</div>
+
+
+
+{% endblock %}

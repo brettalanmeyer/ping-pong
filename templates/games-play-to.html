@@ -1,0 +1,19 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Play To{% endblock %}
+
+{% block body %}
+
+	<h1>Select Score</h1>
+
+	<form action="/games/{{ game.id }}/play-to" method="POST">
+
+		<input type="number" name="playTo" min="1" max="51" value="{{ default }}" />
+
+		<button class="btn btn-default">Select Score</button>
+
+	</form>
+
+
+{% endblock %}
