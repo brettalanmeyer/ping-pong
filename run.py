@@ -1,9 +1,9 @@
 from flask import Flask, render_template, Response,redirect, request
 from flask.ext.assets import Environment, Bundle
 from flask_socketio import SocketIO, emit
-from sqlalchemy import create_engine, Column, Integer, DateTime, String
+from sqlalchemy import create_engine, Column, Integer, DateTime, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from datetime import datetime
 import random, json
 
@@ -23,13 +23,28 @@ def makeDatabaseConnection():
 
 session, Base = makeDatabaseConnection()
 
+@app.route("/relationships", methods = ["GET"])
+def relationships():
+	matches = session.query(MatchModel)
+	print(matches.count())
+	for match in matches:
+		print("matchId: " + str(match.id))
+		teams = match.teams
+		len(teams)
+		for team in teams:
+			print("teamId: " + str(team.id))
+
+			for teamPlayer in team.teamPlayers:
+				print("player: " + teamPlayer.player.name)
+	return "relationships"
+
 @app.route("/", methods = ["GET"])
 def index():
-	return render_template("index.html")
+	return render_template("main/index.html")
 
 @app.route("/matches/new", methods = ["GET"])
 def matches_new():
-	return render_template("matches-new.html")
+	return render_template("matches/new.html")
 
 @app.route("/matches", methods = ["POST"])
 def matches_create():
@@ -40,11 +55,21 @@ def matches_create():
 def matches_play_to(id):
 	match = MatchService().selectById(id)
 	title, template, default = MatchService().getMatchTypeAttributes(match)
-	return render_template("matches-play-to.html", match = match, default = default)
+	return render_template("matches/play-to.html", match = match, default = default)
 
 @app.route("/matches/<int:id>/play-to", methods = ["POST"])
 def matches_play_to_update(id):
 	MatchService().updatePlayTo(id, request.form["playTo"])
+	return redirect("/matches/%d/games" % id)
+
+@app.route("/matches/<int:id>/games", methods = ["GET"])
+def matches_games(id):
+	match = MatchService().selectById(id)
+	return render_template("matches/games.html", match = match)
+
+@app.route("/matches/<int:id>/games", methods = ["POST"])
+def matches_games_update(id):
+	MatchService().updateGames(id, request.form["games"])
 	return redirect("/matches/%d/players" % id)
 
 @app.route("/matches/<int:id>/players", methods = ["GET"])
@@ -60,11 +85,11 @@ def matches_play(id):
 
 @app.route("/players", methods = ["GET"])
 def players():
-	return render_template("players.html", players = PlayerService().select())
+	return render_template("players/index.html", players = PlayerService().select())
 
 @app.route("/players/new", methods = ["GET"])
 def players_new():
-	return render_template("players-new.html")
+	return render_template("players/new.html")
 
 @app.route("/players", methods = ["POST"])
 def players_create():
@@ -72,7 +97,7 @@ def players_create():
 
 	players = session.query(PlayerModel).filter_by(name = name)
 	if players.count() > 0:
-		return render_template("players-new.html", name = name, error = True)
+		return render_template("players/new.html", name = name, error = True)
 
 	PlayerService().create(name)
 
@@ -81,7 +106,7 @@ def players_create():
 @app.route("/players/<int:id>/edit", methods = ["GET"])
 def players_edit(id):
 	player = session.query(PlayerModel).filter(PlayerModel.id == id).one()
-	return render_template("players-edit.html", player = player)
+	return render_template("players/edit.html", player = player)
 
 @app.route("/players/<int:id>", methods = ["POST"])
 def players_update(id):
@@ -91,7 +116,7 @@ def players_update(id):
 
 	players = session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
 	if players.count() > 0:
-		return render_template("players-edit.html", player = player, error = True)
+		return render_template("players/edit.html", player = player, error = True)
 
 	PlayerService().update(id, name)
 
@@ -124,11 +149,11 @@ def afterRequest(response):
 
 @app.errorhandler(404)
 def not_found(error):
-	return render_template("404.html"), 404
+	return render_template("errors/404.html"), 404
 
 @app.errorhandler(500)
 def server_error(error):
-	return render_template("500.html"), 500
+	return render_template("errors/500.html"), 500
 
 class MatchService():
 
@@ -136,7 +161,7 @@ class MatchService():
 		return session.query(MatchModel).filter(MatchModel.id == id).one()
 
 	def create(self, matchType):
-		match = MatchModel(matchType, datetime.now(), datetime.now())
+		match = MatchModel(matchType, False, False, datetime.now(), datetime.now())
 		session.add(match)
 		session.commit()
 
@@ -148,15 +173,21 @@ class MatchService():
 		match.updatedAt = datetime.now()
 		session.commit()
 
+	def updateGames(self, id, games):
+		match = self.selectById(id)
+		match.games = games
+		match.updatedAt = datetime.now()
+		session.commit()
+
 	def getMatchTypeAttributes(self, match):
 		if match.matchType == "singles":
-			return "Singles", "two-player.html", 21
+			return "Singles", "matches/two-player.html", 21
 
 		if match.matchType == "nines":
-			return "9s", "four-player.html", 9
+			return "9s", "matches/four-player.html", 9
 
 		if match.matchType == "doubles":
-			return "Doubles", "four-player.html", 21
+			return "Doubles", "matches/four-player.html", 21
 
 class PlayerService():
 
@@ -184,14 +215,19 @@ class MatchModel(Base):
 	id = Column(Integer, primary_key = True)
 	matchType = Column(String)
 	playTo = Column(Integer)
+	games = Column(Integer)
 	ready = Column(Integer)
 	complete = Column(Integer)
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 	completedAt = Column(DateTime)
 
-	def __init__(self, matchType, createdAt, modifiedAt):
+	teams = relationship("TeamModel", back_populates = "match")
+
+	def __init__(self, matchType, ready, complete, createdAt, modifiedAt):
 		self.matchType = matchType
+		self.ready = ready
+		self.complete = complete
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
 
@@ -208,6 +244,41 @@ class PlayerModel(Base):
 		self.name = name
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
+
+class TeamModel(Base):
+
+	__tablename__ = "teams"
+
+	id = Column(Integer, primary_key = True)
+	matchId = Column(Integer, ForeignKey("matches.id"))
+	win = Column(Integer)
+	loss = Column(Integer)
+	createdAt = Column(DateTime)
+	modifiedAt = Column(DateTime)
+
+	match = relationship("MatchModel")
+	teamPlayers = relationship("TeamPlayerModel", back_populates = "team")
+
+	def __init__(self, matchId, createdAt, modifiedAt):
+		self.matchId = matchId
+		self.createdAt = createdAt
+		self.modifiedAt = modifiedAt
+
+class TeamPlayerModel(Base):
+
+	__tablename__ = "teams_players"
+
+	id = Column(Integer, primary_key = True)
+	teamId = Column(Integer, ForeignKey("teams.id"))
+	playerId = Column(Integer, ForeignKey("players.id"))
+
+	team = relationship("TeamModel")
+	player = relationship("PlayerModel")
+
+	def __init__(self, teamId, playerId):
+		self.teamId = teamId
+		self.playerId = playerId
+
 
 if __name__ == "__main__":
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])
