@@ -1,0 +1,32 @@
+NINES
+
+{
+	"team1": {
+		"yellow": {
+			"id": 1,
+			"name": "dave",
+			"points": 9
+		},
+		"blue": {
+			"id": 2,
+			"name": "cole",
+			"points": 9
+		}
+	},
+	"team2": {
+		"points": 18,
+		"green": {
+			"id": 3,
+			"name": "aaron"
+		},
+		"red": {
+			"id": 4,
+			"name": "brett"
+		}
+	}
+
+}
+
+one a player is eliminated, that remaining player on that side should be able to use both buttons
+
+if both players are one side are eliminated, player is randomly swapped
