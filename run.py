@@ -81,6 +81,7 @@ def matches_players(id):
 
 @app.route("/matches/<int:id>", methods = ["POST"])
 def matches_play(id):
+	MatchService().createTeams(id, request.form)
 	return Response(json.dumps(request.form), status = 200, mimetype = "application/json")
 
 @app.route("/players", methods = ["GET"])
@@ -179,6 +180,23 @@ class MatchService():
 		match.updatedAt = datetime.now()
 		session.commit()
 
+	def createTeams(self, id, data):
+		match = self.selectById(id)
+
+		if match.matchType == "singles":
+			team1 = TeamService().createOnePlayer(match.id, data["yellow"])
+			team2 = TeamService().createOnePlayer(match.id, data["green"])
+
+		elif match.matchType == "doubles":
+			team1 = TeamService().createTwoPlayer(match.id, data["yellow"], data["blue"])
+			team2 = TeamService().createTwoPlayer(match.id, data["green"], data["red"])
+
+		elif match.matchType == "nines":
+			team1 = TeamService().createOnePlayer(match.id, data["yellow"])
+			team2 = TeamService().createOnePlayer(match.id, data["green"])
+			team3 = TeamService().createOnePlayer(match.id, data["blue"])
+			team4 = TeamService().createOnePlayer(match.id, data["red"])
+
 	def getMatchTypeAttributes(self, match):
 		if match.matchType == "singles":
 			return "Singles", "matches/two-player.html", 21
@@ -188,6 +206,33 @@ class MatchService():
 
 		if match.matchType == "doubles":
 			return "Doubles", "matches/four-player.html", 21
+
+class TeamService():
+
+	def create(self, matchId):
+		team = TeamModel(matchId, datetime.now(), datetime.now())
+		session.add(team)
+		session.commit()
+		return team
+
+	def createOnePlayer(self, matchId, playerId):
+		team = self.create(matchId)
+		teamPlayer = TeamPlayerService().create(team.id, playerId)
+		return team
+
+	def createTwoPlayer(self, matchId, player1Id, player2Id):
+		team = self.create(matchId)
+		teamPlayer1 = TeamPlayerService().create(team.id, player1Id)
+		teamPlayer2 = TeamPlayerService().create(team.id, player2Id)
+		return team
+
+class TeamPlayerService():
+
+	def create(self, teamId, playerId):
+		teamPlayer = TeamPlayerModel(teamId, playerId)
+		session.add(teamPlayer)
+		session.commit()
+		return teamPlayer
 
 class PlayerService():
 
@@ -201,6 +246,7 @@ class PlayerService():
 		player = PlayerModel(name, datetime.now(), datetime.now())
 		session.add(player)
 		session.commit()
+		return player
 
 	def update(self, id, name):
 		player = self.selectById(id)
