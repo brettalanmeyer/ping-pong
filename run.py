@@ -53,8 +53,8 @@ def matches_new():
 
 @app.route("/matches", methods = ["POST"])
 def matches_create():
-	id = MatchService().create(request.form["matchType"])
-	return redirect("/matches/%d/play-to" % id)
+	match = MatchService().create(request.form["matchType"])
+	return redirect("/matches/%d/play-to" % match.id)
 
 @app.route("/matches/<int:id>/play-to", methods = ["GET"])
 def matches_play_to(id):
@@ -64,7 +64,11 @@ def matches_play_to(id):
 
 @app.route("/matches/<int:id>/play-to", methods = ["POST"])
 def matches_play_to_update(id):
-	MatchService().updatePlayTo(id, request.form["playTo"])
+	match = MatchService().updatePlayTo(id, request.form["playTo"])
+
+	if match.matchType == "nines":
+		return redirect("/matches/%d/players" % id)
+
 	return redirect("/matches/%d/games" % id)
 
 @app.route("/matches/<int:id>/games", methods = ["GET"])
@@ -181,7 +185,7 @@ class MatchService():
 		session.add(match)
 		session.commit()
 
-		return match.id
+		return match
 
 	def updatePlayTo(self, id, playTo):
 		match = self.selectById(id)
@@ -189,11 +193,15 @@ class MatchService():
 		match.updatedAt = datetime.now()
 		session.commit()
 
+		return match
+
 	def updateGames(self, id, games):
 		match = self.selectById(id)
 		match.games = games
 		match.updatedAt = datetime.now()
 		session.commit()
+
+		return match
 
 	def createTeams(self, id, data):
 		match = self.selectById(id)
@@ -239,6 +247,7 @@ class TeamService():
 		team = self.create(matchId)
 		teamPlayer1 = TeamPlayerService().create(team.id, player1Id)
 		teamPlayer2 = TeamPlayerService().create(team.id, player2Id)
+
 		return team
 
 class TeamPlayerService():
@@ -247,6 +256,7 @@ class TeamPlayerService():
 		teamPlayer = TeamPlayerModel(teamId, playerId)
 		session.add(teamPlayer)
 		session.commit()
+
 		return teamPlayer
 
 class PlayerService():
@@ -261,6 +271,7 @@ class PlayerService():
 		player = PlayerModel(name, datetime.now(), datetime.now())
 		session.add(player)
 		session.commit()
+
 		return player
 
 	def update(self, id, name):
@@ -268,6 +279,8 @@ class PlayerService():
 		player.name = name
 		player.updatedAt = datetime.now()
 		session.commit()
+
+		return player
 
 class MatchModel(Base):
 
