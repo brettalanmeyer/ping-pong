@@ -5,6 +5,12 @@ a {
 
 .players-form-play {
 	margin-bottom: 8px;
+	display: none;
+}
+
+.players-form-randomize {
+	margin-bottom: 4px;
+	display: none;
 }
 
 .players-form-redo {

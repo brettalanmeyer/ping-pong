@@ -7,6 +7,7 @@ $(function(){
 	var players = $(".player");
 	var play = $("#players-form-play");
 	var redo = $("#players-form-redo");
+	var randomize = $("#players-form-randomize");
 
 	next();
 
@@ -16,6 +17,7 @@ $(function(){
 		if(index == inputs.length - 1){
 			playerList.hide();
 			play.show();
+			randomize.show();
 		} else {
 			index++;
 			buttons.eq(index).addClass("active");
@@ -41,6 +43,27 @@ $(function(){
 		next();
 	});
 
+	randomize.on("click", function(){
 
+		var values = $.map(inputs, function(input){
+			return $(input).val();
+		});
+
+		shuffle(values);
+
+		for(i in values){
+			inputs.eq(i).val(values[i]);
+			buttons.eq(i).html(players.filter("[data-id=" + values[i] + "]").html());
+		}
+
+	});
 
 });
+
+
+function shuffle(a) {
+	for (let i = a.length; i; i--) {
+		let j = Math.floor(Math.random() * i);
+		[a[i - 1], a[j]] = [a[j], a[i - 1]];
+	}
+}

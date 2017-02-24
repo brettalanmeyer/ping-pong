@@ -7,7 +7,7 @@
 
 	<h1>Select Score</h1>
 
-	<form action="/games/{{ game.id }}/play-to" method="POST">
+	<form action="/matches/{{ match.id }}/play-to" method="POST">
 
 		<input type="number" name="playTo" min="1" max="51" value="{{ default }}" />
 

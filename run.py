@@ -27,35 +27,35 @@ session, Base = makeDatabaseConnection()
 def index():
 	return render_template("index.html")
 
-@app.route("/games/new", methods = ["GET"])
-def games_new():
-	return render_template("games-new.html")
+@app.route("/matches/new", methods = ["GET"])
+def matches_new():
+	return render_template("matches-new.html")
 
-@app.route("/games", methods = ["POST"])
-def games_create():
-	id = GameService().create(request.form["gametype"])
-	return redirect("/games/%d/play-to" % id)
+@app.route("/matches", methods = ["POST"])
+def matches_create():
+	id = MatchService().create(request.form["matchType"])
+	return redirect("/matches/%d/play-to" % id)
 
-@app.route("/games/<int:id>/play-to", methods = ["GET"])
-def games_play_to(id):
-	game = GameService().selectById(id)
-	title, template, default = GameService().getGameTypeAttributes(game)
-	return render_template("games-play-to.html", game = game, default = default)
+@app.route("/matches/<int:id>/play-to", methods = ["GET"])
+def matches_play_to(id):
+	match = MatchService().selectById(id)
+	title, template, default = MatchService().getMatchTypeAttributes(match)
+	return render_template("matches-play-to.html", match = match, default = default)
 
-@app.route("/games/<int:id>/play-to", methods = ["POST"])
-def games_play_to_update(id):
-	GameService().updatePlayTo(id, request.form["playTo"])
-	return redirect("/games/%d/players" % id)
+@app.route("/matches/<int:id>/play-to", methods = ["POST"])
+def matches_play_to_update(id):
+	MatchService().updatePlayTo(id, request.form["playTo"])
+	return redirect("/matches/%d/players" % id)
 
-@app.route("/games/<int:id>/players", methods = ["GET"])
-def games_players(id):
-	game = GameService().selectById(id)
-	title, template, default = GameService().getGameTypeAttributes(game)
+@app.route("/matches/<int:id>/players", methods = ["GET"])
+def matches_players(id):
+	match = MatchService().selectById(id)
+	title, template, default = MatchService().getMatchTypeAttributes(match)
 	players = PlayerService().select()
-	return render_template(template, title = title, game = game, players = players)
+	return render_template(template, title = title, match = match, players = players)
 
-@app.route("/games/<int:id>", methods = ["POST"])
-def games_play(id):
+@app.route("/matches/<int:id>", methods = ["POST"])
+def matches_play(id):
 	return Response(json.dumps(request.form), status = 200, mimetype = "application/json")
 
 @app.route("/players", methods = ["GET"])
@@ -130,32 +130,32 @@ def not_found(error):
 def server_error(error):
 	return render_template("500.html"), 500
 
-class GameService():
+class MatchService():
 
 	def selectById(self, id):
-		return session.query(GameModel).filter(GameModel.id == id).one()
+		return session.query(MatchModel).filter(MatchModel.id == id).one()
 
-	def create(self, gameType):
-		game = GameModel(gameType, datetime.now(), datetime.now())
-		session.add(game)
+	def create(self, matchType):
+		match = MatchModel(matchType, datetime.now(), datetime.now())
+		session.add(match)
 		session.commit()
 
-		return game.id
+		return match.id
 
 	def updatePlayTo(self, id, playTo):
-		game = self.selectById(id)
-		game.playTo = playTo
-		game.updatedAt = datetime.now()
+		match = self.selectById(id)
+		match.playTo = playTo
+		match.updatedAt = datetime.now()
 		session.commit()
 
-	def getGameTypeAttributes(self, game):
-		if game.gameType == "singles":
+	def getMatchTypeAttributes(self, match):
+		if match.matchType == "singles":
 			return "Singles", "two-player.html", 21
 
-		if game.gameType == "nines":
+		if match.matchType == "nines":
 			return "9s", "four-player.html", 9
 
-		if game.gameType == "doubles":
+		if match.matchType == "doubles":
 			return "Doubles", "four-player.html", 21
 
 class PlayerService():
@@ -177,11 +177,12 @@ class PlayerService():
 		player.updatedAt = datetime.now()
 		session.commit()
 
-class GameModel(Base):
-	__tablename__ = "games"
+class MatchModel(Base):
+
+	__tablename__ = "matches"
 
 	id = Column(Integer, primary_key = True)
-	gameType = Column(String)
+	matchType = Column(String)
 	playTo = Column(Integer)
 	ready = Column(Integer)
 	complete = Column(Integer)
@@ -189,12 +190,13 @@ class GameModel(Base):
 	modifiedAt = Column(DateTime)
 	completedAt = Column(DateTime)
 
-	def __init__(self, gameType, createdAt, modifiedAt):
-		self.gameType = gameType
+	def __init__(self, matchType, createdAt, modifiedAt):
+		self.matchType = matchType
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
 
 class PlayerModel(Base):
+
 	__tablename__ = "players"
 
 	id = Column(Integer, primary_key = True)
@@ -208,4 +210,4 @@ class PlayerModel(Base):
 		self.modifiedAt = modifiedAt
 
 if __name__ == "__main__":
-	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"])
+	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])

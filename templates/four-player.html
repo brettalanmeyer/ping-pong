@@ -49,22 +49,20 @@
 			{% endfor %}
 		</div>
 
-		<form id="players-form" action="/games/{{ game.id }}" method="POST">
+		<form id="players-form" action="/matches/{{ match.id }}" method="POST">
 			<input type="hidden" name="yellow" />
 			<input type="hidden" name="blue" />
 			<input type="hidden" name="green" />
 			<input type="hidden" name="red" />
 
-			<button id="players-form-play" class="players-form-play btn btn-lg btn-block btn-primary" style="display: none;">Play</button>
+			<button id="players-form-play" class="players-form-play btn btn-lg btn-block btn-primary">Play</button>
 		</form>
 
-		<button id="players-form-random" class="players-form-random btn btn-block btn-warning">Randomize</button>
-		<button id="players-form-redo" class="players-form-redo btn btn-block btn-info">Redo</button>
+		<button id="players-form-randomize" class="players-form-randomize btn btn-block btn-success">Randomize</button>
+		<button id="players-form-redo" class="players-form-redo btn btn-block btn-warning">Redo</button>
 
 	</div>
 
 </div>
-
-
 
 {% endblock %}
