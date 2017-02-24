@@ -5,15 +5,18 @@
 
 {% block body %}
 
-	<h1>Best Of</h1>
+	<div class="container">
 
-	<form action="/matches/{{ match.id }}/games" method="POST">
+		<h1>Best Of</h1>
 
-		<button type="submit" class="btn btn-default" name="games" value="1">Best Of 1</button>
-		<button type="submit" class="btn btn-default" name="games" value="3">Best Of 3</button>
-		<button type="submit" class="btn btn-default" name="games" value="5">Best Of 5</button>
+		<form action="/matches/{{ match.id }}/games" method="POST">
 
-	</form>
+			<button type="submit" class="btn btn-default" name="games" value="1">Best Of 1</button>
+			<button type="submit" class="btn btn-default" name="games" value="3">Best Of 3</button>
+			<button type="submit" class="btn btn-default" name="games" value="5">Best Of 5</button>
 
+		</form>
+
+	</div>
 
 {% endblock %}

@@ -5,15 +5,18 @@
 
 {% block body %}
 
-	<h1>Select Score</h1>
+	<div class="container">
 
-	<form action="/matches/{{ match.id }}/play-to" method="POST">
+		<h1>Select Score</h1>
 
-		<input type="number" name="playTo" min="1" max="51" value="{{ default }}" />
+		<form action="/matches/{{ match.id }}/play-to" method="POST">
 
-		<button class="btn btn-default">Select Score</button>
+			<input type="number" name="playTo" min="1" max="51" value="{{ default }}" />
 
-	</form>
+			<button class="btn btn-default">Select Score</button>
 
+		</form>
+
+	</div>
 
 {% endblock %}

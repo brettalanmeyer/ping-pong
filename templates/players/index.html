@@ -2,23 +2,40 @@
 
 {% block body %}
 
-	<h1>Players</h1>
+	<div class="container">
 
-	<a href="/players/new">Create Player</a>
+		<a class="btn btn-default btn-sm action" href="/players/new/">
+			<span class="glyphicon glyphicon-star"></span>
+			Create Player
+		</a>
 
-	<ul>
-		{% for player in players %}
+		<h1 class="with-action">Players</h1>
 
-			<li>
-				{{ player.name }}
+		<table class="table">
 
-				<a href="/players/{{ player.id }}/edit" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-pencil"></span>
-					Edit
-				</a>
-			</li>
+			<tbody>
 
-		{% endfor %}
-	</ul>
+				{% for player in players %}
+
+					<tr>
+
+						<td>{{ player.name }}</td>
+
+						<td class="text-right">
+							<a href="/players/{{ player.id }}/edit" class="btn btn-default btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span>
+								Edit
+							</a>
+						</td>
+
+					</tr>
+
+				{% endfor %}
+
+			</tbody>
+
+		</table>
+
+	</div>
 
 {% endblock %}

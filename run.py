@@ -42,6 +42,11 @@ def relationships():
 def index():
 	return render_template("main/index.html")
 
+@app.route("/matches", methods = ["GET"])
+def matches_index():
+	matches = MatchService().select()
+	return render_template("matches/index.html", matches = matches)
+
 @app.route("/matches/new", methods = ["GET"])
 def matches_new():
 	return render_template("matches/new.html")
@@ -123,6 +128,11 @@ def players_update(id):
 
 	return redirect("/players")
 
+@app.route("/leaderboard", methods = ["GET"])
+def leaderboard_index():
+	return render_template("leaderboard/index.html")
+
+# FOR TESTING
 @app.route("/buttons", methods = ["GET"])
 def buttons():
 	return render_template("buttons.html")
@@ -142,6 +152,8 @@ def buttons_undo():
 def buttons_new():
 	print("buttons new")
 	return "buttons new"
+# FOR TESTING
+
 
 @app.after_request
 def afterRequest(response):
@@ -160,6 +172,9 @@ class MatchService():
 
 	def selectById(self, id):
 		return session.query(MatchModel).filter(MatchModel.id == id).one()
+
+	def select(self):
+		return session.query(MatchModel)
 
 	def create(self, matchType):
 		match = MatchModel(matchType, False, False, datetime.now(), datetime.now())

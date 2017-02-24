@@ -4,23 +4,27 @@
 
 {% block body %}
 
-	<h1>Create Player</h1>
+	<div class="container">
 
-	{% if error %}
-		<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>
-	{% endif %}
+		<h1>Create Player</h1>
 
-	<form action="/players" method="POST">
+		{% if error %}
+			<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>
+		{% endif %}
 
-		<div class="form-group">
+		<form action="/players" method="POST">
 
-			<label for="name-field">Name</label>
-			<input id="name-field" name="name" value="{{ name }}" class="form-control" />
+			<div class="form-group">
 
-		</div>
+				<label for="name-field">Name</label>
+				<input id="name-field" name="name" value="{{ name }}" class="form-control" />
 
-		<button class="btn btn-default">Create Player</button>
+			</div>
 
-	</form>
+			<button class="btn btn-default">Create Player</button>
+
+		</form>
+
+	</div>
 
 {% endblock %}

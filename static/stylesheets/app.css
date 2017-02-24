@@ -1,6 +1,97 @@
+@font-face {
+	font-family: digital;
+	src: url("/static/fonts/digital-7.ttf");
+}
 
-a {
-	padding: 0 8px;
+html,
+body {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+    background: #f0f0f0;
+    color: #333;
+}
+
+header {
+	border-bottom: solid 1px #333;
+}
+
+header a {
+	display: block;
+	text-align: center;
+	font-size: 48px;
+	font-family: digital;
+}
+
+header a:hover {
+	text-decoration: none;
+}
+
+h1.ping-pong {
+	font-size: 120px;
+	text-align: center;
+	font-family: digital;
+}
+
+h1 {
+	font-size: 28px;
+	text-align: center;
+}
+
+h1.with-action {
+	text-align: left;
+}
+
+a,
+a:hover {
+	color: #333;
+}
+
+a.action {
+	float: right;
+	margin-top: 15px;
+}
+
+.table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+.main-container {
+	width: 600px;
+	height: 350px;
+	margin: auto;
+}
+
+.main-container img {
+	display: block;
+	margin: 40px auto 0;
+}
+
+.main-container .links a {
+	display: block;
+	border: solid 1px #ccc;
+	text-align: center;
+	padding: 10px 0;
+	border-bottom-width: 0px;
+	text-decoration: none;
+	background: #fff;
+	font-size: 22px;
+}
+
+.main-container .links a:first-child {
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+.main-container .links a:last-child {
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-width: 1px;
+}
+
+.main-container .links a:hover {
+	background: #e6e6e6;
 }
 
 .players-form-play {
