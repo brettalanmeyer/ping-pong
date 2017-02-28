@@ -222,7 +222,7 @@ class MatchService():
 			Singles().createTeams(match, data)
 
 		elif match.matchType == "doubles":
-			pass
+			Doubles().createTeams(match, data)
 
 		elif match.matchType == "nines":
 			pass
@@ -245,7 +245,7 @@ class MatchService():
 			return Singles().matchData(match)
 
 		elif match.matchType == "doubles":
-			pass
+			return Doubles().matchData(match)
 
 		elif match.matchType == "nines":
 			pass
@@ -551,6 +551,138 @@ class Doubles():
 
 	template = "matches/doubles.html"
 
+	def matchData(self, match):
+		game = match.games[match.game - 1]
+
+		data = {
+			"matchId": match.id,
+			"matchType": "doubles",
+			"playTo": match.playTo,
+			"numOfGames": match.numOfGames,
+			"games": [],
+			"game": match.game,
+			"template": self.template,
+			"complete": False,
+			"teams": [],
+			"players": {
+				"green": {
+					"teamId": None,
+					"playerId": game.green,
+					"playerName": None,
+					"serving": False
+				},
+				"yellow": {
+					"teamId": None,
+					"playerId": game.yellow,
+					"playerName": None,
+					"serving": False
+				},
+				"blue": {
+					"teamId": None,
+					"playerId": game.blue,
+					"playerName": None,
+					"serving": False
+				},
+				"red": {
+					"teamId": None,
+					"playerId": game.red,
+					"playerName": None,
+					"serving": False
+				}
+			},
+			"points": 0
+		}
+
+		for team in match.teams:
+
+			points = ScoreService().getScore(match.id, team.id, match.game)
+			data["points"] += points
+
+			data["teams"].append({
+				"teamId": team.id,
+				"points": points
+			})
+
+			for teamPlayer in team.teamPlayers:
+				if data["players"]["green"]["playerId"] == teamPlayer.player.id:
+					color = "green"
+				elif data["players"]["yellow"]["playerId"] == teamPlayer.player.id:
+					color = "yellow"
+				elif data["players"]["blue"]["playerId"] == teamPlayer.player.id:
+					color = "blue"
+				elif data["players"]["red"]["playerId"] == teamPlayer.player.id:
+					color = "red"
+
+				data["players"][color]["playerName"] = teamPlayer.player.name
+				data["players"][color]["teamId"] = team.id
+
+		for game in match.games:
+			data["games"].append({
+				"winner": game.winner,
+				"winnerScore": game.winnerScore,
+				"loser": game.loser,
+				"loserScore": game.loserScore
+			})
+
+		self.determineServe(data)
+
+		return data
+
+	def determineServe(self, data):
+
+		if data["points"] % 10 < 5:
+			data["players"]["green"]["serving"] = True
+		else:
+			data["players"]["yellow"]["serving"] = True
+
+	def createTeams(self, match, data):
+		green = data["green"]
+		yellow = data["yellow"]
+		blue = data["blue"]
+		red = data["red"]
+
+		team1 = TeamService().createTwoPlayer(match.id, green, red)
+		team2 = TeamService().createTwoPlayer(match.id, yellow, blue)
+
+		for i in range(0, match.numOfGames):
+
+			# Game 1
+			# B  A
+			# C  D
+			if i % 4 == 0:
+				a = green
+				b = yellow
+				c = blue
+				d = red
+
+			# Game 2
+			# A  B
+			# D  C
+			elif i % 4 == 1:
+				a = yellow
+				b = green
+				c = red
+				d = blue
+
+			# Game 3
+			# C  D
+			# B  A
+			elif i % 4 == 2:
+				a = red
+				b = blue
+				c = yellow
+				d = green
+
+			# Game 4
+			# D  C
+			# A  B
+			elif i % 4 == 3:
+				a = blue
+				b = red
+				c = green
+				d = yellow
+
+			GameService().create(match.id, i + 1, a, b, c, d)
 
 class Nines():
 
