@@ -1,7 +1,7 @@
-from flask import Flask, render_template, Response,redirect, request
+from flask import Flask, render_template, Response, redirect, request
 from flask.ext.assets import Environment, Bundle
 from flask_socketio import SocketIO, emit
-from sqlalchemy import create_engine, Column, Integer, DateTime, String, ForeignKey
+from sqlalchemy import create_engine, text, func, Column, Integer, DateTime, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from datetime import datetime
@@ -69,16 +69,16 @@ def matches_play_to_update(id):
 	if match.matchType == "nines":
 		return redirect("/matches/%d/players" % id)
 
-	return redirect("/matches/%d/games" % id)
+	return redirect("/matches/%d/num-of-games" % id)
 
-@app.route("/matches/<int:id>/games", methods = ["GET"])
+@app.route("/matches/<int:id>/num-of-games", methods = ["GET"])
 def matches_games(id):
 	match = MatchService().selectById(id)
-	return render_template("matches/games.html", match = match)
+	return render_template("matches/num-of-games.html", match = match)
 
-@app.route("/matches/<int:id>/games", methods = ["POST"])
+@app.route("/matches/<int:id>/num-of-games", methods = ["POST"])
 def matches_games_update(id):
-	MatchService().updateGames(id, request.form["games"])
+	MatchService().updateGames(id, request.form["numOfGames"])
 	return redirect("/matches/%d/players" % id)
 
 @app.route("/matches/<int:id>/players", methods = ["GET"])
@@ -88,10 +88,18 @@ def matches_players(id):
 	players = PlayerService().select()
 	return render_template(template, title = title, match = match, players = players)
 
-@app.route("/matches/<int:id>", methods = ["POST"])
-def matches_play(id):
+@app.route("/matches/<int:id>/players", methods = ["POST"])
+def matches_players_create(id):
 	MatchService().createTeams(id, request.form)
-	return Response(json.dumps(request.form), status = 200, mimetype = "application/json")
+	return redirect("/matches/%d" % id)
+
+@app.route("/matches/<int:id>", methods = ["GET"])
+def matches(id):
+
+	data = MatchService().matchData(id)
+
+	return Response(json.dumps(data), status = 200, mimetype = "application/json")
+	# return render_template(data["template"], data = data)
 
 @app.route("/players", methods = ["GET"])
 def players():
@@ -141,20 +149,20 @@ def leaderboard_index():
 def buttons():
 	return render_template("buttons.html")
 
-@app.route("/buttons/score", methods = ["POST"])
-def buttons_score():
-	print("buttons score: ")
-	print(request.form["button"])
+@app.route("/buttons/<path:button>/score", methods = ["POST"])
+def buttons_score(button):
+	Singles().score(button)
+	print("button " + button + " score")
 	return "buttons score"
 
-@app.route("/buttons/undo", methods = ["POST"])
-def buttons_undo():
-	print("buttons undo")
+@app.route("/buttons/<path:button>/undo", methods = ["POST"])
+def buttons_undo(button):
+	print("button " + button + " undo")
 	return "buttons undo"
 
-@app.route("/buttons/new", methods = ["POST"])
-def buttons_new():
-	print("buttons new")
+@app.route("/buttons/<path:button>/new", methods = ["POST"])
+def buttons_new(button):
+	print("button " + button + " new")
 	return "buttons new"
 # FOR TESTING
 
@@ -180,6 +188,9 @@ class MatchService():
 	def select(self):
 		return session.query(MatchModel)
 
+	def selectActiveMatch(self):
+		return session.query(MatchModel).filter(MatchModel.id == 70).one()
+
 	def create(self, matchType):
 		match = MatchModel(matchType, False, False, datetime.now(), datetime.now())
 		session.add(match)
@@ -195,9 +206,10 @@ class MatchService():
 
 		return match
 
-	def updateGames(self, id, games):
+	def updateGames(self, id, numOfGames):
 		match = self.selectById(id)
-		match.games = games
+		match.numOfGames = numOfGames
+		match.game = 1
 		match.updatedAt = datetime.now()
 		session.commit()
 
@@ -207,18 +219,13 @@ class MatchService():
 		match = self.selectById(id)
 
 		if match.matchType == "singles":
-			team1 = TeamService().createOnePlayer(match.id, data["yellow"])
-			team2 = TeamService().createOnePlayer(match.id, data["green"])
+			Singles().createTeams(match, data)
 
 		elif match.matchType == "doubles":
-			team1 = TeamService().createTwoPlayer(match.id, data["yellow"], data["blue"])
-			team2 = TeamService().createTwoPlayer(match.id, data["green"], data["red"])
+			pass
 
 		elif match.matchType == "nines":
-			team1 = TeamService().createOnePlayer(match.id, data["yellow"])
-			team2 = TeamService().createOnePlayer(match.id, data["green"])
-			team3 = TeamService().createOnePlayer(match.id, data["blue"])
-			team4 = TeamService().createOnePlayer(match.id, data["red"])
+			pass
 
 	def getMatchTypeAttributes(self, match):
 		if match.matchType == "singles":
@@ -229,6 +236,19 @@ class MatchService():
 
 		if match.matchType == "doubles":
 			return "Doubles", "matches/four-player.html", 21
+
+	def matchData(self, id):
+
+		match = self.selectById(id)
+
+		if match.matchType == "singles":
+			return Singles().matchData(match)
+
+		elif match.matchType == "doubles":
+			pass
+
+		elif match.matchType == "nines":
+			pass
 
 class TeamService():
 
@@ -282,6 +302,37 @@ class PlayerService():
 
 		return player
 
+class ScoreService():
+
+	def score(self, matchId, teamId, game):
+		score = ScoreModel(matchId, teamId, game, datetime.now())
+		session.add(score)
+		session.commit()
+
+	def getScore(self, matchId, teamId, game):
+		query = "\
+			SELECT COUNT(*) as points\
+			FROM scores\
+			WHERE matchId = :matchId AND teamId = :teamId AND game = :game\
+			GROUP BY matchId, teamId, game\
+		"
+		connection = session.connection()
+		data = connection.execute(text(query), matchId = matchId, teamId = teamId, game = game).first()
+
+		if data == None:
+			return 0
+
+		return int(data.points)
+
+class GameService():
+
+	def create(self, matchId, game, green, yellow, blue, red):
+		game = GameModel(matchId, game, green, yellow, blue, red, datetime.now())
+		session.add(game)
+		session.commit()
+
+		return game
+
 class MatchModel(Base):
 
 	__tablename__ = "matches"
@@ -289,7 +340,8 @@ class MatchModel(Base):
 	id = Column(Integer, primary_key = True)
 	matchType = Column(String)
 	playTo = Column(Integer)
-	games = Column(Integer)
+	numOfGames = Column(Integer)
+	game = Column(Integer)
 	ready = Column(Integer)
 	complete = Column(Integer)
 	createdAt = Column(DateTime)
@@ -297,6 +349,7 @@ class MatchModel(Base):
 	completedAt = Column(DateTime)
 
 	teams = relationship("TeamModel", back_populates = "match")
+	games = relationship("GameModel", back_populates = "match")
 
 	def __init__(self, matchType, ready, complete, createdAt, modifiedAt):
 		self.matchType = matchType
@@ -352,6 +405,156 @@ class TeamPlayerModel(Base):
 	def __init__(self, teamId, playerId):
 		self.teamId = teamId
 		self.playerId = playerId
+
+class ScoreModel(Base):
+
+	__tablename__ = "scores"
+
+	id = Column(Integer, primary_key = True)
+	matchId = Column(Integer, ForeignKey("matches.id"))
+	teamId = Column(Integer, ForeignKey("teams.id"))
+	game = Column(Integer)
+	createdAt = Column(DateTime)
+
+	def __init__(self, matchId, teamId, game, createdAt):
+		self.matchId = matchId
+		self.teamId = teamId
+		self.game = game
+		self.createdAt = createdAt
+
+class GameModel(Base):
+
+	__tablename__ = "games"
+
+	id = Column(Integer, primary_key = True)
+	matchId = Column(Integer, ForeignKey("matches.id"))
+	game = Column(Integer)
+	green = Column(Integer, ForeignKey("players.id"))
+	yellow = Column(Integer, ForeignKey("players.id"))
+	blue = Column(Integer, ForeignKey("players.id"))
+	red = Column(Integer, ForeignKey("players.id"))
+	winner = Column(Integer, ForeignKey("teams.id"))
+	winnerScore = Column(Integer)
+	loser = Column(Integer, ForeignKey("teams.id"))
+	loserScore = Column(Integer)
+	createdAt = Column(DateTime)
+	completedAt = Column(DateTime)
+
+	match = relationship("MatchModel")
+
+	def __init__(self, matchId, game, green, yellow, blue, red, createdAt):
+		self.matchId = matchId
+		self.game = game
+		self.green = green
+		self.yellow = yellow
+		self.blue = blue
+		self.red = red
+		self.createdAt = createdAt
+
+class Singles():
+
+	template = "matches/singles.html"
+
+	def matchData(self, match):
+		game = match.games[match.game - 1]
+
+		data = {
+			"matchId": match.id,
+			"matchType": "singles",
+			"playTo": match.playTo,
+			"numOfGames": match.numOfGames,
+			"games": [],
+			"game": match.game,
+			"template": self.template,
+			"complete": False,
+			"teams": {
+				"green": {
+					"teamId": None,
+					"playerId": game.green,
+					"playerName": None,
+					"points": None,
+					"serving": False
+				},
+				"yellow": {
+					"teamId": None,
+					"playerId": game.yellow,
+					"playerName": None,
+					"points": None,
+					"serving": False
+				}
+			},
+			"points": 0
+		}
+
+		for team in match.teams:
+			for teamPlayer in team.teamPlayers:
+				color = "green"
+
+				if data["teams"]["yellow"]["playerId"] == teamPlayer.player.id:
+					color = "yellow"
+
+				data["teams"][color]["playerName"] = teamPlayer.player.name
+				data["teams"][color]["points"] = ScoreService().getScore(match.id, team.id, match.game)
+				data["teams"][color]["teamId"] = team.id
+
+		for color in data["teams"]:
+			data["points"] += data["teams"][color]["points"]
+
+		for game in match.games:
+			data["games"].append({
+				"winner": game.winner,
+				"winnerScore": game.winnerScore,
+				"loser": game.loser,
+				"loserScore": game.loserScore
+			})
+
+		self.determineServe(data)
+
+		return data
+
+	def determineServe(self, data):
+
+		if data["points"] % 10 < 5:
+			data["teams"]["green"]["serving"] = True
+		else:
+			data["teams"]["yellow"]["serving"] = True
+
+	def score(self, button):
+
+		match = MatchService().selectActiveMatch()
+
+		data = self.matchData(match)
+
+		if button == "green" or button == "red":
+			ScoreService().score(match.id, data["north"]["teamId"], match.game)
+
+		elif button == "yellow" or button == "blue":
+			ScoreService().score(match.id, data["south"]["teamId"], match.game)
+
+	def createTeams(self, match, data):
+		team1 = TeamService().createOnePlayer(match.id, data["green"])
+		team2 = TeamService().createOnePlayer(match.id, data["yellow"])
+
+		for i in range(1, match.numOfGames + 1):
+
+			if i % 2 == 1:
+				green = data["green"]
+				yellow = data["yellow"]
+			else:
+				green = data["yellow"]
+				yellow = data["green"]
+
+			GameService().create(match.id, i, green, yellow, None, None)
+
+
+class Doubles():
+
+	template = "matches/doubles.html"
+
+
+class Nines():
+
+	template = "matches/nines.html"
 
 
 if __name__ == "__main__":

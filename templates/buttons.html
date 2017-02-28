@@ -6,96 +6,61 @@
 
 	<style>
 
-		.container {
-			width: 500px;
-			margin: auto;
-			overflow: hidden;
-			padding-top: 100px;
-		}
-
-		.group {
-			float: left;
-			width: 250px;
-		}
-
-		ul {
-			list-style: none;
-			padding: 30px;
-			margin: 0;
-			display: inline-block;
-			border-radius: 24px;
-		}
-
-		li {
+		button {
+			display: block;
+			width: 100px;
 			cursor: pointer;
-			padding: 2px 6px;
-			margin: 1px;
-			border: solid 2px #fff;
-			border-radius: 2px;
-			text-align: center;
+			border: solid 1px #ccc;
+			border-radius: 4px;
+			padding: 8px;
+			color: white;
+			margin: auto;
 		}
 
-		.red {
+		button:nth-child(3n - 2){
+			margin-top: 12px;
+		}
+
+		button:nth-child(6){
+			margin-bottom: 36px;
+		}
+
+		button.red {
 			background: red;
-			color: #fff;
 		}
 
-		.green {
+		button.green {
 			background: green;
-			color: #fff;
 		}
 
-		.blue {
+		button.blue {
 			background: blue;
-			color: #fff;
 		}
 
-		.yellow {
+		button.yellow {
 			background: yellow;
-		}
-		.yellow li {
-			border-color: #999;
+			color: black;
 		}
 
 	</style>
 
 	<div class="container">
 
-		<div class="group">
+		<button class="red" data-color="red" data-action="score">score</button>
+		<button class="red" data-color="red" data-action="undo">undo</button>
+		<button class="red" data-color="red" data-action="new">new</button>
 
-			<ul class="red">
-				<li>score</li>
-				<li>undo</li>
-				<li>new</li>
-			</ul>
+		<button class="green" data-color="green" data-action="score">score</button>
+		<button class="green" data-color="green" data-action="undo">undo</button>
+		<button class="green" data-color="green" data-action="new">new</button>
 
-			<br /><br />
+		<button class="blue" data-color="blue" data-action="score">score</button>
+		<button class="blue" data-color="blue" data-action="undo">undo</button>
+		<button class="blue" data-color="blue" data-action="new">new</button>
 
-			<ul class="green">
-				<li>score</li>
-				<li>undo</li>
-				<li>new</li>
-			</ul>
-
-		</div>
-
-		<div class="group">
-
-			<ul class="blue">
-				<li>score</li>
-				<li>undo</li>
-				<li>new</li>
-			</ul>
-
-			<br /><br />
-
-			<ul class="yellow">
-				<li>score</li>
-				<li>undo</li>
-				<li>new</li>
-			</ul>
-
-		</div>
+		<button class="yellow" data-color="yellow" data-action="score">score</button>
+		<button class="yellow" data-color="yellow" data-action="undo">undo</button>
+		<button class="yellow" data-color="yellow" data-action="new">new</button>
 
 	</div>
 
@@ -107,17 +72,15 @@
 
 		$(function(){
 
-			$("li").on("click", function(){
-
-				var source = $(this);
-				var data = {};
-
-				if(source.html() == "score"){
-					data["button"] = source.parent("ul").attr("class");
-				}
-
-				$.post("/buttons/" + source.html(), data);
+			$("button").on("click", function(){
+				var button = $(this);
+				$.post("/buttons/" + button.data("color") + "/" + button.data("action"));
 			});
+
+			setInterval(function(){
+				var rand = Math.floor(Math.random() * 4);
+				// $("button[data-action=score]").eq(rand).click();
+			}, 2500);
 
 		});
 

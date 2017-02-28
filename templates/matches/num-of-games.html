@@ -1,0 +1,22 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Play To{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>Best Of</h1>
+
+		<form action="/matches/{{ match.id }}/num-of-games" method="POST">
+
+			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="1">Best Of 1</button>
+			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="3">Best Of 3</button>
+			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="5">Best Of 5</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}
