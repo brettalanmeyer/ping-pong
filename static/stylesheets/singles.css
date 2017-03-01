@@ -1,0 +1,86 @@
+.singles-container {
+	overflow: hidden;
+	display: table;
+	width: 100%;
+	text-align: center;
+}
+
+.singles-container .score-board {
+	border: solid 1px #ccc;
+	display: table-cell;
+	vertical-align: top;
+	padding-bottom: 16px;
+}
+
+.singles-container .score-board .name {
+	display: block;
+	font-size: 60px;
+	padding-top: 30px;
+}
+
+.singles-container .score-board .score {
+	display: block;
+	font-family: digital;
+	font-size: 200px;
+	line-height: 200px;
+}
+
+.singles-container .sets {
+	display: table-cell;
+	font-size: 30px;
+	vertical-align: middle;
+	width: 300px;
+}
+
+.singles-container .sets .text {
+	display: block;
+}
+
+.singles-container .sets .set {
+	display: block;
+}
+
+.singles-container .sets .set .num {
+	font-size: 80px;
+	line-height: 80px;
+}
+
+.singles-container .sets .serving {
+	display: block;
+	position: relative;
+	font-size: 100px;
+	text-align: center;
+	color: #ccc;
+}
+
+.singles-container .sets .serving .active {
+	color: #333;
+}
+
+
+
+.set-scores {
+	font-size: 18px;
+	width: 80%;
+	margin: 30px auto 0;
+}
+
+.set-score {
+	font-family: digital;
+	font-size: 28px;
+	line-height: 28px !important;
+}
+
+.set-score.win {
+	font-weight: bold;
+}
+
+
+/*
+glyphicon glyphicon-chevron-left
+glyphicon glyphicon-chevron-right
+
+glyphicon glyphicon-arrow-left
+glyphicon glyphicon-arrow-right
+
+*/

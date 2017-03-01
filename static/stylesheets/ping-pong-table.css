@@ -1,0 +1,31 @@
+.ping-pong-table {
+	width: 675px;
+	height: 375px;
+	background: green;
+	border: solid 2px #000;
+	margin: auto;
+	overflow: hidden;
+}
+
+.ping-pong-table .quadrant {
+	width: 49.5%;
+	height: 50%;
+	border: solid 6px #fff;
+	display: block;
+	float: left;
+}
+
+.ping-pong-table .quadrant:nth-child(odd) {
+	border-bottom-width: 3px;
+}
+.ping-pong-table .quadrant:nth-child(even) {
+	border-top-width: 3px;
+}
+
+.ping-pong-table .net {
+	width: 1%;
+	height: 50%;
+	background: gray;
+	display: block;
+	float: left;
+}

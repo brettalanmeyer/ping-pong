@@ -11,26 +11,47 @@
 
 		<table class="table">
 
-			{% for match in matches %}
+			<thead>
 
 				<tr>
 
-					<td>{{ match.createdAt }}</td>
-					<td>{{ match.matchType }}</td>
-					<td>{{ match.games }}</td>
-					<td>{{ match.playTo }}</td>
-
-					<td>
-						{% for team in match.teams %}
-							{% for teamPlayer in team.teamPlayers %}
-								{{ teamPlayer.player.name }}
-							{% endfor %}
-						{% endfor %}
-					</td>
+					<th>Date</th>
+					<th>Type</th>
+					<th>Games</th>
+					<th>Points</th>
+					<th>Teams</th>
+					<th></th>
 
 				</tr>
 
-			{% endfor %}
+			</thead>
+
+			<tbody>
+
+				{% for match in matches %}
+
+						<tr>
+
+							<td>{{ match.createdAt }}</td>
+							<td>{{ match.matchType }}</td>
+							<td>{{ match.numOfGames }}</td>
+							<td>{{ match.playTo }}</td>
+
+							<td>
+								{% for team in match.teams %}
+									{% for teamPlayer in team.teamPlayers %}
+										{{ teamPlayer.player.name }}
+									{% endfor %}
+								{% endfor %}
+							</td>
+
+							<td><a href="/matches/{{ match.id }}" class="btn btn-default">Go</a></td>
+
+						</tr>
+
+				{% endfor %}
+
+			</tbody>
 
 		</table>
 

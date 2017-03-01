@@ -11,7 +11,7 @@
 			<title>Ping Pong | {% block title %}{% endblock %}</title>
 			<link rel="shortcut icon" href="/static/images/ping-pong-icon.png" type="image/x-icon" />
 			<link href="{{ url_for('static', filename='libraries/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-			{% assets filters="cssmin", output="gen/ping-pong.css", "stylesheets/app.css" %}
+			{% assets filters="cssmin", output="gen/ping-pong.css", "stylesheets/app.css", "stylesheets/ping-pong-table.css", "stylesheets/singles.css" %}
 				<link href="{{ ASSET_URL }}" rel="stylesheet">
 			{% endassets %}
 
@@ -20,9 +20,15 @@
 	</head>
 	<body>
 
-		<header>
-			<a href="/">Ping Pong</a>
-		</header>
+		<form style="position: absolute; right: 15px; top: 15px;" action="/matches/delete" method="POST">
+			<button class="btn btn-danger">Delete Matches</button>
+		</form>
+
+		{% if request.endpoint != "index" %}
+			<header>
+				<a href="/">Ping Pong</a>
+			</header>
+		{% endif %}
 
 		{% block body %}{% endblock %}
 

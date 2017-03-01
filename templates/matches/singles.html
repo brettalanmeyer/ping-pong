@@ -7,7 +7,72 @@
 
 	<div class="container">
 
-		<h1>{{ data.matchType }}</h1>
+		<h1>
+			{{ data.matchType.title() }}<br />
+			Playing to {{ data.playTo }}<br />
+		</h1>
+
+		<div class="singles-container">
+
+			<div class="score-board">
+				<span class="name">{{ data.teams.yellow.playerName }}</span>
+				<span class="score">{{ '%02d' % data.teams.yellow.points }}</span>
+			</div>
+
+			<div class="sets">
+				<span class="text">Set</span>
+				<span class="set">
+					<span class="num">{{ data.game }}</span>
+					<span class="total">/ {{ data.numOfGames }}</span>
+				</span>
+
+				<span class="serving">
+					<span class="glyphicon glyphicon-arrow-left active"></span>
+					<span class="glyphicon glyphicon-arrow-right"></span>
+				</span>
+			</div>
+
+			<div class="score-board">
+				<span class="name">{{ data.teams.green.playerName }}</span>
+				<span class="score">{{ '%02d' % data.teams.green.points }}</span>
+			</div>
+
+		</div>
+
+		<table class="table table-bordered set-scores">
+
+			<tr>
+
+				<td>&nbsp;</td>
+
+				{% for i in range(1, data.numOfGames + 1) %}
+					<td>{{ i }}</td>
+				{% endfor %}
+
+			</tr>
+
+			{% for game in data["games"] %}
+
+				<tr>
+
+					<td>{{ game.name }}</td>
+
+					{% for i in range(0, data.numOfGames) %}
+						{% if "score" in game.games[i] %}
+							<td class="set-score {% if game.games[i]["win"] %}win{% endif %}">
+								{{ '%02d' % game.games[i]["score"] }}
+							</td>
+						{% else %}
+							<td class="set-score"></td>
+						{% endif %}
+					{% endfor %}
+
+				</tr>
+
+
+			{% endfor %}
+
+		</table>
 
 	</div>
 

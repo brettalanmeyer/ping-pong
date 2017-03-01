@@ -56,6 +56,11 @@ def matches_create():
 	match = MatchService().create(request.form["matchType"])
 	return redirect("/matches/%d/play-to" % match.id)
 
+@app.route("/matches/delete", methods = ["POST"])
+def matches_delete():
+	MatchService().deleteAll()
+	return redirect("/")
+
 @app.route("/matches/<int:id>/play-to", methods = ["GET"])
 def matches_play_to(id):
 	match = MatchService().selectById(id)
@@ -95,11 +100,14 @@ def matches_players_create(id):
 
 @app.route("/matches/<int:id>", methods = ["GET"])
 def matches(id):
-
 	data = MatchService().matchData(id)
+	# return Response(json.dumps(data), status = 200, mimetype = "application/json")
+	return render_template(data["template"], data = data)
 
+@app.route("/matches/<int:id>.json", methods = ["GET"])
+def matches_json(id):
+	data = MatchService().matchData(id)
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
-	# return render_template(data["template"], data = data)
 
 @app.route("/players", methods = ["GET"])
 def players():
@@ -249,6 +257,10 @@ class MatchService():
 
 		elif match.matchType == "nines":
 			pass
+
+	def deleteAll(self):
+		session.query(MatchModel).delete()
+		session.commit()
 
 class TeamService():
 
@@ -497,16 +509,28 @@ class Singles():
 				data["teams"][color]["points"] = ScoreService().getScore(match.id, team.id, match.game)
 				data["teams"][color]["teamId"] = team.id
 
+				data["games"].append({
+					"teamId": team.id,
+					"name": teamPlayer.player.name,
+					"games": []
+				})
+
 		for color in data["teams"]:
 			data["points"] += data["teams"][color]["points"]
 
+
 		for game in match.games:
-			data["games"].append({
-				"winner": game.winner,
-				"winnerScore": game.winnerScore,
-				"loser": game.loser,
-				"loserScore": game.loserScore
-			})
+			for team in data["games"]:
+				if game.winner == team["teamId"]:
+					team["games"].append({
+						"win": True,
+						"score": game.winnerScore
+					})
+				elif game.loser == team["teamId"]:
+					team["games"].append({
+						"win": False,
+						"score": game.loserScore
+					})
 
 		self.determineServe(data)
 
