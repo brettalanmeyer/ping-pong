@@ -14,6 +14,10 @@ Doubles
 	3. Show table with player selector at each corner
 
 
+replace getMatchTypeAttributes() with Singles().getTitle() or getTemplate() variables
+
+
+replace match.matchType == "singles" with Singles.isMatchType(match)
 
 To Install For OS X
 

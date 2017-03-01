@@ -101,7 +101,6 @@ def matches_players_create(id):
 @app.route("/matches/<int:id>", methods = ["GET"])
 def matches(id):
 	data = MatchService().matchData(id)
-	# return Response(json.dumps(data), status = 200, mimetype = "application/json")
 	return render_template(data["template"], data = data)
 
 @app.route("/matches/<int:id>.json", methods = ["GET"])
@@ -152,28 +151,19 @@ def players_update(id):
 def leaderboard_index():
 	return render_template("leaderboard/index.html")
 
-# FOR TESTING
 @app.route("/buttons", methods = ["GET"])
 def buttons():
 	return render_template("buttons.html")
 
 @app.route("/buttons/<path:button>/score", methods = ["POST"])
 def buttons_score(button):
-	Singles().score(button)
-	print("button " + button + " score")
-	return "buttons score"
+	MatchService().score(button)
+	return button
 
 @app.route("/buttons/<path:button>/undo", methods = ["POST"])
 def buttons_undo(button):
-	print("button " + button + " undo")
-	return "buttons undo"
-
-@app.route("/buttons/<path:button>/new", methods = ["POST"])
-def buttons_new(button):
-	print("button " + button + " new")
-	return "buttons new"
-# FOR TESTING
-
+	MatchService().undo(button)
+	return button
 
 @app.after_request
 def afterRequest(response):
@@ -197,7 +187,7 @@ class MatchService():
 		return session.query(MatchModel)
 
 	def selectActiveMatch(self):
-		return session.query(MatchModel).filter(MatchModel.id == 70).one()
+		return session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).one()
 
 	def create(self, matchType):
 		match = MatchModel(matchType, False, False, datetime.now(), datetime.now())
@@ -254,6 +244,30 @@ class MatchService():
 
 		elif match.matchType == "doubles":
 			return Doubles().matchData(match)
+
+		elif match.matchType == "nines":
+			pass
+
+	def score(self, button):
+		match = self.selectActiveMatch()
+
+		if match.matchType == "singles":
+			Singles().score(match, button)
+
+		elif match.matchType == "doubles":
+			pass
+
+		elif match.matchType == "nines":
+			pass
+
+	def undo(self, button):
+		match = self.selectActiveMatch()
+
+		if match.matchType == "singles":
+			return Singles().undo(match, button)
+
+		elif match.matchType == "doubles":
+			pass
 
 		elif match.matchType == "nines":
 			pass
@@ -320,6 +334,12 @@ class ScoreService():
 		score = ScoreModel(matchId, teamId, game, datetime.now())
 		session.add(score)
 		session.commit()
+
+	def undo(self, matchId):
+		score = session.query(ScoreModel).filter(MatchModel.id == matchId).order_by(ScoreModel.id.desc()).first()
+		if score != None:
+			session.query(ScoreModel).filter(ScoreModel.id == score.id).delete()
+			session.commit()
 
 	def getScore(self, matchId, teamId, game):
 		query = "\
@@ -543,17 +563,17 @@ class Singles():
 		else:
 			data["teams"]["yellow"]["serving"] = True
 
-	def score(self, button):
-
-		match = MatchService().selectActiveMatch()
-
+	def score(self, match, button):
 		data = self.matchData(match)
 
 		if button == "green" or button == "red":
-			ScoreService().score(match.id, data["north"]["teamId"], match.game)
+			ScoreService().score(match.id, data["teams"]["green"]["teamId"], match.game)
 
 		elif button == "yellow" or button == "blue":
-			ScoreService().score(match.id, data["south"]["teamId"], match.game)
+			ScoreService().score(match.id, data["teams"]["yellow"]["teamId"], match.game)
+
+	def undo(self, match, button):
+		ScoreService().undo(match.id)
 
 	def createTeams(self, match, data):
 		team1 = TeamService().createOnePlayer(match.id, data["green"])
@@ -569,7 +589,6 @@ class Singles():
 				yellow = data["green"]
 
 			GameService().create(match.id, i, green, yellow, None, None)
-
 
 class Doubles():
 
