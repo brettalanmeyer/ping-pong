@@ -8,7 +8,7 @@
 			<meta http-equiv="X-UA-Compatible" content="IE=edge">
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-			<title>Ping Pong | {% block title %}{% endblock %}</title>
+			<title>Ping Pong{% if request.endpoint != "index" %} | {% endif %}{% block title %}{% endblock %}</title>
 			<link rel="shortcut icon" href="/static/images/ping-pong-icon.png" type="image/x-icon" />
 			<link href="{{ url_for('static', filename='libraries/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 			{% assets filters="cssmin", output="gen/ping-pong.css", "stylesheets/app.css", "stylesheets/ping-pong-table.css", "stylesheets/singles.css" %}
@@ -32,7 +32,7 @@
 
 		{% block body %}{% endblock %}
 
-		{% assets filters="jsmin", output="gen/ping-pong.js", "libraries/jquery.min.js", "libraries/socket.io.min.js", "javascripts/app.js" %}
+		{% assets filters="jsmin", output="gen/ping-pong.js", "libraries/jquery.min.js", "libraries/socket.io.min.js", "javascripts/app.js", "javascripts/singles.js" %}
 			<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 		{% endassets %}
 

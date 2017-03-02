@@ -5,7 +5,7 @@
 
 {% block body %}
 
-	<div class="container">
+	<div id="singles" class="container">
 
 		<h1>
 			{{ data.matchType.title() }}<br />
@@ -15,26 +15,26 @@
 		<div class="singles-container">
 
 			<div class="score-board">
-				<span class="name">{{ data.teams.yellow.playerName }}</span>
-				<span class="score">{{ '%02d' % data.teams.yellow.points }}</span>
+				<span class="name" data-var="name" data-color="yellow">{{ data.teams.yellow.playerName }}</span>
+				<span class="score" data-var="score" data-color="yellow">{{ '%02d' % data.teams.yellow.points }}</span>
 			</div>
 
 			<div class="sets">
 				<span class="text">Set</span>
 				<span class="set">
-					<span class="num">{{ data.game }}</span>
+					<span class="num" data-var="set">{{ data.game }}</span>
 					<span class="total">/ {{ data.numOfGames }}</span>
 				</span>
 
 				<span class="serving">
-					<span class="glyphicon glyphicon-arrow-left {% if data.teams.yellow.serving %}active{% endif %}"></span>
-					<span class="glyphicon glyphicon-arrow-right {% if data.teams.green.serving %}active{% endif %}"></span>
+					<span class="glyphicon glyphicon-arrow-left {% if data.teams.yellow.serving %}active{% endif %}" data-var="serving" data-color="yellow"></span>
+					<span class="glyphicon glyphicon-arrow-right {% if data.teams.green.serving %}active{% endif %}" data-var="serving" data-color="green"></span>
 				</span>
 			</div>
 
 			<div class="score-board">
-				<span class="name">{{ data.teams.green.playerName }}</span>
-				<span class="score">{{ '%02d' % data.teams.green.points }}</span>
+				<span class="name" data-var="name" data-color="green">{{ data.teams.green.playerName }}</span>
+				<span class="score" data-var="score" data-color="green">{{ '%02d' % data.teams.green.points }}</span>
 			</div>
 
 		</div>
@@ -53,7 +53,7 @@
 
 			{% for game in data["games"] %}
 
-				<tr>
+				<tr data-teamid="{{ game.teamId }}">
 
 					<td>{{ game.name }}</td>
 

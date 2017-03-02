@@ -190,12 +190,14 @@ def buttons():
 
 @app.route("/buttons/<path:button>/score", methods = ["POST"])
 def buttons_score(button):
-	MatchService().score(button)
+	data = MatchService().score(button)
+	socketio.emit("response", data, broadcast = True)
 	return button
 
 @app.route("/buttons/<path:button>/undo", methods = ["POST"])
 def buttons_undo(button):
-	MatchService().undo(button)
+	data = MatchService().undo(button)
+	socketio.emit("response", data, broadcast = True)
 	return button
 
 @app.after_request
@@ -246,6 +248,14 @@ class MatchService():
 
 		return match
 
+	def updateGame(self, id, game):
+		match = self.selectById(id)
+		match.game = game
+		match.modifiedAt = datetime.now()
+		session.commit()
+
+		return match
+
 	def createTeams(self, id, data):
 		match = self.selectById(id)
 
@@ -285,7 +295,7 @@ class MatchService():
 		match = self.selectActiveMatch()
 
 		if Singles().isMatchType(match.matchType):
-			Singles().score(match, button)
+			return Singles().score(match, button)
 
 		elif Doubles().isMatchType(match.matchType):
 			pass
@@ -409,6 +419,15 @@ class GameService():
 		session.commit()
 
 		return game
+
+	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
+		game = session.query(GameModel).filter_by(matchId = matchId, game = game).one()
+		game.winner = winner
+		game.winnerScore = winnerScore
+		game.loser = loser
+		game.loserScore = loserScore
+		game.completedAt = datetime.now()
+		session.commit()
 
 class IsmService():
 
@@ -678,8 +697,33 @@ class Singles():
 		elif button == "yellow" or button == "blue":
 			ScoreService().score(match.id, data["teams"]["yellow"]["teamId"], match.game)
 
+
+		data = self.matchData(match)
+
+		greenWin = data["teams"]["green"]["points"] >= data["playTo"] and data["teams"]["green"]["points"] >= data["teams"]["yellow"]["points"] + 2
+		yellowWin = data["teams"]["yellow"]["points"] >= data["playTo"] and data["teams"]["yellow"]["points"] >= data["teams"]["green"]["points"] + 2
+
+		if greenWin or yellowWin:
+			if greenWin:
+				winner = data["teams"]["green"]["teamId"]
+				winnerScore = data["teams"]["green"]["points"]
+				loser = data["teams"]["yellow"]["teamId"]
+				loserScore = data["teams"]["yellow"]["points"]
+			elif yellowWin:
+				winner = data["teams"]["yellow"]["teamId"]
+				winnerScore = data["teams"]["yellow"]["points"]
+				loser = data["teams"]["green"]["teamId"]
+				loserScore = data["teams"]["green"]["points"]
+
+			GameService().complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
+			MatchService().updateGame(data["matchId"], data["game"] + 1)
+			data = self.matchData(match)
+
+		return data
+
 	def undo(self, match, button):
 		ScoreService().undo(match.id)
+		return self.matchData(match)
 
 	def createTeams(self, match, data):
 		team1 = TeamService().createOnePlayer(match.id, data["green"])

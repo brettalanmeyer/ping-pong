@@ -10,6 +10,7 @@
 	display: table-cell;
 	vertical-align: top;
 	padding-bottom: 16px;
+	width: 35%;
 }
 
 .singles-container .score-board .name {
@@ -29,7 +30,7 @@
 	display: table-cell;
 	font-size: 30px;
 	vertical-align: middle;
-	width: 300px;
+	width: 30%;
 }
 
 .singles-container .sets .text {

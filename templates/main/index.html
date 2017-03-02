@@ -6,7 +6,13 @@
 
 		<div class="main-container">
 
-			<h1 class="ping-pong">Ping Pong</h1>
+			<h1 class="ping-pong">
+				{% if range(0, 15) | random < 14 %}
+					Ping Pong
+				{% else %}
+					Table Tennis
+				{% endif %}
+			</h1>
 
 			<div class="links">
 				<a href="/matches/new">New Game</a>
