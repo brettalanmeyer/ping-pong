@@ -115,7 +115,8 @@ def players():
 
 @app.route("/players/new", methods = ["GET"])
 def players_new():
-	return render_template("players/new.html")
+	player = PlayerService().new()
+	return render_template("players/new.html", player = player)
 
 @app.route("/players", methods = ["POST"])
 def players_create():
@@ -123,9 +124,11 @@ def players_create():
 
 	players = session.query(PlayerModel).filter_by(name = name)
 	if players.count() > 0:
-		return render_template("players/new.html", name = name, error = True)
+		player = PlayerService().new()
+		player.name = name
+		return render_template("players/new.html", player = player, error = True)
 
-	PlayerService().create(name)
+	PlayerService().create(request.form)
 
 	return redirect("/players")
 
@@ -140,13 +143,42 @@ def players_update(id):
 	player = PlayerService().selectById(id)
 	player.name = name
 
-	players = session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
+	players = PlayerService().excludeByName(id, name)
 	if players.count() > 0:
 		return render_template("players/edit.html", player = player, error = True)
 
 	PlayerService().update(id, name)
 
 	return redirect("/players")
+
+@app.route("/isms", methods = ["GET"])
+def isms():
+	return render_template("isms/index.html", isms = IsmService().select())
+
+@app.route("/isms/new", methods = ["GET"])
+def isms_new():
+	ism = IsmService().new()
+	return render_template("isms/new.html", ism = ism)
+
+@app.route("/isms", methods = ["POST"])
+def isms_create():
+	IsmService().create(request.form)
+	return redirect("/isms")
+
+@app.route("/isms/<int:id>/edit", methods = ["GET"])
+def isms_edit(id):
+	ism = IsmService().selectById(id)
+	return render_template("isms/edit.html", ism = ism)
+
+@app.route("/isms/<int:id>", methods = ["POST"])
+def isms_update(id):
+	IsmService().update(id, request.form)
+	return redirect("/isms")
+
+@app.route("/isms/<int:id>/delete", methods = ["POST"])
+def isms_delete(id):
+	IsmService().delete(id)
+	return redirect("/isms")
 
 @app.route("/leaderboard", methods = ["GET"])
 def leaderboard_index():
@@ -200,7 +232,7 @@ class MatchService():
 	def updatePlayTo(self, id, playTo):
 		match = self.selectById(id)
 		match.playTo = playTo
-		match.updatedAt = datetime.now()
+		match.modifiedAt = datetime.now()
 		session.commit()
 
 		return match
@@ -209,7 +241,7 @@ class MatchService():
 		match = self.selectById(id)
 		match.numOfGames = numOfGames
 		match.game = 1
-		match.updatedAt = datetime.now()
+		match.modifiedAt = datetime.now()
 		session.commit()
 
 		return match
@@ -276,7 +308,7 @@ class MatchService():
 	def play(self, id):
 		match = self.selectById(id)
 		match.ready = True
-		match.updatedAt = datetime.now()
+		match.modifiedAt = datetime.now()
 		session.commit()
 
 	def deleteAll(self):
@@ -320,8 +352,11 @@ class PlayerService():
 	def selectById(self, id):
 		return session.query(PlayerModel).filter(PlayerModel.id == id).one()
 
-	def create(self, name):
-		player = PlayerModel(name, datetime.now(), datetime.now())
+	def new(self):
+		return PlayerModel("", None, None)
+
+	def create(self, form):
+		player = PlayerModel(form["name"], datetime.now(), datetime.now())
 		session.add(player)
 		session.commit()
 
@@ -330,10 +365,13 @@ class PlayerService():
 	def update(self, id, name):
 		player = self.selectById(id)
 		player.name = name
-		player.updatedAt = datetime.now()
+		player.modifiedAt = datetime.now()
 		session.commit()
 
 		return player
+
+	def excludeByName(self, id, name):
+		return session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
 
 class ScoreService():
 
@@ -371,6 +409,42 @@ class GameService():
 		session.commit()
 
 		return game
+
+class IsmService():
+
+	def select(self):
+		return session.query(IsmModel).filter(IsmModel.approved == True)
+
+	def selectById(self, id):
+		return session.query(IsmModel).filter(IsmModel.id == id).one()
+
+	def new(self):
+		return IsmModel(0, 0, "", False, None, None)
+
+	def create(self, form):
+		ism = IsmModel(form["left"], form["right"], form["saying"], False, datetime.now(), datetime.now())
+		session.add(ism)
+		session.commit()
+
+		return ism
+
+	def update(self, id, form):
+		ism = self.selectById(id)
+		ism.left = form["left"]
+		ism.right = form["right"]
+		ism.saying = form["saying"]
+		ism.approved = False
+		ism.modifiedAt = datetime.now()
+		session.commit()
+
+		return ism
+
+	def delete(self, id):
+		ism = self.selectById(id)
+		session.delete(ism)
+		session.commit()
+
+		return ism
 
 class MatchModel(Base):
 
@@ -489,6 +563,26 @@ class GameModel(Base):
 		self.blue = blue
 		self.red = red
 		self.createdAt = createdAt
+
+class IsmModel(Base):
+
+	__tablename__ = "isms"
+
+	id = Column(Integer, primary_key = True)
+	left = Column(Integer)
+	right = Column(Integer)
+	saying = Column(String)
+	approved = Column(Integer)
+	createdAt = Column(DateTime)
+	modifiedAt = Column(DateTime)
+
+	def __init__(self, left, right, saying, approved, createdAt, modifiedAt):
+		self.left = left
+		self.right = right
+		self.saying = saying
+		self.approved = approved
+		self.createdAt = createdAt
+		self.modifiedAt = modifiedAt
 
 class Singles():
 

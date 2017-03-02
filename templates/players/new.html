@@ -14,12 +14,7 @@
 
 		<form action="/players" method="POST">
 
-			<div class="form-group">
-
-				<label for="name-field">Name</label>
-				<input id="name-field" name="name" value="{{ name }}" class="form-control" />
-
-			</div>
+			{% include 'players/_form.html' %}
 
 			<button class="btn btn-default">Create Player</button>
 

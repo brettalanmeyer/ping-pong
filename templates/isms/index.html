@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}Isms{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<a class="btn btn-default btn-sm action" href="/isms/new">
+			<span class="glyphicon glyphicon-star"></span>
+			Create Ism
+		</a>
+
+		<h1 class="with-action">Isms</h1>
+
+		<table class="table">
+
+			<tbody>
+
+				{% for ism in isms %}
+
+					<tr>
+
+						<td>
+							<span class="text-center" style="display: inline-block; width: 16px;">{{ ism.left }}</span>
+							<span class="text-center" style="display: inline-block;">-</span>
+							<span class="text-center" style="display: inline-block; width: 16px;">{{ ism.right }}</span>
+						</td>
+						<td>{{ ism.saying }}</td>
+
+						<td width="1">
+							<a href="/isms/{{ ism.id }}/edit" class="btn btn-default btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span>
+								Edit
+							</a>
+						</td>
+
+						<!--
+						<td width="1">
+							<form action="/isms/{{ ism.id }}/delete" method="POST">
+								<button class="btn btn-danger btn-sm">
+									<span class="glyphicon glyphicon-trash"></span>
+									Delete
+								</button>
+							</form>
+						</td> -->
+
+					</tr>
+
+				{% endfor %}
+
+			</tbody>
+
+		</table>
+
+	</div>
+
+{% endblock %}
