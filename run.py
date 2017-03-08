@@ -63,22 +63,21 @@ def matches_delete():
 
 @app.route("/matches/<int:id>/play-to", methods = ["GET"])
 def matches_play_to(id):
-	match = MatchService().selectById(id)
-	title, template, default = MatchService().getMatchTypeAttributes(match)
-	return render_template("matches/play-to.html", match = match, default = default)
+	match, matchType = MatchService().selectById(id)
+	return render_template("matches/play-to.html", match = match, default = matchType.defaultPoints)
 
 @app.route("/matches/<int:id>/play-to", methods = ["POST"])
 def matches_play_to_update(id):
-	match = MatchService().updatePlayTo(id, request.form["playTo"])
+	match, matchType = MatchService().updatePlayTo(id, request.form["playTo"])
 
-	if match.matchType == "nines":
-		return redirect("/matches/%d/players" % id)
+	if matchType.matchType == "nines":
+		return redirect("/matches/%d/players" % match.id)
 
-	return redirect("/matches/%d/num-of-games" % id)
+	return redirect("/matches/%d/num-of-games" % match.id)
 
 @app.route("/matches/<int:id>/num-of-games", methods = ["GET"])
 def matches_games(id):
-	match = MatchService().selectById(id)
+	match, matchType = MatchService().selectById(id)
 	return render_template("matches/num-of-games.html", match = match)
 
 @app.route("/matches/<int:id>/num-of-games", methods = ["POST"])
@@ -88,15 +87,15 @@ def matches_games_update(id):
 
 @app.route("/matches/<int:id>/players", methods = ["GET"])
 def matches_players(id):
-	match = MatchService().selectById(id)
-	title, template, default = MatchService().getMatchTypeAttributes(match)
+	match, matchType = MatchService().selectById(id)
 	players = PlayerService().select()
-	return render_template(template, title = title, match = match, players = players)
+	return render_template(matchType.playerTemplate, title = matchType.label, match = match, players = players)
 
 @app.route("/matches/<int:id>/players", methods = ["POST"])
 def matches_players_create(id):
-	MatchService().createTeams(id, request.form)
-	MatchService().play(id)
+	match, matchType = MatchService().selectById(id)
+	matchType.createTeams(match, request.form)
+	MatchService().play(match)
 	return redirect("/matches/%d" % id)
 
 @app.route("/matches/<int:id>", methods = ["GET"])
@@ -191,13 +190,19 @@ def buttons():
 
 @app.route("/buttons/<path:button>/score", methods = ["POST"])
 def buttons_score(button):
-	data = MatchService().score(button)
+	match, matchType = MatchService().selectActiveMatch()
+	data = None
+	if matchType != None:
+		data = matchType.score(match, button)
 	socketio.emit("response", data, broadcast = True)
 	return button
 
 @app.route("/buttons/<path:button>/undo", methods = ["POST"])
 def buttons_undo(button):
-	data = MatchService().undo(button)
+	match, matchType = MatchService().selectActiveMatch()
+	data = None
+	if matchType != None:
+		data = matchType.undo(match, button)
 	socketio.emit("response", data, broadcast = True)
 	return button
 
@@ -217,13 +222,19 @@ def server_error(error):
 class MatchService():
 
 	def selectById(self, id):
-		return session.query(MatchModel).filter(MatchModel.id == id).one()
+		match = session.query(MatchModel).filter(MatchModel.id == id).one()
+		matchType = self.getMatchType(match)
+		return match, matchType
 
 	def select(self):
 		return session.query(MatchModel)
 
 	def selectActiveMatch(self):
-		return session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).order_by(MatchModel.id.desc()).first()
+		match = session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).order_by(MatchModel.id.desc()).first()
+		matchType = None
+		if match != None:
+			matchType = self.getMatchType(match)
+		return match, matchType
 
 	def create(self, matchType):
 		match = MatchModel(matchType, False, False, datetime.now(), datetime.now())
@@ -233,95 +244,45 @@ class MatchService():
 		return match
 
 	def updatePlayTo(self, id, playTo):
-		match = self.selectById(id)
+		match, matchType = self.selectById(id)
 		match.playTo = playTo
 		match.modifiedAt = datetime.now()
 		session.commit()
 
-		return match
+		return match, matchType
 
 	def updateGames(self, id, numOfGames):
-		match = self.selectById(id)
+		match, matchType = self.selectById(id)
 		match.numOfGames = numOfGames
 		match.game = 1
 		match.modifiedAt = datetime.now()
 		session.commit()
 
-		return match
+		return match, matchType
 
 	def updateGame(self, id, game):
-		match = self.selectById(id)
+		match, matchType = self.selectById(id)
 		match.game = game
 		match.modifiedAt = datetime.now()
 		session.commit()
 
-		return match
+		return match, matchType
 
-	def createTeams(self, id, data):
-		match = self.selectById(id)
-
+	def getMatchType(self, match):
 		if Singles().isMatchType(match.matchType):
-			Singles().createTeams(match, data)
+			return Singles()
 
 		elif Doubles().isMatchType(match.matchType):
-			Doubles().createTeams(match, data)
+			return Doubles()
 
 		elif Nines().isMatchType(match.matchType):
-			pass
-
-	def getMatchTypeAttributes(self, match):
-		if Singles().isMatchType(match.matchType):
-			return "Singles", "matches/two-player.html", 21
-
-		if Doubles().isMatchType(match.matchType):
-			return "9s", "matches/four-player.html", 9
-
-		if Nines().isMatchType(match.matchType):
-			return "Doubles", "matches/four-player.html", 21
+			return Nines()
 
 	def matchDataById(self, id):
-		match = self.selectById(id)
-		return self.matchData(match)
+		match, matchType = self.selectById(id)
+		return matchType.matchData(match)
 
-	def matchData(self, match):
-		if Singles().isMatchType(match.matchType):
-			return Singles().matchData(match)
-
-		elif Doubles().isMatchType(match.matchType):
-			return Doubles().matchData(match)
-
-		elif Nines().isMatchType(match.matchType):
-			pass
-
-	def score(self, button):
-		match = self.selectActiveMatch()
-
-		if match == None:
-			return None
-
-		elif Singles().isMatchType(match.matchType):
-			return Singles().score(match, button)
-
-		elif Doubles().isMatchType(match.matchType):
-			pass
-
-		elif Nines().isMatchType(match.matchType):
-			pass
-
-	def undo(self, button):
-		match = self.selectActiveMatch()
-
-		if Singles().isMatchType(match.matchType):
-			return Singles().undo(match, button)
-
-		elif Doubles().isMatchType(match.matchType):
-			pass
-
-		elif Nines().isMatchType(match.matchType):
-			pass
-
-	def play(self, id):
-		match = self.selectById(id)
+	def play(self, match):
 		match.ready = True
 		match.modifiedAt = datetime.now()
 		session.commit()
@@ -653,14 +614,18 @@ class IsmModel(Base):
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
 
-class Singles():
-
-	label = "Singles"
-	matchType = "singles"
-	template = "matches/singles.html"
+class MatchType():
 
 	def isMatchType(self, matchType):
 		return self.matchType == matchType
+
+class Singles(MatchType):
+
+	label = "Singles"
+	matchType = "singles"
+	playerTemplate = "matches/two-player.html"
+	matchTemplate = "matches/singles.html"
+	defaultPoints = 21
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]
@@ -672,7 +637,7 @@ class Singles():
 			"numOfGames": match.numOfGames,
 			"games": [],
 			"game": match.game,
-			"template": self.template,
+			"template": self.matchTemplate,
 			"complete": match.complete == 1,
 			"createdAt": str(match.createdAt),
 			"completedAt": str(match.completedAt),
@@ -820,14 +785,14 @@ class Singles():
 
 			GameService().create(match.id, i, green, yellow, None, None)
 
-class Doubles():
+class Doubles(MatchType):
 
 	label = "Doubles"
 	matchType = "doubles"
-	template = "matches/doubles.html"
+	playerTemplate = "matches/four-player.html"
+	matchTemplate = "matches/doubles.html"
 
-	def isMatchType(self, matchType):
-		return self.matchType == matchType
+	defaultPoints = 21
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]
@@ -839,7 +804,7 @@ class Doubles():
 			"numOfGames": match.numOfGames,
 			"games": [],
 			"game": match.game,
-			"template": self.template,
+			"template": self.matchTemplate,
 			"complete": False,
 			"teams": [],
 			"players": {
@@ -962,15 +927,13 @@ class Doubles():
 
 			GameService().create(match.id, i + 1, a, b, c, d)
 
-class Nines():
+class Nines(MatchType):
 
 	label = "9s"
 	matchType = "nines"
-	template = "matches/nines.html"
-
-	def isMatchType(self, matchType):
-		return self.matchType == matchType
-
+	playerTemplate = "matches/four-player.html"
+	matchTemplate = "matches/nines.html"
+	defaultPoints = 9
 
 if __name__ == "__main__":
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])

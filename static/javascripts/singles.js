@@ -57,9 +57,9 @@ $(function(){
 
 			if(data.complete){
 				if(data.teams.green.winner){
-					teamId = data.teams.green.id;
+					teamId = data.teams.green.teamId;
 				} else {
-					teamId = data.teams.yellow.id;
+					teamId = data.teams.yellow.teamId;
 				}
 
 				$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
@@ -83,11 +83,8 @@ $(function(){
 
 					return;
 				}
-
 			}
-
 		}
-
 
 	}
 

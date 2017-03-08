@@ -1,50 +1,49 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Buttons</title>
+		<style>
 
-{% block title %}Buttons{% endblock %}
+			button {
+				display: block;
+				width: 100px;
+				cursor: pointer;
+				border: solid 1px #ccc;
+				border-radius: 4px;
+				padding: 8px;
+				color: white;
+				margin: auto;
+			}
 
-{% block body %}
+			button:nth-child(2n - 1){
+				margin-top: 12px;
+			}
 
-	<style>
+			button:nth-child(4){
+				margin-bottom: 40px;
+			}
 
-		button {
-			display: block;
-			width: 100px;
-			cursor: pointer;
-			border: solid 1px #ccc;
-			border-radius: 4px;
-			padding: 8px;
-			color: white;
-			margin: auto;
-		}
+			button.red {
+				background: red;
+			}
 
-		button:nth-child(2n - 1){
-			margin-top: 12px;
-		}
+			button.green {
+				background: green;
+			}
 
-		button:nth-child(4){
-			margin-bottom: 72px;
-		}
+			button.blue {
+				background: blue;
+			}
 
-		button.red {
-			background: red;
-		}
+			button.yellow {
+				background: yellow;
+				color: black;
+			}
 
-		button.green {
-			background: green;
-		}
+		</style>
 
-		button.blue {
-			background: blue;
-		}
-
-		button.yellow {
-			background: yellow;
-			color: black;
-		}
-
-	</style>
-
-	<div class="container">
+	</head>
+	<body>
 
 		<button class="red" data-color="red" data-action="score">score</button>
 		<button class="red" data-color="red" data-action="undo">undo</button>
@@ -58,28 +57,24 @@
 		<button class="yellow" data-color="yellow" data-action="score">score</button>
 		<button class="yellow" data-color="yellow" data-action="undo">undo</button>
 
-	</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script>
 
-{% endblock %}
+			$(function(){
 
-{% block footer %}
+				$("button").on("click", function(){
+					var button = $(this);
+					$.post("/buttons/" + button.data("color") + "/" + button.data("action"));
+				});
 
-	<script>
+				setInterval(function(){
+					var rand = Math.floor(Math.random() * 4);
+					// $("button[data-action=score]").eq(rand).click();
+				}, 2500);
 
-		$(function(){
-
-			$("button").on("click", function(){
-				var button = $(this);
-				$.post("/buttons/" + button.data("color") + "/" + button.data("action"));
 			});
 
-			setInterval(function(){
-				var rand = Math.floor(Math.random() * 4);
-				// $("button[data-action=score]").eq(rand).click();
-			}, 2500);
+		</script>
 
-		});
-
-	</script>
-
-{% endblock %}
+	</body>
+</html>
