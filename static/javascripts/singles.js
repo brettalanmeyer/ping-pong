@@ -15,6 +15,8 @@ $(function(){
 		var greenServing = $("[data-color=green][data-var=serving");
 
 		function update(data){
+			if(data == null) return;
+
 			set.html(data.game);
 
 			yellowName.html(data.teams.yellow.playerName);
@@ -25,6 +27,7 @@ $(function(){
 
 			yellowServing.removeClass("active");
 			greenServing.removeClass("active");
+
 			if(data.teams.yellow.serving){
 				yellowServing.addClass("active");
 			} else if(data.teams.green.serving){
@@ -41,14 +44,23 @@ $(function(){
 				for(var j = 0; j < game.games.length; j++){
 					var g = game.games[j];
 					cells.eq(j + 1).html(pad(g.score));
+
+					if(g.win){
+						cells.eq(j + 1).addClass("win");
+					}
 				}
 			}
-		}
 
-		function pad(num){
-			return ("00" + num).substr(-2,2);
-		}
+			if(data.complete){
+				if(data.teams.green.winner){
+					teamId = data.teams.green.id;
+				} else {
+					teamId = data.teams.yellow.id;
+				}
 
+				$("tr[data-teamid=" + game.teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
+			}
+		}
 	}
 
 });

@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, text, func, Column, Integer, DateTime, Str
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from datetime import datetime
-import random, json
+import random, json, math
 
 app = Flask(__name__)
 app.config.from_pyfile("config.cfg")
@@ -101,12 +101,12 @@ def matches_players_create(id):
 
 @app.route("/matches/<int:id>", methods = ["GET"])
 def matches(id):
-	data = MatchService().matchData(id)
+	data = MatchService().matchDataById(id)
 	return render_template(data["template"], data = data)
 
 @app.route("/matches/<int:id>.json", methods = ["GET"])
 def matches_json(id):
-	data = MatchService().matchData(id)
+	data = MatchService().matchDataById(id)
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
 
 @app.route("/players", methods = ["GET"])
@@ -278,10 +278,11 @@ class MatchService():
 		if Nines().isMatchType(match.matchType):
 			return "Doubles", "matches/four-player.html", 21
 
-	def matchData(self, id):
-
+	def matchDataById(self, id):
 		match = self.selectById(id)
+		return self.matchData(match)
 
+	def matchData(self, match):
 		if Singles().isMatchType(match.matchType):
 			return Singles().matchData(match)
 
@@ -294,7 +295,10 @@ class MatchService():
 	def score(self, button):
 		match = self.selectActiveMatch()
 
-		if Singles().isMatchType(match.matchType):
+		if match == None:
+			return None
+
+		elif Singles().isMatchType(match.matchType):
 			return Singles().score(match, button)
 
 		elif Doubles().isMatchType(match.matchType):
@@ -321,6 +325,12 @@ class MatchService():
 		match.modifiedAt = datetime.now()
 		session.commit()
 
+	def complete(self, match):
+		match.complete = True
+		match.modifiedAt = datetime.now()
+		match.completedAt = datetime.now()
+		session.commit()
+
 	def deleteAll(self):
 		session.query(MatchModel).delete()
 		session.commit()
@@ -344,6 +354,18 @@ class TeamService():
 		teamPlayer2 = TeamPlayerService().create(team.id, player2Id)
 
 		return team
+
+	def win(self, team):
+		team.win = True
+		team.loss = False
+		team.modifiedAt = datetime.now()
+		session.commit()
+
+	def lose(self, team):
+		team.win = False
+		team.loss = True
+		team.modifiedAt = datetime.now()
+		session.commit()
 
 class TeamPlayerService():
 
@@ -428,6 +450,20 @@ class GameService():
 		game.loserScore = loserScore
 		game.completedAt = datetime.now()
 		session.commit()
+
+	def getTeamWins(self, matchId, teamId):
+		query = "\
+			SELECT COUNT(*) as wins\
+			FROM games\
+			WHERE matchId = :matchId AND winner = :teamId\
+		"
+		connection = session.connection()
+		data = connection.execute(text(query), matchId = matchId, teamId = teamId).first()
+
+		if data == None:
+			return 0
+
+		return int(data.wins)
 
 class IsmService():
 
@@ -623,21 +659,25 @@ class Singles():
 			"games": [],
 			"game": match.game,
 			"template": self.template,
-			"complete": False,
+			"complete": match.complete == 1,
+			"createdAt": str(match.createdAt),
+			"completedAt": str(match.completedAt),
 			"teams": {
 				"green": {
 					"teamId": None,
 					"playerId": game.green,
 					"playerName": None,
 					"points": None,
-					"serving": False
+					"serving": False,
+					"winner": False
 				},
 				"yellow": {
 					"teamId": None,
 					"playerId": game.yellow,
 					"playerName": None,
 					"points": None,
-					"serving": False
+					"serving": False,
+					"winner": False
 				}
 			},
 			"points": 0
@@ -653,6 +693,7 @@ class Singles():
 				data["teams"][color]["playerName"] = teamPlayer.player.name
 				data["teams"][color]["points"] = ScoreService().getScore(match.id, team.id, match.game)
 				data["teams"][color]["teamId"] = team.id
+				data["teams"][color]["winner"] = team.win == 1
 
 				data["games"].append({
 					"teamId": team.id,
@@ -688,16 +729,7 @@ class Singles():
 		else:
 			data["teams"]["yellow"]["serving"] = True
 
-	def score(self, match, button):
-		data = self.matchData(match)
-
-		if button == "green" or button == "red":
-			ScoreService().score(match.id, data["teams"]["green"]["teamId"], match.game)
-
-		elif button == "yellow" or button == "blue":
-			ScoreService().score(match.id, data["teams"]["yellow"]["teamId"], match.game)
-
-
+	def determineGameWinner(self, match):
 		data = self.matchData(match)
 
 		greenWin = data["teams"]["green"]["points"] >= data["playTo"] and data["teams"]["green"]["points"] >= data["teams"]["yellow"]["points"] + 2
@@ -716,10 +748,44 @@ class Singles():
 				loserScore = data["teams"]["green"]["points"]
 
 			GameService().complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
-			MatchService().updateGame(data["matchId"], data["game"] + 1)
-			data = self.matchData(match)
 
-		return data
+			if match.game < match.numOfGames:
+				MatchService().updateGame(match.id, match.game + 1)
+
+	def determineMatchWinner(self, match):
+		team1 = match.teams[0]
+		team2 = match.teams[1]
+
+		team1Wins = self.getTeamWins(match.id, team1.id)
+		team2Wins = self.getTeamWins(match.id, team2.id)
+
+		gamesNeededToWinMatch = int(math.ceil(float(match.numOfGames) / 2.0))
+
+		if team1Wins == gamesNeededToWinMatch:
+			TeamService().win(team1)
+			TeamService().lose(team2)
+			MatchService().complete(match)
+		elif team2Wins == gamesNeededToWinMatch:
+			TeamService().win(team2)
+			TeamService().lose(team1)
+			MatchService().complete(match)
+
+	def getTeamWins(self, matchId, teamId):
+		return GameService().getTeamWins(matchId, teamId)
+
+	def score(self, match, button):
+		data = self.matchData(match)
+
+		if button == "green" or button == "red":
+			ScoreService().score(match.id, data["teams"]["green"]["teamId"], match.game)
+
+		elif button == "yellow" or button == "blue":
+			ScoreService().score(match.id, data["teams"]["yellow"]["teamId"], match.game)
+
+		self.determineGameWinner(match)
+		self.determineMatchWinner(match)
+
+		return self.matchData(match)
 
 	def undo(self, match, button):
 		ScoreService().undo(match.id)
