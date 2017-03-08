@@ -7,11 +7,6 @@
 
 	<div id="singles" class="container">
 
-		<h1>
-			{{ data.matchType.title() }}<br />
-			Playing to {{ data.playTo }}<br />
-		</h1>
-
 		<div class="singles-container">
 
 			<div class="score-board">
@@ -26,6 +21,8 @@
 					<span class="total">/ {{ data.numOfGames }}</span>
 				</span>
 
+				<span class="playing-to">Playing to {{ data.playTo }}</span>
+
 				<span class="serving">
 					<span class="glyphicon glyphicon-arrow-left {% if data.teams.yellow.serving %}active{% endif %}" data-var="serving" data-color="yellow"></span>
 					<span class="glyphicon glyphicon-arrow-right {% if data.teams.green.serving %}active{% endif %}" data-var="serving" data-color="green"></span>
@@ -38,6 +35,8 @@
 			</div>
 
 		</div>
+
+		<div id="saying" class="saying"></div>
 
 		<table class="table table-bordered set-scores">
 
@@ -76,4 +75,11 @@
 
 	</div>
 
+{% endblock %}
+
+
+{% block footer %}
+	<script>
+		var isms = {{ isms|safe }};
+	</script>
 {% endblock %}

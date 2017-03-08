@@ -3,6 +3,7 @@
 	display: table;
 	width: 100%;
 	text-align: center;
+	margin-top: 30px;
 }
 
 .singles-container .score-board {
@@ -58,12 +59,15 @@
 	color: #333;
 }
 
+.singles-container .sets .playing-to {
+	font-size: 18px;
 
+}
 
 .set-scores {
 	font-size: 18px;
 	width: 80%;
-	margin: 30px auto 0;
+	margin: 15px auto 0;
 }
 
 .set-score {
@@ -76,12 +80,10 @@
 	font-weight: bold;
 }
 
-
-/*
-glyphicon glyphicon-chevron-left
-glyphicon glyphicon-chevron-right
-
-glyphicon glyphicon-arrow-left
-glyphicon glyphicon-arrow-right
-
-*/
+.saying {
+	height: 30px;
+	margin-top: 10px;
+	text-align: center;
+	font-size: 24px;
+	opacity: 0;
+}

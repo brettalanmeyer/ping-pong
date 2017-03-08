@@ -102,7 +102,8 @@ def matches_players_create(id):
 @app.route("/matches/<int:id>", methods = ["GET"])
 def matches(id):
 	data = MatchService().matchDataById(id)
-	return render_template(data["template"], data = data)
+	isms = IsmService().select()
+	return render_template(data["template"], data = data, isms = IsmService().serialize(isms))
 
 @app.route("/matches/<int:id>.json", methods = ["GET"])
 def matches_json(id):
@@ -500,6 +501,19 @@ class IsmService():
 		session.commit()
 
 		return ism
+
+	def serialize(self, isms):
+		data = []
+
+		for ism in isms:
+			data.append({
+				"id": int(ism.id),
+				"left": int(ism.left),
+				"right": int(ism.right),
+				"saying": ism.saying
+			})
+
+		return data
 
 class MatchModel(Base):
 
