@@ -9,11 +9,15 @@
 
 		<h1>Select Score</h1>
 
-		<form action="/matches/{{ match.id }}/play-to" method="POST">
+		<form action="/matches/{{ match.id }}/play-to" method="POST" class="option-form">
 
-			<input type="number" name="playTo" min="1" max="51" value="{{ default }}" />
+			<div class="form-group">
 
-			<button class="btn btn-default">Select Score</button>
+				<input type="number" name="playTo" min="1" max="51" value="{{ default }}" class="form-control" />
+
+			</div>
+
+			<button class="btn btn-default btn-block">Select Score</button>
 
 		</form>
 

@@ -204,3 +204,8 @@ a.action {
 	color: #5d7731;
 	text-shadow: 0 1px 0 #d0e5a4;
 }
+
+.option-form {
+	width: 300px;
+	margin: auto;
+}
