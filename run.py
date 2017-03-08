@@ -23,21 +23,6 @@ def makeDatabaseConnection():
 
 session, Base = makeDatabaseConnection()
 
-@app.route("/relationships", methods = ["GET"])
-def relationships():
-	matches = session.query(MatchModel)
-	print(matches.count())
-	for match in matches:
-		print("matchId: " + str(match.id))
-		teams = match.teams
-		len(teams)
-		for team in teams:
-			print("teamId: " + str(team.id))
-
-			for teamPlayer in team.teamPlayers:
-				print("player: " + teamPlayer.player.name)
-	return "relationships"
-
 @app.route("/", methods = ["GET"])
 def index():
 	return render_template("main/index.html")
@@ -632,7 +617,7 @@ class Singles(MatchType):
 
 		data = {
 			"matchId": match.id,
-			"matchType": "singles",
+			"matchType": self.matchType,
 			"playTo": match.playTo,
 			"numOfGames": match.numOfGames,
 			"games": [],
@@ -791,7 +776,6 @@ class Doubles(MatchType):
 	matchType = "doubles"
 	playerTemplate = "matches/four-player.html"
 	matchTemplate = "matches/doubles.html"
-
 	defaultPoints = 21
 
 	def matchData(self, match):
@@ -799,36 +783,49 @@ class Doubles(MatchType):
 
 		data = {
 			"matchId": match.id,
-			"matchType": "doubles",
+			"matchType": self.matchType,
 			"playTo": match.playTo,
 			"numOfGames": match.numOfGames,
 			"games": [],
 			"game": match.game,
 			"template": self.matchTemplate,
-			"complete": False,
-			"teams": [],
+			"complete": match.complete == 1,
+			"teams": {
+				"north": {
+					"teamId": None,
+					"points": 0,
+					"winner": False,
+					"players": []
+				},
+				"south": {
+					"teamId": None,
+					"points": 0,
+					"winner": False,
+					"players": []
+				}
+			},
 			"players": {
 				"green": {
-					"teamId": None,
 					"playerId": game.green,
+					"teamPlayerId": None,
 					"playerName": None,
 					"serving": False
 				},
 				"yellow": {
-					"teamId": None,
 					"playerId": game.yellow,
+					"teamPlayerId": None,
 					"playerName": None,
 					"serving": False
 				},
 				"blue": {
-					"teamId": None,
 					"playerId": game.blue,
+					"teamPlayerId": None,
 					"playerName": None,
 					"serving": False
 				},
 				"red": {
-					"teamId": None,
 					"playerId": game.red,
+					"teamPlayerId": None,
 					"playerName": None,
 					"serving": False
 				}
@@ -841,31 +838,51 @@ class Doubles(MatchType):
 			points = ScoreService().getScore(match.id, team.id, match.game)
 			data["points"] += points
 
-			data["teams"].append({
-				"teamId": team.id,
-				"points": points
-			})
-
 			for teamPlayer in team.teamPlayers:
 				if data["players"]["green"]["playerId"] == teamPlayer.player.id:
 					color = "green"
+					data["teams"]["north"]["teamId"] = team.id
+					data["teams"]["north"]["points"] = points
+					data["teams"]["north"]["players"].append(teamPlayer.player.name)
+
 				elif data["players"]["yellow"]["playerId"] == teamPlayer.player.id:
 					color = "yellow"
+					data["teams"]["south"]["teamId"] = team.id
+					data["teams"]["south"]["points"] = points
+					data["teams"]["south"]["players"].append(teamPlayer.player.name)
+
 				elif data["players"]["blue"]["playerId"] == teamPlayer.player.id:
 					color = "blue"
+					data["teams"]["south"]["players"].append(teamPlayer.player.name)
+
 				elif data["players"]["red"]["playerId"] == teamPlayer.player.id:
 					color = "red"
+					data["teams"]["north"]["players"].append(teamPlayer.player.name)
 
 				data["players"][color]["playerName"] = teamPlayer.player.name
 				data["players"][color]["teamId"] = team.id
 
+
+		# for game in match.games:
+		# 	data["games"].append({
+		# 		"winner": game.winner,
+		# 		"winnerScore": game.winnerScore,
+		# 		"loser": game.loser,
+		# 		"loserScore": game.loserScore
+		# 	})
+
 		for game in match.games:
-			data["games"].append({
-				"winner": game.winner,
-				"winnerScore": game.winnerScore,
-				"loser": game.loser,
-				"loserScore": game.loserScore
-			})
+			for team in data["games"]:
+				if game.winner == team["teamId"]:
+					team["games"].append({
+						"win": True,
+						"score": game.winnerScore
+					})
+				elif game.loser == team["teamId"]:
+					team["games"].append({
+						"win": False,
+						"score": game.loserScore
+					})
 
 		self.determineServe(data)
 

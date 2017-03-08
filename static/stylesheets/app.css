@@ -209,3 +209,8 @@ a.action {
 	width: 300px;
 	margin: auto;
 }
+
+.text-sm {
+	font-size: 13px;
+
+}

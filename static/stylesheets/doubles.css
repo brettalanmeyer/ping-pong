@@ -1,0 +1,65 @@
+.doubles-container {
+	overflow: hidden;
+	display: table;
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+}
+
+.doubles-container .score-board {
+	border: solid 1px #ccc;
+	display: table-cell;
+	vertical-align: top;
+	padding-bottom: 16px;
+	width: 35%;
+}
+
+.doubles-container .score-board .name {
+	display: block;
+	font-size: 60px;
+	padding-top: 30px;
+}
+
+.doubles-container .score-board .score {
+	display: block;
+	font-family: digital;
+	font-size: 200px;
+	line-height: 200px;
+}
+
+.doubles-container .sets {
+	display: table-cell;
+	font-size: 30px;
+	vertical-align: middle;
+	width: 30%;
+}
+
+.doubles-container .sets .text {
+	display: block;
+}
+
+.doubles-container .sets .set {
+	display: block;
+}
+
+.doubles-container .sets .set .num {
+	font-size: 80px;
+	line-height: 80px;
+}
+
+.doubles-container .sets .serving {
+	display: block;
+	position: relative;
+	font-size: 100px;
+	text-align: center;
+	color: #ccc;
+}
+
+.doubles-container .sets .serving .active {
+	color: #333;
+}
+
+.doubles-container .sets .playing-to {
+	font-size: 18px;
+}
+
