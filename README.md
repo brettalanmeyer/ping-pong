@@ -13,6 +13,7 @@ Doubles
 	2. Select score to: (default is 21, must win by 2 pts)
 	3. Show table with player selector at each corner
 
+Redo singles to use north and south for teams intead of just colors
 
 To Install For OS X
 

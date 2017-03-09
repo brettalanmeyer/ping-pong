@@ -28,7 +28,7 @@
 
 		{% block body %}{% endblock %}
 
-		{% assets filters="jsmin", output="gen/ping-pong.js", "libraries/jquery.min.js", "libraries/socket.io.min.js", "javascripts/app.js", "javascripts/singles.js", "javascripts/doubles.js" %}
+		{% assets filters="jsmin", output="gen/ping-pong.js", "libraries/jquery.min.js", "libraries/socket.io.min.js", "javascripts/app.js", "javascripts/isms.js", "javascripts/singles.js", "javascripts/doubles.js" %}
 			<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 		{% endassets %}
 
