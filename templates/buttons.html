@@ -4,9 +4,21 @@
 		<title>Buttons</title>
 		<style>
 
+			body {
+				overflow: hidden;
+			}
+
+			.team {
+				float: left;
+			}
+
+			.team:first-child {
+				margin-right: 4px;
+			}
+
 			button {
 				display: block;
-				width: 100px;
+				width: 50px;
 				cursor: pointer;
 				border: solid 1px #ccc;
 				border-radius: 4px;
@@ -15,12 +27,8 @@
 				margin: auto;
 			}
 
-			button:nth-child(2n - 1){
-				margin-top: 12px;
-			}
-
-			button:nth-child(4){
-				margin-bottom: 40px;
+			button:nth-child(2n){
+				margin-bottom: 4px;
 			}
 
 			button.red {
@@ -40,22 +48,36 @@
 				color: black;
 			}
 
+			button.delete-all {
+				background: orange;
+				width: 100%;
+			}
 		</style>
 
 	</head>
 	<body>
 
-		<button class="red" data-color="red" data-action="score">score</button>
-		<button class="red" data-color="red" data-action="undo">undo</button>
+		<div class="team">
 
-		<button class="green" data-color="green" data-action="score">score</button>
-		<button class="green" data-color="green" data-action="undo">undo</button>
+			<button class="yellow" data-color="yellow" data-action="score">score</button>
+			<button class="yellow" data-color="yellow" data-action="undo">undo</button>
 
-		<button class="blue" data-color="blue" data-action="score">score</button>
-		<button class="blue" data-color="blue" data-action="undo">undo</button>
+			<button class="blue" data-color="blue" data-action="score">score</button>
+			<button class="blue" data-color="blue" data-action="undo">undo</button>
 
-		<button class="yellow" data-color="yellow" data-action="score">score</button>
-		<button class="yellow" data-color="yellow" data-action="undo">undo</button>
+		</div>
+
+		<div class="team">
+
+			<button class="green" data-color="green" data-action="score">score</button>
+			<button class="green" data-color="green" data-action="undo">undo</button>
+
+			<button class="red" data-color="red" data-action="score">score</button>
+			<button class="red" data-color="red" data-action="undo">undo</button>
+
+		</div>
+
+		<button class="delete-all" data-color="none" data-action="delete-scores">delete scores</button>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>
@@ -66,11 +88,6 @@
 					var button = $(this);
 					$.post("/buttons/" + button.data("color") + "/" + button.data("action"));
 				});
-
-				setInterval(function(){
-					var rand = Math.floor(Math.random() * 4);
-					// $("button[data-action=score]").eq(rand).click();
-				}, 2500);
 
 			});
 

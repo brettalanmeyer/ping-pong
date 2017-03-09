@@ -11,18 +11,14 @@
 			<title>Ping Pong{% if request.endpoint != "index" %} | {% endif %}{% block title %}{% endblock %}</title>
 			<link rel="shortcut icon" href="/static/images/ping-pong-icon.png" type="image/x-icon" />
 			<link href="{{ url_for('static', filename='libraries/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-			{% assets filters="cssmin", output="gen/ping-pong.css", "stylesheets/app.css", "stylesheets/ping-pong-table.css", "stylesheets/singles.css", "stylesheets/doubles.css" %}
+			{% assets filters="cssmin", output="gen/ping-pong.css", "stylesheets/app.css", "stylesheets/ping-pong-table.css", "stylesheets/singles.css", "stylesheets/doubles.css", "stylesheets/debug.css" %}
 				<link href="{{ ASSET_URL }}" rel="stylesheet">
 			{% endassets %}
 
 		{% endblock %}
 
 	</head>
-	<body>
-
-		<form style="position: absolute; right: 15px; top: 15px;" action="/matches/delete" method="POST">
-			<button class="btn btn-danger">Delete Matches</button>
-		</form>
+	<body {% if request.args.get('debug') %}class="debug"{% endif %}>
 
 		{% if request.endpoint != "index" %}
 			<header>
@@ -38,7 +34,12 @@
 
 		{% block footer %}{% endblock %}
 
-		<iframe src="http://10.9.1.215:5010/buttons" style="position: absolute; top: 78px; right: 8px; height: 354px; width: 120px; border: solid 1px #ccc;"></iframe>
+		{% if request.args.get('debug') %}
+			<form class="debug-delete-matches" action="/matches/delete" method="POST">
+				<button class="btn btn-danger">Delete Matches</button>
+			</form>
+			<iframe src="http://10.9.1.215:5010/buttons" class="debug-button-panel"></iframe>
+		{% endif %}
 
 	</body>
 </html>

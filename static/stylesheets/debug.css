@@ -1,0 +1,42 @@
+
+.debug .singles-container .name[data-var="name"][data-color="green"] {
+	background: green;
+	color: white;
+}
+
+.debug .singles-container .name[data-var="name"][data-color="yellow"] {
+	background: yellow;
+}
+
+.debug .doubles-container .name[data-var="name"][data-color="green"] {
+	background: green;
+	color: white;
+}
+
+.debug .doubles-container .name[data-var="name"][data-color="yellow"] {
+	background: yellow;
+}
+
+.debug .doubles-container .name[data-var="name"][data-color="blue"] {
+	background: blue;
+	color: white;
+}
+
+.debug .doubles-container .name[data-var="name"][data-color="red"] {
+	background: red;
+	color: white;
+}
+
+.debug .debug-delete-matches {
+	position: absolute;
+	right: 15px; top: 15px;
+}
+
+.debug .debug-button-panel {
+	position: absolute;
+	top: 78px;
+	right: 8px;
+	height: 190px;
+	width: 122px;
+	border: solid 1px #ccc;
+}
