@@ -191,6 +191,16 @@ def buttons_undo(button):
 	socketio.emit("response", data, broadcast = True)
 	return button
 
+@app.route("/buttons/<path:button>/delete-scores", methods = ["POST"])
+def buttons_delete_scores(button):
+	ScoreService().deleteAll()
+	match, matchType = MatchService().selectActiveMatch()
+	data = None
+	if matchType != None:
+		data = matchType.matchData(match)
+	socketio.emit("response", data, broadcast = True)
+	return button
+
 @app.after_request
 def afterRequest(response):
 	session.close()
@@ -379,6 +389,10 @@ class ScoreService():
 			return 0
 
 		return int(data.points)
+
+	def deleteAll(self):
+		session.query(ScoreModel).delete()
+		session.commit()
 
 class GameService():
 
@@ -604,6 +618,10 @@ class MatchType():
 	def isMatchType(self, matchType):
 		return self.matchType == matchType
 
+	def undo(self, match, button):
+		ScoreService().undo(match.id)
+		return self.matchData(match)
+
 class Singles(MatchType):
 
 	label = "Singles"
@@ -741,18 +759,15 @@ class Singles(MatchType):
 		data = self.matchData(match)
 
 		if button == "green" or button == "red":
-			ScoreService().score(match.id, data["teams"]["green"]["teamId"], match.game)
-
+			teamId = data["teams"]["green"]["teamId"]
 		elif button == "yellow" or button == "blue":
-			ScoreService().score(match.id, data["teams"]["yellow"]["teamId"], match.game)
+			teamId = data["teams"]["yellow"]["teamId"]
+
+		ScoreService().score(match.id, teamId, match.game)
 
 		self.determineGameWinner(match)
 		self.determineMatchWinner(match)
 
-		return self.matchData(match)
-
-	def undo(self, match, button):
-		ScoreService().undo(match.id)
 		return self.matchData(match)
 
 	def createTeams(self, match, data):
@@ -862,15 +877,6 @@ class Doubles(MatchType):
 				data["players"][color]["playerName"] = teamPlayer.player.name
 				data["players"][color]["teamId"] = team.id
 
-
-		# for game in match.games:
-		# 	data["games"].append({
-		# 		"winner": game.winner,
-		# 		"winnerScore": game.winnerScore,
-		# 		"loser": game.loser,
-		# 		"loserScore": game.loserScore
-		# 	})
-
 		for game in match.games:
 			for team in data["games"]:
 				if game.winner == team["teamId"]:
@@ -890,10 +896,30 @@ class Doubles(MatchType):
 
 	def determineServe(self, data):
 
+		# green serves first and swaps after serving is complete
+		if (data["points"] - 5) % 20 < 10:
+			green = data["players"]["green"]
+			red = data["players"]["red"]
+			data["players"]["green"] = red
+			data["players"]["red"] = green
+
+		# blue serves second and swaps after serving is complete
+		if (data["points"]) % 20 >= 10:
+			yellow = data["players"]["yellow"]
+			blue = data["players"]["blue"]
+			data["players"]["yellow"] = blue
+			data["players"]["blue"] = yellow
+
 		if data["points"] % 10 < 5:
 			data["players"]["green"]["serving"] = True
 		else:
-			data["players"]["yellow"]["serving"] = True
+			data["players"]["blue"]["serving"] = True
+
+	def determineGameWinner(self, match):
+		pass
+
+	def determineMatchWinner(self, match):
+		pass
 
 	def createTeams(self, match, data):
 		green = data["green"]
@@ -943,6 +969,21 @@ class Doubles(MatchType):
 				d = yellow
 
 			GameService().create(match.id, i + 1, a, b, c, d)
+
+	def score(self, match, button):
+		data = self.matchData(match)
+
+		if button == "green" or button == "red":
+			teamId = data["teams"]["north"]["teamId"]
+		elif button == "yellow" or button == "blue":
+			teamId = data["teams"]["south"]["teamId"]
+
+		ScoreService().score(match.id, teamId, match.game)
+
+		# self.determineGameWinner(match)
+		# self.determineMatchWinner(match)
+
+		return self.matchData(match)
 
 class Nines(MatchType):
 
