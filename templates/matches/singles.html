@@ -50,16 +50,16 @@
 
 			</tr>
 
-			{% for game in data["games"] %}
+			{% for side in data["teams"] %}
 
-				<tr data-teamid="{{ game.teamId }}">
+				<tr data-teamid="{{ data.teams[side].teamId }}">
 
-					<td>{{ game.name }}</td>
+					<td>{{ data.teams[side].playerName }}</td>
 
 					{% for i in range(0, data.numOfGames) %}
-						{% if "score" in game.games[i] %}
-							<td class="set-score {% if game.games[i]["win"] %}win{% endif %}">
-								{{ '%02d' % game.games[i]["score"] }}
+						{% if data.teams[side].games[i].score != None %}
+							<td class="set-score {% if data.teams[side].games[i]["win"] %}win{% endif %}">
+								{{ '%02d' % data.teams[side].games[i].score }}
 							</td>
 						{% else %}
 							<td class="set-score"></td>
@@ -68,7 +68,6 @@
 
 				</tr>
 
-
 			{% endfor %}
 
 		</table>
@@ -76,7 +75,6 @@
 	</div>
 
 {% endblock %}
-
 
 {% block footer %}
 	<script>

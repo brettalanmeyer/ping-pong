@@ -59,12 +59,18 @@
 
 			{% for side in data["teams"] %}
 
-				<tr data-teamid="{{ data["teams"][side]["teamId"] }}">
+				<tr data-teamid="{{ data.teams[side].teamId }}">
 
-					<td>{{ data["teams"][side]["players"]|join(' <span class="text-sm">and</span> ')|safe }}</td>
+					<td>{{ data.teams[side].players|join(' <span class="text-sm">and</span> ')|safe }}</td>
 
 					{% for i in range(0, data.numOfGames) %}
-						<td class="set-score"></td>
+						{% if data.teams[side].games[i].score != None %}
+							<td class="set-score {% if data.teams[side].games[i]["win"] %}win{% endif %}">
+								{{ '%02d' % data.teams[side].games[i].score }}
+							</td>
+						{% else %}
+							<td class="set-score"></td>
+						{% endif %}
 					{% endfor %}
 
 				</tr>

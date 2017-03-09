@@ -14,8 +14,6 @@ $(function(){
 		var greenScore = $("[data-color=green][data-var=score");
 		var greenServing = $("[data-color=green][data-var=serving");
 
-		var saying = $("#saying");
-
 		function update(data){
 			if(data == null) return;
 
@@ -36,19 +34,20 @@ $(function(){
 				greenServing.addClass("active");
 			}
 
-			for(var i = 0; i < data.games.length; i++){
-				var game = data.games[i];
+			for(var color in data.teams){
+				var team = data.teams[color];
 
-				var cells = $("tr[data-teamid=" + game.teamId + "]").find("td");
+				var cells = $("tr[data-teamid=" + team.teamId + "]").find("td");
+				cells.eq(0).html(team.playerName);
 
-				cells.eq(0).html(game.name);
+				for(var i = 0; i < team.games.length; i++){
+					var game = team.games[i];
 
-				for(var j = 0; j < game.games.length; j++){
-					var g = game.games[j];
-					cells.eq(j + 1).html(pad(g.score));
-
-					if(g.win){
-						cells.eq(j + 1).addClass("win");
+					if(game.score != null){
+						cells.eq(i + 1).html(pad(game.score));
+						if(game.win){
+							cells.eq(i + 1).addClass("win");
+						}
 					}
 				}
 			}
@@ -63,26 +62,6 @@ $(function(){
 				}
 
 				$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
-			}
-		}
-
-
-		function sayings(left, right){
-			shuffle(isms);
-
-			for(var i = 0; i < isms.length; i++){
-				ism = isms[i];
-
-				if(ism.left == left && ism.right == right){
-
-					saying.html(ism.saying).animate({ opacity: 1 }, 1000);
-
-					setTimeout(function(){
-						saying.animate({ opacity: 0 }, 1000);
-					}, 2500);
-
-					return;
-				}
 			}
 		}
 

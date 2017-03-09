@@ -32,6 +32,8 @@ $(function(){
 		function update(data){
 			if(data == null) return;
 
+			set.html(data.game);
+
 			for(var i in colors){
 				var color = colors[i];
 				playerNames[color].html(data.players[color].playerName);
@@ -48,6 +50,35 @@ $(function(){
 				scores[team].html(pad(data.teams[team].points));
 			}
 
+			for(var side in data.teams){
+				var team = data.teams[side];
+
+				var cells = $("tr[data-teamid=" + team.teamId + "]").find("td");
+				cells.eq(0).html(team.playerName);
+
+				for(var i = 0; i < team.games.length; i++){
+					var game = team.games[i];
+
+					if(game.score != null){
+						cells.eq(i + 1).html(pad(game.score));
+						if(game.win){
+							cells.eq(i + 1).addClass("win");
+						}
+					}
+				}
+			}
+
+			sayings(data.teams.south.points, data.teams.north.points);
+
+			if(data.complete){
+				if(data.teams.north.winner){
+					teamId = data.teams.north.teamId;
+				} else {
+					teamId = data.teams.south.teamId;
+				}
+
+				$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
+			}
 		}
 
 	}

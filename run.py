@@ -622,6 +622,27 @@ class MatchType():
 		ScoreService().undo(match.id)
 		return self.matchData(match)
 
+	def determineMatchWinner(self, match):
+		team1 = match.teams[0]
+		team2 = match.teams[1]
+
+		team1Wins = self.getTeamWins(match.id, team1.id)
+		team2Wins = self.getTeamWins(match.id, team2.id)
+
+		gamesNeededToWinMatch = int(math.ceil(float(match.numOfGames) / 2.0))
+
+		if team1Wins == gamesNeededToWinMatch:
+			TeamService().win(team1)
+			TeamService().lose(team2)
+			MatchService().complete(match)
+		elif team2Wins == gamesNeededToWinMatch:
+			TeamService().win(team2)
+			TeamService().lose(team1)
+			MatchService().complete(match)
+
+	def getTeamWins(self, matchId, teamId):
+		return GameService().getTeamWins(matchId, teamId)
+
 class Singles(MatchType):
 
 	label = "Singles"
@@ -638,7 +659,6 @@ class Singles(MatchType):
 			"matchType": self.matchType,
 			"playTo": match.playTo,
 			"numOfGames": match.numOfGames,
-			"games": [],
 			"game": match.game,
 			"template": self.matchTemplate,
 			"complete": match.complete == 1,
@@ -651,7 +671,8 @@ class Singles(MatchType):
 					"playerName": None,
 					"points": None,
 					"serving": False,
-					"winner": False
+					"winner": False,
+					"games": []
 				},
 				"yellow": {
 					"teamId": None,
@@ -659,7 +680,8 @@ class Singles(MatchType):
 					"playerName": None,
 					"points": None,
 					"serving": False,
-					"winner": False
+					"winner": False,
+					"games": []
 				}
 			},
 			"points": 0
@@ -667,38 +689,35 @@ class Singles(MatchType):
 
 		for team in match.teams:
 			for teamPlayer in team.teamPlayers:
-				color = "green"
 
+				points = ScoreService().getScore(match.id, team.id, match.game)
+				data["points"] += points
+
+				color = "green"
 				if data["teams"]["yellow"]["playerId"] == teamPlayer.player.id:
 					color = "yellow"
 
 				data["teams"][color]["playerName"] = teamPlayer.player.name
-				data["teams"][color]["points"] = ScoreService().getScore(match.id, team.id, match.game)
+				data["teams"][color]["points"] = points
 				data["teams"][color]["teamId"] = team.id
 				data["teams"][color]["winner"] = team.win == 1
 
-				data["games"].append({
-					"teamId": team.id,
-					"name": teamPlayer.player.name,
-					"games": []
-				})
-
-		for color in data["teams"]:
-			data["points"] += data["teams"][color]["points"]
-
-
 		for game in match.games:
-			for team in data["games"]:
-				if game.winner == team["teamId"]:
-					team["games"].append({
-						"win": True,
-						"score": game.winnerScore
-					})
-				elif game.loser == team["teamId"]:
-					team["games"].append({
-						"win": False,
-						"score": game.loserScore
-					})
+			if game.winner == data["teams"]["green"]["teamId"]:
+				winner = data["teams"]["green"]
+				loser = data["teams"]["yellow"]
+			else:
+				loser = data["teams"]["green"]
+				winner = data["teams"]["yellow"]
+
+			winner["games"].append({
+				"win": None if game.winner == None else True,
+				"score": game.winnerScore
+			})
+			loser["games"].append({
+				"win": None if game.winner == None else False,
+				"score": game.loserScore
+			})
 
 		self.determineServe(data)
 
@@ -733,27 +752,6 @@ class Singles(MatchType):
 
 			if match.game < match.numOfGames:
 				MatchService().updateGame(match.id, match.game + 1)
-
-	def determineMatchWinner(self, match):
-		team1 = match.teams[0]
-		team2 = match.teams[1]
-
-		team1Wins = self.getTeamWins(match.id, team1.id)
-		team2Wins = self.getTeamWins(match.id, team2.id)
-
-		gamesNeededToWinMatch = int(math.ceil(float(match.numOfGames) / 2.0))
-
-		if team1Wins == gamesNeededToWinMatch:
-			TeamService().win(team1)
-			TeamService().lose(team2)
-			MatchService().complete(match)
-		elif team2Wins == gamesNeededToWinMatch:
-			TeamService().win(team2)
-			TeamService().lose(team1)
-			MatchService().complete(match)
-
-	def getTeamWins(self, matchId, teamId):
-		return GameService().getTeamWins(matchId, teamId)
 
 	def score(self, match, button):
 		data = self.matchData(match)
@@ -801,7 +799,6 @@ class Doubles(MatchType):
 			"matchType": self.matchType,
 			"playTo": match.playTo,
 			"numOfGames": match.numOfGames,
-			"games": [],
 			"game": match.game,
 			"template": self.matchTemplate,
 			"complete": match.complete == 1,
@@ -810,13 +807,15 @@ class Doubles(MatchType):
 					"teamId": None,
 					"points": 0,
 					"winner": False,
-					"players": []
+					"players": [],
+					"games": []
 				},
 				"south": {
 					"teamId": None,
 					"points": 0,
 					"winner": False,
-					"players": []
+					"players": [],
+					"games": []
 				}
 			},
 			"players": {
@@ -878,17 +877,21 @@ class Doubles(MatchType):
 				data["players"][color]["teamId"] = team.id
 
 		for game in match.games:
-			for team in data["games"]:
-				if game.winner == team["teamId"]:
-					team["games"].append({
-						"win": True,
-						"score": game.winnerScore
-					})
-				elif game.loser == team["teamId"]:
-					team["games"].append({
-						"win": False,
-						"score": game.loserScore
-					})
+			if game.winner == data["teams"]["north"]["teamId"]:
+				winner = data["teams"]["north"]
+				loser = data["teams"]["south"]
+			else:
+				loser = data["teams"]["north"]
+				winner = data["teams"]["south"]
+
+			winner["games"].append({
+				"win": None if game.winner == None else True,
+				"score": game.winnerScore
+			})
+			loser["games"].append({
+				"win": None if game.winner == None else False,
+				"score": game.loserScore
+			})
 
 		self.determineServe(data)
 
@@ -916,10 +919,27 @@ class Doubles(MatchType):
 			data["players"]["blue"]["serving"] = True
 
 	def determineGameWinner(self, match):
-		pass
+		data = self.matchData(match)
 
-	def determineMatchWinner(self, match):
-		pass
+		northWin = data["teams"]["north"]["points"] >= data["playTo"] and data["teams"]["north"]["points"] >= data["teams"]["south"]["points"] + 2
+		southWin = data["teams"]["south"]["points"] >= data["playTo"] and data["teams"]["south"]["points"] >= data["teams"]["north"]["points"] + 2
+
+		if northWin or southWin:
+			if northWin:
+				winner = data["teams"]["north"]["teamId"]
+				winnerScore = data["teams"]["north"]["points"]
+				loser = data["teams"]["south"]["teamId"]
+				loserScore = data["teams"]["south"]["points"]
+			elif southWin:
+				winner = data["teams"]["south"]["teamId"]
+				winnerScore = data["teams"]["south"]["points"]
+				loser = data["teams"]["north"]["teamId"]
+				loserScore = data["teams"]["north"]["points"]
+
+			GameService().complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
+
+			if match.game < match.numOfGames:
+				MatchService().updateGame(match.id, match.game + 1)
 
 	def createTeams(self, match, data):
 		green = data["green"]
@@ -980,8 +1000,8 @@ class Doubles(MatchType):
 
 		ScoreService().score(match.id, teamId, match.game)
 
-		# self.determineGameWinner(match)
-		# self.determineMatchWinner(match)
+		self.determineGameWinner(match)
+		self.determineMatchWinner(match)
 
 		return self.matchData(match)
 
