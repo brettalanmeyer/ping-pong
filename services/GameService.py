@@ -5,8 +5,8 @@ from sqlalchemy import text
 
 class GameService(Service.Service):
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, GameModel.GameModel)
+	def __init__(self):
+		Service.Service.__init__(self, GameModel.GameModel)
 
 	def create(self, matchId, game, green, yellow, blue, red):
 		game = self.model(matchId, game, green, yellow, blue, red, datetime.now())

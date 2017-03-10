@@ -4,8 +4,8 @@ from datetime import datetime
 
 class PlayerService(Service.Service):
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, PlayerModel.PlayerModel)
+	def __init__(self):
+		Service.Service.__init__(self, PlayerModel.PlayerModel)
 
 	def select(self):
 		return self.session.query(self.model).order_by(self.model.name)

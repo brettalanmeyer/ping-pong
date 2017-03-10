@@ -1,12 +1,12 @@
 import Service
-from models import ScoreModel
+from models import ScoreModel, MatchModel
 from sqlalchemy import text
 from datetime import datetime
 
 class ScoreService(Service.Service):
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, ScoreModel.ScoreModel)
+	def __init__(self):
+		Service.Service.__init__(self, ScoreModel.ScoreModel)
 
 	def score(self, matchId, teamId, game):
 		score = self.model(matchId, teamId, game, datetime.now())
@@ -14,7 +14,7 @@ class ScoreService(Service.Service):
 		self.session.commit()
 
 	def undo(self, matchId):
-		score = self.session.query(self.model).filter(MatchModel.id == matchId).order_by(self.model.id.desc()).first()
+		score = self.session.query(self.model).filter(MatchModel.MatchModel.id == matchId).order_by(self.model.id.desc()).first()
 		if score != None:
 			self.session.query(self.model).filter(self.model.id == score.id).delete()
 			self.session.commit()

@@ -1,11 +1,8 @@
 from flask import Flask, render_template, Response, redirect, request
-from flask.ext.assets import Environment, Bundle
+from flask.ext.assets import Environment
 from flask_socketio import SocketIO, emit
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 from services import IsmService, PlayerService, MatchService, ScoreService
-
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
@@ -13,24 +10,14 @@ app.config.from_pyfile("config.cfg")
 assets = Environment(app)
 socketio = SocketIO(app)
 
-def makeDatabaseConnection():
-	engine = create_engine("mysql+mysqldb://" + app.config["MYSQL_USERNAME"] + ":" + app.config["MYSQL_PASSWORD"] + "@" + app.config["MYSQL_HOST"] + "/" + app.config["MYSQL_DATABASE"], pool_recycle = 3600)
-	db_session = scoped_session(sessionmaker(autocommit = False, autoflush = False, bind = engine))
-	Session = sessionmaker(bind = engine)
-	session = Session()
+ismService = IsmService.IsmService()
+playerService = PlayerService.PlayerService()
+matchService = MatchService.MatchService()
+scoreService = ScoreService.ScoreService()
 
-	return session
-
-session = makeDatabaseConnection()
-
-ismService = IsmService.IsmService(session)
-playerService = PlayerService.PlayerService(session)
-matchService = MatchService.MatchService(session)
-scoreService = ScoreService.ScoreService(session)
-
-singles = Singles.Singles(session)
-doubles = Doubles.Doubles(session)
-nines = Nines.Nines(session)
+singles = Singles.Singles()
+doubles = Doubles.Doubles()
+nines = Nines.Nines()
 
 @app.route("/", methods = ["GET"])
 def index():
@@ -193,6 +180,7 @@ def buttons():
 def buttons_score(button):
 	match = matchService.selectActiveMatch()
 	matchType = getMatchType(match)
+
 	data = None
 	if matchType != None:
 		data = matchType.score(match, button)
@@ -201,7 +189,9 @@ def buttons_score(button):
 
 @app.route("/buttons/<path:button>/undo", methods = ["POST"])
 def buttons_undo(button):
-	match, matchType = matchService.selectActiveMatch()
+	match = matchService.selectActiveMatch()
+	matchType = getMatchType(match)
+
 	data = None
 	if matchType != None:
 		data = matchType.undo(match, button)
@@ -211,17 +201,19 @@ def buttons_undo(button):
 @app.route("/buttons/<path:button>/delete-scores", methods = ["POST"])
 def buttons_delete_scores(button):
 	scoreService.deleteAll()
-	match, matchType = matchService.selectActiveMatch()
+	match = matchService.selectActiveMatch()
+	matchType = getMatchType(matchType)
+
 	data = None
 	if matchType != None:
 		data = matchType.matchData(match)
 	socketio.emit("response", data, broadcast = True)
 	return button
 
-@app.after_request
-def afterRequest(response):
-	session.close()
-	return response
+# @app.after_request
+# def afterRequest(response):
+# 	session.close()
+# 	return response
 
 @app.errorhandler(404)
 def not_found(error):

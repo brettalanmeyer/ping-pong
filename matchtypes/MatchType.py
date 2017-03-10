@@ -3,12 +3,11 @@ import math
 
 class MatchType():
 
-	def __init__(self, session, label, matchType, playerTemplate, matchTemplate, defaultPoints):
-		self.session = session
-		self.matchService = MatchService.MatchService(self.session)
-		self.gameService = GameService.GameService(self.session)
-		self.teamService = TeamService.TeamService(self.session)
-		self.scoreService = ScoreService.ScoreService(self.session)
+	def __init__(self, label, matchType, playerTemplate, matchTemplate, defaultPoints):
+		self.matchService = MatchService.MatchService()
+		self.gameService = GameService.GameService()
+		self.teamService = TeamService.TeamService()
+		self.scoreService = ScoreService.ScoreService()
 
 		self.label = label
 		self.matchType = matchType
@@ -35,7 +34,7 @@ class MatchType():
 		return self.matchType == matchType
 
 	def undo(self, match, button):
-		ScoreService().undo(match.id)
+		self.scoreService.undo(match.id)
 		return self.matchData(match)
 
 	def determineMatchWinner(self, match):

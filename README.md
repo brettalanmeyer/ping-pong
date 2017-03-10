@@ -15,10 +15,8 @@ Doubles
 
 Redo singles to use north and south for teams intead of just colors
 
-To Install For OS X
+large Flask application: https://www.digitalocean.com/community/tutorials/how-to-structure-large-flask-applications
 
-sudo pip install --ignore-installed six
-sudo pip install Flask
-sudo pip install flask-socketio
-sudo pip install --user gevent
-sudo pip install --user gevent-websocket
+put session.close back in run.py
+
+figure out better way to do run.getMatchType(), also put score and undo in their own class that handles singles, doubles, and nines maybe

@@ -8,8 +8,8 @@ class Doubles(MatchType.MatchType):
 	matchTemplate = "matches/doubles.html"
 	defaultPoints = 21
 
-	def __init__(self, session):
-		MatchType.MatchType.__init__(self, session, "Doubles", "doubles", "matches/four-player.html", "matches/doubles.html", 21)
+	def __init__(self):
+		MatchType.MatchType.__init__(self, "Doubles", "doubles", "matches/four-player.html", "matches/doubles.html", 21)
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]
