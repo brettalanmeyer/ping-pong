@@ -1,6 +1,5 @@
 .doubles-container {
 	overflow: hidden;
-	display: table;
 	width: 100%;
 	text-align: center;
 	margin-top: 30px;
@@ -8,38 +7,37 @@
 
 .doubles-container .score-board {
 	border: solid 1px #ccc;
-	display: table-cell;
-	vertical-align: top;
-	padding-bottom: 16px;
 	width: 35%;
+	float: left;
 }
 
 .doubles-container .score-board .name {
 	display: block;
 	font-size: 60px;
-	padding-top: 30px;
+	padding: 30px 0;
 }
 
 .doubles-container .score-board .score {
 	display: block;
 	font-family: digital;
-	font-size: 200px;
-	line-height: 200px;
+	font-size: 210px;
+	line-height: 210px;
 }
 
 .doubles-container .sets {
-	display: table-cell;
 	font-size: 30px;
-	vertical-align: middle;
 	width: 30%;
+	float: left;
 }
 
 .doubles-container .sets .text {
 	display: block;
+	padding: 8px 0;
 }
 
 .doubles-container .sets .set {
 	display: block;
+	padding: 2px 0 1px;
 }
 
 .doubles-container .sets .set .num {
@@ -49,10 +47,14 @@
 
 .doubles-container .sets .serving {
 	display: block;
-	position: relative;
 	font-size: 100px;
 	text-align: center;
 	color: #ccc;
+	padding: 2px 0;
+}
+
+.doubles-container .sets .serving .glyphicon {
+	line-height: 84px;
 }
 
 .doubles-container .sets .serving .active {
@@ -61,4 +63,6 @@
 
 .doubles-container .sets .playing-to {
 	font-size: 18px;
+	display: block;
+	padding: 22px 0;
 }

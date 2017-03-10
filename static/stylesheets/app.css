@@ -210,7 +210,11 @@ a.action {
 	margin: auto;
 }
 
+.option-form .btn,
+.option-form .form-control {
+	font-size: 18px;
+}
+
 .text-sm {
 	font-size: 13px;
-
 }
