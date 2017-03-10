@@ -159,8 +159,7 @@ class Doubles(MatchType.MatchType):
 			self.gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
 
 			if match.game < match.numOfGames:
-				# self.matchService.updateGame(match.id, match.game + 1)
-				print("update game")
+				self.matchService.updateGame(match.id, match.game + 1)
 
 	def createTeams(self, match, data):
 		green = data["green"]

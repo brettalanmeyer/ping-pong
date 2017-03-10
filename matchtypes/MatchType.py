@@ -1,10 +1,11 @@
-from services import GameService, TeamService, ScoreService, PlayerService
+from services import MatchService, GameService, TeamService, ScoreService, PlayerService
 import math
 
 class MatchType():
 
 	def __init__(self, session, label, matchType, playerTemplate, matchTemplate, defaultPoints):
 		self.session = session
+		self.matchService = MatchService.MatchService(self.session)
 		self.gameService = GameService.GameService(self.session)
 		self.teamService = TeamService.TeamService(self.session)
 		self.scoreService = ScoreService.ScoreService(self.session)

@@ -6,6 +6,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from services import IsmService, PlayerService, MatchService, ScoreService
 
+from matchtypes import Singles, Doubles, Nines
+
 app = Flask(__name__)
 app.config.from_pyfile("config.cfg")
 assets = Environment(app)
@@ -25,6 +27,10 @@ ismService = IsmService.IsmService(session)
 playerService = PlayerService.PlayerService(session)
 matchService = MatchService.MatchService(session)
 scoreService = ScoreService.ScoreService(session)
+
+singles = Singles.Singles(session)
+doubles = Doubles.Doubles(session)
+nines = Nines.Nines(session)
 
 @app.route("/", methods = ["GET"])
 def index():
@@ -51,12 +57,14 @@ def matches_delete():
 
 @app.route("/matches/<int:id>/play-to", methods = ["GET"])
 def matches_play_to(id):
-	match, matchType = matchService.selectById(id)
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
 	return render_template("matches/play-to.html", match = match, default = matchType.defaultPoints)
 
 @app.route("/matches/<int:id>/play-to", methods = ["POST"])
 def matches_play_to_update(id):
-	match, matchType = matchService.updatePlayTo(id, request.form["playTo"])
+	match = matchService.updatePlayTo(id, request.form["playTo"])
+	matchType = getMatchType(match)
 
 	if matchType.matchType == "nines":
 		return redirect("/matches/%d/players" % match.id)
@@ -65,7 +73,8 @@ def matches_play_to_update(id):
 
 @app.route("/matches/<int:id>/num-of-games", methods = ["GET"])
 def matches_games(id):
-	match, matchType = matchService.selectById(id)
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
 	return render_template("matches/num-of-games.html", match = match)
 
 @app.route("/matches/<int:id>/num-of-games", methods = ["POST"])
@@ -75,20 +84,24 @@ def matches_games_update(id):
 
 @app.route("/matches/<int:id>/players", methods = ["GET"])
 def matches_players(id):
-	match, matchType = matchService.selectById(id)
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
 	players = playerService.select()
 	return render_template(matchType.playerTemplate, title = matchType.label, match = match, players = players)
 
 @app.route("/matches/<int:id>/players", methods = ["POST"])
 def matches_players_create(id):
-	match, matchType = matchService.selectById(id)
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
 	matchType.createTeams(match, request.form)
 	matchService.play(match)
 	return redirect("/matches/%d" % id)
 
 @app.route("/matches/<int:id>", methods = ["GET"])
 def matches(id):
-	data = matchService.matchDataById(id)
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
+	data = matchType.matchData(match)
 	isms = ismService.select()
 	return render_template(data["template"], data = data, isms = ismService.serialize(isms))
 
@@ -178,7 +191,8 @@ def buttons():
 
 @app.route("/buttons/<path:button>/score", methods = ["POST"])
 def buttons_score(button):
-	match, matchType = matchService.selectActiveMatch()
+	match = matchService.selectActiveMatch()
+	matchType = getMatchType(match)
 	data = None
 	if matchType != None:
 		data = matchType.score(match, button)
@@ -216,6 +230,16 @@ def not_found(error):
 @app.errorhandler(500)
 def server_error(error):
 	return render_template("errors/500.html"), 500
+
+def getMatchType(match):
+	if singles.isMatchType(match.matchType):
+		return singles
+
+	elif doubles.isMatchType(match.matchType):
+		return doubles
+
+	elif nines.isMatchType(match.matchType):
+		return nines
 
 if __name__ == "__main__":
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])
