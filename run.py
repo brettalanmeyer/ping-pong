@@ -206,7 +206,7 @@ def buttons_undo(button):
 def buttons_delete_scores(button):
 	scoreService.deleteAll()
 	match = matchService.selectActiveMatch()
-	matchType = getMatchType(matchType)
+	matchType = getMatchType(match)
 
 	data = None
 	if matchType != None:

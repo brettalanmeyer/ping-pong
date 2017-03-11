@@ -4,7 +4,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 class Service():
 
 	def __init__(self, model):
-		print("Service has been initialized")
 		self.session = self.makeDatabaseConnection()
 		self.model = model
 
