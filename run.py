@@ -1,8 +1,9 @@
 from flask import Flask, render_template, Response, redirect, request
-from flask.ext.assets import Environment
+from flask_assets import Environment
 from flask_socketio import SocketIO, emit
+import json
 
-from services import IsmService, PlayerService, MatchService, ScoreService
+from services import Service, IsmService, PlayerService, MatchService, ScoreService
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app.config.from_pyfile("config.cfg")
 assets = Environment(app)
 socketio = SocketIO(app)
 
+service = Service.Service(None)
 ismService = IsmService.IsmService()
 playerService = PlayerService.PlayerService()
 matchService = MatchService.MatchService()
@@ -94,7 +96,9 @@ def matches(id):
 
 @app.route("/matches/<int:id>.json", methods = ["GET"])
 def matches_json(id):
-	data = matchService.matchDataById(id)
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
+	data = matchType.matchData(match)
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
 
 @app.route("/players", methods = ["GET"])
@@ -210,10 +214,10 @@ def buttons_delete_scores(button):
 	socketio.emit("response", data, broadcast = True)
 	return button
 
-# @app.after_request
-# def afterRequest(response):
-# 	session.close()
-# 	return response
+@app.after_request
+def afterRequest(response):
+	service.close()
+	return response
 
 @app.errorhandler(404)
 def not_found(error):

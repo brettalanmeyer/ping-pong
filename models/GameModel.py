@@ -17,12 +17,13 @@ class GameModel(Base):
 	winnerScore = Column(Integer)
 	loser = Column(Integer, ForeignKey("teams.id"))
 	loserScore = Column(Integer)
-	createdAt = Column(DateTime)
 	completedAt = Column(DateTime)
+	createdAt = Column(DateTime)
+	modifiedAt = Column(DateTime)
 
 	match = relationship("MatchModel")
 
-	def __init__(self, matchId, game, green, yellow, blue, red, createdAt):
+	def __init__(self, matchId, game, green, yellow, blue, red, createdAt, modifiedAt):
 		self.matchId = matchId
 		self.game = game
 		self.green = green
@@ -30,3 +31,4 @@ class GameModel(Base):
 		self.blue = blue
 		self.red = red
 		self.createdAt = createdAt
+		self.modifiedAt = modifiedAt

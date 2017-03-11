@@ -9,7 +9,7 @@ class GameService(Service.Service):
 		Service.Service.__init__(self, GameModel.GameModel)
 
 	def create(self, matchId, game, green, yellow, blue, red):
-		game = self.model(matchId, game, green, yellow, blue, red, datetime.now())
+		game = self.model(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
 		self.session.add(game)
 		self.session.commit()
 
@@ -21,6 +21,7 @@ class GameService(Service.Service):
 		game.winnerScore = winnerScore
 		game.loser = loser
 		game.loserScore = loserScore
+		game.modifiedAt = datetime.now()
 		game.completedAt = datetime.now()
 		self.session.commit()
 
