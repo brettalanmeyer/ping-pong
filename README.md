@@ -20,3 +20,29 @@ large Flask application: https://www.digitalocean.com/community/tutorials/how-to
 put session.close back in run.py
 
 figure out better way to do run.getMatchType(), also put score and undo in their own class that handles singles, doubles, and nines maybe
+
+
+
+Installation
+
+	sudo pip install Flask
+	sudo pip install Flask-Assets
+	sudo pip install flask-socketio
+	sudo pip install SQLAlchemy
+	sudo pip install mysql-python
+
+
+	Windows
+		Download get-pip.py
+		python get-pip.py
+		pip install Flask
+		pip install Flask-Assets
+		pip install flask-socketio
+		pip install SQLAlchemy
+		pip install mysqlclient==1.3.4
+		pip install jsmin
+		pip install cssmin
+		pip install gevent-websocket
+
+
+Configuration File
