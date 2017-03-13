@@ -1,0 +1,14 @@
+
+CREATE TABLE `teams` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`matchId` INT(11) NULL DEFAULT NULL,
+	`win` TINYINT(4) NULL DEFAULT NULL,
+	`loss` TINYINT(4) NULL DEFAULT NULL,
+	`createdAt` DATETIME NULL DEFAULT NULL,
+	`modifiedAt` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	INDEX `fk_teams_matches` (`matchId`),
+	CONSTRAINT `fk_teams_matches` FOREIGN KEY (`matchId`) REFERENCES `matches` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
