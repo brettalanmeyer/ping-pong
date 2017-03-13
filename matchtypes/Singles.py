@@ -124,7 +124,7 @@ class Singles(MatchType.MatchType):
 
 			self.gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
 
-			if match.game < match.numOfGames:
+			if data["game"] < data["numOfGames"]:
 				self.matchService.updateGame(match.id, match.game + 1)
 
 	def score(self, match, button):

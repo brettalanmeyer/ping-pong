@@ -16,13 +16,13 @@ class GameService(Service.Service):
 		return game
 
 	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
-		game = self.session.query(self.model).filter_by(matchId = matchId, game = game).one()
-		game.winner = winner
-		game.winnerScore = winnerScore
-		game.loser = loser
-		game.loserScore = loserScore
-		game.modifiedAt = datetime.now()
-		game.completedAt = datetime.now()
+		existingGame = self.session.query(self.model).filter_by(matchId = matchId, game = game).one()
+		existingGame.winner = winner
+		existingGame.winnerScore = winnerScore
+		existingGame.loser = loser
+		existingGame.loserScore = loserScore
+		existingGame.modifiedAt = datetime.now()
+		existingGame.completedAt = datetime.now()
 		self.session.commit()
 
 	def getTeamWins(self, matchId, teamId):

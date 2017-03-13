@@ -21,6 +21,7 @@
 					<th>Points</th>
 					<th>Teams</th>
 					<th></th>
+					<th></th>
 
 				</tr>
 
@@ -32,9 +33,13 @@
 
 						<tr>
 
-							<td>{{ match.createdAt }}</td>
-							<td>{{ match.matchType }}</td>
-							<td>{{ match.numOfGames }}</td>
+							<td>{{ "{:%b %d, %Y %I:%M %p} ".format(match.createdAt) }}</td>
+							<td>{{ match.matchType.title() }}</td>
+							<td>
+								{% if match.numOfGames != None %}
+									{{ match.numOfGames }}
+								{% endif %}
+							</td>
 							<td>{{ match.playTo }}</td>
 
 							<td>
@@ -45,7 +50,17 @@
 								{% endfor %}
 							</td>
 
-							<td><a href="/matches/{{ match.id }}" class="btn btn-default">Go</a></td>
+							<td>
+								{% for game in match.games %}
+									{% if game.completedAt != None %}
+										{{ game.winnerScore }}/{{ game.loserScore }}
+									{% endif %}
+								{% endfor %}
+							</td>
+
+							<td>
+								<a href="/matches/{{ match.id }}" class="btn btn-default">View Match</a>
+							</td>
 
 						</tr>
 

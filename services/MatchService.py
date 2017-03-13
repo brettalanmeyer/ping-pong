@@ -8,8 +8,7 @@ class MatchService(Service.Service):
 		Service.Service.__init__(self, MatchModel.MatchModel)
 
 	def selectById(self, id):
-		match = self.session.query(self.model).filter(self.model.id == id).one()
-		return match
+		return self.session.query(self.model).filter(self.model.id == id).one()
 
 	def select(self):
 		return self.session.query(self.model)
