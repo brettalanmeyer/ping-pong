@@ -7,7 +7,7 @@ from services import Service, IsmService, PlayerService, MatchService, ScoreServ
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
-app.config.from_pyfile("config.cfg")
+app.config.from_pyfile("app-config.cfg")
 assets = Environment(app)
 socketio = SocketIO(app)
 

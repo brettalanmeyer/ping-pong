@@ -22,7 +22,6 @@ put session.close back in run.py
 figure out better way to do run.getMatchType(), also put score and undo in their own class that handles singles, doubles, and nines maybe
 
 
-
 Installation
 
 	sudo pip install Flask
