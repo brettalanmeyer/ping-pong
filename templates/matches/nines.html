@@ -4,7 +4,35 @@
 {% block title %}Play Nines{% endblock %}
 
 {% block body %}
-{% endblock %}
 
-{% block footer %}
+	<div id="nines" class="container">
+
+		<h2>Nines</h2>
+
+		<div class="nines-container">
+
+			<div class="score-board">
+				<span class="name" data-var="name" data-color="yellow">{{ data.players.yellow.playerName }}</span>
+				<span class="score" data-var="score" data-color="yellow">{{ data.players.yellow.points }}</span>
+			</div>
+
+			<div class="score-board">
+				<span class="score" data-var="score" data-color="green">{{ data.players.green.points }}</span>
+				<span class="name" data-var="name" data-color="green">{{ data.players.green.playerName }}</span>
+			</div>
+
+			<div class="score-board">
+				<span class="name" data-var="name" data-color="blue">{{ data.players.blue.playerName }}</span>
+				<span class="score" data-var="score" data-color="blue">{{ data.players.blue.points }}</span>
+			</div>
+
+			<div class="score-board">
+				<span class="score" data-var="score" data-color="red">{{ data.players.red.points }}</span>
+				<span class="name" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
+			</div>
+
+		</div>
+
+	</div>
+
 {% endblock %}

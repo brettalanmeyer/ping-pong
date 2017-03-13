@@ -27,7 +27,7 @@ def index():
 
 @app.route("/matches", methods = ["GET"])
 def matches_index():
-	matches = matchService.select()
+	matches = matchService.selectReady()
 	return render_template("matches/index.html", matches = matches)
 
 @app.route("/matches/new", methods = ["GET"])
@@ -42,7 +42,7 @@ def matches_create():
 @app.route("/matches/delete", methods = ["POST"])
 def matches_delete():
 	matchService.deleteAll()
-	return redirect("/")
+	return redirect("/?debug=true")
 
 @app.route("/matches/<int:id>/play-to", methods = ["GET"])
 def matches_play_to(id):

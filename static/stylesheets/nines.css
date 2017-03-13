@@ -1,0 +1,37 @@
+.nines-container {
+	overflow: hidden;
+	width: 100%;
+	text-align: center;
+}
+
+.nines-container .score-board {
+	border: solid 1px #ccc;
+	width: 50%;
+	float: left;
+}
+
+.nines-container .score-board:nth-child(1),
+.nines-container .score-board:nth-child(2) {
+	margin-bottom: 60px;
+}
+.nines-container .score-board:nth-child(2n) {
+	border-left: none;
+}
+
+.nines-container .score-board .name {
+	display: block;
+	float: left;
+	font-size: 80px;
+	width: 60%;
+	padding: 48px 0;
+}
+
+.nines-container .score-board .score {
+	display: block;
+	font-family: digital;
+	font-size: 210px;
+	line-height: 210px;
+	float: left;
+	width: 40%;
+	text-align: center;
+}

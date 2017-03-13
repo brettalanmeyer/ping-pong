@@ -20,8 +20,9 @@ class MatchModel(Base):
 	teams = relationship("TeamModel", backref = "MatchMode.id")
 	games = relationship("GameModel", backref = "MatchMode.id")
 
-	def __init__(self, matchType, ready, complete, createdAt, modifiedAt):
+	def __init__(self, matchType, game, ready, complete, createdAt, modifiedAt):
 		self.matchType = matchType
+		self.game = game
 		self.ready = ready
 		self.complete = complete
 		self.createdAt = createdAt

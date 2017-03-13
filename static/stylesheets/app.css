@@ -44,6 +44,11 @@ h1.with-action {
 	text-align: left;
 }
 
+h2 {
+	text-align: center;
+	margin: 12px 0;
+}
+
 a,
 a:hover {
 	color: #333;

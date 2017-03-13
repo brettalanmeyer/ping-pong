@@ -14,11 +14,14 @@ class MatchService(Service.Service):
 	def select(self):
 		return self.session.query(self.model)
 
+	def selectReady(self):
+		return self.session.query(self.model).filter(self.model.ready == True)
+
 	def selectActiveMatch(self):
 		return self.session.query(self.model).filter(self.model.ready == True, self.model.complete == False).order_by(self.model.id.desc()).first()
 
 	def create(self, matchType):
-		match = self.model(matchType, False, False, datetime.now(), datetime.now())
+		match = self.model(matchType, 0, False, False, datetime.now(), datetime.now())
 		self.session.add(match)
 		self.session.commit()
 
