@@ -2,12 +2,6 @@ import MatchType
 
 class Doubles(MatchType.MatchType):
 
-	label = "Doubles"
-	matchType = "doubles"
-	playerTemplate = "matches/four-player.html"
-	matchTemplate = "matches/doubles.html"
-	defaultPoints = 21
-
 	def __init__(self):
 		MatchType.MatchType.__init__(self, "Doubles", "doubles", "matches/four-player.html", "matches/doubles.html", 21)
 

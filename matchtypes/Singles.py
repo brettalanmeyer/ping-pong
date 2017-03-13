@@ -2,12 +2,6 @@ import MatchType
 
 class Singles(MatchType.MatchType):
 
-	label = "Singles"
-	matchType = "singles"
-	playerTemplate = "matches/two-player.html"
-	matchTemplate = "matches/singles.html"
-	defaultPoints = 21
-
 	def __init__(self):
 		MatchType.MatchType.__init__(self, "Singles", "singles", "matches/two-player.html", "matches/singles.html", 21)
 
@@ -85,10 +79,30 @@ class Singles(MatchType.MatchType):
 
 	def determineServe(self, data):
 
+		# swap every 5 turns
 		if data["points"] % 10 < 5:
-			data["teams"]["green"]["serving"] = True
+			self.setServer(data, "green")
 		else:
-			data["teams"]["yellow"]["serving"] = True
+			self.setServer(data, "yellow")
+
+		# possible game point
+		if data["teams"]["green"]["points"] >= data["playTo"] - 1 or data["teams"]["yellow"]["points"] >= data["playTo"] - 1:
+
+			# if teams are tied, revert to default serving
+			if data["teams"]["green"]["points"] == data["teams"]["yellow"]["points"]:
+				pass
+
+			elif data["teams"]["green"]["points"] > data["teams"]["yellow"]["points"]:
+				self.setServer(data, "yellow")
+
+			elif data["teams"]["yellow"]["points"] > data["teams"]["green"]["points"]:
+				self.setServer(data, "green")
+
+	def setServer(self, data, color):
+		data["teams"]["green"]["serving"] = False
+		data["teams"]["yellow"]["serving"] = False
+
+		data["teams"][color]["serving"] = True
 
 	def determineGameWinner(self, match):
 		data = self.matchData(match)
