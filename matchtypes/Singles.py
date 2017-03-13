@@ -2,8 +2,8 @@ import MatchType
 
 class Singles(MatchType.MatchType):
 
-	def __init__(self):
-		MatchType.MatchType.__init__(self, "Singles", "singles", "matches/two-player.html", "matches/singles.html", 21)
+	def __init__(self, session):
+		MatchType.MatchType.__init__(self, session, "Singles", "singles", "matches/two-player.html", "matches/singles.html", 21)
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]

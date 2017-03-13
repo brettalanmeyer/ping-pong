@@ -4,8 +4,8 @@ from datetime import datetime
 
 class IsmService(Service.Service):
 
-	def __init__(self):
-		Service.Service.__init__(self, IsmModel.IsmModel)
+	def __init__(self, session):
+		Service.Service.__init__(self, session, IsmModel.IsmModel)
 
 	def select(self):
 		return self.session.query(self.model).filter(self.model.approved == True)

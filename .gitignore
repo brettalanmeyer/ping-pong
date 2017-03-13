@@ -1,5 +1,4 @@
 *.pyc
-/app-config.cfg
-/db-config.cfg
+/config.cfg
 /static/.webassets-cache/
 /static/gen/

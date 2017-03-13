@@ -4,8 +4,8 @@ from datetime import datetime
 
 class MatchService(Service.Service):
 
-	def __init__(self):
-		Service.Service.__init__(self, MatchModel.MatchModel)
+	def __init__(self, session):
+		Service.Service.__init__(self, session, MatchModel.MatchModel)
 
 	def selectById(self, id):
 		return self.session.query(self.model).filter(self.model.id == id).one()

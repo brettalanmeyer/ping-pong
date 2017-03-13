@@ -5,8 +5,8 @@ from datetime import datetime
 
 class ScoreService(Service.Service):
 
-	def __init__(self):
-		Service.Service.__init__(self, ScoreModel.ScoreModel)
+	def __init__(self, session):
+		Service.Service.__init__(self, session, ScoreModel.ScoreModel)
 
 	def score(self, matchId, teamId, game):
 		score = self.model(matchId, teamId, game, datetime.now())

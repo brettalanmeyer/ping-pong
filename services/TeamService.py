@@ -5,9 +5,9 @@ from datetime import datetime
 
 class TeamService(Service.Service):
 
-	def __init__(self):
-		Service.Service.__init__(self, TeamModel.TeamModel)
-		self.teamPlayerService = TeamPlayerService.TeamPlayerService()
+	def __init__(self, session):
+		Service.Service.__init__(self, session, TeamModel.TeamModel)
+		self.teamPlayerService = TeamPlayerService.TeamPlayerService(session)
 
 	def create(self, matchId):
 		team = self.model(matchId, datetime.now(), datetime.now())
