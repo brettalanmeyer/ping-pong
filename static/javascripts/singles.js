@@ -16,6 +16,7 @@ $(function(){
 
 		function update(data){
 			if(data == null) return;
+			if(data.matchType != "singles") return;
 
 			set.html(data.game);
 

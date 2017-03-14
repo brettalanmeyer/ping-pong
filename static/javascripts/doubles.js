@@ -31,6 +31,7 @@ $(function(){
 
 		function update(data){
 			if(data == null) return;
+			if(data.matchType != "doubles") return;
 
 			set.html(data.game);
 

@@ -91,7 +91,6 @@ class Nines(MatchType.MatchType):
 
 	def score(self, match, button):
 		data = self.matchData(match)
-
 		players = data["players"]
 		player = players[button]
 
@@ -111,4 +110,12 @@ class Nines(MatchType.MatchType):
 		if player["points"] > 0:
 			self.scoreService.score(match.id, player["teamId"], match.game)
 
-		return self.matchData(match)
+		data = self.matchData(match)
+
+		# prevent further scoring if a winner has been declared
+		for color in self.colors:
+			if data["players"][color]["winner"]:
+				self.matchService.complete(match)
+				return self.matchData(match)
+
+		return data

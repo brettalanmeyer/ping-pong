@@ -19,6 +19,8 @@ $(function(){
 		}
 
 		function update(data){
+			if(data == null) return;
+			if(data.matchType != "nines") return;
 
 			for(var i = 0; i < colors.length; i++){
 				var color = colors[i];

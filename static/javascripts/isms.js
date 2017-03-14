@@ -6,7 +6,6 @@ function sayings(left, right){
 	for(var i = 0; i < isms.length; i++){
 		ism = isms[i];
 
-		console.log(ism.left == left && ism.right == right);
 		if(ism.left == left && ism.right == right){
 
 			saying.html(ism.saying).animate({ opacity: 1 }, 1000);
