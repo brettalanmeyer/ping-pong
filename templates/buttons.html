@@ -48,10 +48,27 @@
 				color: black;
 			}
 
+			button.wide-action {
+				width: 100%;
+				margin-bottom: 4px;
+			}
+
 			button.delete-all {
 				background: orange;
-				width: 100%;
 			}
+
+			button.random-score {
+				background: mediumseagreen;
+			}
+
+			button.random-undo {
+				background: steelblue;
+			}
+
+			button.auto-score {
+				background: maroon;
+			}
+
 		</style>
 
 	</head>
@@ -77,17 +94,45 @@
 
 		</div>
 
-		<button class="delete-all" data-color="none" data-action="delete-scores">delete scores</button>
+		<button class="random-score wide-action">random score</button>
+		<button class="random-undo wide-action">random undo</button>
+		<button class="auto-score wide-action">auto score</button>
+		<button class="delete-all wide-action" data-color="none" data-action="delete-scores">delete scores</button>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>
 
+			var interval = null;
+
 			$(function(){
 
-				$("button").on("click", function(){
+				$("button[data-action=score]").on("click", function(){
 					var button = $(this);
 					$.post("/buttons/" + button.data("color") + "/" + button.data("action"));
 				});
+
+				$(".random-score").on("click", function(){
+					$("button[data-action=score]").eq(rand()).click();
+				});
+
+				$(".random-undo").on("click", function(){
+					$("button[data-action=undo]").eq(rand()).click();
+				});
+
+				$(".auto-score").on("click", function(){
+					if(interval == null){
+						interval = setInterval(function(){
+							$("button[data-action=score]").eq(rand()).click();
+						}, 100);
+					} else {
+						clearInterval(interval)
+						interval = null;
+					}
+				});
+
+				function rand(){
+					return Math.floor(Math.random() * 4);
+				}
 
 			});
 
