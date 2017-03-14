@@ -17,86 +17,78 @@ class Doubles(MatchType.MatchType):
 			"template": self.matchTemplate,
 			"complete": match.complete == 1,
 			"teams": {
-				"north": {
-					"teamId": None,
-					"points": 0,
-					"winner": False,
-					"players": [],
-					"games": []
-				},
-				"south": {
-					"teamId": None,
-					"points": 0,
-					"winner": False,
-					"players": [],
-					"games": []
-				}
+				"north": self.newTeam(),
+				"south": self.newTeam()
 			},
-			"players": {
-				"green": {
-					"playerId": game.green,
-					"teamPlayerId": None,
-					"playerName": None,
-					"serving": False
-				},
-				"yellow": {
-					"playerId": game.yellow,
-					"teamPlayerId": None,
-					"playerName": None,
-					"serving": False
-				},
-				"blue": {
-					"playerId": game.blue,
-					"teamPlayerId": None,
-					"playerName": None,
-					"serving": False
-				},
-				"red": {
-					"playerId": game.red,
-					"teamPlayerId": None,
-					"playerName": None,
-					"serving": False
-				}
-			},
+			"players": {},
 			"points": 0
 		}
 
+		for color in self.colors:
+			data["players"][color] = self.newPlayer(getattr(game, color))
+
+		data["points"] = data["teams"]["north"]["points"] + data["teams"]["south"]["points"]
+
+		self.setTeamData(match, data["players"], data["teams"])
+		self.determineWinner(match, data["teams"])
+		self.determineServe(data["points"], data["players"])
+
+		return data
+
+	def newTeam(self):
+		return {
+			"teamId": None,
+			"points": 0,
+			"winner": False,
+			"players": [],
+			"games": []
+		}
+
+	def newPlayer(self, playerId):
+		return {
+			"playerId": playerId,
+			"teamPlayerId": None,
+			"playerName": None,
+			"serving": False
+		}
+
+	def setTeamData(self, match, players, teams):
 		for team in match.teams:
 
 			points = self.scoreService.getScore(match.id, team.id, match.game)
-			data["points"] += points
 
 			for teamPlayer in team.teamPlayers:
-				if data["players"]["green"]["playerId"] == teamPlayer.player.id:
+				if players["green"]["playerId"] == teamPlayer.player.id:
 					color = "green"
-					data["teams"]["north"]["teamId"] = team.id
-					data["teams"]["north"]["points"] = points
-					data["teams"]["north"]["players"].append(teamPlayer.player.name)
+					teams["north"]["teamId"] = team.id
+					teams["north"]["points"] = points
+					teams["north"]["players"].append(teamPlayer.player.name)
 
-				elif data["players"]["yellow"]["playerId"] == teamPlayer.player.id:
+				elif players["yellow"]["playerId"] == teamPlayer.player.id:
 					color = "yellow"
-					data["teams"]["south"]["teamId"] = team.id
-					data["teams"]["south"]["points"] = points
-					data["teams"]["south"]["players"].append(teamPlayer.player.name)
+					teams["south"]["teamId"] = team.id
+					teams["south"]["points"] = points
+					teams["south"]["players"].append(teamPlayer.player.name)
 
-				elif data["players"]["blue"]["playerId"] == teamPlayer.player.id:
+				elif players["blue"]["playerId"] == teamPlayer.player.id:
 					color = "blue"
-					data["teams"]["south"]["players"].append(teamPlayer.player.name)
+					teams["south"]["players"].append(teamPlayer.player.name)
 
-				elif data["players"]["red"]["playerId"] == teamPlayer.player.id:
+				elif players["red"]["playerId"] == teamPlayer.player.id:
 					color = "red"
-					data["teams"]["north"]["players"].append(teamPlayer.player.name)
+					teams["north"]["players"].append(teamPlayer.player.name)
 
-				data["players"][color]["playerName"] = teamPlayer.player.name
-				data["players"][color]["teamId"] = team.id
+				players[color]["playerName"] = teamPlayer.player.name
+				players[color]["teamId"] = team.id
 
+	def determineWinner(self, match, teams):
 		for game in match.games:
-			if game.winner == data["teams"]["north"]["teamId"]:
-				winner = data["teams"]["north"]
-				loser = data["teams"]["south"]
+			if game.winner == teams["north"]["teamId"]:
+				winner = teams["north"]
+				loser = teams["south"]
 			else:
-				loser = data["teams"]["north"]
-				winner = data["teams"]["south"]
+				loser = teams["north"]
+				winner = teams["south"]
 
 			winner["games"].append({
 				"win": None if game.winner == None else True,
@@ -107,48 +99,46 @@ class Doubles(MatchType.MatchType):
 				"score": game.loserScore
 			})
 
-		self.determineServe(data)
-
-		return data
-
-	def determineServe(self, data):
+	def determineServe(self, points, players):
 
 		# green serves first and swaps after serving is complete
-		if (data["points"] - 5) % 20 < 10:
-			green = data["players"]["green"]
-			red = data["players"]["red"]
-			data["players"]["green"] = red
-			data["players"]["red"] = green
+		if (points - 5) % 20 < 10:
+			green = players["green"]
+			red = players["red"]
+			players["green"] = red
+			players["red"] = green
 
 		# blue serves second and swaps after serving is complete
-		if (data["points"]) % 20 >= 10:
-			yellow = data["players"]["yellow"]
-			blue = data["players"]["blue"]
-			data["players"]["yellow"] = blue
-			data["players"]["blue"] = yellow
+		if (points) % 20 >= 10:
+			yellow = players["yellow"]
+			blue = players["blue"]
+			players["yellow"] = blue
+			players["blue"] = yellow
 
-		if data["points"] % 10 < 5:
-			data["players"]["green"]["serving"] = True
+		if points % 10 < 5:
+			players["green"]["serving"] = True
 		else:
-			data["players"]["blue"]["serving"] = True
+			players["blue"]["serving"] = True
 
 	def determineGameWinner(self, match):
 		data = self.matchData(match)
+		north = data["teams"]["north"]
+		south = data["teams"]["south"]
 
-		northWin = data["teams"]["north"]["points"] >= data["playTo"] and data["teams"]["north"]["points"] >= data["teams"]["south"]["points"] + 2
-		southWin = data["teams"]["south"]["points"] >= data["playTo"] and data["teams"]["south"]["points"] >= data["teams"]["north"]["points"] + 2
+		northWin = north["points"] >= data["playTo"] and north["points"] >= south["points"] + 2
+		southWin = south["points"] >= data["playTo"] and south["points"] >= north["points"] + 2
 
 		if northWin or southWin:
 			if northWin:
-				winner = data["teams"]["north"]["teamId"]
-				winnerScore = data["teams"]["north"]["points"]
-				loser = data["teams"]["south"]["teamId"]
-				loserScore = data["teams"]["south"]["points"]
+				winner = north["teamId"]
+				winnerScore = north["points"]
+				loser = south["teamId"]
+				loserScore = south["points"]
 			elif southWin:
-				winner = data["teams"]["south"]["teamId"]
-				winnerScore = data["teams"]["south"]["points"]
-				loser = data["teams"]["north"]["teamId"]
-				loserScore = data["teams"]["north"]["points"]
+				winner = south["teamId"]
+				winnerScore = south["points"]
+				loser = north["teamId"]
+				loserScore = north["points"]
 
 			self.gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
 
