@@ -188,35 +188,31 @@ def buttons():
 
 @app.route("/buttons/<path:button>/score", methods = ["POST"])
 def buttons_score(button):
-	match = matchService.selectActiveMatch()
-	matchType = getMatchType(match)
-
 	data = None
-	if matchType != None:
+	match = matchService.selectActiveMatch()
+	if match != None:
+		matchType = getMatchType(match)
 		data = matchType.score(match, button)
 	socketio.emit("response", data, broadcast = True)
 	return button
 
 @app.route("/buttons/<path:button>/undo", methods = ["POST"])
 def buttons_undo(button):
-	match = matchService.selectActiveMatch()
-	matchType = getMatchType(match)
-
 	data = None
-	if matchType != None:
+	match = matchService.selectActiveMatch()
+	if match != None:
+		matchType = getMatchType(match)
 		data = matchType.undo(match, button)
 	socketio.emit("response", data, broadcast = True)
 	return button
 
 @app.route("/buttons/<path:button>/delete-scores", methods = ["POST"])
 def buttons_delete_scores(button):
-	scoreService.deleteAll()
-	match = matchService.selectActiveMatch()
-	matchType = getMatchType(match)
-
 	data = None
-	if matchType != None:
-		data = matchType.matchData(match)
+	match = matchService.selectActiveMatch()
+	if match != None:
+		scoreService.deleteByMatch(match.id)
+		data = getMatchType(match).matchData(match)
 	socketio.emit("response", data, broadcast = True)
 	return button
 

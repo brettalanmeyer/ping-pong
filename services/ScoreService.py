@@ -14,7 +14,7 @@ class ScoreService(Service.Service):
 		self.session.commit()
 
 	def undo(self, matchId):
-		score = self.session.query(self.model).filter(MatchModel.MatchModel.id == matchId).order_by(self.model.id.desc()).first()
+		score = self.session.query(self.model).filter(self.model.matchId == matchId).order_by(self.model.id.desc()).first()
 		if score != None:
 			self.session.query(self.model).filter(self.model.id == score.id).delete()
 			self.session.commit()
@@ -34,6 +34,6 @@ class ScoreService(Service.Service):
 
 		return int(data.points)
 
-	def deleteAll(self):
-		self.session.query(self.model).delete()
+	def deleteByMatch(self, matchId):
+		self.session.query(self.model).filter(self.model.matchId == matchId).delete()
 		self.session.commit()
