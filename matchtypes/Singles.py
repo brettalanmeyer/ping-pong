@@ -19,63 +19,63 @@ class Singles(MatchType.MatchType):
 			"createdAt": str(match.createdAt),
 			"completedAt": str(match.completedAt),
 			"teams": {
-				"green": {
-					"teamId": None,
-					"playerId": game.green,
-					"playerName": None,
-					"points": None,
-					"serving": False,
-					"winner": False,
-					"games": []
-				},
-				"yellow": {
-					"teamId": None,
-					"playerId": game.yellow,
-					"playerName": None,
-					"points": None,
-					"serving": False,
-					"winner": False,
-					"games": []
-				}
+				"green": self.newPlayer(game.green),
+				"yellow": self.newPlayer(game.yellow)
 			},
 			"points": 0
 		}
 
+		self.setPlayerData(match, data["teams"])
+		data["points"] = data["teams"]["green"]["points"] + data["teams"]["yellow"]["points"]
+		self.determineWinner(match, data["teams"])
+		self.determineServe(data)
+
+		return data
+
+	def newPlayer(self, playerId):
+		return {
+			"teamId": None,
+			"playerId": playerId,
+			"playerName": None,
+			"points": None,
+			"serving": False,
+			"winner": False,
+			"games": []
+		}
+
+	def setPlayerData(self, match, teams):
 		for team in match.teams:
 			for teamPlayer in team.teamPlayers:
 
 				points = self.scoreService.getScore(match.id, team.id, match.game)
-				data["points"] += points
 
 				color = "green"
-				if data["teams"]["yellow"]["playerId"] == teamPlayer.player.id:
+				if teams["yellow"]["playerId"] == teamPlayer.player.id:
 					color = "yellow"
 
-				data["teams"][color]["playerName"] = teamPlayer.player.name
-				data["teams"][color]["points"] = points
-				data["teams"][color]["teamId"] = team.id
-				data["teams"][color]["winner"] = team.win == 1
+				teams[color]["playerName"] = teamPlayer.player.name
+				teams[color]["points"] = points
+				teams[color]["teamId"] = team.id
+				teams[color]["winner"] = team.win == 1
 
+	def determineWinner(self, match, teams):
 		for game in match.games:
-			if game.winner == data["teams"]["green"]["teamId"]:
-				winner = data["teams"]["green"]
-				loser = data["teams"]["yellow"]
+			if game.winner == teams["green"]["teamId"]:
+				winner = teams["green"]
+				loser = teams["yellow"]
 			else:
-				loser = data["teams"]["green"]
-				winner = data["teams"]["yellow"]
+				loser = teams["green"]
+				winner = teams["yellow"]
 
 			winner["games"].append({
 				"win": None if game.winner == None else True,
 				"score": game.winnerScore
 			})
+
 			loser["games"].append({
 				"win": None if game.winner == None else False,
 				"score": game.loserScore
 			})
-
-		self.determineServe(data)
-
-		return data
 
 	def determineServe(self, data):
 
@@ -156,4 +156,3 @@ class Singles(MatchType.MatchType):
 				yellow = data["green"]
 
 			self.gameService.create(match.id, i, green, yellow, None, None)
-
