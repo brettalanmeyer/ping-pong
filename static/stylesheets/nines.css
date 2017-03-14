@@ -10,6 +10,10 @@
 	float: left;
 }
 
+.nines-container .score-board.out {
+	opacity: 0.35;
+}
+
 .nines-container .score-board:nth-child(1),
 .nines-container .score-board:nth-child(2) {
 	margin-bottom: 60px;

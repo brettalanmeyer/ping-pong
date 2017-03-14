@@ -11,22 +11,22 @@
 
 		<div class="nines-container">
 
-			<div class="score-board">
+			<div class="score-board {% if data.players.yellow.out %}out{% endif %}" data-var="board" data-color="yellow">
 				<span class="name" data-var="name" data-color="yellow">{{ data.players.yellow.playerName }}</span>
 				<span class="score" data-var="score" data-color="yellow">{{ data.players.yellow.points }}</span>
 			</div>
 
-			<div class="score-board">
+			<div class="score-board {% if data.players.green.out %}out{% endif %}" data-var="board" data-color="green">
 				<span class="score" data-var="score" data-color="green">{{ data.players.green.points }}</span>
 				<span class="name" data-var="name" data-color="green">{{ data.players.green.playerName }}</span>
 			</div>
 
-			<div class="score-board">
+			<div class="score-board {% if data.players.blue.out %}out{% endif %}" data-var="board" data-color="blue">
 				<span class="name" data-var="name" data-color="blue">{{ data.players.blue.playerName }}</span>
 				<span class="score" data-var="score" data-color="blue">{{ data.players.blue.points }}</span>
 			</div>
 
-			<div class="score-board">
+			<div class="score-board {% if data.players.red.out %}out{% endif %}" data-var="board" data-color="red">
 				<span class="score" data-var="score" data-color="red">{{ data.players.red.points }}</span>
 				<span class="name" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
 			</div>
