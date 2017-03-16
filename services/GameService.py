@@ -1,14 +1,19 @@
-import Service
+import Service, logging
 from models import GameModel
 from datetime import datetime
 from sqlalchemy import text
 
+logger = logging.getLogger(__name__)
+
 class GameService(Service.Service):
 
 	def __init__(self, session):
+		logger.info("Initializing Game Service")
 		Service.Service.__init__(self, session, GameModel.GameModel)
 
 	def create(self, matchId, game, green, yellow, blue, red):
+		logger.info("Creating game for match=%d", matchId)
+
 		game = self.model(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
 		self.session.add(game)
 		self.session.commit()
@@ -16,6 +21,8 @@ class GameService(Service.Service):
 		return game
 
 	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
+		logger.info("Setting match=%d and game=%d as complete", matchId, game)
+
 		existingGame = self.session.query(self.model).filter_by(matchId = matchId, game = game).one()
 		existingGame.winner = winner
 		existingGame.winnerScore = winnerScore
@@ -26,6 +33,8 @@ class GameService(Service.Service):
 		self.session.commit()
 
 	def getTeamWins(self, matchId, teamId):
+		logger.info("Getting wins for match=%d and team=%d", matchId, teamId)
+
 		query = "\
 			SELECT COUNT(*) as wins\
 			FROM games\

@@ -3,15 +3,23 @@ from flask_assets import Environment
 from flask_socketio import SocketIO, emit
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-import json
+import json, logging
 
-from services import Service, IsmService, PlayerService, MatchService, ScoreService
+from services import Service, IsmService, PlayerService, MatchService, ScoreService, LeaderboardService
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
 app.config.from_pyfile("config.cfg")
 assets = Environment(app)
 socketio = SocketIO(app)
+
+logging.basicConfig(filename = "app.log", level = logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+if app.config["DEBUG"]:
+	logger.setLevel(logging.DEBUG)
+else:
+	logger.setLevel(logging.ERROR)
 
 engine = create_engine("mysql+mysqldb://" + app.config["MYSQL_USERNAME"] + ":" + app.config["MYSQL_PASSWORD"] + "@" + app.config["MYSQL_HOST"] + "/" + app.config["MYSQL_DATABASE"], pool_recycle = 3600)
 db_session = scoped_session(sessionmaker(autocommit = False, autoflush = False, bind = engine))
@@ -22,6 +30,7 @@ ismService = IsmService.IsmService(session)
 playerService = PlayerService.PlayerService(session)
 matchService = MatchService.MatchService(session)
 scoreService = ScoreService.ScoreService(session)
+leaderboardService = LeaderboardService.LeaderboardService(session)
 
 singles = Singles.Singles(session)
 doubles = Doubles.Doubles(session)
@@ -138,11 +147,11 @@ def players_edit(id):
 @app.route("/players/<int:id>", methods = ["POST"])
 def players_update(id):
 	name = request.form["name"]
-	player = playerService.selectById(id)
-	player.name = name
 
 	players = playerService.excludeByName(id, name)
 	if players.count() > 0:
+		player = playerService.selectById(id)
+		player.name = name
 		return render_template("players/edit.html", player = player, error = True)
 
 	playerService.update(id, name)
@@ -180,7 +189,8 @@ def isms_delete(id):
 
 @app.route("/leaderboard", methods = ["GET"])
 def leaderboard_index():
-	return render_template("leaderboard/index.html")
+	stats = leaderboardService.stats()
+	return render_template("leaderboard/index.html", stats = stats)
 
 @app.route("/buttons", methods = ["GET"])
 def buttons():
