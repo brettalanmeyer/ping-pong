@@ -13,14 +13,6 @@ app.config.from_pyfile("config.cfg")
 assets = Environment(app)
 socketio = SocketIO(app)
 
-logging.basicConfig(filename = "app.log", level = logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-if app.config["DEBUG"]:
-	logger.setLevel(logging.DEBUG)
-else:
-	logger.setLevel(logging.ERROR)
-
 engine = create_engine("mysql+mysqldb://" + app.config["MYSQL_USERNAME"] + ":" + app.config["MYSQL_PASSWORD"] + "@" + app.config["MYSQL_HOST"] + "/" + app.config["MYSQL_DATABASE"], pool_recycle = 3600)
 db_session = scoped_session(sessionmaker(autocommit = False, autoflush = False, bind = engine))
 Session = sessionmaker(bind = engine)
@@ -250,4 +242,8 @@ def getMatchType(match):
 		return nines
 
 if __name__ == "__main__":
+	logging.basicConfig(filename = app.config["LOG_FILE"], level = logging.DEBUG, format = app.config["LOG_FORMAT"])
+	logger = logging.getLogger(__name__)
+	logger.setLevel(logging.DEBUG)
+
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])
