@@ -34,7 +34,7 @@ def index():
 
 @app.route("/matches", methods = ["GET"])
 def matches_index():
-	matches = matchService.selectReady()
+	matches = matchService.selectComplete()
 	return render_template("matches/index.html", matches = matches)
 
 @app.route("/matches/new", methods = ["GET"])
@@ -107,6 +107,14 @@ def matches_json(id):
 	matchType = getMatchType(match)
 	data = matchType.matchData(match)
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
+
+@app.route("/matches/<int:id>/play-again", methods = ["POST"])
+def matches_again(id):
+	match = matchService.selectById(id)
+	matchType = getMatchType(match)
+
+	newMatch = matchType.playAgain(match)
+	return redirect("/matches/%d" % newMatch.id)
 
 @app.route("/players", methods = ["GET"])
 def players():
@@ -192,9 +200,21 @@ def buttons():
 def buttons_score(button):
 	data = None
 	match = matchService.selectActiveMatch()
+
 	if match != None:
 		matchType = getMatchType(match)
 		data = matchType.score(match, button)
+	else:
+		latestMatch = matchService.selectLatestMatch()
+		print(latestMatch.id)
+		matchType = getMatchType(latestMatch)
+		newMatch = matchType.playAgain(latestMatch)
+		data = {
+			"matchType": matchType.matchType,
+			"redirect": True,
+			"matchId": newMatch.id
+		}
+
 	socketio.emit("response", data, broadcast = True)
 	return button
 

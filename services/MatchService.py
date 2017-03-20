@@ -15,20 +15,36 @@ class MatchService(Service.Service):
 
 		return self.session.query(self.model).filter(self.model.id == id).one()
 
+	def selectNotById(self, id):
+		logger.info("Selecting matches excluding match=%d", id)
+
+		return self.session.query(self.model).filter(self.model.id != id)
+
 	def select(self):
 		logger.info("Selecting matches")
 
 		return self.session.query(self.model)
 
-	def selectReady(self):
+	def selectComplete(self):
 		logger.info("Selecting ready for play matches")
 
-		return self.session.query(self.model).filter(self.model.ready == True)
+		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc())
 
 	def selectActiveMatch(self):
-		logger.info("Selecting active matches")
+		logger.info("Selecting active match")
 
 		return self.session.query(self.model).filter(self.model.ready == True, self.model.complete == False).order_by(self.model.id.desc()).first()
+
+	def selectLatestMatch(self):
+		logger.info("Selecting latest completed match")
+
+		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc()).first()
+
+	def setAsNotReady(self, id):
+		logger.info("Updateing all matches except current one to not ready")
+
+		update(self.model).where(self.model.id != id).values(ready = False)
+		self.session.commit()
 
 	def create(self, matchType):
 		match = self.model(matchType, 0, False, False, datetime.now(), datetime.now())
@@ -71,6 +87,10 @@ class MatchService(Service.Service):
 		return match
 
 	def play(self, match):
+		matches = self.selectNotById(match.id)
+		for item in matches:
+			item.ready = False
+
 		match.ready = True
 		match.modifiedAt = datetime.now()
 		self.session.commit()

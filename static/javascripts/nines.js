@@ -22,6 +22,14 @@ $(function(){
 			if(data == null) return;
 			if(data.matchType != "nines") return;
 
+			if(data.redirect){
+				window.location = "/matches/" + data.matchId
+			}
+
+			if(data.complete){
+				$("#play-again").removeClass("hidden");
+			}
+
 			for(var i = 0; i < colors.length; i++){
 				var color = colors[i];
 

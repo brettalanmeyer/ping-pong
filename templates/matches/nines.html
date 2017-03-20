@@ -31,6 +31,10 @@
 				<span class="name" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
 			</div>
 
+			<form id="play-again" method="POST" action="/matches/{{ data.matchId }}/play-again" class="play-again {% if not data.complete %}hidden{% endif %}">
+				<button class="btn btn-block btn-info">Press any button to play again</button>
+			</form>
+
 		</div>
 
 	</div>

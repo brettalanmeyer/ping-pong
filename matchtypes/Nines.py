@@ -1,4 +1,4 @@
-import MatchType
+import MatchType, random
 
 class Nines(MatchType.MatchType):
 
@@ -119,3 +119,27 @@ class Nines(MatchType.MatchType):
 				return self.matchData(match)
 
 		return data
+
+	def playAgain(self, match):
+		players = []
+		for game in match.games:
+			players.append(game.yellow)
+			players.append(game.blue)
+			players.append(game.red)
+			players.append(game.green)
+
+		random.shuffle(players)
+
+		teams = {
+			"green": players[0],
+			"yellow": players[1],
+			"blue": players[2],
+			"red": players[3]
+		}
+
+		newMatch = self.matchService.create(self.matchType)
+		self.matchService.updatePlayTo(newMatch.id, match.playTo)
+		self.createTeams(newMatch, teams)
+		self.matchService.play(newMatch)
+
+		return newMatch

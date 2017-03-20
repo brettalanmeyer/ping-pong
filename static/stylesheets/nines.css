@@ -39,3 +39,12 @@
 	width: 40%;
 	text-align: center;
 }
+
+.nines-container .play-again {
+	padding-top: 20px;
+	clear: both;
+}
+
+.nines-container .play-again .btn {
+	font-size: 24px;
+}

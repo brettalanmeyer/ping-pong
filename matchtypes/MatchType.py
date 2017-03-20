@@ -59,3 +59,6 @@ class MatchType():
 
 	def getTeamWins(self, matchId, teamId):
 		return self.gameService.getTeamWins(matchId, teamId)
+
+	def playAgain(self, match):
+		return match
