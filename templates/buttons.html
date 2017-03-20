@@ -106,7 +106,7 @@
 
 			$(function(){
 
-				$("button[data-action=score]").on("click", function(){
+				$("button[data-action=score], button[data-action=undo]").on("click", function(){
 					var button = $(this);
 					$.post("/buttons/" + button.data("color") + "/" + button.data("action"));
 				});
