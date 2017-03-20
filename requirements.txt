@@ -1,0 +1,4 @@
+Flask-Assets
+flask-socketio
+SQLAlchemy
+mysql-python

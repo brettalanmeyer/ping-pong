@@ -1,34 +1,40 @@
-Game Types
+# Ping Pong
+
+# Installation
+
+Install dependencies
+
+run `sudo pip install -r requirements.txt`
+
+# Game Types
 	Singles
 	Doubles
 	9's
 
-Singles
-	1. Select number of games (Best of 1, 3, or 5)
-	2. Select score to: (default is 21, must win by 2 pts)
-	3. Show table with player selector at each end
+	Singles
+		1. Select number of games (Best of 1, 3, or 5)
+		2. Select score to: (default is 21, must win by 2 pts)
+		3. Show table with player selector at each end
 
-Doubles
-	1. Select number of games (Best of 1, 3, or 5)
-	2. Select score to: (default is 21, must win by 2 pts)
-	3. Show table with player selector at each corner
+	Doubles
+		1. Select number of games (Best of 1, 3, or 5)
+		2. Select score to: (default is 21, must win by 2 pts)
+		3. Show table with player selector at each corner
 
-Redo singles to use north and south for teams intead of just colors
+	9's
 
-large Flask application: https://www.digitalocean.com/community/tutorials/how-to-structure-large-flask-applications
+# Configuration
 
-put session.close back in run.py
+	create config.cfg
 
-figure out better way to do run.getMatchType(), also put score and undo in their own class that handles singles, doubles, and nines maybe
-
-
-Installation
-
-	sudo pip install Flask
-	sudo pip install Flask-Assets
-	sudo pip install flask-socketio
-	sudo pip install SQLAlchemy
-	sudo pip install mysql-python
+		DEBUG = True
+		HOST = '0.0.0.0'
+		PORT = 5000
+		SECRET_KEY = ''
+		MYSQL_USERNAME = ''
+		MYSQL_PASSWORD = ''
+		MYSQL_HOST = ''
+		MYSQL_DATABASE = ''
 
 
 	Windows
@@ -44,4 +50,5 @@ Installation
 		pip install gevent-websocket
 
 
-Configuration File
+/home/pi/ping-pong
+
