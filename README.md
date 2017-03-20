@@ -1,12 +1,10 @@
 # Ping Pong
 
-# Installation
+## Installation
 
-Install dependencies
+Install dependencies by running `sudo pip install -r requirements.txt`
 
-run `sudo pip install -r requirements.txt`
-
-# Game Types
+## Game Types
 	Singles
 	Doubles
 	9's
@@ -22,8 +20,10 @@ run `sudo pip install -r requirements.txt`
 		3. Show table with player selector at each corner
 
 	9's
-
-# Configuration
+		1. Select score to: (default is 9)
+		2. Show table with player selector at each corner
+		
+## Configuration
 
 	create config.cfg
 
@@ -49,6 +49,7 @@ run `sudo pip install -r requirements.txt`
 		pip install cssmin
 		pip install gevent-websocket
 
+## Raspberry pi
 
-/home/pi/ping-pong
+* run script `/home/pi/ping-pong/ping-pong-controls.py`
 
