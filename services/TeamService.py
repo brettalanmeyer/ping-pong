@@ -1,14 +1,12 @@
-import Service, logging
+import Service
 from models import TeamModel
 from services import TeamPlayerService
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
+from flask import current_app as app
 
 class TeamService(Service.Service):
 
 	def __init__(self, session):
-		logger.info("Initializing Team Service")
 		Service.Service.__init__(self, session, TeamModel.TeamModel)
 		self.teamPlayerService = TeamPlayerService.TeamPlayerService(session)
 
@@ -17,7 +15,7 @@ class TeamService(Service.Service):
 		self.session.add(team)
 		self.session.commit()
 
-		logger.info("Creating team=%d match=%d", team.id, team.matchId)
+		app.logger.info("Creating team=%d match=%d", team.id, team.matchId)
 
 		return team
 
@@ -25,7 +23,7 @@ class TeamService(Service.Service):
 		team = self.create(matchId)
 		teamPlayer = self.teamPlayerService.create(team.id, playerId)
 
-		logger.info("Creating single player team=%d match=%d teamPlayer=%d player=%d", team.id, matchId, teamPlayer.id, teamPlayer.playerId)
+		app.logger.info("Creating single player team=%d match=%d teamPlayer=%d player=%d", team.id, matchId, teamPlayer.id, teamPlayer.playerId)
 
 		return team
 
@@ -34,7 +32,7 @@ class TeamService(Service.Service):
 		teamPlayer1 = self.teamPlayerService.create(team.id, player1Id)
 		teamPlayer2 = self.teamPlayerService.create(team.id, player2Id)
 
-		logger.info("Creating two player team=%d match=%d teamPlayer1=%d player1=%d teamPlayer2=%d player2=%d", team.id, matchId, teamPlayer1.id, teamPlayer1.playerId, teamPlayer2.id, teamPlayer2.playerId)
+		app.logger.info("Creating two player team=%d match=%d teamPlayer1=%d player1=%d teamPlayer2=%d player2=%d", team.id, matchId, teamPlayer1.id, teamPlayer1.playerId, teamPlayer2.id, teamPlayer2.playerId)
 
 		return team
 
@@ -44,7 +42,7 @@ class TeamService(Service.Service):
 		team.modifiedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Team win team=%d", team.id)
+		app.logger.info("Team win team=%d", team.id)
 
 	def lose(self, team):
 		team.win = False
@@ -52,4 +50,4 @@ class TeamService(Service.Service):
 		team.modifiedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Team loss team=%d", team.id)
+		app.logger.info("Team loss team=%d", team.id)

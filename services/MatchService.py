@@ -1,47 +1,45 @@
-import Service, logging
+import Service
 from models import MatchModel, TeamModel, GameModel, TeamPlayerModel
 from datetime import datetime
-
-logger = logging.getLogger(__name__)
+from flask import current_app as app
 
 class MatchService(Service.Service):
 
 	def __init__(self, session):
-		logger.info("Initializing Match Service")
 		Service.Service.__init__(self, session, MatchModel.MatchModel)
 
 	def selectById(self, id):
-		logger.info("Selecting match=%d", id)
+		app.logger.info("Selecting match=%d", id)
 
 		return self.session.query(self.model).filter(self.model.id == id).one()
 
 	def selectNotById(self, id):
-		logger.info("Selecting matches excluding match=%d", id)
+		app.logger.info("Selecting matches excluding match=%d", id)
 
 		return self.session.query(self.model).filter(self.model.id != id)
 
 	def select(self):
-		logger.info("Selecting matches")
+		app.logger.info("Selecting matches")
 
 		return self.session.query(self.model)
 
 	def selectComplete(self):
-		logger.info("Selecting ready for play matches")
+		app.logger.info("Selecting ready for play matches")
 
 		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc())
 
 	def selectActiveMatch(self):
-		logger.info("Selecting active match")
+		app.logger.info("Selecting active match")
 
 		return self.session.query(self.model).filter(self.model.ready == True, self.model.complete == False).order_by(self.model.id.desc()).first()
 
 	def selectLatestMatch(self):
-		logger.info("Selecting latest completed match")
+		app.logger.info("Selecting latest completed match")
 
 		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc()).first()
 
 	def setAsNotReady(self, id):
-		logger.info("Updateing all matches except current one to not ready")
+		app.logger.info("Updateing all matches except current one to not ready")
 
 		update(self.model).where(self.model.id != id).values(ready = False)
 		self.session.commit()
@@ -51,7 +49,7 @@ class MatchService(Service.Service):
 		self.session.add(match)
 		self.session.commit()
 
-		logger.info("Creating match=%d", match.id)
+		app.logger.info("Creating match=%d", match.id)
 
 		return match
 
@@ -61,7 +59,7 @@ class MatchService(Service.Service):
 		match.modifiedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Updating match=%d playTo=%d", match.id, match.playTo)
+		app.logger.info("Updating match=%d playTo=%d", match.id, match.playTo)
 
 		return match
 
@@ -72,7 +70,7 @@ class MatchService(Service.Service):
 		match.modifiedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Updating match=%d numOfGames=%d game=%d", match.id, match.numOfGames, match.game)
+		app.logger.info("Updating match=%d numOfGames=%d game=%d", match.id, match.numOfGames, match.game)
 
 		return match
 
@@ -82,7 +80,7 @@ class MatchService(Service.Service):
 		match.modifiedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Updating match=%d game=%d", match.id, match.game)
+		app.logger.info("Updating match=%d game=%d", match.id, match.game)
 
 		return match
 
@@ -95,7 +93,7 @@ class MatchService(Service.Service):
 		match.modifiedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Play match=%d", match.id)
+		app.logger.info("Play match=%d", match.id)
 
 	def complete(self, match):
 		match.complete = True
@@ -103,10 +101,10 @@ class MatchService(Service.Service):
 		match.completedAt = datetime.now()
 		self.session.commit()
 
-		logger.info("Completing match=%d", match.id)
+		app.logger.info("Completing match=%d", match.id)
 
 	def deleteAll(self):
-		logger.info("Deleting all matches")
+		app.logger.info("Deleting all matches")
 
 		self.session.query(self.model).delete()
 		self.session.commit()

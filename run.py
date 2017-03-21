@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, emit
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import json, logging
+from logging.handlers import TimedRotatingFileHandler
 
 from services import Service, IsmService, PlayerService, MatchService, ScoreService, LeaderboardService
 from matchtypes import Singles, Doubles, Nines
@@ -30,6 +31,15 @@ nines = Nines.Nines(session)
 
 @app.route("/", methods = ["GET"])
 def index():
+
+	app.logger.warning('A warning occurred (%d apples)', 42)
+	app.logger.error('An error occurred')
+	app.logger.info('Info')
+	app.logger.info('Info1')
+	app.logger.info('Info2')
+	app.logger.info('Info3')
+	app.logger.info('Info4')
+
 	return render_template("main/index.html")
 
 @app.route("/matches", methods = ["GET"])
@@ -262,8 +272,10 @@ def getMatchType(match):
 		return nines
 
 if __name__ == "__main__":
-	logging.basicConfig(filename = app.config["LOG_FILE"], level = logging.DEBUG, format = app.config["LOG_FORMAT"])
-	logger = logging.getLogger(__name__)
-	logger.setLevel(logging.DEBUG)
+	handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when = "midnight", interval = 1, backupCount = 14)
+	handler.setLevel(logging.INFO)
+	formatter = logging.Formatter(app.config["LOG_FORMAT"])
+	handler.setFormatter(formatter)
+	app.logger.addHandler(handler)
 
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])

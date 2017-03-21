@@ -1,12 +1,10 @@
-import Service, logging
+import Service
 from models import TeamPlayerModel
-
-logger = logging.getLogger(__name__)
+from flask import current_app as app
 
 class TeamPlayerService(Service.Service):
 
 	def __init__(self, session):
-		logger.info("Initializing TeamPlayer Service")
 		Service.Service.__init__(self, session, TeamPlayerModel.TeamPlayerModel)
 
 	def create(self, teamId, playerId):
@@ -14,6 +12,6 @@ class TeamPlayerService(Service.Service):
 		self.session.add(teamPlayer)
 		self.session.commit()
 
-		logger.info("Creating teamplayer=%d team=%d player=%d", teamPlayer.id, teamPlayer.teamId, teamPlayer.playerId)
+		app.logger.info("Creating teamplayer=%d team=%d player=%d", teamPlayer.id, teamPlayer.teamId, teamPlayer.playerId)
 
 		return teamPlayer
