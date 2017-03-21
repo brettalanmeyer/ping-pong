@@ -31,15 +31,6 @@ nines = Nines.Nines(session)
 
 @app.route("/", methods = ["GET"])
 def index():
-
-	app.logger.warning('A warning occurred (%d apples)', 42)
-	app.logger.error('An error occurred')
-	app.logger.info('Info')
-	app.logger.info('Info1')
-	app.logger.info('Info2')
-	app.logger.info('Info3')
-	app.logger.info('Info4')
-
 	return render_template("main/index.html")
 
 @app.route("/matches", methods = ["GET"])
@@ -272,7 +263,7 @@ def getMatchType(match):
 		return nines
 
 if __name__ == "__main__":
-	handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when = "midnight", interval = 1, backupCount = 14)
+	handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when = app.config["LOG_WHEN"], interval = app.config["LOG_INTERVAL"], backupCount = app.config["LOG_BACKUP_COUNT"])
 	handler.setLevel(logging.INFO)
 	formatter = logging.Formatter(app.config["LOG_FORMAT"])
 	handler.setFormatter(formatter)
