@@ -1,11 +1,8 @@
 from flask import Flask, render_template, Response, redirect, request
 from flask_assets import Environment
 from flask_socketio import SocketIO, emit
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-import json, logging
-from logging.handlers import TimedRotatingFileHandler
-
+import json
+from utils import database, logger
 from services import Service, IsmService, PlayerService, MatchService, ScoreService, LeaderboardService
 from matchtypes import Singles, Doubles, Nines
 
@@ -250,22 +247,9 @@ def getMatchType(match):
 	elif nines.isMatchType(match.matchType):
 		return nines
 
-def setupLogging():
-	handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when = app.config["LOG_WHEN"], interval = app.config["LOG_INTERVAL"], backupCount = app.config["LOG_BACKUP_COUNT"])
-	handler.setLevel(logging.INFO)
-	formatter = logging.Formatter(app.config["LOG_FORMAT"])
-	handler.setFormatter(formatter)
-	app.logger.addHandler(handler)
-
-def setupSession():
-	engine = create_engine("mysql+mysqldb://" + app.config["MYSQL_USERNAME"] + ":" + app.config["MYSQL_PASSWORD"] + "@" + app.config["MYSQL_HOST"] + "/" + app.config["MYSQL_DATABASE"], pool_recycle = 3600)
-	db_session = scoped_session(sessionmaker(autocommit = False, autoflush = False, bind = engine))
-	Session = sessionmaker(bind = engine)
-	return Session()
-
 if __name__ == "__main__":
-	setupLogging()
-	session = setupSession()
+	logger.setupLogging(app)
+	session = database.setupSession(app)
 
 	ismService = IsmService.IsmService(session)
 	playerService = PlayerService.PlayerService(session)
