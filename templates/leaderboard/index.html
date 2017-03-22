@@ -8,9 +8,46 @@
 
 		<h1>Leaderboard</h1>
 
-		<p>Cole is pretty good.</p>
+		<table class="table">
 
-		<p>Everyone else sucks.</p>
+			<thead>
+
+				<tr>
+
+					<th>Player</th>
+					<th>Matches</th>
+					<th>Win %</th>
+					<th>Points</th>
+					<th>Wins</th>
+					<th>Losses</th>
+					<th>Time</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody>
+
+				{% for stat in stats %}
+
+					<tr>
+
+						<td>{{ stat.playerName }}</td>
+						<td>{{ stat.matches }}</td>
+						<td>{{ "{:.3f}".format(stat.percentage) }}</td>
+						<td>{{  "{:,}".format(stat.points) }}</td>
+						<td>{{ stat.wins }}</td>
+						<td>{{ stat.losses }}</td>
+						<td>{{ stat.time }}</td>
+
+					</tr>
+
+				{% endfor %}
+
+			</tbody>
+
+		</table>
+
 
 	</div>
 

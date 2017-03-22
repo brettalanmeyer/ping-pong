@@ -3,7 +3,7 @@ from flask_assets import Environment
 from flask_socketio import SocketIO, emit
 import json
 from utils import database, logger
-from services import Service, IsmService, PlayerService, MatchService, ScoreService, LeaderboardService
+from services import IsmService, PlayerService, MatchService, ScoreService, LeaderboardService
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
@@ -174,6 +174,11 @@ def isms_delete(id):
 def leaderboard_index():
 	stats = leaderboardService.stats()
 	return render_template("leaderboard/index.html", stats = stats)
+
+@app.route("/leaderboard.json", methods = ["GET"])
+def leaderboard_json():
+	stats = leaderboardService.stats()
+	return Response(json.dumps(stats), status = 200, mimetype = "application/json")
 
 @app.route("/buttons", methods = ["GET"])
 def buttons():
