@@ -60,3 +60,12 @@ Remove need to approve isms
 reduce leaderboard to only singles and doubles
 on completion, set team win/loss
 Create player from player selection page
+
+
+Delegate Python Process
+		screen python run.py
+		Ctrl-a then d
+	List Screen Processes
+		screen -ls
+	Kill Screen Process
+		screen -X -S PID quit
