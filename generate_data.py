@@ -11,7 +11,13 @@ session = database.setupSession(app)
 
 
 def createMatch():
-	match = MatchModel.MatchModel("singles", 1, True, False, datetime.now(), datetime.now())
+
+	if random.randrange(0,2) == 0:
+		matchType = "singles"
+	else:
+		matchType = "doubles"
+
+	match = MatchModel.MatchModel(matchType, 1, True, False, datetime.now(), datetime.now())
 	match.playTo = 21
 	match.numOfGames = [1,3,5][random.randrange(0,3)]
 
@@ -118,7 +124,7 @@ def score(match):
 			return team2, team2Points, team1, team1Points
 
 def generate():
-	players = session.query(PlayerModel.PlayerModel).order_by(func.rand()).limit(2)
+	players = session.query(PlayerModel.PlayerModel).order_by(func.rand()).limit(4)
 
 	match = createMatch()
 
@@ -127,16 +133,25 @@ def generate():
 
 	player1 = None
 	player2 = None
+	player3 = None
+	player4 = None
 
 	for player in players:
 		if player1 == None:
 			player1 = player
-		else:
+		elif player2 == None:
 			player2 = player
-			break
+		elif player3 == None:
+			player3 = player
+		elif player4 == None:
+			player4 = player
 
 	createTeamPlayer(team1.id, player1.id)
 	createTeamPlayer(team2.id, player2.id)
+
+	if match.matchType == "doubles":
+		createTeamPlayer(team1.id, player3.id)
+		createTeamPlayer(team2.id, player4.id)
 
 	createGames(match)
 

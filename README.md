@@ -57,6 +57,6 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 Remove need to approve isms
-generate 4 player games
 reduce leaderboard to only singles and doubles
 on completion, set team win/loss
+Create player from player selection page
