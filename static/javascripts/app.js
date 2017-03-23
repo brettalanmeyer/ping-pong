@@ -58,6 +58,8 @@ $(function(){
 
 	});
 
+	$("#leaderboard").stupidtable();
+
 });
 
 function shuffle(a) {

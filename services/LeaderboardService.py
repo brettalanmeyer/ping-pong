@@ -32,7 +32,8 @@ class LeaderboardService(Service.Service):
 				"pointsAgainst": pointsAgainst[player.id] if player.id in pointsAgainst else 0,
 				"wins": matches[player.id]["wins"] if player.id in matches else 0,
 				"losses": matches[player.id]["losses"] if player.id in matches else 0,
-				"time": self.formatTime(times[player.id]) if player.id in times else 0,
+				"seconds": times[player.id] if player.id in matches else 0,
+				"time": self.formatTime(times[player.id]) if player.id in times else 0
 			})
 
 		return stats

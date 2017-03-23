@@ -1,0 +1,22 @@
+.leaderboard-container .table th {
+	cursor: pointer;
+	position: relative;
+}
+
+.leaderboard-container .table .sorting-container {
+	display: inline-block;
+	font-size: 10px;
+	position: relative;
+	top: 4px;
+	left: 4px;
+}
+
+.leaderboard-container .table .glyphicon {
+	color: #aaa;
+	display: block;
+}
+
+.leaderboard-container .table .sorting-asc .glyphicon-chevron-up,
+.leaderboard-container .table .sorting-desc .glyphicon-chevron-down {
+	color: #333
+}
