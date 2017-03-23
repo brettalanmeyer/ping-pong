@@ -223,3 +223,39 @@ a.action {
 .text-sm {
 	font-size: 13px;
 }
+
+.previous-matches {
+
+}
+
+.previous-matches .score-cell {
+	padding: 4px 0;
+	width: 320px;
+}
+
+.previous-matches .score-table {
+	margin: 0;
+	width: initial;
+}
+
+.previous-matches .score-table td {
+	padding: 4px 6px;
+	font-size: 13px;
+}
+
+.previous-matches .score-table td.name {
+	width: 120px;
+}
+
+.previous-matches .score-table td.name.winner {
+	font-weight: bold;
+}
+
+.previous-matches .score-table td.score {
+	width: 40px;
+	text-align: center;
+}
+
+.previous-matches .score-table td.score.winner {
+	font-weight: bold;
+}

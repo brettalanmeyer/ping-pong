@@ -9,7 +9,7 @@
 
 		<h1>Previous Matches</h1>
 
-		<table class="table">
+		<table class="table previous-matches">
 
 			<thead>
 
@@ -17,10 +17,7 @@
 
 					<th>Date</th>
 					<th>Type</th>
-					<th>Games</th>
-					<th>Points</th>
 					<th>Teams</th>
-					<th></th>
 					<th></th>
 
 				</tr>
@@ -35,27 +32,35 @@
 
 							<td>{{ "{:%b %d, %Y %I:%M %p} ".format(match.createdAt) }}</td>
 							<td>{{ match.matchType.title() }}</td>
-							<td>
-								{% if match.numOfGames != None %}
-									{{ match.numOfGames }}
-								{% endif %}
-							</td>
-							<td>{{ match.playTo }}</td>
 
-							<td>
-								{% for team in match.teams %}
-									{% for teamPlayer in team.teamPlayers %}
-										{{ teamPlayer.player.name }}
+							<td class="score-cell">
+
+								<table class="table table-bordered score-table">
+
+									{% for team in match.teams %}
+
+										<tr>
+
+											<td class="name {% if team.win %}winner{% endif %}">
+												{% for teamPlayer in team.teamPlayers %}
+													{{ teamPlayer.player.name|e }}
+												{% endfor %}
+											</td>
+
+											{% for game in match.games %}
+												{% if game.winner == team.id %}
+													<td class="score winner">{{ game.winnerScore }}</td>
+												{% elif game.loser == team.id %}
+													<td class="score loser">{{ game.loserScore }}</td>
+												{% endif %}
+											{% endfor %}
+
+										</tr>
+
 									{% endfor %}
-								{% endfor %}
-							</td>
 
-							<td>
-								{% for game in match.games %}
-									{% if game.completedAt != None %}
-										{{ game.winnerScore }}/{{ game.loserScore }}
-									{% endif %}
-								{% endfor %}
+								</table>
+
 							</td>
 
 							<td>

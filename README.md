@@ -59,3 +59,4 @@ TODO
 Remove need to approve isms
 generate 4 player games
 reduce leaderboard to only singles and doubles
+on completion, set team win/loss
