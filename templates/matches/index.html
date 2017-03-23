@@ -70,6 +70,10 @@
 
 		</table>
 
+		{% with url = "/matches", paging = paging %}
+			{% include 'partials/pagination.html' %}
+		{% endwith %}
+
 	</div>
 
 {% endblock %}

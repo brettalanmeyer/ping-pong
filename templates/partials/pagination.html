@@ -1,0 +1,27 @@
+<div class="text-center">
+
+	<ul class="pagination">
+		{% if paging.page > 1 %}
+			<li>
+				<a href="{{ url }}/{{ paging.page - 1 }}" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+		{% endif %}
+
+		{% for i in range(1, paging.pages + 1): %}
+			<li {% if paging.page == i %}class="active"{% endif %}>
+				<a href="{{ url }}/{{ i }}">{{ i }}</a>
+			</li>
+		{% endfor %}
+
+		{% if paging.page < paging.pages %}
+			<li>
+				<a href="{{ url }}/{{ paging.page + 1 }}" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		{% endif %}
+	</ul>
+
+</div>

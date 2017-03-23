@@ -3,7 +3,7 @@ from flask_assets import Environment
 from flask_socketio import SocketIO, emit
 import json
 from utils import database, logger
-from services import IsmService, PlayerService, MatchService, ScoreService, LeaderboardService
+from services import IsmService, PlayerService, MatchService, ScoreService, LeaderboardService, PagingService
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
@@ -15,10 +15,11 @@ socketio = SocketIO(app)
 def index():
 	return render_template("main/index.html")
 
-@app.route("/matches", methods = ["GET"])
-def matches_index():
-	matches = matchService.selectComplete()
-	return render_template("matches/index.html", matches = matches)
+@app.route("/matches", methods = ["GET"], defaults = { "page": 1 })
+@app.route("/matches/<int:page>", methods = ["GET"])
+def matches_index(page):
+	matches = pagingService.pager(matchService.selectComplete(), page)
+	return render_template("matches/index.html", matches = matches, paging = pagingService.data())
 
 @app.route("/matches/new", methods = ["GET"])
 def matches_new():
@@ -261,6 +262,7 @@ if __name__ == "__main__":
 	matchService = MatchService.MatchService(session)
 	scoreService = ScoreService.ScoreService(session)
 	leaderboardService = LeaderboardService.LeaderboardService(session)
+	pagingService = PagingService.PagingService()
 
 	singles = Singles.Singles(session)
 	doubles = Doubles.Doubles(session)

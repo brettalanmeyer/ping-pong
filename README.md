@@ -22,7 +22,7 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 	9's
 		1. Select score to: (default is 9)
 		2. Show table with player selector at each corner
-		
+
 ## Configuration
 
 	create config.cfg
@@ -53,3 +53,9 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 * run script `/home/pi/ping-pong/ping-pong-controls.py`
 
+
+
+TODO
+Remove need to approve isms
+generate 4 player games
+reduce leaderboard to only singles and doubles
