@@ -17,7 +17,8 @@
 					<th>Player</th>
 					<th>Matches</th>
 					<th>Win %</th>
-					<th>Points</th>
+					<th>Points For</th>
+					<th>Points Against</th>
 					<th>Wins</th>
 					<th>Losses</th>
 					<th>Time</th>
@@ -35,7 +36,8 @@
 						<td>{{ stat.playerName }}</td>
 						<td>{{ stat.matches }}</td>
 						<td>{{ "{:.3f}".format(stat.percentage) }}</td>
-						<td>{{  "{:,}".format(stat.points) }}</td>
+						<td>{{  "{:,}".format(stat.pointsFor) }}</td>
+						<td>{{  "{:,}".format(stat.pointsAgainst) }}</td>
 						<td>{{ stat.wins }}</td>
 						<td>{{ stat.losses }}</td>
 						<td>{{ stat.time }}</td>

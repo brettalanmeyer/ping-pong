@@ -18,6 +18,11 @@ class PlayerService(Service.Service):
 
 		return self.session.query(self.model).filter(self.model.id == id).one()
 
+	def	selectActive(self):
+		app.logger.info("Selecting active players")
+
+		return self.session.query(self.model).filter(self.model.enabled == 1)
+
 	def selectByName(self, name):
 		app.logger.info("Selecting player by name=%s", name)
 
@@ -26,10 +31,10 @@ class PlayerService(Service.Service):
 	def new(self):
 		app.logger.info("New player")
 
-		return self.model("", None, None)
+		return self.model("", True, None, None)
 
 	def create(self, form):
-		player = self.model(form["name"], datetime.now(), datetime.now())
+		player = self.model(form["name"], True, datetime.now(), datetime.now())
 		self.session.add(player)
 		self.session.commit()
 

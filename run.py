@@ -65,7 +65,7 @@ def matches_games_update(id):
 def matches_players(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
-	players = playerService.select()
+	players = playerService.selectActive()
 	return render_template(matchType.playerTemplate, title = matchType.label, match = match, players = players)
 
 @app.route("/matches/<int:id>/players", methods = ["POST"])

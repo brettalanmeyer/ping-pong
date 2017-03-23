@@ -118,24 +118,34 @@ def score(match):
 			return team2, team2Points, team1, team1Points
 
 def generate():
-	players = session.query(PlayerModel.PlayerModel).order_by(func.random())
+	players = session.query(PlayerModel.PlayerModel).order_by(func.rand()).limit(2)
 
 	match = createMatch()
 
 	team1 = createTeam(match.id)
 	team2 = createTeam(match.id)
 
-	createTeamPlayer(team1.id, players[0].id)
-	createTeamPlayer(team2.id, players[1].id)
+	player1 = None
+	player2 = None
+
+	for player in players:
+		if player1 == None:
+			player1 = player
+		else:
+			player2 = player
+			break
+
+	createTeamPlayer(team1.id, player1.id)
+	createTeamPlayer(team2.id, player2.id)
 
 	createGames(match)
 
 	scoring(match)
 
 def main():
-	# session.query(MatchModel.MatchModel).delete()
+	session.query(MatchModel.MatchModel).delete()
 
-	for i in range(0, 1000):
+	for i in range(0, 100):
 		print("Generating match #:" + str(i + 1))
 		generate()
 
