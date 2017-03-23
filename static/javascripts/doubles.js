@@ -74,11 +74,13 @@ $(function(){
 			if(data.complete){
 				if(data.teams.north.winner){
 					teamId = data.teams.north.teamId;
-				} else {
+				} else if(data.teams.south.winner){
 					teamId = data.teams.south.teamId;
 				}
 
-				$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
+				if(data.teams.north.winner || data.teams.south.winner){
+					$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
+				}
 			}
 		}
 

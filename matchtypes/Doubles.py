@@ -63,12 +63,14 @@ class Doubles(MatchType.MatchType):
 					teams["north"]["teamId"] = team.id
 					teams["north"]["points"] = points
 					teams["north"]["players"].append(teamPlayer.player.name)
+					teams["north"]["winner"] = (team.win == 1)
 
 				elif players["yellow"]["playerId"] == teamPlayer.player.id:
 					color = "yellow"
 					teams["south"]["teamId"] = team.id
 					teams["south"]["points"] = points
 					teams["south"]["players"].append(teamPlayer.player.name)
+					teams["south"]["winner"] = (team.win == 1)
 
 				elif players["blue"]["playerId"] == teamPlayer.player.id:
 					color = "blue"

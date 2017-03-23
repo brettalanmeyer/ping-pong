@@ -58,11 +58,13 @@ $(function(){
 			if(data.complete){
 				if(data.teams.green.winner){
 					teamId = data.teams.green.teamId;
-				} else {
+				} else if(data.teams.yellow.winner){
 					teamId = data.teams.yellow.teamId;
 				}
 
-				$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
+				if(data.teams.green.winner || data.teams.yellow.winner){
+					$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
+				}
 			}
 		}
 

@@ -56,7 +56,7 @@ class Singles(MatchType.MatchType):
 				teams[color]["playerName"] = teamPlayer.player.name
 				teams[color]["points"] = points
 				teams[color]["teamId"] = team.id
-				teams[color]["winner"] = team.win == 1
+				teams[color]["winner"] = (team.win == 1)
 
 	def determineWinner(self, match, teams):
 		for game in match.games:
