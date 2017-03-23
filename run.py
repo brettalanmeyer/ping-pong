@@ -16,7 +16,7 @@ def index():
 	return render_template("main/index.html")
 
 @app.route("/matches", methods = ["GET"], defaults = { "page": 1 })
-@app.route("/matches/<int:page>", methods = ["GET"])
+@app.route("/matches/page/<int:page>", methods = ["GET"])
 def matches_index(page):
 	matches = pagingService.pager(matchService.selectComplete(), page)
 	return render_template("matches/index.html", matches = matches, paging = pagingService.data())
