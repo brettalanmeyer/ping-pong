@@ -224,13 +224,11 @@ a.action {
 	font-size: 13px;
 }
 
-.previous-matches {
-
-}
+.previous-matches {}
 
 .previous-matches .score-cell {
 	padding: 4px 0;
-	width: 320px;
+	width: 340px;
 }
 
 .previous-matches .score-table {
