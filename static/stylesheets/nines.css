@@ -2,6 +2,7 @@
 	overflow: hidden;
 	width: 100%;
 	text-align: center;
+	margin-top: 30px;
 }
 
 .nines-container .score-board {
@@ -25,19 +26,19 @@
 .nines-container .score-board .name {
 	display: block;
 	float: left;
-	font-size: 80px;
-	width: 60%;
+	font-size: 60px;
 	padding: 48px 0;
+	width: 483px;
 }
 
 .nines-container .score-board .score {
 	display: block;
 	font-family: digital;
-	font-size: 210px;
-	line-height: 210px;
+	font-size: 180px;
+	line-height: 180px;
 	float: left;
-	width: 40%;
 	text-align: center;
+	width: 150px;
 }
 
 .nines-container .play-again {

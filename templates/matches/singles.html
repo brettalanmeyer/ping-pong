@@ -7,12 +7,10 @@
 
 	<div id="singles" class="container">
 
-		<h2>Singles</h2>
-
 		<div class="singles-container">
 
 			<div class="score-board">
-				<span class="name" data-var="name" data-color="yellow">{{ data.teams.yellow.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="yellow">{{ data.teams.yellow.playerName }}</span>
 				<span class="score" data-var="score" data-color="yellow">{{ '%02d' % data.teams.yellow.points }}</span>
 			</div>
 
@@ -32,7 +30,7 @@
 			</div>
 
 			<div class="score-board">
-				<span class="name" data-var="name" data-color="green">{{ data.teams.green.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="green">{{ data.teams.green.playerName }}</span>
 				<span class="score" data-var="score" data-color="green">{{ '%02d' % data.teams.green.points }}</span>
 			</div>
 

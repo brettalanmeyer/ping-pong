@@ -7,14 +7,12 @@
 
 	<div id="doubles" class="container">
 
-		<h2>Doubles</h2>
-
 		<div class="doubles-container">
 
 			<div class="score-board">
-				<span class="name" data-var="name" data-color="yellow">{{ data.players.yellow.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="yellow">{{ data.players.yellow.playerName }}</span>
 				<span class="score" data-var="score" data-team="south">{{ '%02d' % data.teams.south.points }}</span>
-				<span class="name" data-var="name" data-color="blue">{{ data.players.blue.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="blue">{{ data.players.blue.playerName }}</span>
 			</div>
 
 			<div class="sets">
@@ -38,9 +36,9 @@
 			</div>
 
 			<div class="score-board">
-				<span class="name" data-var="name" data-color="green">{{ data.players.green.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="green">{{ data.players.green.playerName }}</span>
 				<span class="score" data-var="score" data-team="north">{{ '%02d' % data.teams.north.points }}</span>
-				<span class="name" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
 			</div>
 
 		</div>
