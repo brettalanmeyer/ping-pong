@@ -21,13 +21,22 @@
 	display: block;
 	font-family: digital;
 	font-size: 210px;
-	line-height: 210px;
+	line-height: 140px;
 }
 
 .doubles-container .sets {
 	font-size: 30px;
 	width: 30%;
 	float: left;
+	height: 392px;
+	overflow: hidden;
+}
+
+.doubles-container .sets .middle {
+	position: relative;
+	bottom: 50px;
+	display: block;
+	overflow: hidden;
 }
 
 .doubles-container .sets .text {
@@ -52,6 +61,11 @@
 	text-align: center;
 	color: #ccc;
 	padding: 2px 0;
+}
+
+.doubles-container .sets .serving.bottom {
+	position: relative;
+	bottom: 70px;
 }
 
 .doubles-container .sets .serving .glyphicon {

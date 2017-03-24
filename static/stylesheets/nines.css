@@ -28,7 +28,7 @@
 	float: left;
 	font-size: 60px;
 	padding: 48px 0;
-	width: 483px;
+	width: 75%
 }
 
 .nines-container .score-board .score {
@@ -38,7 +38,7 @@
 	line-height: 180px;
 	float: left;
 	text-align: center;
-	width: 150px;
+	width: 25%;
 }
 
 .nines-container .play-again {

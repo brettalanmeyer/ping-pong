@@ -21,18 +21,21 @@
 	display: block;
 	font-family: digital;
 	font-size: 210px;
-	line-height: 210px;
+	line-height: 140px;
+	margin-bottom: 40px;
 }
 
 .singles-container .sets {
 	font-size: 30px;
 	width: 30%;
 	float: left;
+	height: 307px;
+	overflow: hidden;
 }
 
 .singles-container .sets .text {
 	display: block;
-	padding: 8px 0;
+	padding-bottom: 8px;
 }
 
 .singles-container .sets .set {

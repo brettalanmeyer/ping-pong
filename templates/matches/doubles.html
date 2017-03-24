@@ -5,7 +5,7 @@
 
 {% block body %}
 
-	<div id="doubles" class="container">
+	<div id="doubles" class="container-fluid">
 
 		<div class="doubles-container">
 
@@ -21,15 +21,17 @@
 					<span class="glyphicon glyphicon-arrow-right {% if data.players.green.serving %}active{% endif %}" data-var="serving" data-color="green"></span>
 				</span>
 
-				<span class="text">Set</span>
-				<span class="set">
-					<span class="num" data-var="set">{{ data.game }}</span>
-					<span class="total">/ {{ data.numOfGames }}</span>
+				<span class="middle">
+					<span class="text">Set</span>
+					<span class="set">
+						<span class="num" data-var="set">{{ data.game }}</span>
+						<span class="total">/ {{ data.numOfGames }}</span>
+					</span>
+
+					<span class="playing-to">Playing to {{ data.playTo }}</span>
 				</span>
 
-				<span class="playing-to">Playing to {{ data.playTo }}</span>
-
-				<span class="serving">
+				<span class="serving bottom">
 					<span class="glyphicon glyphicon-arrow-left {% if data.players.blue.serving %}active{% endif %}" data-var="serving" data-color="blue"></span>
 					<span class="glyphicon glyphicon-arrow-right {% if data.players.red.serving %}active{% endif %}" data-var="serving" data-color="red"></span>
 				</span>
