@@ -35,32 +35,23 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 		MYSQL_PASSWORD = ''
 		MYSQL_HOST = ''
 		MYSQL_DATABASE = ''
+		LOG_FILE = 'logs/app.log'
+		LOG_FORMAT = '%(asctime)s %(levelname)s %(process)d %(message)s %(pathname)s:%(lineno)d:%(funcName)s()'
+		LOG_WHEN = 'midnight'
+		LOG_INTERVAL = 1
+		LOG_BACKUP_COUNT = 14
 
-
-	Windows
-		Download get-pip.py
-		python get-pip.py
-		pip install Flask
-		pip install Flask-Assets
-		pip install flask-socketio
-		pip install SQLAlchemy
-		pip install mysqlclient==1.3.4
-		pip install jsmin
-		pip install cssmin
-		pip install gevent-websocket
 
 ## Raspberry pi
 
 * run script `/home/pi/ping-pong/ping-pong-controls.py`
 
 
-
 TODO
-Remove need to approve isms
-on completion, set team win/loss
+
 Create player from player selection page
-Redo player selection page
 Separate leaderboard into singles and doubles
+animate scoring so you know your button has been pressed
 
 Delegate Python Process
 		screen python run.py
@@ -69,7 +60,3 @@ Delegate Python Process
 		screen -ls
 	Kill Screen Process
 		screen -X -S PID quit
-
-speech to text
-
-pip install gTTS

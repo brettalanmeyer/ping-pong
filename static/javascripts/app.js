@@ -1,65 +1,69 @@
 $(function(){
 
-	var index = -1;
-	var inputs = $("#players-form").find("input");
-	var buttons = $(".color-button");
-	var playerList = $(".player-list")
-	var players = $(".player");
-	var play = $("#players-form-play");
-	var redo = $("#players-form-redo");
-	var randomize = $("#players-form-randomize");
+	if($("#player-selector").length > 0){
 
-	next();
+		var index = -1;
+		var inputs = $("#players-form").find("input");
+		var names = $(".player-table .name");
+		var playerList = $(".player-list")
+		var players = $(".player");
+		var play = $("#players-form-play");
+		var redo = $("#players-form-redo");
+		var randomize = $("#players-form-randomize");
 
-	function next(){
-		buttons.removeClass("active");
+		next();
 
-		if(index == inputs.length - 1){
-			playerList.hide();
-			play.show();
-			randomize.show();
-		} else {
-			index++;
-			buttons.eq(index).addClass("active");
-			var input = inputs.eq(index);
+		function next(){
+			names.removeClass("active");
+
+			if(index == inputs.length - 1){
+				playerList.hide();
+				play.show();
+				randomize.show();
+			} else {
+				index++;
+				names.eq(index).addClass("active");
+				var input = inputs.eq(index);
+			}
 		}
-	}
 
-	players.on("click", function(){
-		var source = $(this);
-		inputs.eq(index).val(source.data("id"));
-		buttons.eq(index).html(source.html());
-		source.hide();
-		next();
-	});
+		players.on("click", function(){
+			var source = $(this);
+			inputs.eq(index).val(source.data("id"));
+			names.eq(index).html(source.html());
 
-	redo.on("click", function(){
-		buttons.html("");
-		inputs.val("");
-		playerList.show();
-		players.show();
-		play.hide();
-		index = -1;
-		next();
-	});
-
-	randomize.on("click", function(){
-
-		var values = $.map(inputs, function(input){
-			return $(input).val();
+			console.log(names.eq(index));
+			source.hide();
+			next();
 		});
 
-		shuffle(values);
+		redo.on("click", function(){
+			names.html("");
+			inputs.val("");
+			playerList.show();
+			players.show();
+			play.hide();
+			index = -1;
+			next();
+		});
 
-		for(i in values){
-			inputs.eq(i).val(values[i]);
-			buttons.eq(i).html(players.filter("[data-id=" + values[i] + "]").html());
-		}
+		randomize.on("click", function(){
 
-	});
+			var values = $.map(inputs, function(input){
+				return $(input).val();
+			});
+
+			shuffle(values);
+
+			for(i in values){
+				inputs.eq(i).val(values[i]);
+				names.eq(i).html(players.filter("[data-id=" + values[i] + "]").html());
+			}
+
+		});
+	}
 
 	$("#leaderboard").stupidtable();
-
 
 	$("form.action-delete").on("submit", function(){
 		return confirm("Are you sure you want to delete this?");

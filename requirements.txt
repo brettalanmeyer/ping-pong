@@ -1,4 +1,10 @@
+Flask
 Flask-Assets
 flask-socketio
 SQLAlchemy
 mysql-python
+mysqlclient==1.3.4
+jsmin
+cssmin
+gevent-websocket
+gTTS
