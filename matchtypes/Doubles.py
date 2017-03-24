@@ -27,9 +27,7 @@ class Doubles(MatchType.MatchType):
 		for color in self.colors:
 			data["players"][color] = self.newPlayer(getattr(game, color))
 
-		data["points"] = data["teams"]["north"]["points"] + data["teams"]["south"]["points"]
-
-		self.setTeamData(match, data["players"], data["teams"])
+		data["points"] = self.setTeamData(match, data["players"], data["teams"])
 		self.determineWinner(match, data["teams"])
 		self.determineServe(data["points"], data["players"])
 
@@ -82,6 +80,8 @@ class Doubles(MatchType.MatchType):
 
 				players[color]["playerName"] = teamPlayer.player.name
 				players[color]["teamId"] = team.id
+
+		return teams["north"]["points"] + teams["south"]["points"]
 
 	def determineWinner(self, match, teams):
 		for game in match.games:
