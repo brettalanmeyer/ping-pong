@@ -27,8 +27,21 @@
 	display: block;
 	float: left;
 	font-size: 60px;
-	padding: 48px 0;
+	padding: 48px 12px;
 	width: 75%
+}
+
+.nines-container .score-board .name[data-color="green"] {
+	box-shadow: inset 0 0 10px 10px green;
+}
+.nines-container .score-board .name[data-color="yellow"] {
+	box-shadow: inset 0 0 10px 10px yellow;
+}
+.nines-container .score-board .name[data-color="blue"] {
+	box-shadow: inset 0 0 10px 10px blue;
+}
+.nines-container .score-board .name[data-color="red"] {
+	box-shadow: inset 0 0 10px 10px red;
 }
 
 .nines-container .score-board .score {
