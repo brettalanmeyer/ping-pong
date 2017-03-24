@@ -1,7 +1,8 @@
-import Service, logging
+import Service, logging, os, uuid
 from models import IsmModel
 from datetime import datetime
 from flask import current_app as app
+from gtts import gTTS
 
 class IsmService(Service.Service):
 
@@ -24,11 +25,14 @@ class IsmService(Service.Service):
 		return self.model(0, 0, "", False, None, None)
 
 	def create(self, form):
-		ism = self.model(form["left"], form["right"], form["saying"], False, datetime.now(), datetime.now())
+		ism = self.model(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
 		self.session.add(ism)
 		self.session.commit()
 
 		app.logger.info("Creating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
+
+		ism.file = self.generateAudio(ism)
+		self.session.commit()
 
 		return ism
 
@@ -38,8 +42,9 @@ class IsmService(Service.Service):
 		ism.left = form["left"]
 		ism.right = form["right"]
 		ism.saying = form["saying"]
-		ism.approved = False
+		ism.approved = True
 		ism.modifiedAt = datetime.now()
+		ism.file = self.generateAudio(ism)
 		self.session.commit()
 
 		app.logger.info("Updating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
@@ -65,7 +70,27 @@ class IsmService(Service.Service):
 				"id": int(ism.id),
 				"left": int(ism.left),
 				"right": int(ism.right),
-				"saying": ism.saying
+				"saying": ism.saying,
+				"file": ism.file
 			})
 
 		return data
+
+	def generateAudio(self, ism):
+		app.logger.info("Generating audio file for ism %d", ism.id)
+
+		oldFile = ism.file
+		newFile = "ism-audio-{}.mp3".format(uuid.uuid4())
+
+		path = "static/isms/{}"
+		oldPath = path.format(oldFile)
+		newPath = path.format(newFile)
+
+		if os.path.isfile(oldPath):
+			os.remove(oldPath)
+
+		app.logger.info("Generating ism audio file")
+		tts = gTTS(text = ism.saying, lang = "en-us")
+		tts.save(newPath)
+
+		return newFile

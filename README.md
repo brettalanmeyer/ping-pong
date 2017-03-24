@@ -57,10 +57,10 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 Remove need to approve isms
-reduce leaderboard to only singles and doubles
 on completion, set team win/loss
 Create player from player selection page
-
+Redo player selection page
+Separate leaderboard into singles and doubles
 
 Delegate Python Process
 		screen python run.py
@@ -69,3 +69,7 @@ Delegate Python Process
 		screen -ls
 	Kill Screen Process
 		screen -X -S PID quit
+
+speech to text
+
+pip install gTTS

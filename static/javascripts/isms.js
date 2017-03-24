@@ -1,5 +1,3 @@
-var saying;
-
 function sayings(left, right){
 	shuffle(isms);
 
@@ -7,18 +5,9 @@ function sayings(left, right){
 		ism = isms[i];
 
 		if(ism.left == left && ism.right == right){
-
-			saying.html(ism.saying).animate({ opacity: 1 }, 1000);
-
-			setTimeout(function(){
-				saying.animate({ opacity: 0 }, 1000);
-			}, 2500);
-
-			return;
+			var sound = new Audio("/static/isms/" + ism.file);
+			sound.play();
+			break;
 		}
 	}
-}
 
-$(function(){
-	saying = $("#saying");
-});

@@ -10,6 +10,7 @@ class IsmModel(Base):
 	left = Column(Integer)
 	right = Column(Integer)
 	saying = Column(String)
+	file = Column(String)
 	approved = Column(Integer)
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)

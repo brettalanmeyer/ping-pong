@@ -89,11 +89,3 @@
 .set-score.win {
 	font-weight: bold;
 }
-
-.saying {
-	height: 30px;
-	margin-top: 10px;
-	text-align: center;
-	font-size: 24px;
-	opacity: 0;
-}

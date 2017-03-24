@@ -4,7 +4,7 @@
 
 {% block body %}
 
-	<div class="container">
+	<div id="isms" class="container">
 
 		<a class="btn btn-default btn-sm action" href="/isms/new">
 			<span class="glyphicon glyphicon-star"></span>
@@ -28,6 +28,18 @@
 						</td>
 						<td>{{ ism.saying }}</td>
 
+						<td>
+							{% if ism.file != None %}
+								<button class="btn btn-default btn-sm play-ism">
+									<span class="glyphicon glyphicon-play"></span>
+
+									<audio preload="none">
+										<source src="/static/isms/{{ ism.file }}" type="audio/mpeg">
+									</audio>
+								</button>
+							{% endif %}
+						</td>
+
 						<td width="1">
 							<a href="/isms/{{ ism.id }}/edit" class="btn btn-default btn-sm">
 								<span class="glyphicon glyphicon-pencil"></span>
@@ -44,5 +56,36 @@
 		</table>
 
 	</div>
+
+{% endblock %}
+
+
+{% block footer %}
+
+	<script>
+
+		$(function(){
+
+			if($("#isms").length > 0){
+
+				$("button.play-ism").on("click", function(){
+
+					var source = $(this);
+					var icon = source.find(".glyphicon")
+					icon.removeClass("glyphicon-play").addClass("glyphicon-pause");
+
+					var audio = source.find("audio")[0];
+					audio.play();
+
+					audio.onended = function(){
+						icon.removeClass("glyphicon-pause").addClass("glyphicon-play");
+					};
+				});
+
+			}
+
+		});
+
+	</script>
 
 {% endblock %}
