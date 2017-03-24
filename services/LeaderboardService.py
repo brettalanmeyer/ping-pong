@@ -45,7 +45,7 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1\
+			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
 			GROUP BY players.id\
 		"
 		connection = self.session.connection()
@@ -54,6 +54,7 @@ class LeaderboardService(Service.Service):
 		data = {}
 
 		for match in matches:
+			print(match)
 			data[int(match.playerId)] = {
 				"matches": int(match.matches),
 				"wins": int(match.wins),
@@ -69,7 +70,7 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1\
+			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
 		"
 		connection = self.session.connection()
 		times = connection.execute(text(query))
@@ -92,7 +93,7 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
-			WHERE matches.complete = 1\
+			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
 			GROUP BY players.id\
 		"
 
@@ -113,7 +114,7 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1\
+			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
 			GROUP BY players.id\
 		"
 		connection = self.session.connection()
