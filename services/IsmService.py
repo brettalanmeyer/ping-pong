@@ -58,6 +58,11 @@ class IsmService(Service.Service):
 		self.session.delete(ism)
 		self.session.commit()
 
+		app.logger.info("Removing ism audio file")
+		path =  "static/isms/{}".format(ism.file)
+		if os.path.isfile(path):
+			os.remove(path)
+
 		return ism
 
 	def serialize(self, isms):
