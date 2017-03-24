@@ -235,7 +235,7 @@ a.action {
 
 .previous-matches .score-cell {
 	padding: 4px 0;
-	width: 340px;
+	width: 520px;
 }
 
 .previous-matches .score-table {
@@ -249,7 +249,7 @@ a.action {
 }
 
 .previous-matches .score-table td.name {
-	width: 120px;
+	width: 300px;
 }
 
 .previous-matches .score-table td.name.winner {

@@ -35,34 +35,52 @@
 
 							<td class="score-cell">
 
-								<table class="table table-bordered score-table">
+								{% if match.matchType == "nines" %}
 
 									{% for team in match.teams %}
 
-										<tr>
+										{% for teamPlayer in team.teamPlayers %}
+											{{ teamPlayer.player.name }}
+										{% endfor %}
 
-											<td class="name {% if team.win %}winner{% endif %}">
-												{% for teamPlayer in team.teamPlayers %}
-													{% if loop.index == 2 %}
-														&amp;
-													{% endif %}
-													{{ teamPlayer.player.name }}
-												{% endfor %}
-											</td>
-
-											{% for game in match.games %}
-												{% if game.winner == team.id %}
-													<td class="score winner">{{ game.winnerScore }}</td>
-												{% elif game.loser == team.id %}
-													<td class="score loser">{{ game.loserScore }}</td>
-												{% endif %}
-											{% endfor %}
-
-										</tr>
+										{% if loop.index < 4 %}
+											-
+										{% endif %}
 
 									{% endfor %}
 
-								</table>
+								{% else %}
+
+									<table class="table table-bordered score-table">
+
+										{% for team in match.teams %}
+
+											<tr>
+
+												<td class="name {% if team.win %}winner{% endif %}">
+													{% for teamPlayer in team.teamPlayers %}
+														{% if loop.index == 2 %}
+															&amp;
+														{% endif %}
+														{{ teamPlayer.player.name }}
+													{% endfor %}
+												</td>
+
+												{% for game in match.games %}
+													{% if game.winner == team.id %}
+														<td class="score winner">{{ game.winnerScore }}</td>
+													{% elif game.loser == team.id %}
+														<td class="score loser">{{ game.loserScore }}</td>
+													{% endif %}
+												{% endfor %}
+
+											</tr>
+
+										{% endfor %}
+
+									</table>
+
+								{% endif %}
 
 							</td>
 
