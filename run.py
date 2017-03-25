@@ -196,13 +196,14 @@ def buttons_score(button):
 		data = matchType.score(match, button)
 	else:
 		latestMatch = matchService.selectLatestMatch()
-		matchType = getMatchType(latestMatch)
-		newMatch = matchType.playAgain(latestMatch)
-		data = {
-			"matchType": matchType.matchType,
-			"redirect": True,
-			"matchId": newMatch.id
-		}
+		if latestMatch.matchType == "nines":
+			matchType = getMatchType(latestMatch)
+			newMatch = matchType.playAgain(latestMatch)
+			data = {
+				"matchType": matchType.matchType,
+				"redirect": True,
+				"matchId": newMatch.id
+			}
 
 	socketio.emit("response", data, broadcast = True)
 	return button

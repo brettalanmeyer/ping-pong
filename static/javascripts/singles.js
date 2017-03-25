@@ -14,6 +14,10 @@ $(function(){
 		var greenScore = $("[data-color=green][data-var=score");
 		var greenServing = $("[data-color=green][data-var=serving");
 
+		var singlesAudio = new Audio("/static/audio/multi-player-start.wav").play();
+		var scoreAudio = new Audio("/static/audio/coin.wav");
+		var undoAudio = new Audio("/static/audio/picking-up.wav");
+
 		function update(data){
 			if(data == null) return;
 			if(data.matchType != "singles") return;
@@ -21,13 +25,30 @@ $(function(){
 			set.html(data.game);
 
 			yellowName.html(data.teams.yellow.playerName);
-			yellowScore.html(pad(data.teams.yellow.points));
-
 			greenName.html(data.teams.green.playerName);
-			greenScore.html(pad(data.teams.green.points));
 
 			yellowServing.removeClass("active");
 			greenServing.removeClass("active");
+
+			var isScore = false;
+			var isUndo = false;
+
+			if(data.teams.yellow.points > parseInt(yellowScore.html()) || data.teams.green.points > parseInt(greenScore.html())){
+				isScore = true;
+			} else if(data.teams.yellow.points < parseInt(yellowScore.html()) || data.teams.green.points < parseInt(greenScore.html())){
+				isUndo = true;
+			}
+
+			if(isScore){
+				scoreAudio.currentTime = 0;
+				scoreAudio.play();
+			} else if(isUndo){
+				undoAudio.currentTime = 0;
+				undoAudio.play();
+			}
+
+			yellowScore.html(pad(data.teams.yellow.points));
+			greenScore.html(pad(data.teams.green.points));
 
 			if(data.teams.yellow.serving){
 				yellowServing.addClass("active");

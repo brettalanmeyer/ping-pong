@@ -10,6 +10,12 @@ $(function(){
 		var play = $("#players-form-play");
 		var redo = $("#players-form-redo");
 		var randomize = $("#players-form-randomize");
+		var selectSound = new Audio("/static/audio/picking-up.wav");
+		var randomizeSound = new Audio("/static/audio/down-the-flagpole.wav");
+		var redoSound = new Audio("/static/audio/bowser-fails.wav");
+
+
+		new Audio("/static/audio/boing.wav").play();
 
 		next();
 
@@ -32,9 +38,10 @@ $(function(){
 			inputs.eq(index).val(source.data("id"));
 			names.eq(index).html(source.html());
 
-			console.log(names.eq(index));
 			source.hide();
 			next();
+
+			selectSound.play();
 		});
 
 		redo.on("click", function(){
@@ -45,6 +52,8 @@ $(function(){
 			play.hide();
 			index = -1;
 			next();
+
+			redoSound.play();
 		});
 
 		randomize.on("click", function(){
@@ -60,10 +69,23 @@ $(function(){
 				names.eq(i).html(players.filter("[data-id=" + values[i] + "]").html());
 			}
 
+			randomizeSound.play();
 		});
 	}
 
 	$("#leaderboard").stupidtable();
+
+	if($("#matches-new").length > 0){
+		new Audio("/static/audio/bonus-game-match.wav").play();
+	}
+
+	if($("#matches-play-to").length > 0){
+		new Audio("/static/audio/hit-while-flying.wav").play();
+	}
+
+	if($("#matches-num-of-games").length > 0){
+		new Audio("/static/audio/spring-jump.wav").play();
+	}
 
 	$("form.action-delete").on("submit", function(){
 		return confirm("Are you sure you want to delete this?");

@@ -20,7 +20,6 @@ $(function(){
 
 });
 
-
 function sayings(left, right){
 	shuffle(isms);
 
@@ -28,8 +27,10 @@ function sayings(left, right){
 		ism = isms[i];
 
 		if(ism.left == left && ism.right == right){
-			var sound = new Audio("/static/isms/" + ism.file);
-			sound.play();
+			// allow game sounds to finish first
+			setTimeout(function(){
+				new Audio("/static/isms/" + ism.file).play();
+			}, 500);
 			break;
 		}
 	}
