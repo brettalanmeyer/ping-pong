@@ -27,7 +27,8 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 	create config.cfg
 
-		DEBUG = True
+		DEBUG = False
+		ASSETS_DEBUG = False
 		HOST = '0.0.0.0'
 		PORT = 5000
 		SECRET_KEY = ''
@@ -35,7 +36,8 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 		MYSQL_PASSWORD = ''
 		MYSQL_HOST = ''
 		MYSQL_DATABASE = ''
-		LOG_FILE = 'logs/app.log'
+		LOG_FILE_APPLICATION = 'logs/app.log'
+		LOG_FILE_ACCESS = 'logs/access.log'
 		LOG_FORMAT = '%(asctime)s %(levelname)s %(process)d %(message)s %(pathname)s:%(lineno)d:%(funcName)s()'
 		LOG_WHEN = 'midnight'
 		LOG_INTERVAL = 1
@@ -60,6 +62,3 @@ Delegate Python Process
 		screen -ls
 	Kill Screen Process
 		screen -X -S PID quit
-
-
-Nines game needs a team to win

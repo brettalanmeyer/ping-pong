@@ -274,6 +274,4 @@ if __name__ == "__main__":
 	doubles = Doubles.Doubles(session)
 	nines = Nines.Nines(session)
 
-	app.config["ASSETS_DEBUG"] = app.config["DEBUG"]
-
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])
