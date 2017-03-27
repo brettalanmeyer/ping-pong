@@ -34,6 +34,9 @@ $(function(){
 		};
 
 		function update(data){
+
+			console.log(data);
+
 			if(data == null) return;
 			if(data.matchType != "doubles") return;
 

@@ -55,30 +55,30 @@ class Doubles(MatchType.MatchType):
 
 			points = self.scoreService.getScore(match.id, team.id, match.game)
 
-			for teamPlayer in team.teamPlayers:
-				if players["green"]["playerId"] == teamPlayer.player.id:
+			for player in team.players:
+				if players["green"]["playerId"] == player.id:
 					color = "green"
 					teams["north"]["teamId"] = team.id
 					teams["north"]["points"] = points
-					teams["north"]["players"].append(teamPlayer.player.name)
+					teams["north"]["players"].append(player.name)
 					teams["north"]["winner"] = (team.win == 1)
 
-				elif players["yellow"]["playerId"] == teamPlayer.player.id:
+				elif players["yellow"]["playerId"] == player.id:
 					color = "yellow"
 					teams["south"]["teamId"] = team.id
 					teams["south"]["points"] = points
-					teams["south"]["players"].append(teamPlayer.player.name)
+					teams["south"]["players"].append(player.name)
 					teams["south"]["winner"] = (team.win == 1)
 
-				elif players["blue"]["playerId"] == teamPlayer.player.id:
+				elif players["blue"]["playerId"] == player.id:
 					color = "blue"
-					teams["south"]["players"].append(teamPlayer.player.name)
+					teams["south"]["players"].append(player.name)
 
-				elif players["red"]["playerId"] == teamPlayer.player.id:
+				elif players["red"]["playerId"] == player.id:
 					color = "red"
-					teams["north"]["players"].append(teamPlayer.player.name)
+					teams["north"]["players"].append(player.name)
 
-				players[color]["playerName"] = teamPlayer.player.name
+				players[color]["playerName"] = player.name
 				players[color]["teamId"] = team.id
 
 		return teams["north"]["points"] + teams["south"]["points"]

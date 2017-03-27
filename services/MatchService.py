@@ -1,5 +1,5 @@
 import Service
-from models import MatchModel, TeamModel, GameModel, TeamPlayerModel
+from models import MatchModel, TeamModel, GameModel
 from datetime import datetime
 from flask import current_app as app
 

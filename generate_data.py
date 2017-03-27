@@ -1,6 +1,6 @@
 from flask import Flask
 from utils import database
-from models import MatchModel, TeamModel, GameModel, TeamPlayerModel, PlayerModel, ScoreModel
+from models import MatchModel, TeamModel, GameModel, PlayerModel, ScoreModel
 from datetime import datetime
 from  sqlalchemy.sql.expression import func
 import random, math
@@ -32,13 +32,6 @@ def createTeam(matchId):
 	session.commit()
 
 	return team
-
-def createTeamPlayer(teamId, playerId):
-	teamPlayer = TeamPlayerModel.TeamPlayerModel(teamId, playerId)
-	session.add(teamPlayer)
-	session.commit()
-
-	return teamPlayer
 
 def createGames(match):
 	for i in range(0, match.numOfGames):

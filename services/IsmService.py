@@ -1,4 +1,4 @@
-import Service, logging, os, uuid
+import Service, logging, os, uuid, json
 from models import IsmModel
 from datetime import datetime
 from flask import current_app as app
@@ -79,7 +79,7 @@ class IsmService(Service.Service):
 				"file": ism.file
 			})
 
-		return data
+		return json.dumps(data)
 
 	def generateAudio(self, ism):
 		app.logger.info("Generating audio file for ism %d", ism.id)

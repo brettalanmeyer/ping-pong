@@ -1,6 +1,6 @@
 import Service
 from models import TeamModel
-from services import TeamPlayerService
+from services import PlayerService
 from datetime import datetime
 from flask import current_app as app
 
@@ -8,7 +8,7 @@ class TeamService(Service.Service):
 
 	def __init__(self, session):
 		Service.Service.__init__(self, session, TeamModel.TeamModel)
-		self.teamPlayerService = TeamPlayerService.TeamPlayerService(session)
+		self.playerService = PlayerService.PlayerService(session)
 
 	def create(self, matchId):
 		team = self.model(matchId, datetime.now(), datetime.now())
@@ -29,10 +29,11 @@ class TeamService(Service.Service):
 
 	def createTwoPlayer(self, matchId, player1Id, player2Id):
 		team = self.create(matchId)
-		teamPlayer1 = self.teamPlayerService.create(team.id, player1Id)
-		teamPlayer2 = self.teamPlayerService.create(team.id, player2Id)
+		team.players.append(self.playerService.selectById(player1Id))
+		team.players.append(self.playerService.selectById(player2Id))
+		self.session.commit()
 
-		app.logger.info("Creating two player team=%d match=%d teamPlayer1=%d player1=%d teamPlayer2=%d player2=%d", team.id, matchId, teamPlayer1.id, teamPlayer1.playerId, teamPlayer2.id, teamPlayer2.playerId)
+		app.logger.info("Creating two player team=%d match=%d player1=%d player2=%d", team.id, matchId, player1Id, player2Id)
 
 		return team
 

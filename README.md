@@ -60,3 +60,6 @@ Delegate Python Process
 		screen -ls
 	Kill Screen Process
 		screen -X -S PID quit
+
+
+Nines game needs a team to win

@@ -39,8 +39,8 @@
 
 									{% for team in match.teams %}
 
-										{% for teamPlayer in team.teamPlayers %}
-											{{ teamPlayer.player.name }}
+										{% for player in team.players %}
+											{{ player.name }}
 										{% endfor %}
 
 										{% if loop.index < 4 %}
@@ -58,11 +58,11 @@
 											<tr>
 
 												<td class="name {% if team.win %}winner{% endif %}">
-													{% for teamPlayer in team.teamPlayers %}
+													{% for player in team.players %}
 														{% if loop.index == 2 %}
 															&amp;
 														{% endif %}
-														{{ teamPlayer.player.name }}
+														{{ player.name }}
 													{% endfor %}
 												</td>
 
