@@ -12,22 +12,24 @@ class FilterAccessLogs(logging.Filter):
 def setupLogging(app):
 	formatter = logging.Formatter(app.config["LOG_FORMAT"])
 
-	handler = TimedRotatingFileHandler(
+	handlerApp = TimedRotatingFileHandler(
 		app.config["LOG_FILE_APPLICATION"],
 		when = app.config["LOG_WHEN"],
 		interval = app.config["LOG_INTERVAL"],
 		backupCount = app.config["LOG_BACKUP_COUNT"]
 	)
-	handler.setFormatter(formatter)
-	handler.addFilter(FilterAppLogs())
-	app.logger.addHandler(handler)
+	handlerApp.setFormatter(formatter)
+	handlerApp.addFilter(FilterAppLogs())
 
-	handler2 = TimedRotatingFileHandler(
+	handlerAccess = TimedRotatingFileHandler(
 		app.config["LOG_FILE_ACCESS"],
 		when = app.config["LOG_WHEN"],
 		interval = app.config["LOG_INTERVAL"],
 		backupCount = app.config["LOG_BACKUP_COUNT"]
 	)
-	handler2.setFormatter(formatter)
-	handler2.addFilter(FilterAccessLogs())
-	app.logger.addHandler(handler2)
+	handlerAccess.setFormatter(formatter)
+	handlerAccess.addFilter(FilterAccessLogs())
+
+	app.logger.addHandler(handlerApp)
+	app.logger.addHandler(handlerAccess)
+	app.logger.setLevel(logging.INFO)
