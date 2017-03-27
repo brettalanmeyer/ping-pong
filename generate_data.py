@@ -35,8 +35,8 @@ def createTeam(matchId):
 
 def createGames(match):
 	for i in range(0, match.numOfGames):
-		green = match.teams[1 if i % 2 == 0 else 0].teamPlayers[0].player.id
-		yellow = match.teams[1 if i % 2 == 1 else 0].teamPlayers[0].player.id
+		green = match.teams[1 if i % 2 == 0 else 0].players[0].id
+		yellow = match.teams[1 if i % 2 == 1 else 0].players[0].id
 
 		game = GameModel.GameModel(match.id, i + 1, green, yellow, None, None, datetime.now(), datetime.now())
 		session.add(game)
@@ -139,12 +139,14 @@ def generate():
 		elif player4 == None:
 			player4 = player
 
-	createTeamPlayer(team1.id, player1.id)
-	createTeamPlayer(team2.id, player2.id)
+	team1.players.append(player1)
+	team2.players.append(player2)
 
 	if match.matchType == "doubles":
-		createTeamPlayer(team1.id, player3.id)
-		createTeamPlayer(team2.id, player4.id)
+		team1.players.append(player3)
+		team2.players.append(player4)
+
+	session.commit()
 
 	createGames(match)
 

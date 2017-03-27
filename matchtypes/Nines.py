@@ -32,7 +32,6 @@ class Nines(MatchType.MatchType):
 		return {
 			"playerId": playerId,
 			"teamId": None,
-			"teamPlayerId": None,
 			"playerName": None,
 			"points": 0,
 			"winner": False,
@@ -44,12 +43,11 @@ class Nines(MatchType.MatchType):
 
 			points = self.scoreService.getScore(match.id, team.id, match.game)
 
-			for teamPlayer in team.teamPlayers:
+			for player in team.players:
 				for color in self.colors:
-					if players[color]["playerId"] == teamPlayer.player.id:
+					if players[color]["playerId"] == player.id:
 						players[color]["teamId"] = team.id
-						players[color]["teamPlayerId"] = teamPlayer.id
-						players[color]["playerName"] = teamPlayer.player.name
+						players[color]["playerName"] = player.name
 						players[color]["points"] = match.playTo - points
 						players[color]["out"] = players[color]["points"] == 0
 
@@ -111,12 +109,32 @@ class Nines(MatchType.MatchType):
 			self.scoreService.score(match.id, player["teamId"], match.game)
 
 		data = self.matchData(match)
+		data = self.determineMatchWinner(match, data)
 
-		# prevent further scoring if a winner has been declared
+		return data
+
+	def determineMatchWinner(self, match, data):
+		if match.complete:
+			return data
+
+		hasWinner = False
+
 		for color in self.colors:
 			if data["players"][color]["winner"]:
 				self.matchService.complete(match)
-				return self.matchData(match)
+				hasWinner = True
+				break
+
+		if hasWinner:
+			for color in self.colors:
+				team = self.teamService.selectById(data["players"][color]["teamId"])
+
+				if data["players"][color]["winner"]:
+					self.teamService.win(team)
+				else:
+					self.teamService.lose(team)
+
+			data = self.matchData(match)
 
 		return data
 

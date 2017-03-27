@@ -10,6 +10,11 @@ class TeamService(Service.Service):
 		Service.Service.__init__(self, session, TeamModel.TeamModel)
 		self.playerService = PlayerService.PlayerService(session)
 
+	def selectById(self, id):
+		app.logger.info("Selecting team=%d", id)
+
+		return self.session.query(self.model).filter(self.model.id == id).one()
+
 	def create(self, matchId):
 		team = self.model(matchId, datetime.now(), datetime.now())
 		self.session.add(team)
@@ -21,9 +26,9 @@ class TeamService(Service.Service):
 
 	def createOnePlayer(self, matchId, playerId):
 		team = self.create(matchId)
-		teamPlayer = self.teamPlayerService.create(team.id, playerId)
+		team.players.append(self.playerService.selectById(playerId))
 
-		app.logger.info("Creating single player team=%d match=%d teamPlayer=%d player=%d", team.id, matchId, teamPlayer.id, teamPlayer.playerId)
+		app.logger.info("Creating single player team=%d match=%d player=%d", team.id, matchId, playerId)
 
 		return team
 

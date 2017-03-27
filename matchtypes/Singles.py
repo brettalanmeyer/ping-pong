@@ -45,15 +45,15 @@ class Singles(MatchType.MatchType):
 
 	def setPlayerData(self, match, teams):
 		for team in match.teams:
-			for teamPlayer in team.teamPlayers:
+			for player in team.players:
 
 				points = self.scoreService.getScore(match.id, team.id, match.game)
 
 				color = "green"
-				if teams["yellow"]["playerId"] == teamPlayer.player.id:
+				if teams["yellow"]["playerId"] == player.id:
 					color = "yellow"
 
-				teams[color]["playerName"] = teamPlayer.player.name
+				teams[color]["playerName"] = player.name
 				teams[color]["points"] = points
 				teams[color]["teamId"] = team.id
 				teams[color]["winner"] = (team.win == 1)

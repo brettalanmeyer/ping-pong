@@ -40,7 +40,11 @@
 									{% for team in match.teams %}
 
 										{% for player in team.players %}
-											{{ player.name }}
+											{% if team.win %}
+												<strong>{{ player.name }}</strong>
+											{% else %}
+												{{ player.name }}
+											{% endif %}
 										{% endfor %}
 
 										{% if loop.index < 4 %}

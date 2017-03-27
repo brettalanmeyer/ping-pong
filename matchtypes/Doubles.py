@@ -45,7 +45,6 @@ class Doubles(MatchType.MatchType):
 	def newPlayer(self, playerId):
 		return {
 			"playerId": playerId,
-			"teamPlayerId": None,
 			"playerName": None,
 			"serving": False
 		}

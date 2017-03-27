@@ -7,8 +7,8 @@ class TeamModel(Base):
 	__tablename__ = "teams"
 
 	associationTable = Table("teams_players", Base.metadata,
-		Column("teamId", Integer, ForeignKey("teams.id")),
-		Column("playerId", Integer, ForeignKey("players.id"))
+		Column("teamId", Integer, ForeignKey("teams.id"), primary_key = True),
+		Column("playerId", Integer, ForeignKey("players.id"), primary_key = True)
 	)
 
 	id = Column(Integer, primary_key = True)
@@ -20,7 +20,6 @@ class TeamModel(Base):
 
 	match = relationship("MatchModel")
 	players = relationship("PlayerModel", secondary = associationTable)
-	# teamPlayers = relationship("TeamPlayerModel", backref = "TeamModel.id")
 
 	def __init__(self, matchId, createdAt, modifiedAt):
 		self.matchId = matchId
