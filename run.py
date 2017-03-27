@@ -228,6 +228,10 @@ def buttons_delete_scores(button):
 	socketio.emit("response", data, broadcast = True)
 	return button
 
+@app.before_request
+def beforeRequest():
+	app.logger.info("%s \"%s %s\"", request.remote_addr, request.environ["REQUEST_METHOD"], request.url)
+
 @app.after_request
 def afterRequest(response):
 	session.close()
