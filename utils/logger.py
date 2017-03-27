@@ -1,15 +1,23 @@
 import logging, re
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 
+ACCESS_LEVEL = 60
+
 class FilterAppLogs(logging.Filter):
 	def filter(self, record):
-		return not record.getMessage().startswith("10.")
+		return record.levelno != ACCESS_LEVEL
 
 class FilterAccessLogs(logging.Filter):
 	def filter(self, record):
-		return record.getMessage().startswith("10.")
+		return record.levelno == ACCESS_LEVEL
+
+def access(self, message, *args, **kws):
+	self._log(ACCESS_LEVEL, message, args, **kws)
 
 def setupLogging(app):
+	logging.addLevelName(ACCESS_LEVEL, "ACCESS")
+	logging.Logger.access = access
+
 	formatter = logging.Formatter(app.config["LOG_FORMAT"])
 
 	handlerApp = TimedRotatingFileHandler(

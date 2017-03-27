@@ -230,7 +230,7 @@ def buttons_delete_scores(button):
 
 @app.before_request
 def beforeRequest():
-	app.logger.info("%s \"%s %s\"", request.remote_addr, request.environ["REQUEST_METHOD"], request.url)
+	app.logger.access("%s \"%s %s\"", request.remote_addr, request.environ["REQUEST_METHOD"], request.url)
 
 @app.after_request
 def afterRequest(response):
