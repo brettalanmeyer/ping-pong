@@ -3,15 +3,11 @@ from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 
 class FilterAppLogs(logging.Filter):
 	def filter(self, record):
-		return not isIp(record.getMessage())
+		return not record.getMessage().startswith("10.")
 
 class FilterAccessLogs(logging.Filter):
 	def filter(self, record):
-		return isIp(record.getMessage())
-
-def isIp(message):
-	matches = re.search("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", message)
-	return bool(matches)
+		return record.getMessage().startswith("10.")
 
 def setupLogging(app):
 	formatter = logging.Formatter(app.config["LOG_FORMAT"])
