@@ -13,8 +13,9 @@ socketio = SocketIO(app)
 
 @app.route("/", methods = ["GET"])
 def index():
-	matches = matchService.selectComplete()
-	return render_template("main/index.html", num = matches.count())
+	matches = matchService.selectComplete().count()
+	scores = scoreService.selectCount()
+	return render_template("main/index.html", matches = matches, scores = scores)
 
 @app.route("/matches", methods = ["GET"], defaults = { "page": 1 })
 @app.route("/matches/page/<int:page>", methods = ["GET"])

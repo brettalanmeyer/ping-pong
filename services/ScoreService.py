@@ -16,6 +16,9 @@ class ScoreService(Service.Service):
 
 		app.logger.info("Scoring for match=%d team=%d game=%d", matchId, teamId, game)
 
+	def selectCount(self):
+		return self.session.query(self.model.matchId).count()
+
 	def undo(self, matchId):
 		score = self.session.query(self.model).filter(self.model.matchId == matchId).order_by(self.model.id.desc()).first()
 		if score != None:
