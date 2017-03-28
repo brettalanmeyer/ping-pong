@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Audio Test</title>
+	</head>
+	<body>
+
+		<h1>Audio Test</h1>
+
+		<audio controls>
+			<source src="/static/audio/coin.wav" type="audio/wav">
+			Your browser does not support the audio element.
+		</audio>
+
+		<br /><br />
+
+		<button id="play-js-audio">Play Audio()</button>
+
+		<br /><br />
+
+		<button id="play-html-audio">Play &lt;audio&gt;</button>
+
+		<audio id="html-audio">
+			<source src="/static/audio/coin.wav" type="audio/wav">
+			Your browser does not support the audio element.
+		</audio>
+
+		<script>
+
+			var jsCoin = new Audio("/static/audio/coin.wav");
+			var playJs = document.getElementById("play-js-audio");
+			playJs.addEventListener("click", function(){
+				jsCoin.currentTime = 0;
+				jsCoin.play();
+			});
+
+			var htmlCoin = document.getElementById("html-audio");
+			var playHtml = document.getElementById("play-html-audio");
+			playHtml.addEventListener("click", function(){
+				htmlCoin.currentTime = 0;
+				htmlCoin.play();
+			});
+
+		</script>
+
+	</body>
+</html>
