@@ -51,7 +51,6 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
-animate scoring so you know your button has been pressed
 Instead of a team winning and losing, just make it so that win is true or false
 
 Delegate Python Process
