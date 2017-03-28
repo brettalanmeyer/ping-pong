@@ -186,9 +186,10 @@ def leaderboard_index(matchType):
 	stats = leaderboardService.stats(matchType)
 	return render_template("leaderboard/index.html", stats = stats, matchTypes = singles.matchTypes, matchType = matchType)
 
-@app.route("/leaderboard.json", methods = ["GET"])
-def leaderboard_json():
-	stats = leaderboardService.stats()
+@app.route("/leaderboard.json", methods = ["GET"], defaults = { "matchType": "singles" })
+@app.route("/leaderboard/<path:matchType>.json", methods = ["GET"])
+def leaderboard_json(matchType):
+	stats = leaderboardService.stats(matchType)
 	return Response(json.dumps(stats), status = 200, mimetype = "application/json")
 
 @app.route("/rules", methods = ["GET"])

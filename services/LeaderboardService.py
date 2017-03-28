@@ -20,10 +20,15 @@ class LeaderboardService(Service.Service):
 		pointsFor = self.pointsFor(matchType)
 		pointsAgainst = self.pointsAgainst(pointsFor, matchType)
 
-		stats = []
+		stats = {
+			"labels": self.labels(),
+			"matchType": matchType,
+			"rows": [],
+			"totals": {}
+		}
 
 		for player in players:
-			stats.append({
+			stats["rows"].append({
 				"playerId": player.id,
 				"playerName": player.name,
 				"matches": matches[player.id]["matches"] if player.id in matches else 0,
@@ -36,7 +41,36 @@ class LeaderboardService(Service.Service):
 				"time": self.formatTime(times[player.id]) if player.id in times else 0
 			})
 
+		stats["totals"] = self.totals(stats["rows"])
+
 		return stats
+
+	def labels(self):
+		return [{
+			"sort": "string",
+			"name": "Player"
+		}, {
+			"sort": "int",
+			"name": "Matches"
+		}, {
+			"sort": "float",
+			"name": "Win %"
+		}, {
+			"sort": "int",
+			"name": "Points For"
+		}, {
+			"sort": "int",
+			"name": "Points Against"
+		}, {
+			"sort": "int",
+			"name": "Wins"
+		}, {
+			"sort": "int",
+			"name": "Losses"
+		}, {
+			"sort": "int",
+			"name": "Time"
+		}]
 
 	def matches(self, matchType):
 		query = "\
@@ -136,6 +170,29 @@ class LeaderboardService(Service.Service):
 			data[match.playerId] = points.points - pointsFor[match.playerId]
 
 		return data
+
+	def totals(self, rows):
+		totals = {
+			"matches": 0,
+			"pointsFor": 0,
+			"pointsAgainst": 0,
+			"seconds": 0,
+			"wins": 0,
+			"losses": 0,
+			"time": ""
+		}
+
+		for row in rows:
+			totals["matches"] += row["matches"]
+			totals["pointsFor"] += row["pointsFor"]
+			totals["pointsAgainst"] += row["pointsAgainst"]
+			totals["seconds"] += row["seconds"]
+			totals["wins"] += row["wins"]
+			totals["losses"] += row["losses"]
+
+		totals["time"] = self.formatTime(totals["seconds"])
+
+		return totals
 
 	def formatTime(self, seconds):
 		m, s = divmod(seconds, 60)
