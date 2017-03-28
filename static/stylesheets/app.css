@@ -107,6 +107,14 @@ a.action {
 	background: #e6e6e6;
 }
 
+.player-selector-container {
+	position: relative;
+}
+
+.player-selector-container .action {
+	position: absolute;
+	right: 15px;
+}
 
 .player-table {
 	border: solid 1px #ccc;

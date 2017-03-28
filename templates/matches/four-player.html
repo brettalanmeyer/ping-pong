@@ -5,7 +5,12 @@
 
 {% block body %}
 
-	<div id="player-selector" class="container">
+	<div id="player-selector" class="player-selector-container container">
+
+		<a class="btn btn-default btn-sm action" href="/players/new/matches/{{ match.id }}">
+			<span class="glyphicon glyphicon-star"></span>
+			Add Player
+		</a>
 
 		<h1>Select Players</h1>
 

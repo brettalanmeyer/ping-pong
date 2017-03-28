@@ -105,22 +105,27 @@ def matches_again(id):
 def players():
 	return render_template("players/index.html", players = playerService.select())
 
-@app.route("/players/new", methods = ["GET"])
-def players_new():
+@app.route("/players/new", methods = ["GET"], defaults = { "matchId": None })
+@app.route("/players/new/matches/<int:matchId>", methods = ["GET"])
+def players_new(matchId):
 	player = playerService.new()
-	return render_template("players/new.html", player = player)
+	return render_template("players/new.html", player = player, matchId = matchId)
 
-@app.route("/players", methods = ["POST"])
-def players_create():
+@app.route("/players", methods = ["POST"], defaults = { "matchId": None })
+@app.route("/players/matches/<int:matchId>", methods = ["POST"])
+def players_create(matchId):
 	name = request.form["name"]
 
 	players = playerService.selectByName(name)
 	if players.count() > 0:
 		player = playerService.new()
 		player.name = name
-		return render_template("players/new.html", player = player, error = True)
+		return render_template("players/new.html", player = player, matchId = matchId, error = True)
 
 	playerService.create(request.form)
+
+	if matchId != None:
+		return redirect("/matches/%d/players" % matchId)
 
 	return redirect("/players")
 
