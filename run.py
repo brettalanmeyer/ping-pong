@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, redirect, request
+from flask import Flask, render_template, Response, redirect, request, abort
 from flask_assets import Environment
 from flask_socketio import SocketIO, emit
 import json
@@ -172,10 +172,14 @@ def isms_delete(id):
 	ismService.delete(id)
 	return redirect("/isms")
 
-@app.route("/leaderboard", methods = ["GET"])
-def leaderboard_index():
-	stats = leaderboardService.stats()
-	return render_template("leaderboard/index.html", stats = stats)
+@app.route("/leaderboard", methods = ["GET"], defaults = { "matchType": "singles" })
+@app.route("/leaderboard/<path:matchType>", methods = ["GET"])
+def leaderboard_index(matchType):
+	if matchType not in singles.matchTypes:
+		abort(404)
+
+	stats = leaderboardService.stats(matchType)
+	return render_template("leaderboard/index.html", stats = stats, matchTypes = singles.matchTypes, matchType = matchType)
 
 @app.route("/leaderboard.json", methods = ["GET"])
 def leaderboard_json():

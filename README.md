@@ -52,7 +52,6 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 TODO
 
 Create player from player selection page
-Separate leaderboard into singles and doubles
 animate scoring so you know your button has been pressed
 
 Delegate Python Process

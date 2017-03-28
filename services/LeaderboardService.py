@@ -10,15 +10,15 @@ class LeaderboardService(Service.Service):
 	def __init__(self, session):
 		Service.Service.__init__(self, session, None)
 
-	def stats(self):
+	def stats(self, matchType):
 		app.logger.info("Querying Leaderboard Statistics")
 
 		players = self.session.query(PlayerModel.PlayerModel).order_by(PlayerModel.PlayerModel.name)
 
-		matches = self.matches()
-		times = self.times()
-		pointsFor = self.pointsFor()
-		pointsAgainst = self.pointsAgainst(pointsFor)
+		matches = self.matches(matchType)
+		times = self.times(matchType)
+		pointsFor = self.pointsFor(matchType)
+		pointsAgainst = self.pointsAgainst(pointsFor, matchType)
 
 		stats = []
 
@@ -38,23 +38,22 @@ class LeaderboardService(Service.Service):
 
 		return stats
 
-	def matches(self):
+	def matches(self, matchType):
 		query = "\
 			SELECT players.id AS playerId, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.loss = 1) AS losses\
 			FROM players\
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
+			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 			GROUP BY players.id\
 		"
 		connection = self.session.connection()
-		matches = connection.execute(text(query))
+		matches = connection.execute(text(query), matchType = matchType)
 
 		data = {}
 
 		for match in matches:
-			print(match)
 			data[int(match.playerId)] = {
 				"matches": int(match.matches),
 				"wins": int(match.wins),
@@ -63,17 +62,17 @@ class LeaderboardService(Service.Service):
 
 		return data
 
-	def times(self):
+	def times(self, matchType):
 		query = "\
 			SELECT DISTINCT players.id as playerId, UNIX_TIMESTAMP(matches.createdAt) as gameTime, UNIX_TIMESTAMP(matches.completedAt) as resultTime\
 			FROM players\
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
+			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 		"
 		connection = self.session.connection()
-		times = connection.execute(text(query))
+		times = connection.execute(text(query), matchType = matchType)
 
 		data = {}
 
@@ -85,7 +84,7 @@ class LeaderboardService(Service.Service):
 
 		return data
 
-	def pointsFor(self):
+	def pointsFor(self, matchType):
 		query = "\
 			SELECT players.id AS playerId, COUNT(scores.id) as points\
 			FROM players\
@@ -93,12 +92,12 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
-			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
+			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 			GROUP BY players.id\
 		"
 
 		connection = self.session.connection()
-		points = connection.execute(text(query))
+		points = connection.execute(text(query), matchType = matchType)
 
 		data = {}
 
@@ -107,18 +106,18 @@ class LeaderboardService(Service.Service):
 
 		return data
 
-	def pointsAgainst(self, pointsFor):
+	def pointsAgainst(self, pointsFor, matchType):
 		query = "\
 			SELECT players.id as playerId, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType IN ('singles','doubles')\
+			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 			GROUP BY players.id\
 		"
 		connection = self.session.connection()
-		matches = connection.execute(text(query))
+		matches = connection.execute(text(query), matchType = matchType)
 
 		data = {}
 

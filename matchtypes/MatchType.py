@@ -15,6 +15,7 @@ class MatchType():
 		self.matchTemplate = matchTemplate
 		self.defaultPoints = defaultPoints
 
+		self.matchTypes = ["singles", "doubles", "nines"]
 		self.colors = ["green", "yellow", "blue", "red"]
 
 	def getLabel(self):

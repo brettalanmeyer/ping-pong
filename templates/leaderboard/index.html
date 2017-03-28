@@ -10,6 +10,14 @@
 
 			<h1>Leaderboard</h1>
 
+			<ul class="nav nav-tabs">
+				{% for item in matchTypes %}
+					<li role="presentation" class="{% if matchType == item %}active{% endif %}">
+						<a href="/leaderboard/{{ item }}">{{ item.title() }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+
 			<table id="leaderboard" class="table">
 
 				<thead>
