@@ -17,8 +17,7 @@ def createMatch():
 	else:
 		matchType = "doubles"
 
-	match = MatchModel.MatchModel(matchType, 1, True, False, datetime.now(), datetime.now())
-	match.playTo = 21
+	match = MatchModel.MatchModel(matchType, 21, 1, True, False, datetime.now(), datetime.now())
 	match.numOfGames = [1,3,5][random.randrange(0,3)]
 
 	session.add(match)

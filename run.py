@@ -29,28 +29,17 @@ def matches_new():
 @app.route("/matches", methods = ["POST"])
 def matches_create():
 	match = matchService.create(request.form["matchType"])
-	return redirect("/matches/%d/play-to" % match.id)
-
-@app.route("/matches/delete", methods = ["POST"])
-def matches_delete():
-	matchService.deleteAll()
-	return redirect("/?debug=true")
-
-@app.route("/matches/<int:id>/play-to", methods = ["GET"])
-def matches_play_to(id):
-	match = matchService.selectById(id)
-	matchType = getMatchType(match)
-	return render_template("matches/play-to.html", match = match, default = matchType.defaultPoints)
-
-@app.route("/matches/<int:id>/play-to", methods = ["POST"])
-def matches_play_to_update(id):
-	match = matchService.updatePlayTo(id, request.form["playTo"])
 	matchType = getMatchType(match)
 
 	if matchType.matchType == "nines":
 		return redirect("/matches/%d/players" % match.id)
 
 	return redirect("/matches/%d/num-of-games" % match.id)
+
+@app.route("/matches/delete", methods = ["POST"])
+def matches_delete():
+	matchService.deleteAll()
+	return redirect("/?debug=true")
 
 @app.route("/matches/<int:id>/num-of-games", methods = ["GET"])
 def matches_games(id):

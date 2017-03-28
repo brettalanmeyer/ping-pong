@@ -156,7 +156,6 @@ class Nines(MatchType.MatchType):
 		}
 
 		newMatch = self.matchService.create(self.matchType)
-		self.matchService.updatePlayTo(newMatch.id, match.playTo)
 		self.createTeams(newMatch, teams)
 		self.matchService.play(newMatch)
 

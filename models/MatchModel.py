@@ -17,11 +17,12 @@ class MatchModel(Base):
 	modifiedAt = Column(DateTime)
 	completedAt = Column(DateTime)
 
-	teams = relationship("TeamModel", backref = "MatchMode.id")
-	games = relationship("GameModel", backref = "MatchMode.id")
+	teams = relationship("TeamModel")
+	games = relationship("GameModel")
 
-	def __init__(self, matchType, game, ready, complete, createdAt, modifiedAt):
+	def __init__(self, matchType, playTo, game, ready, complete, createdAt, modifiedAt):
 		self.matchType = matchType
+		self.playTo = playTo
 		self.game = game
 		self.ready = ready
 		self.complete = complete

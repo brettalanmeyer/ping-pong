@@ -45,21 +45,15 @@ class MatchService(Service.Service):
 		self.session.commit()
 
 	def create(self, matchType):
-		match = self.model(matchType, 0, False, False, datetime.now(), datetime.now())
+		playTo = 21
+		if matchType == "nines":
+			playTo = 9
+
+		match = self.model(matchType, playTo, 0, False, False, datetime.now(), datetime.now())
 		self.session.add(match)
 		self.session.commit()
 
 		app.logger.info("Creating match=%d", match.id)
-
-		return match
-
-	def updatePlayTo(self, id, playTo):
-		match = self.selectById(id)
-		match.playTo = playTo
-		match.modifiedAt = datetime.now()
-		self.session.commit()
-
-		app.logger.info("Updating match=%d playTo=%d", match.id, match.playTo)
 
 		return match
 
