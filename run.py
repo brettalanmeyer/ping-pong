@@ -186,6 +186,10 @@ def leaderboard_json():
 	stats = leaderboardService.stats()
 	return Response(json.dumps(stats), status = 200, mimetype = "application/json")
 
+@app.route("/rules", methods = ["GET"])
+def rules():
+	return render_template("rules/index.html")
+
 @app.route("/buttons", methods = ["GET"])
 def buttons():
 	return render_template("buttons.html")
