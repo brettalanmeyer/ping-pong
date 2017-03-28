@@ -37,6 +37,28 @@
 	line-height: 175px;
 }
 
+@keyframes doublesScoreAnimation {
+	0% {
+		box-shadow: inset 0 0 0 0 orange;
+	}
+	10% {
+		box-shadow: inset 0 0 80px 80px orange;
+	}
+	90% {
+		box-shadow: inset 0 0 80px 80px orange;
+	}
+	100% {
+		box-shadow: inset 0 0 0 0 orange;
+	}
+}
+
+.doubles-container .score-board .score.scored {
+	animation-name: doublesScoreAnimation;
+	animation-duration: 1.5s;
+	animation-iteration-count: 1;
+	animation-timing-function: linear;
+}
+
 .doubles-container .sets {
 	font-size: 30px;
 	width: 30%;

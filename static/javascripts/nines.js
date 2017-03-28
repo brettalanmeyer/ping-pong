@@ -52,7 +52,17 @@ $(function(){
 				playerNames[color].html(data.players[color].playerName);
 				scores[color].html(data.players[color].points);
 				boards[color].toggleClass("out", data.players[color].out);
+
+				if(previousScore != nextScore){
+					playerNames[color].addClass("scored");
+				}
 			}
+			setTimeout(function(){
+				for(var i in colors){
+					var color = colors[i];
+					playerNames[color].removeClass("scored");
+				}
+			}, 2000);
 
 			if(isScore){
 				scoreAudio.currentTime = 0;

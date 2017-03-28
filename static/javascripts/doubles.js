@@ -65,7 +65,15 @@ $(function(){
 				}
 
 				scores[team].html(pad(data.teams[team].points));
+				if(previousScore != nextScore){
+					scores[team].addClass("scored");
+				}
 			}
+			setTimeout(function(){
+				for(side in scores){
+					scores[side].removeClass("scored");
+				}
+			}, 2000);
 
 			if(isScore){
 				scoreAudio.currentTime = 0;
