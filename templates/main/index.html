@@ -2,6 +2,7 @@
 
 {% block body %}
 
+
 	<div class="container-fluid">
 
 		<div class="main-container">
@@ -14,6 +15,8 @@
 				{% endif %}
 			</h1>
 
+			<div class="text-center matches-played">{{ num }} matches played</div>
+
 			<div class="links">
 				<a href="/matches/new">New Match</a>
 				<a href="/matches">Previous Matches</a>
@@ -23,10 +26,6 @@
 			</div>
 
 			<img src="/static/images/ping-pong.png" />
-
-			<br />
-
-			<div class="text-center">{{ num }} matches played</div>
 
 		</div>
 

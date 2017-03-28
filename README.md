@@ -53,6 +53,7 @@ TODO
 
 Create player from player selection page
 animate scoring so you know your button has been pressed
+Instead of a team winning and losing, just make it so that win is true or false
 
 Delegate Python Process
 		screen python run.py

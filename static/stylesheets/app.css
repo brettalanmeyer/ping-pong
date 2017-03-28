@@ -78,7 +78,8 @@ a.action {
 
 .main-container img {
 	display: block;
-	margin: 40px auto 20px;
+	width: 250px;
+	margin: 10px auto;
 }
 
 .main-container .links a {
@@ -158,13 +159,13 @@ a.action {
 }
 
 .option-form {
-	width: 300px;
+	width: 500px;
 	margin: auto;
 }
 
 .option-form .btn,
 .option-form .form-control {
-	font-size: 18px;
+	font-size: 24px;
 }
 
 .text-sm {
@@ -203,6 +204,12 @@ a.action {
 
 .previous-matches .score-table td.score.winner {
 	font-weight: bold;
+}
+
+.matches-played {
+	position: relative;
+	bottom: 12px;
+	font-size: 12px;
 }
 
 @media (min-width: 768px) {
