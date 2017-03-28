@@ -12,7 +12,7 @@ $(function(){
 
 		var ninesAudio = new Audio("/static/audio/multi-player-start.wav").play();
 		var scoreAudio = new Audio("/static/audio/bump.wav");
-		var undoAudio = new Audio("/static/audio/picking-up.wav");
+		var undoAudio = new Audio("/static/audio/coin.wav");
 
 		for(var i = 0; i < colors.length; i++){
 			var color = colors[i];
