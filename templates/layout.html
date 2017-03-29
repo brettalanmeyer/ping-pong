@@ -11,9 +11,10 @@
 			<title>Ping Pong{% if request.endpoint != "index" %} | {% endif %}{% block title %}{% endblock %}</title>
 			<link rel="shortcut icon" href="/static/images/ping-pong-icon.png" type="image/x-icon" />
 			<link href="{{ url_for('static', filename='libraries/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-			{% assets filters="cssmin", output="gen/ping-pong.css", "stylesheets/app.css", "stylesheets/singles.css", "stylesheets/doubles.css", "stylesheets/nines.css", "stylesheets/leaderboard.css", "stylesheets/debug.css" %}
+			{% assets "css_all" %}
 				<link href="{{ ASSET_URL }}" rel="stylesheet">
 			{% endassets %}
+
 
 		{% endblock %}
 
@@ -28,7 +29,8 @@
 
 		{% block body %}{% endblock %}
 
-		{% assets filters="jsmin", output="gen/ping-pong.js", "libraries/jquery.min.js", "libraries/socket.io.min.js", "libraries/stupidtable.min.js", "javascripts/app.js", "javascripts/isms.js", "javascripts/singles.js", "javascripts/doubles.js", "javascripts/nines.js" %}
+
+		{% assets "js_all" %}
 			<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 		{% endassets %}
 

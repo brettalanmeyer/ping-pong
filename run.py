@@ -1,14 +1,12 @@
 from flask import Flask, render_template, Response, redirect, request, abort
-from flask_assets import Environment
 from flask_socketio import SocketIO, emit
 import json
-from utils import database, logger
+from utils import database, logger, assets
 from services import IsmService, PlayerService, MatchService, ScoreService, LeaderboardService, PagingService
 from matchtypes import Singles, Doubles, Nines
 
 app = Flask(__name__)
 app.config.from_pyfile("config.cfg")
-assets = Environment(app)
 socketio = SocketIO(app)
 
 @app.route("/", methods = ["GET"])
@@ -269,6 +267,7 @@ def audioTest():
 
 if __name__ == "__main__":
 	logger.setupLogging(app)
+	assets.setupAssets(app)
 	session = database.setupSession(app)
 
 	ismService = IsmService.IsmService(session)
