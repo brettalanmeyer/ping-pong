@@ -44,7 +44,7 @@
 
 					{% for row in stats.rows %}
 
-						<tr>
+						<tr data-time="{{ row.time }}">
 
 							<td data-sort-value="{{ row.playerName }}">{{ row.playerName }}</td>
 							<td data-sort-value="{{ row.matches }}">{{ row.matches }}</td>
@@ -53,7 +53,6 @@
 							<td data-sort-value="{{ row.pointsAgainst }}">{{  "{:,}".format(row.pointsAgainst) }}</td>
 							<td data-sort-value="{{ row.wins }}">{{ row.wins }}</td>
 							<td data-sort-value="{{ row.losses }}">{{ row.losses }}</td>
-							<td data-sort-value="{{ row.seconds }}"></td>
 
 						</tr>
 
@@ -72,7 +71,6 @@
 						<th>{{ stats.totals["pointsAgainst"] }}</th>
 						<th>{{ stats.totals["wins"] }}</th>
 						<th>{{ stats.totals["losses"] }}</th>
-						<th>{{ stats.totals["time"] }}</th>
 
 					</tr>
 

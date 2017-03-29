@@ -67,9 +67,6 @@ class LeaderboardService(Service.Service):
 		}, {
 			"sort": "int",
 			"name": "Losses"
-		}, {
-			"sort": "int",
-			"name": "Time"
 		}]
 
 	def matches(self, matchType):
@@ -178,8 +175,7 @@ class LeaderboardService(Service.Service):
 			"pointsAgainst": 0,
 			"seconds": 0,
 			"wins": 0,
-			"losses": 0,
-			"time": ""
+			"losses": 0
 		}
 
 		for row in rows:
