@@ -77,11 +77,9 @@ def scoring(match):
 				index2 = 0
 
 			match.teams[index1].win = True
-			match.teams[index1].loss = False
 			match.teams[index1].modifiedAt = datetime.now()
 
 			match.teams[index2].win = False
-			match.teams[index2].loss = True
 			match.teams[index2].modifiedAt = datetime.now()
 
 			session.commit()

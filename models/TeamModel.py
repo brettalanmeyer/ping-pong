@@ -14,7 +14,6 @@ class TeamModel(Base):
 	id = Column(Integer, primary_key = True)
 	matchId = Column(Integer, ForeignKey("matches.id"))
 	win = Column(Integer)
-	loss = Column(Integer)
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 

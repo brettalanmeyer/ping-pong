@@ -43,17 +43,14 @@ class TeamService(Service.Service):
 		return team
 
 	def win(self, team):
-		team.win = True
-		team.loss = False
-		team.modifiedAt = datetime.now()
-		self.session.commit()
-
-		app.logger.info("Team win team=%d", team.id)
+		self.status(team, True)
 
 	def lose(self, team):
-		team.win = False
-		team.loss = True
+		self.status(team, False)
+
+	def status(self, team, win):
+		team.win = win
 		team.modifiedAt = datetime.now()
 		self.session.commit()
 
-		app.logger.info("Team loss team=%d", team.id)
+		app.logger.info("Team win=%s team=%d", win, team.id)

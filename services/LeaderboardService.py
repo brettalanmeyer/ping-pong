@@ -71,7 +71,7 @@ class LeaderboardService(Service.Service):
 
 	def matches(self, matchType):
 		query = "\
-			SELECT players.id AS playerId, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.loss = 1) AS losses\
+			SELECT players.id AS playerId, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.win = 0) AS losses\
 			FROM players\
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
