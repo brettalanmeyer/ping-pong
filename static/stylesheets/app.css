@@ -107,65 +107,6 @@ a.action {
 	background: #e6e6e6;
 }
 
-.player-selector-container {
-	position: relative;
-}
-
-.player-selector-container .action {
-	position: absolute;
-	right: 15px;
-}
-
-.player-table {
-	border: solid 1px #ccc;
-	margin: 8px 0;
-	overflow: hidden;
-}
-
-.player-table .name {
-	float: left;
-	height: 100px;
-	width: 50%;
-	border: solid 1px #ccc;
-	text-align: center;
-	font-size: 40px;
-	line-height: 100px;
-}
-
-.player-table .name.yellow {
-	box-shadow: inset 0 0 10px 10px yellow;
-}
-.player-table .name.green {
-	box-shadow: inset 0 0 10px 10px green;
-}
-.player-table .name.red {
-	box-shadow: inset 0 0 10px 10px red;
-}
-.player-table .name.blue {
-	box-shadow: inset 0 0 10px 10px blue;
-}
-
-
-.players-form-play {
-	margin-bottom: 8px;
-	display: none;
-}
-
-.players-form-randomize {
-	margin-bottom: 4px;
-	display: none;
-}
-
-.players-form-redo {}
-
-.player-list-container {}
-
-.player-list {
-	width: 100%;
-	cursor: pointer;
-	text-align: center;
-}
-
 .option-form {
 	width: 500px;
 	margin: auto;

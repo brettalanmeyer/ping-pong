@@ -3,7 +3,7 @@ import MatchType, random
 class Nines(MatchType.MatchType):
 
 	def __init__(self, session):
-		MatchType.MatchType.__init__(self, session, "9s", "nines", "matches/four-player.html", "matches/nines.html", 9)
+		MatchType.MatchType.__init__(self, session, "Nines", "nines", "matches/nines.html", 9, 4, 4)
 
 	def matchData(self, match):
 		game = match.games[0]
@@ -80,12 +80,15 @@ class Nines(MatchType.MatchType):
 		players["red"]["winner"] = players["green"]["out"] and players["yellow"]["out"] and players["blue"]["out"]
 
 	def createTeams(self, match, data):
-		team1 = self.teamService.createOnePlayer(match.id, data["green"])
-		team2 = self.teamService.createOnePlayer(match.id, data["yellow"])
-		team3 = self.teamService.createOnePlayer(match.id, data["blue"])
-		team4 = self.teamService.createOnePlayer(match.id, data["red"])
+		ids = map(int, data)
+		random.shuffle(ids)
 
-		self.gameService.create(match.id, 0, data["green"], data["yellow"], data["blue"], data["red"])
+		team1 = self.teamService.createOnePlayer(match.id, ids[0])
+		team2 = self.teamService.createOnePlayer(match.id, ids[1])
+		team3 = self.teamService.createOnePlayer(match.id, ids[2])
+		team4 = self.teamService.createOnePlayer(match.id, ids[3])
+
+		self.gameService.create(match.id, 0, ids[0], ids[1], ids[2], ids[3])
 
 	def score(self, match, button):
 		data = self.matchData(match)
@@ -139,24 +142,11 @@ class Nines(MatchType.MatchType):
 		return data
 
 	def playAgain(self, match):
-		players = []
-		for game in match.games:
-			players.append(game.yellow)
-			players.append(game.blue)
-			players.append(game.red)
-			players.append(game.green)
-
-		random.shuffle(players)
-
-		teams = {
-			"green": players[0],
-			"yellow": players[1],
-			"blue": players[2],
-			"red": players[3]
-		}
+		game = match.games[0]
+		playerIds = [game.yellow, game.blue, game.red, game.green]
 
 		newMatch = self.matchService.create(self.matchType)
-		self.createTeams(newMatch, teams)
+		self.createTeams(newMatch, playerIds)
 		self.matchService.play(newMatch)
 
 		return newMatch

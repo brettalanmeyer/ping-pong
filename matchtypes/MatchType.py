@@ -3,7 +3,7 @@ import math
 
 class MatchType():
 
-	def __init__(self, session, label, matchType, playerTemplate, matchTemplate, defaultPoints):
+	def __init__(self, session, label, matchType, matchTemplate, defaultPoints, numOfPlayers, numOfTeams):
 		self.matchService = MatchService.MatchService(session)
 		self.gameService = GameService.GameService(session)
 		self.teamService = TeamService.TeamService(session)
@@ -11,27 +11,13 @@ class MatchType():
 
 		self.label = label
 		self.matchType = matchType
-		self.playerTemplate = playerTemplate
 		self.matchTemplate = matchTemplate
 		self.defaultPoints = defaultPoints
+		self.numOfPlayers = numOfPlayers
+		self.numOfTeams = numOfTeams
 
 		self.matchTypes = ["singles", "doubles", "nines"]
 		self.colors = ["green", "yellow", "blue", "red"]
-
-	def getLabel(self):
-		return self.label
-
-	def getMatchType(self):
-		return self.matchType
-
-	def getPlayerTemplate(self):
-		return self.playerTemplate
-
-	def getMatchTemplate(self):
-		return self.matchTemplate
-
-	def getDefaultPoints(self):
-		return self.defaultPoints
 
 	def isMatchType(self, matchType):
 		return self.matchType == matchType

@@ -1,9 +1,9 @@
-import MatchType
+import MatchType, random
 
 class Singles(MatchType.MatchType):
 
 	def __init__(self, session):
-		MatchType.MatchType.__init__(self, session, "Singles", "singles", "matches/two-player.html", "matches/singles.html", 21)
+		MatchType.MatchType.__init__(self, session, "Singles", "singles", "matches/singles.html", 21, 2, 2)
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]
@@ -143,16 +143,19 @@ class Singles(MatchType.MatchType):
 		return self.matchData(match)
 
 	def createTeams(self, match, data):
-		team1 = self.teamService.createOnePlayer(match.id, data["green"])
-		team2 = self.teamService.createOnePlayer(match.id, data["yellow"])
+		ids = map(int, data)
+		random.shuffle(ids)
+
+		team1 = self.teamService.createOnePlayer(match.id, ids[0])
+		team2 = self.teamService.createOnePlayer(match.id, ids[1])
 
 		for i in range(1, match.numOfGames + 1):
 
 			if i % 2 == 1:
-				green = data["green"]
-				yellow = data["yellow"]
+				green = ids[0]
+				yellow = ids[1]
 			else:
-				green = data["yellow"]
-				yellow = data["green"]
+				green = ids[1]
+				yellow = ids[0]
 
 			self.gameService.create(match.id, i, green, yellow, None, None)

@@ -56,13 +56,13 @@ def matches_players(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
 	players = playerService.selectActive()
-	return render_template(matchType.playerTemplate, title = matchType.label, match = match, players = players)
+	return render_template("matches/players.html", title = matchType.label, matchType = matchType, match = match, players = players)
 
 @app.route("/matches/<int:id>/players", methods = ["POST"])
 def matches_players_create(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
-	matchType.createTeams(match, request.form)
+	matchType.createTeams(match, request.form.getlist("playerId"))
 	matchService.play(match)
 	return redirect("/matches/%d" % id)
 

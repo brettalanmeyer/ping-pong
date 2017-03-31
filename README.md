@@ -4,25 +4,6 @@
 
 Install dependencies by running `sudo pip install -r requirements.txt`
 
-## Game Types
-	Singles
-	Doubles
-	9's
-
-	Singles
-		1. Select number of games (Best of 1, 3, or 5)
-		2. Select score to: (default is 21, must win by 2 pts)
-		3. Show table with player selector at each end
-
-	Doubles
-		1. Select number of games (Best of 1, 3, or 5)
-		2. Select score to: (default is 21, must win by 2 pts)
-		3. Show table with player selector at each corner
-
-	9's
-		1. Select score to: (default is 9)
-		2. Show table with player selector at each corner
-
 ## Configuration
 
 	create config.cfg
@@ -54,9 +35,9 @@ TODO
 Instead of a team winning and losing, just make it so that win is true or false
 
 Delegate Python Process
-		screen python run.py
-		Ctrl-a then d
-	List Screen Processes
-		screen -ls
-	Kill Screen Process
-		screen -X -S PID quit
+	screen python run.py
+	Ctrl-a then d
+List Screen Processes
+	screen -ls
+Kill Screen Process
+	screen -X -S PID quit
