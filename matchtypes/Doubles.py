@@ -143,7 +143,9 @@ class Doubles(MatchType.MatchType):
 
 			self.gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
 
-			if match.game < match.numOfGames:
+			self.determineMatchWinner(match)
+
+			if not match.complete and match.game < match.numOfGames:
 				self.matchService.updateGame(match.id, match.game + 1)
 
 	def createTeams(self, match, data):
@@ -209,7 +211,6 @@ class Doubles(MatchType.MatchType):
 		self.scoreService.score(match.id, teamId, match.game)
 
 		self.determineGameWinner(match)
-		self.determineMatchWinner(match)
 
 		return self.matchData(match)
 

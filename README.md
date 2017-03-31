@@ -33,6 +33,8 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 TODO
 
 Instead of a team winning and losing, just make it so that win is true or false
+display winner better
+after completion, select play again option, best of 1,3,5 with keep teams option
 
 Delegate Python Process
 	screen python run.py
