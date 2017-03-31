@@ -111,3 +111,20 @@
 .set-score.win {
 	font-weight: bold;
 }
+
+.singles-container .play-again-container {
+	width: 30%;
+	float: left;
+	height: 378px;
+	overflow: hidden;
+	padding: 16px;
+	text-align: left;
+}
+
+.singles-container .play-again-container h2 {
+	margin: 0 0 16px 0;
+}
+
+.singles-container .play-again-container a {
+	margin-top: 24px;
+}

@@ -14,7 +14,7 @@
 				<span class="score" data-var="score" data-color="yellow">{{ '%02d' % data.teams.yellow.points }}</span>
 			</div>
 
-			<div class="sets">
+			<div class="sets complete-hide {% if data.complete %}hidden{% endif %}">
 				<span class="text">Set</span>
 				<span class="set">
 					<span class="num" data-var="set">{{ data.game }}</span>
@@ -27,6 +27,22 @@
 					<span class="glyphicon glyphicon-arrow-left {% if data.teams.yellow.serving %}active{% endif %}" data-var="serving" data-color="yellow"></span>
 					<span class="glyphicon glyphicon-arrow-right {% if data.teams.green.serving %}active{% endif %}" data-var="serving" data-color="green"></span>
 				</span>
+			</div>
+
+			<div class="play-again-container complete-show {% if not data.complete %}hidden{% endif %}">
+
+				<h2>Play Again</h2>
+
+				<form id="play-again" method="POST" action="/matches/{{ data.matchId }}/play-again" class="play-again {% if not data.complete %}hiddens{% endif %}">
+					<button type="submit" class="btn btn-default btn-block btn-lg" name="numOfGames" value="1">Best Of 1</button>
+					<button type="submit" class="btn btn-default btn-block btn-lg" name="numOfGames" value="3">Best Of 3</button>
+					<button type="submit" class="btn btn-default btn-block btn-lg" name="numOfGames" value="5">Best Of 5</button>
+				</form>
+
+				<a href="/" class="btn btn-block btn-lg btn-default">
+					Main Menu
+				</a>
+
 			</div>
 
 			<div class="score-board">
@@ -52,7 +68,12 @@
 
 				<tr data-teamid="{{ data.teams[side].teamId }}">
 
-					<td>{{ data.teams[side].playerName }}</td>
+					<td>
+						{{ data.teams[side].playerName }}
+						{% if data.teams[side].winner %}
+							- <strong>Winner!</strong>
+						{% endif %}
+					</td>
 
 					{% for i in range(0, data.numOfGames) %}
 						{% if data.teams[side].games[i].score != None %}

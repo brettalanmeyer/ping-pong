@@ -79,9 +79,11 @@ class Nines(MatchType.MatchType):
 		players["blue"]["winner"] = players["green"]["out"] and players["yellow"]["out"] and players["red"]["out"]
 		players["red"]["winner"] = players["green"]["out"] and players["yellow"]["out"] and players["blue"]["out"]
 
-	def createTeams(self, match, data):
+	def createTeams(self, match, data, randomize):
 		ids = map(int, data)
-		random.shuffle(ids)
+
+		if randomize:
+			random.shuffle(ids)
 
 		team1 = self.teamService.createOnePlayer(match.id, ids[0])
 		team2 = self.teamService.createOnePlayer(match.id, ids[1])
@@ -141,12 +143,12 @@ class Nines(MatchType.MatchType):
 
 		return data
 
-	def playAgain(self, match):
+	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
 		playerIds = [game.yellow, game.blue, game.red, game.green]
 
 		newMatch = self.matchService.create(self.matchType)
-		self.createTeams(newMatch, playerIds)
+		self.createTeams(newMatch, playerIds, True)
 		self.matchService.play(newMatch)
 
 		return newMatch

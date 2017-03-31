@@ -113,8 +113,25 @@ $(function(){
 				if(data.teams.north.winner || data.teams.south.winner){
 					$("tr[data-teamid=" + teamId + "]").find("td").first().append(" - <strong>Winner!</strong>");
 				}
+
+				$(".complete-hide").addClass("hidden");
+				$(".complete-show").removeClass("hidden");
 			}
 		}
+
+		var randomize = $("input[name=randomize]");
+
+		$("button.randomize").on("click", function(){
+			var source = $(this);
+
+			if(randomize.val() == "true"){
+				source.html("Yes");
+				randomize.val("false");
+			} else {
+				source.html("No");
+				randomize.val("true");
+			}
+		});
 
 	}
 

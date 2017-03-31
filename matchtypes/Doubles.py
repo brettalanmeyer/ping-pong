@@ -148,9 +148,11 @@ class Doubles(MatchType.MatchType):
 			if not match.complete and match.game < match.numOfGames:
 				self.matchService.updateGame(match.id, match.game + 1)
 
-	def createTeams(self, match, data):
+	def createTeams(self, match, data, randomize):
 		ids = map(int, data)
-		random.shuffle(ids)
+
+		if randomize:
+			random.shuffle(ids)
 
 		green = ids[0]
 		yellow = ids[1]
@@ -214,3 +216,14 @@ class Doubles(MatchType.MatchType):
 
 		return self.matchData(match)
 
+	def playAgain(self, match, numOfGames, randomize):
+		game = match.games[0]
+		playerIds = [game.green, game.yellow, game.blue, game.red]
+
+		newMatch = self.matchService.create(self.matchType)
+		newMatch.numOfGames = numOfGames
+		newMatch.game = 1
+		self.createTeams(newMatch, playerIds, randomize)
+		self.matchService.play(newMatch)
+
+		return newMatch

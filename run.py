@@ -62,7 +62,7 @@ def matches_players(id):
 def matches_players_create(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
-	matchType.createTeams(match, request.form.getlist("playerId"))
+	matchType.createTeams(match, request.form.getlist("playerId"), True)
 	matchService.play(match)
 	return redirect("/matches/%d" % id)
 
@@ -86,7 +86,14 @@ def matches_again(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
 
-	newMatch = matchType.playAgain(match)
+	numOfGames = None
+	randomize = True
+	if "numOfGames" in request.form:
+		numOfGames = int(request.form["numOfGames"])
+	if "randomize" in request.form:
+		randomize = request.form["randomize"] == "true"
+
+	newMatch = matchType.playAgain(match, numOfGames, randomize)
 	return redirect("/matches/%d" % newMatch.id)
 
 @app.route("/players", methods = ["GET"])
@@ -200,7 +207,7 @@ def buttons_score(button):
 		latestMatch = matchService.selectLatestMatch()
 		if latestMatch.matchType == "nines":
 			matchType = getMatchType(latestMatch)
-			newMatch = matchType.playAgain(latestMatch)
+			newMatch = matchType.playAgain(latestMatch, None, True)
 			data = {
 				"matchType": matchType.matchType,
 				"redirect": True,

@@ -143,9 +143,11 @@ class Singles(MatchType.MatchType):
 
 		return self.matchData(match)
 
-	def createTeams(self, match, data):
+	def createTeams(self, match, data, randomize):
 		ids = map(int, data)
-		random.shuffle(ids)
+
+		if randomize:
+			random.shuffle(ids)
 
 		team1 = self.teamService.createOnePlayer(match.id, ids[0])
 		team2 = self.teamService.createOnePlayer(match.id, ids[1])
@@ -160,3 +162,15 @@ class Singles(MatchType.MatchType):
 				yellow = ids[0]
 
 			self.gameService.create(match.id, i, green, yellow, None, None)
+
+	def playAgain(self, match, numOfGames, persistTeams):
+		game = match.games[0]
+		playerIds = [game.green, game.yellow]
+
+		newMatch = self.matchService.create(self.matchType)
+		newMatch.numOfGames = numOfGames
+		newMatch.game = 1
+		self.createTeams(newMatch, playerIds, True)
+		self.matchService.play(newMatch)
+
+		return newMatch

@@ -116,3 +116,24 @@
 	display: block;
 	padding: 12px 0;
 }
+
+.doubles-container .play-again-container {
+	width: 30%;
+	float: left;
+	height: 378px;
+	overflow: hidden;
+	padding: 16px;
+	text-align: left;
+}
+
+.doubles-container .play-again-container h2 {
+	margin: 0 0 16px 0;
+}
+
+.doubles-container .play-again-container a {
+	margin-top: 24px;
+}
+
+.doubles-container .play-again-container .form-group {
+	margin-top: 5px;
+}
