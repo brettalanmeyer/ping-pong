@@ -27,6 +27,19 @@
 
 		<script>
 
+			if(confirm("play background audio?")){
+				var backgroundAudio = new Audio("/static/audio/multi-player-start.wav");
+				backgroundAudio.volume = 0;
+
+				console.log("play");
+				backgroundAudio.play();
+
+				backgroundAudio.onended = function(){
+					backgroundAudio.play();
+					console.log("replay");
+				};
+			}
+
 			var jsCoin = new Audio("/static/audio/coin.wav");
 			var playJs = document.getElementById("play-js-audio");
 			playJs.addEventListener("click", function(){
