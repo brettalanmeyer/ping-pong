@@ -31,8 +31,6 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
-Instead of a team winning and losing, just make it so that win is true or false
-display winner better
 
 Delegate Python Process
 	screen python run.py
