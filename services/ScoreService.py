@@ -17,6 +17,8 @@ class ScoreService(Service.Service):
 		app.logger.info("Scoring for match=%d team=%d game=%d", matchId, teamId, game)
 
 	def selectCount(self):
+		app.logger.info("Selecting number of scores")
+
 		return self.session.query(self.model.matchId).count()
 
 	def undo(self, matchId):
