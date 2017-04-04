@@ -29,3 +29,19 @@
 .leaderboard-player-container table {
 	width: 100%;
 }
+
+.leaderboard-player-container .nav-tabs li span {
+	display: block;
+	border-radius: 4px 4px 0 0;
+	padding: 9px;
+	cursor: pointer;
+	color: #555;
+	margin-right: 2px;
+}
+
+.leaderboard-player-container .nav-tabs li.active span {
+	border: solid 1px #ddd;
+	border-bottom-color: transparent;
+	background: #fff;
+	padding: 8px;
+}

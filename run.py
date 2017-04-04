@@ -191,7 +191,7 @@ def leaderboard_json(matchType):
 def leaderboard_players(id):
 	player = playerService.selectById(id)
 	stats = leaderboardService.playerStats(player)
-	return render_template("leaderboard/players.html", player = player, stats = stats)
+	return render_template("leaderboard/players.html", player = player, stats = stats, matchTypes = singles.matchTypes)
 
 @app.route("/leaderboard/players/<int:id>.json", methods = ["GET"])
 def leaderboard_players_json(id):

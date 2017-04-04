@@ -31,6 +31,8 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
+Remove audio
+
 Leaderboard:
 	current win/loss streak
 	current point streak

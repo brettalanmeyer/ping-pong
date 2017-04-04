@@ -2,6 +2,16 @@ $(function(){
 
 	$("#leaderboard").stupidtable();
 
+	$(".leaderboard-player-container .nav-tabs li").on("click", function(){
+		$(".leaderboard-player-container .nav-tabs li").removeClass("active");
+
+		var source = $(this);
+		source.addClass("active");
+
+		$(".leaderboard-player-container .opponent-table").addClass("hidden");
+		$(".leaderboard-player-container .opponent-table[data-matchtype=" + source.data("matchtype") + "]").removeClass("hidden");
+	}).first().trigger("click");
+
 	if($("#matches-new").length > 0){
 		new Audio("/static/audio/bonus-game-match.wav").play();
 	}

@@ -17,9 +17,12 @@
 					<tr>
 
 						<th></th>
-						<th>Singles</th>
-						<th>Doubles</th>
-						<th>Nines</th>
+						<th>Matches</th>
+						<th>Win %</td>
+						<th>Points For</th>
+						<th>Points Against</th>
+						<th>Wins</th>
+						<th>Losses</th>
 
 					</tr>
 
@@ -27,64 +30,75 @@
 
 				<tbody>
 
-					<tr>
+					{% for item in matchTypes %}
 
-						<th>Matches</th>
-						<td>{{ stats.singles.matches }}</td>
-						<td>{{ stats.doubles.matches }}</td>
-						<td>{{ stats.nines.matches }}</td>
+						<tr>
 
-					</tr>
+							<th>{{ item.title() }}</th>
+							<td>{{ stats[item].matches }}</td>
+							<td>{{ "{:.3f}".format(stats[item].percentage) }}</td>
+							<td>{{ "{:,}".format(stats[item].pointsFor) }}</td>
+							<td>{{ "{:,}".format(stats[item].pointsAgainst) }}</td>
+							<td>{{ stats[item].wins }}</td>
+							<td>{{ stats[item].losses }}</td>
 
-					<tr>
+						</tr>
 
-						<th>Win %</td>
-						<td>{{ "{:.3f}".format(stats.singles.percentage) }}</td>
-						<td>{{ "{:.3f}".format(stats.doubles.percentage) }}</td>
-						<td>{{ "{:.3f}".format(stats.nines.percentage) }}</td>
-
-					</tr>
-
-					<tr>
-
-						<th>Points For</th>
-						<td>{{ "{:,}".format(stats.singles.pointsFor) }}</td>
-						<td>{{ "{:,}".format(stats.doubles.pointsFor) }}</td>
-						<td>{{ "{:,}".format(stats.nines.pointsFor) }}</td>
-
-					</tr>
-
-					<tr>
-
-						<th>Points Against</th>
-						<td>{{ "{:,}".format(stats.singles.pointsAgainst) }}</td>
-						<td>{{ "{:,}".format(stats.doubles.pointsAgainst) }}</td>
-						<td>{{ "{:,}".format(stats.nines.pointsAgainst) }}</td>
-
-					</tr>
-
-					<tr>
-
-						<th>Wins</th>
-						<td>{{ stats.singles.wins }}</td>
-						<td>{{ stats.doubles.wins }}</td>
-						<td>{{ stats.nines.wins }}</td>
-
-					</tr>
-
-					<tr>
-
-						<th>Losses</th>
-						<td>{{ stats.singles.losses }}</td>
-						<td>{{ stats.doubles.losses }}</td>
-						<td>{{ stats.nines.losses }}</td>
-
-					</tr>
-
+					{% endfor %}
 
 				</tbody>
 
 			</table>
+
+			<ul class="nav nav-tabs">
+				{% for item in matchTypes %}
+					<li role="presentation" data-matchtype="{{ item }}">
+						<span>{{ item.title() }}</span>
+					</li>
+				{% endfor %}
+			</ul>
+
+			{% for item in matchTypes %}
+
+				<table class="table opponent-table hidden" data-matchtype="{{ item }}">
+
+					<thead>
+
+						<tr>
+
+							<th>Opponent</th>
+							<th>Matches</th>
+							<th>Win %</td>
+							<th>Points For</th>
+							<th>Points Against</th>
+							<th>Wins</th>
+							<th>Losses</th>
+
+						</tr>
+
+					</thead>
+
+					<tbody>
+
+						{% for matchup in stats[item].matchups %}
+
+							<tr class="matchup">
+								<td>{{ matchup.playerName }}</td>
+								<td>{{ matchup.numOfMatches }}</td>
+								<td>{{ "{:.3f}".format(matchup.percentage) }}</td>
+								<td></td>
+								<td></td>
+								<td>{{ matchup.wins }}</td>
+								<td>{{ matchup.losses }}</td>
+							</tr>
+
+						{% endfor %}
+
+					</tbody>
+
+				</table>
+
+			{% endfor %}
 
 		</div>
 

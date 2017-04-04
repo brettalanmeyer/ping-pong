@@ -71,6 +71,22 @@ class LeaderboardService(Service.Service):
 		stats["doubles"]["pointsAgainst"] = pointsAgainst["doubles"]
 		stats["nines"]["pointsAgainst"] = pointsAgainst["nines"]
 
+		stats["singles"]["matchups"] = []
+		stats["doubles"]["matchups"] = []
+		stats["nines"]["matchups"] = []
+
+		results = self.matchups(player.id)
+
+		for result in results:
+			stats[result.matchType]["matchups"].append({
+				"playerId": result.playerId,
+				"playerName": result.playerName,
+				"numOfMatches": int(result.numOfMatches),
+				"wins": int(result.wins),
+				"losses": int(result.losses),
+				"percentage": float(result.wins) / float(result.numOfMatches) * 100
+			})
+
 		return stats
 
 	def labels(self):
@@ -295,6 +311,39 @@ class LeaderboardService(Service.Service):
 		totals["time"] = self.formatTime(totals["seconds"])
 
 		return totals
+
+	def matchups(self, playerId):
+		query = "\
+			SELECT\
+				players.id as playerId,\
+				players.name as playerName,\
+				matches.matchType,\
+				COUNT(players.id) AS numOfMatches,\
+				SUM(teams.win = 0) AS wins,\
+				SUM(teams.win = 1) AS losses\
+			FROM matches\
+			LEFT JOIN teams ON matches.id = teams.matchId\
+			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+			LEFT JOIN players ON teams_players.playerId = players.id\
+			WHERE teams.id IN (\
+					SELECT teams.id\
+					FROM teams\
+					LEFT JOIN matches ON teams.matchId = matches.id\
+					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+					WHERE matches.id IN (\
+							SELECT matches.id AS matchIds\
+							FROM matches\
+							LEFT JOIN teams ON matches.id = teams.matchId\
+							LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+							WHERE teams_players.playerId = :playerId\
+								AND matches.complete = 1\
+						)\
+						AND teams_players.playerId != :playerId\
+				)\
+			GROUP BY players.id, matches.matchType\
+		"
+		connection = self.session.connection()
+		return connection.execute(text(query), playerId = playerId)
 
 	def formatTime(self, seconds):
 		m, s = divmod(seconds, 60)
