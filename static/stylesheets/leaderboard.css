@@ -20,3 +20,12 @@
 .leaderboard-container .table .sorting-desc .glyphicon-chevron-down {
 	color: #333
 }
+
+.leaderboard-player-container {
+	width: 800px;
+	margin: auto;
+}
+
+.leaderboard-player-container table {
+	width: 100%;
+}

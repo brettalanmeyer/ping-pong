@@ -31,6 +31,11 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
+Leaderboard:
+	current win/loss streak
+	current point streak
+	highest win/lost streak
+	highest point streak
 
 Delegate Python Process
 	screen python run.py

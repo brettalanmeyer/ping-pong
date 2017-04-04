@@ -46,11 +46,13 @@
 
 						<tr data-time="{{ row.time }}">
 
-							<td data-sort-value="{{ row.playerName }}">{{ row.playerName }}</td>
+							<td data-sort-value="{{ row.playerName }}">
+								<a href="/leaderboard/players/{{ row.playerId }}">{{ row.playerName }}</a>
+							</td>
 							<td data-sort-value="{{ row.matches }}">{{ row.matches }}</td>
 							<td data-sort-value="{{ row.percentage }}">{{ "{:.3f}".format(row.percentage) }}</td>
-							<td data-sort-value="{{ row.pointsFor }}">{{  "{:,}".format(row.pointsFor) }}</td>
-							<td data-sort-value="{{ row.pointsAgainst }}">{{  "{:,}".format(row.pointsAgainst) }}</td>
+							<td data-sort-value="{{ row.pointsFor }}">{{ "{:,}".format(row.pointsFor) }}</td>
+							<td data-sort-value="{{ row.pointsAgainst }}">{{ "{:,}".format(row.pointsAgainst) }}</td>
 							<td data-sort-value="{{ row.wins }}">{{ row.wins }}</td>
 							<td data-sort-value="{{ row.losses }}">{{ row.losses }}</td>
 

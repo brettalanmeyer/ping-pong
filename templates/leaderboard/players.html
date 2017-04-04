@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block title %}Leaderboard | {{ player.name }}{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<div class="leaderboard-player-container">
+
+			<h1>Leaderboard | {{ player.name }}</h1>
+
+			<table class="table">
+
+				<thead>
+
+					<tr>
+
+						<th></th>
+						<th>Singles</th>
+						<th>Doubles</th>
+						<th>Nines</th>
+
+					</tr>
+
+				</thead>
+
+				<tbody>
+
+					<tr>
+
+						<th>Matches</th>
+						<td>{{ stats.singles.matches }}</td>
+						<td>{{ stats.doubles.matches }}</td>
+						<td>{{ stats.nines.matches }}</td>
+
+					</tr>
+
+					<tr>
+
+						<th>Win %</td>
+						<td>{{ "{:.3f}".format(stats.singles.percentage) }}</td>
+						<td>{{ "{:.3f}".format(stats.doubles.percentage) }}</td>
+						<td>{{ "{:.3f}".format(stats.nines.percentage) }}</td>
+
+					</tr>
+
+					<tr>
+
+						<th>Points For</th>
+						<td>{{ "{:,}".format(stats.singles.pointsFor) }}</td>
+						<td>{{ "{:,}".format(stats.doubles.pointsFor) }}</td>
+						<td>{{ "{:,}".format(stats.nines.pointsFor) }}</td>
+
+					</tr>
+
+					<tr>
+
+						<th>Points Against</th>
+						<td>{{ "{:,}".format(stats.singles.pointsAgainst) }}</td>
+						<td>{{ "{:,}".format(stats.doubles.pointsAgainst) }}</td>
+						<td>{{ "{:,}".format(stats.nines.pointsAgainst) }}</td>
+
+					</tr>
+
+					<tr>
+
+						<th>Wins</th>
+						<td>{{ stats.singles.wins }}</td>
+						<td>{{ stats.doubles.wins }}</td>
+						<td>{{ stats.nines.wins }}</td>
+
+					</tr>
+
+					<tr>
+
+						<th>Losses</th>
+						<td>{{ stats.singles.losses }}</td>
+						<td>{{ stats.doubles.losses }}</td>
+						<td>{{ stats.nines.losses }}</td>
+
+					</tr>
+
+
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</div>
+
+{% endblock %}

@@ -178,13 +178,25 @@ def leaderboard_index(matchType):
 	if matchType not in singles.matchTypes:
 		abort(404)
 
-	stats = leaderboardService.stats(matchType)
+	stats = leaderboardService.matchTypeStats(matchType)
 	return render_template("leaderboard/index.html", stats = stats, matchTypes = singles.matchTypes, matchType = matchType)
 
 @app.route("/leaderboard.json", methods = ["GET"], defaults = { "matchType": "singles" })
 @app.route("/leaderboard/<path:matchType>.json", methods = ["GET"])
 def leaderboard_json(matchType):
-	stats = leaderboardService.stats(matchType)
+	stats = leaderboardService.matchTypeStats(matchType)
+	return Response(json.dumps(stats), status = 200, mimetype = "application/json")
+
+@app.route("/leaderboard/players/<int:id>", methods = ["GET"])
+def leaderboard_players(id):
+	player = playerService.selectById(id)
+	stats = leaderboardService.playerStats(player)
+	return render_template("leaderboard/players.html", player = player, stats = stats)
+
+@app.route("/leaderboard/players/<int:id>.json", methods = ["GET"])
+def leaderboard_players_json(id):
+	player = playerService.selectById(id)
+	stats = leaderboardService.playerStats(player)
 	return Response(json.dumps(stats), status = 200, mimetype = "application/json")
 
 @app.route("/rules", methods = ["GET"])
