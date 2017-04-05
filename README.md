@@ -32,6 +32,7 @@ Install dependencies by running `sudo pip install -r requirements.txt`
 TODO
 
 Remove audio
+put dev in header
 
 Leaderboard:
 	current win/loss streak

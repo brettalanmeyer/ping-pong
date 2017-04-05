@@ -8,7 +8,7 @@
 
 		<div class="leaderboard-player-container">
 
-			<h1>Leaderboard | {{ player.name }}</h1>
+			<h1>Leaderboard - {{ player.name }}</h1>
 
 			<table class="table">
 
@@ -86,8 +86,8 @@
 								<td>{{ matchup.playerName }}</td>
 								<td>{{ matchup.numOfMatches }}</td>
 								<td>{{ "{:.3f}".format(matchup.percentage) }}</td>
-								<td></td>
-								<td></td>
+								<td>{{ matchup.pointsFor }}</td>
+								<td>{{ matchup.pointsAgainst }}</td>
 								<td>{{ matchup.wins }}</td>
 								<td>{{ matchup.losses }}</td>
 							</tr>

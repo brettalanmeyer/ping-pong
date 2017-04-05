@@ -78,13 +78,19 @@ class LeaderboardService(Service.Service):
 		results = self.matchups(player.id)
 
 		for result in results:
+			pointsFor = self.pointsForByOpponent(player.id, result.playerId)
+			pointsAgainst = self.pointsAgainstByOpponent(pointsFor, player.id, result.playerId)
+
+			# points and win/loss are inverted because these stats show the player vs this opponent
 			stats[result.matchType]["matchups"].append({
 				"playerId": result.playerId,
 				"playerName": result.playerName,
 				"numOfMatches": int(result.numOfMatches),
-				"wins": int(result.wins),
-				"losses": int(result.losses),
-				"percentage": float(result.wins) / float(result.numOfMatches) * 100
+				"pointsFor": pointsAgainst[result.matchType],
+				"pointsAgainst": pointsFor[result.matchType],
+				"wins": int(result.losses),
+				"losses": int(result.wins),
+				"percentage": float(result.losses) / float(result.numOfMatches) * 100
 			})
 
 		return stats
@@ -215,11 +221,41 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
 			WHERE matches.complete = 1 AND players.id = :playerId\
-			GROUP BY players.id, matches.matchType\
+			GROUP BY matches.matchType\
 		"
 
 		connection = self.session.connection()
 		points = connection.execute(text(query), playerId = playerId)
+
+		data = {}
+
+		for point in points:
+			data[point.matchType] = point.points
+
+		return data
+
+	def pointsForByOpponent(self, playerId, opponentId):
+		query = "\
+			SELECT players.id AS playerId, matches.matchType, COUNT(scores.id) as points\
+			FROM players\
+			LEFT JOIN teams_players ON players.id = teams_players.playerId\
+			LEFT JOIN teams ON teams_players.teamId = teams.id\
+			LEFT JOIN matches ON teams.matchId = matches.id\
+			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
+			WHERE matches.complete = 1 AND players.id = :opponentId\
+				AND matches.id IN (\
+					SELECT matches.id AS matchIds\
+					FROM matches\
+					LEFT JOIN teams ON matches.id = teams.matchId\
+					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+					WHERE teams_players.playerId = :playerId\
+						AND matches.complete = 1\
+				)\
+			GROUP BY matches.matchType\
+		"
+
+		connection = self.session.connection()
+		points = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
 
 		data = {}
 
@@ -290,6 +326,45 @@ class LeaderboardService(Service.Service):
 
 		return data
 
+	def pointsAgainstByOpponent(self, pointsFor, playerId, opponentId):
+		query = "\
+			SELECT players.id as playerId, matches.matchType, GROUP_CONCAT(teams.matchId) as matchIds\
+			FROM players\
+			LEFT JOIN teams_players ON players.id = teams_players.playerId\
+			LEFT JOIN teams ON teams_players.teamId = teams.id\
+			LEFT JOIN matches ON teams.matchId = matches.id\
+			WHERE matches.complete = 1 AND players.id = :opponentId\
+				AND matches.id IN (\
+					SELECT matches.id AS matchIds\
+					FROM matches\
+					LEFT JOIN teams ON matches.id = teams.matchId\
+					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+					WHERE teams_players.playerId = :playerId\
+						AND matches.complete = 1\
+				)\
+			GROUP BY matches.matchType\
+		"
+		connection = self.session.connection()
+		matches = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
+
+		data = {}
+
+		for match in matches:
+			matchIds = map(int, match.matchIds.split(","))
+			matchIds.append(0)
+
+			query = "\
+				SELECT COUNT(*) as points\
+				FROM scores\
+				WHERE matchId IN :matchIds\
+			"
+			connection = self.session.connection()
+			points = connection.execute(text(query), matchIds = matchIds).first()
+
+			data[match.matchType] = points.points - pointsFor[match.matchType]
+
+		return data
+
 	def totals(self, rows):
 		totals = {
 			"matches": 0,
@@ -319,8 +394,8 @@ class LeaderboardService(Service.Service):
 				players.name as playerName,\
 				matches.matchType,\
 				COUNT(players.id) AS numOfMatches,\
-				SUM(teams.win = 0) AS wins,\
-				SUM(teams.win = 1) AS losses\
+				SUM(teams.win = 1) AS wins,\
+				SUM(teams.win = 0) AS losses\
 			FROM matches\
 			LEFT JOIN teams ON matches.id = teams.matchId\
 			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
