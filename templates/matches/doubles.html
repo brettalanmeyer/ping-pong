@@ -119,8 +119,11 @@
 
 	</div>
 
-{% endblock %}
+	{% if config.DEBUG %}
+		<iframe src="/buttons" class="debug-button-panel"></iframe>
+	{% endif %}
 
+{% endblock %}
 
 {% block footer %}
 	<script>

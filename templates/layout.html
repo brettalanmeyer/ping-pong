@@ -15,11 +15,10 @@
 				<link href="{{ ASSET_URL }}" rel="stylesheet">
 			{% endassets %}
 
-
 		{% endblock %}
 
 	</head>
-	<body {% if request.args.get('debug') %}class="debug"{% endif %}>
+	<body {% if config.DEBUG %}class="debug"{% endif %}>
 
 		{% if request.endpoint != "index" %}
 			<header>
@@ -29,19 +28,11 @@
 
 		{% block body %}{% endblock %}
 
-
 		{% assets "js_all" %}
 			<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 		{% endassets %}
 
 		{% block footer %}{% endblock %}
-
-		{% if request.args.get('debug') %}
-			<form class="debug-delete-matches" action="/matches/delete" method="POST">
-				<button class="btn btn-danger">Delete Matches</button>
-			</form>
-			<iframe src="/buttons" class="debug-button-panel"></iframe>
-		{% endif %}
 
 	</body>
 </html>

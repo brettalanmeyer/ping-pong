@@ -3,10 +3,12 @@
 	src: url("/static/fonts/digital-7.ttf");
 }
 
-html,
-body {
-	width: 100%;
+html {
 	height: 100%;
+}
+
+body {
+	min-height: 100%;
 }
 
 body {

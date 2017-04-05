@@ -35,11 +35,6 @@ def matches_create():
 
 	return redirect("/matches/%d/num-of-games" % match.id)
 
-@app.route("/matches/delete", methods = ["POST"])
-def matches_delete():
-	matchService.deleteAll()
-	return redirect("/?debug=true")
-
 @app.route("/matches/<int:id>/num-of-games", methods = ["GET"])
 def matches_games(id):
 	match = matchService.selectById(id)
