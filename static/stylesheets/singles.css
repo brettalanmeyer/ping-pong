@@ -96,10 +96,11 @@
 	font-size: 18px;
 	width: 60%;
 	margin: 15px auto 0;
+	table-layout: fixed;
 }
 
 .set-scores td:first-child {
-	width: 450px;
+	padding-right: 100px;
 }
 
 .set-score {

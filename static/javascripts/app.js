@@ -1,6 +1,6 @@
 $(function(){
 
-	$("#leaderboard").stupidtable();
+	$(".table-sortable").stupidtable();
 
 	$(".leaderboard-player-container .nav-tabs li").on("click", function(){
 		$(".leaderboard-player-container .nav-tabs li").removeClass("active");

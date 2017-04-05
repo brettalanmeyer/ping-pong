@@ -62,6 +62,10 @@ a.action {
 	margin-top: 15px;
 }
 
+a.link {
+	color: #337ab7;
+}
+
 .table > tbody > tr > td {
 	vertical-align: middle;
 }

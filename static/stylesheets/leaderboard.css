@@ -1,26 +1,3 @@
-.leaderboard-container .table th {
-	cursor: pointer;
-	position: relative;
-}
-
-.leaderboard-container .table .sorting-container {
-	display: inline-block;
-	font-size: 10px;
-	position: relative;
-	top: 4px;
-	left: 4px;
-}
-
-.leaderboard-container .table .glyphicon {
-	color: #aaa;
-	display: block;
-}
-
-.leaderboard-container .table .sorting-asc .glyphicon-chevron-up,
-.leaderboard-container .table .sorting-desc .glyphicon-chevron-down {
-	color: #333
-}
-
 .leaderboard-player-container {
 	width: 800px;
 	margin: auto;
@@ -44,4 +21,31 @@
 	border-bottom-color: transparent;
 	background: #fff;
 	padding: 8px;
+}
+
+.table.table-sortable {
+	table-layout: fixed;
+}
+
+.table.table-sortable th {
+	cursor: pointer;
+	position: relative;
+}
+
+.table.table-sortable .sorting-container {
+	display: inline-block;
+	font-size: 10px;
+	position: relative;
+	top: 4px;
+	left: 4px;
+}
+
+.table.table-sortable .glyphicon {
+	color: #aaa;
+	display: block;
+}
+
+.table.table-sortable .sorting-asc .glyphicon-chevron-up,
+.table.table-sortable .sorting-desc .glyphicon-chevron-down {
+	color: #333
 }
