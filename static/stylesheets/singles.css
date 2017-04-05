@@ -100,7 +100,7 @@
 }
 
 .set-scores td:first-child {
-	padding-right: 100px;
+	width: 330px;
 }
 
 .set-score {
