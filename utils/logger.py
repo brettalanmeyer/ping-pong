@@ -1,5 +1,5 @@
 import logging, re
-from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler
 
 ACCESS_LEVEL = 60
 
