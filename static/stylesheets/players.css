@@ -12,8 +12,9 @@
 	display: none;
 }
 
+
 .player-selector-container .player-list .player .glyphicon {
-	display: none;
+	visibility: hidden;
 }
 
 .player-selector-container .player-list .player.active {
@@ -21,10 +22,20 @@
 }
 
 .player-selector-container .player-list .player.active .glyphicon {
-	display: inline-block;
+	visibility: visible;
 }
 
 .player-selector-container .players-form-play {
 	margin-top: 16px;
 	font-size: 24px;
+}
+
+.player-selector-container .player-list-columns {
+	column-count: 2;
+}
+
+.player-selector-container .player-list-columns .player {
+	break-inside: avoid-column;
+	margin: 4px 0;
+	padding: 8px 0 8px 23px;
 }

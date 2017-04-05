@@ -21,7 +21,7 @@ class PlayerService(Service.Service):
 	def	selectActive(self):
 		app.logger.info("Selecting active players")
 
-		return self.session.query(self.model).filter(self.model.enabled == 1)
+		return self.session.query(self.model).filter(self.model.enabled == 1).order_by(self.model.name)
 
 	def selectByName(self, name):
 		app.logger.info("Selecting player by name=%s", name)

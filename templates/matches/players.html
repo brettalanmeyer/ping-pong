@@ -19,13 +19,17 @@
 
 		<form id="players-list" class="player-list" action="/matches/{{ match.id }}/players" method="POST">
 
-			{% for player in players %}
-				<button class="btn btn-default btn-lg btn-block player">
-					{{ player.name }}
-					<span class="glyphicon glyphicon-ok"></span>
-					<input type="checkbox" name="playerId" value="{{ player.id }}" />
-				</button>
-			{% endfor %}
+			<div class="player-list-columns">
+
+				{% for player in players %}
+					<button class="btn btn-default btn-lg btn-block player">
+						{{ player.name }}
+						<span class="glyphicon glyphicon-ok"></span>
+						<input type="checkbox" name="playerId" value="{{ player.id }}" />
+					</button>
+				{% endfor %}
+
+			</div>
 
 			<button id="players-form-play" class="hidden players-form-play btn btn-lg btn-block btn-primary">Play</button>
 
