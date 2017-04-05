@@ -10,7 +10,7 @@
 
 			<h1>Leaderboard - {{ player.name }}</h1>
 
-			<table class="table">
+			<table class="table player-table">
 
 				<thead>
 
@@ -60,20 +60,60 @@
 
 			{% for item in matchTypes %}
 
-				<table class="table opponent-table hidden" data-matchtype="{{ item }}">
+				<table class="table opponent-table table-sortable hidden" data-matchtype="{{ item }}">
 
 					<thead>
 
 						<tr>
-
-							<th>Opponent</th>
-							<th>Matches</th>
-							<th>Win %</td>
-							<th>Points</th>
-							<th>Opponent Points</th>
-							<th>Wins</th>
-							<th>Opponent Wins</th>
-
+							<th data-sort="string">
+								Opponent
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+							<th data-sort="int">
+								Matches
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+							<th data-sort="float">
+								Win %
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</td>
+							<th data-sort="int">
+								Points
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+							<th data-sort="int">
+								Opp Points
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+							<th data-sort="int">
+								Wins
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+							<th data-sort="int">
+								Opp Wins
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
 						</tr>
 
 					</thead>
@@ -83,13 +123,15 @@
 						{% for matchup in stats[item].matchups %}
 
 							<tr class="matchup">
-								<td>{{ matchup.playerName }}</td>
-								<td>{{ matchup.numOfMatches }}</td>
-								<td>{{ "{:.3f}".format(matchup.percentage) }}</td>
-								<td>{{ matchup.pointsFor }}</td>
-								<td>{{ matchup.pointsAgainst }}</td>
-								<td>{{ matchup.wins }}</td>
-								<td>{{ matchup.losses }}</td>
+								<td data-sort-value="{{ matchup.playerName }}">
+									<a href="/leaderboard/players/{{ matchup.playerId }}" class="link">{{ matchup.playerName }}</a>
+								</td>
+								<td data-sort-value="{{ matchup.numOfMatches }}">{{ matchup.numOfMatches }}</td>
+								<td data-sort-value="{{ matchup.percentage }}">{{ "{:.3f}".format(matchup.percentage) }}</td>
+								<td data-sort-value="{{ matchup.pointsFor }}">{{ matchup.pointsFor }}</td>
+								<td data-sort-value="{{ matchup.pointsAgainst }}">{{ matchup.pointsAgainst }}</td>
+								<td data-sort-value="{{ matchup.wins }}">{{ matchup.wins }}</td>
+								<td data-sort-value="{{ matchup.losses }}">{{ matchup.losses }}</td>
 							</tr>
 
 						{% endfor %}

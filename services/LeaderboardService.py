@@ -19,6 +19,7 @@ class LeaderboardService(Service.Service):
 		times = self.times(matchType)
 		pointsFor = self.pointsForByMatchType(matchType)
 		pointsAgainst = self.pointsAgainstByMatchType(pointsFor, matchType)
+		streakData = self.selectMatchScoresByMatchType(matchType)
 
 		stats = {
 			"labels": self.labels(),
@@ -38,7 +39,8 @@ class LeaderboardService(Service.Service):
 				"wins": matches[player.id]["wins"] if player.id in matches else 0,
 				"losses": matches[player.id]["losses"] if player.id in matches else 0,
 				"seconds": times[player.id] if player.id in matches else 0,
-				"time": self.formatTime(times[player.id]) if player.id in times else 0
+				"time": self.formatTime(times[player.id]) if player.id in times else 0,
+				"longestStreak": self.streakByPlayer(streakData, player.id)
 			})
 
 		stats["totals"] = self.totals(stats["rows"])
@@ -121,6 +123,9 @@ class LeaderboardService(Service.Service):
 		}, {
 			"sort": "int",
 			"name": "Losses"
+		}, {
+			"sort": "int",
+			"name": "Longest Streak"
 		}]
 
 	def matchesByMatchType(self, matchType):
@@ -421,8 +426,64 @@ class LeaderboardService(Service.Service):
 				)\
 			GROUP BY players.id, matches.matchType\
 		"
+
 		connection = self.session.connection()
 		return connection.execute(text(query), playerId = playerId)
+
+	def streakByPlayer(self, streakData, playerId):
+		currentStreak = -1
+		longestStreak = -1
+
+		matchId = None
+		game = None
+
+		for item in streakData:
+			if matchId != item["matchId"]:
+				matchId = item["matchId"]
+				currentStreak = -1
+			if game != item["game"]:
+				game = item["game"]
+				currentStreak = -1
+			if playerId not in item["playerIds"]:
+				currentStreak = -1
+
+			currentStreak += 1
+
+			if playerId == 38 and currentStreak > longestStreak:
+				print("matchId:" + str(item["matchId"]))
+				print("teamId:" + str(item["teamId"]))
+				print("streak:" + str(currentStreak))
+
+			longestStreak = max(currentStreak, longestStreak)
+
+		return longestStreak
+
+	def selectMatchScoresByMatchType(self, matchType):
+		query = "\
+			SELECT scores.id, scores.matchId, scores.teamId, scores.game, matches.matchType, group_concat(teams_players.playerId) as playerIds\
+			FROM scores\
+			LEFT JOIN teams_players ON scores.teamId = teams_players.teamId\
+			LEFT JOIN matches ON scores.matchId = matches.id\
+			WHERE matches.complete = 1 AND matches.matchType = :matchType\
+			GROUP BY scores.id\
+		"
+
+		connection = self.session.connection()
+		results = connection.execute(text(query), matchType = matchType)
+
+		data = []
+
+		for row in results:
+			data.append({
+				"id": row.id,
+				"matchId": row.matchId,
+				"teamId": row.teamId,
+				"game": row.game,
+				"matchType": row.matchType,
+				"playerIds": map(int, row.playerIds.split(","))
+			})
+
+		return data
 
 	def formatTime(self, seconds):
 		m, s = divmod(seconds, 60)
