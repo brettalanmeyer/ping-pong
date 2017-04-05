@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, redirect, request, abort
+from flask import Flask, render_template, Response, redirect, request, abort, send_from_directory
 from flask_socketio import SocketIO, emit
 import json
 from utils import database, logger, assets
@@ -243,6 +243,10 @@ def buttons_delete_scores(button):
 		data = getMatchType(match).matchData(match)
 	socketio.emit("response", data, broadcast = True)
 	return button
+
+@app.route("/favicon.ico")
+def favicon():
+	return send_from_directory("{}/static/images".format(app.root_path), "ping-pong-icon.png", mimetype = "image/vnd.microsoft.icon")
 
 @app.before_request
 def beforeRequest():
