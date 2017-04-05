@@ -53,27 +53,31 @@ class LeaderboardService(Service.Service):
 
 		stats = {
 			"playerId": player.id,
-			"playerName": player.name,
-			"singles": {},
-			"doubles": {},
-			"nines": {}
+			"playerName": player.name
 		}
 
-		stats["singles"] = matches["singles"]
-		stats["doubles"] = matches["doubles"]
-		stats["nines"] = matches["nines"]
+		for matchType in self.matchTypes:
+			stats[matchType] = {
+				"matches": 0,
+				"wins": 0,
+				"losses": 0,
+				"percentage": 0,
+				"pointsFor": 0,
+				"pointsAgainst": 0,
+				"matchups": []
+			}
 
-		stats["singles"]["pointsFor"] = pointsFor["singles"]
-		stats["doubles"]["pointsFor"] = pointsFor["doubles"]
-		stats["nines"]["pointsFor"] = pointsFor["nines"]
+			if matchType in matches:
+				stats[matchType]["matches"] = matches[matchType]["matches"]
+				stats[matchType]["wins"] = matches[matchType]["wins"]
+				stats[matchType]["losses"] = matches[matchType]["losses"]
+				stats[matchType]["percentage"] = matches[matchType]["percentage"]
 
-		stats["singles"]["pointsAgainst"] = pointsAgainst["singles"]
-		stats["doubles"]["pointsAgainst"] = pointsAgainst["doubles"]
-		stats["nines"]["pointsAgainst"] = pointsAgainst["nines"]
+			if matchType in pointsFor:
+				stats[matchType]["pointsFor"] = pointsFor[matchType]
 
-		stats["singles"]["matchups"] = []
-		stats["doubles"]["matchups"] = []
-		stats["nines"]["matchups"] = []
+			if matchType in pointsAgainst:
+				stats[matchType]["pointsAgainst"] = pointsAgainst[matchType]
 
 		results = self.matchups(player.id)
 
