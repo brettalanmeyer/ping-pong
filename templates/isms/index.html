@@ -28,18 +28,6 @@
 						</td>
 						<td>{{ ism.saying }}</td>
 
-						<td>
-							{% if ism.file != None %}
-								<button class="btn btn-default btn-sm play-ism">
-									<span class="glyphicon glyphicon-play"></span>
-
-									<audio preload="none">
-										<source src="/static/isms/{{ ism.file }}" type="audio/mpeg">
-									</audio>
-								</button>
-							{% endif %}
-						</td>
-
 						<td width="1">
 							<a href="/isms/{{ ism.id }}/edit" class="btn btn-default btn-sm">
 								<span class="glyphicon glyphicon-pencil"></span>

@@ -167,6 +167,23 @@ a.link {
 	font-size: 12px;
 }
 
+.ism-container {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 40px 10px;
+	background: rgba(240, 240, 240, 0.8);
+	font-size: 120px;
+	text-align: center;
+	display: none;
+}
+
+.ism-container.long {
+	font-size: 90px;
+	padding: 60px 10px;
+}
+
 @media (min-width: 768px) {
 	.container {
 		width: 750px;

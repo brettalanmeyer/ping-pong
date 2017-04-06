@@ -12,14 +12,6 @@ $(function(){
 		$(".leaderboard-player-container .opponent-table[data-matchtype=" + source.data("matchtype") + "]").removeClass("hidden");
 	}).first().trigger("click");
 
-	if($("#matches-new").length > 0){
-		new Audio("/static/audio/bonus-game-match.wav").play();
-	}
-
-	if($("#matches-num-of-games").length > 0){
-		new Audio("/static/audio/spring-jump.wav").play();
-	}
-
 	$("form.action-delete").on("submit", function(){
 		return confirm("Are you sure you want to delete this?");
 	});

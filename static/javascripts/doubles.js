@@ -10,10 +10,6 @@ $(function(){
 		var colors = ["green", "yellow", "blue", "red"];
 		var teams = ["north", "south"];
 
-		var doublesAudio = new Audio("/static/audio/multi-player-start.wav").play();
-		var scoreAudio = new Audio("/static/audio/coin.wav");
-		var undoAudio = new Audio("/static/audio/picking-up.wav");
-
 		var playerNames = {
 			green: $("[data-color=green][data-var=name"),
 			yellow: $("[data-color=yellow][data-var=name"),
@@ -50,19 +46,10 @@ $(function(){
 				}
 			}
 
-			var isScore = false;
-			var isUndo = false;
-
 			for(var i in teams){
 				var team = teams[i];
 				var previousScore = parseInt(scores[team].html());
 				var nextScore = parseInt(data.teams[team].points);
-
-				if(nextScore > previousScore){
-					isScore = true;
-				} else if(nextScore < previousScore){
-					isUndo = true;
-				}
 
 				scores[team].html(pad(data.teams[team].points));
 				if(previousScore != nextScore){
@@ -74,14 +61,6 @@ $(function(){
 					scores[side].removeClass("scored");
 				}
 			}, 2000);
-
-			if(isScore){
-				scoreAudio.currentTime = 0;
-				scoreAudio.play();
-			} else if(isUndo){
-				undoAudio.currentTime = 0;
-				undoAudio.play();
-			}
 
 			for(var side in data.teams){
 				var team = data.teams[side];

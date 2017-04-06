@@ -7,14 +7,10 @@ $(function(){
 		var numOfPlayers = parseInt($("#numOfPlayers").val());
 		var numOfTeams = parseInt($("#numOfTeams").val());
 
-		var introSound = new Audio("/static/audio/boing.wav").play();
-		var selectSound = new Audio("/static/audio/picking-up.wav");
-
 		players.on("click", function(){
 			var source = $(this);
 			select(source);
 			checkLimit();
-			playSound();
 			return false;
 		});
 
@@ -31,11 +27,6 @@ $(function(){
 				players.attr("disabled", false);
 				play.addClass("hidden");
 			}
-		}
-
-		function playSound(){
-			selectSound.currentTime = 0;
-			selectSound.play();
 		}
 
 	}

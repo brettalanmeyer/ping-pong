@@ -66,8 +66,7 @@ def matches(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
 	data = matchType.matchData(match)
-	isms = ismService.select()
-	return render_template(data["template"], data = data, isms = ismService.serialize(isms))
+	return render_template(data["template"], data = data)
 
 @app.route("/matches/<int:id>.json", methods = ["GET"])
 def matches_json(id):
@@ -141,6 +140,11 @@ def players_update(id):
 @app.route("/isms", methods = ["GET"])
 def isms():
 	return render_template("isms/index.html", isms = ismService.select())
+
+@app.route("/isms.json", methods = ["GET"])
+def isms_json():
+	isms = ismService.select()
+	return Response(ismService.serialize(isms), status = 200, mimetype = "application/json")
 
 @app.route("/isms/new", methods = ["GET"])
 def isms_new():

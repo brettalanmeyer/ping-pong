@@ -23,18 +23,11 @@ $(function(){
 			yellow: $("[data-color=yellow][data-var=score")
 		};
 
-		var singlesAudio = new Audio("/static/audio/multi-player-start.wav").play();
-		var scoreAudio = new Audio("/static/audio/coin.wav");
-		var undoAudio = new Audio("/static/audio/picking-up.wav");
-
 		function update(data){
 			if(data == null) return;
 			if(data.matchType != "singles") return;
 
 			set.html(data.game);
-
-			var isScore = false;
-			var isUndo = false;
 
 			for(var i in colors){
 				var color = colors[i];
@@ -49,12 +42,6 @@ $(function(){
 				var previousScore = parseInt(scores[color].html());
 				var nextScore = parseInt(data.teams[color].points);
 
-				if(nextScore > previousScore){
-					isScore = true;
-				} else if(nextScore < previousScore){
-					isUndo = true;
-				}
-
 				scores[color].html(pad(data.teams[color].points));
 				if(previousScore != nextScore){
 					scores[color].parent(".score-board").addClass("scored");
@@ -66,14 +53,6 @@ $(function(){
 					scores[color].parent(".score-board").removeClass("scored");
 				}
 			}, 2000);
-
-			if(isScore){
-				scoreAudio.currentTime = 0;
-				scoreAudio.play();
-			} else if(isUndo){
-				undoAudio.currentTime = 0;
-				undoAudio.play();
-			}
 
 			for(var color in data.teams){
 				var team = data.teams[color];

@@ -1,24 +1,5 @@
-$(function(){
-
-	if($("#isms").length > 0){
-
-		$("button.play-ism").on("click", function(){
-
-			var source = $(this);
-			var icon = source.find(".glyphicon")
-			icon.removeClass("glyphicon-play").addClass("glyphicon-pause");
-
-			var audio = source.find("audio")[0];
-			audio.play();
-
-			audio.onended = function(){
-				icon.removeClass("glyphicon-pause").addClass("glyphicon-play");
-			};
-		});
-
-	}
-
-});
+var isms = [];
+var ismContainer;
 
 function sayings(left, right){
 	shuffle(isms);
@@ -27,11 +8,30 @@ function sayings(left, right){
 		ism = isms[i];
 
 		if(ism.left == left && ism.right == right){
-			// allow game sounds to finish first
-			setTimeout(function(){
-				new Audio("/static/isms/" + ism.file).play();
-			}, 500);
+			if(ism.saying.length > 25){
+				ismContainer.addClass("long");
+			}
+
+			ismContainer.html(ism.saying);
+			ismContainer.stop(true, true).fadeIn("slow").delay(2000).fadeOut("slow").removeClass("long");
 			break;
 		}
 	}
 }
+
+$(function(){
+
+	if($("#singles").length > 0 || $("#doubles").length > 0){
+
+		ismContainer = $("<div />").addClass("ism-container").html("Jet Fuel Can't Melt Steel Beamz");
+		$("body").append(ismContainer);
+
+		if(isms.length == 0){
+			$.get("/isms.json").done(function(data){
+				isms = data;
+			});
+		}
+
+	}
+
+});

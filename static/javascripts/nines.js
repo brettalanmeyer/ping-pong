@@ -10,10 +10,6 @@ $(function(){
 		var scores = {};
 		var boards = {};
 
-		var ninesAudio = new Audio("/static/audio/multi-player-start.wav").play();
-		var scoreAudio = new Audio("/static/audio/bump.wav");
-		var undoAudio = new Audio("/static/audio/coin.wav");
-
 		for(var i = 0; i < colors.length; i++){
 			var color = colors[i];
 
@@ -34,20 +30,11 @@ $(function(){
 				$("#play-again").removeClass("hidden");
 			}
 
-			var isScore = false;
-			var isUndo = false;
-
 			for(var i = 0; i < colors.length; i++){
 				var color = colors[i];
 
 				var previousScore = parseInt(scores[color].html());
 				var nextScore = data.players[color].points;
-
-				if(nextScore > previousScore){
-					isScore = true;
-				} else if(nextScore < previousScore){
-					isUndo = true;
-				}
 
 				playerNames[color].html(data.players[color].playerName);
 				scores[color].html(data.players[color].points);
@@ -63,14 +50,6 @@ $(function(){
 					playerNames[color].removeClass("scored");
 				}
 			}, 2000);
-
-			if(isScore){
-				scoreAudio.currentTime = 0;
-				scoreAudio.play();
-			} else if(isUndo){
-				undoAudio.currentTime = 0;
-				undoAudio.play();
-			}
 		}
 	}
 
