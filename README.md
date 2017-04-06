@@ -2,7 +2,33 @@
 
 ## Installation
 
-Install dependencies by running `sudo pip install -r requirements.txt`
+Update Server
+
+	`sudo apt-get update`
+
+Install git
+
+	`sudo apt-get install git`
+
+Install mysql
+
+	`sudo apt-get install mysql-server`
+	`sudo nano /etc/mysql/my.cnf`
+		bind-address = LOCALMACHINEIP
+
+
+Virtual Box
+	`sudo apt-get install virtualbox-guest-dkms`
+	`sudo gpasswd -a <linux-username> vboxsf`
+
+Install pip
+
+	`sudo apt-get install python-pip python-dev build-essential`
+	`sudo pip install --upgrade pip`
+	`sudo pip install --upgrade virtualenv`
+	`sudo apt-get install libmysqlclient-dev`
+
+Install app dependencies by running `sudo pip install -r requirements.txt`
 
 ## Configuration
 
