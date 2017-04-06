@@ -2,12 +2,27 @@
 <html>
 	<head>
 		<title>Audio Test</title>
+		<style>
+
+			pre {
+				float: right;
+				width: 300px;
+				height: 400px;
+				border: solid 1px #ccc;
+				padding: 4px;
+				border-radius: 4px;
+				overflow-y: auto;
+			}
+
+		</style>
 	</head>
 	<body>
 
+		<pre id="pre" style=""></pre>
+
 		<h1>Audio Test</h1>
 
-		<audio controls>
+		<audio id="audio" controls>
 			<source src="/static/audio/coin.wav" type="audio/wav">
 			Your browser does not support the audio element.
 		</audio>
@@ -27,22 +42,30 @@
 
 		<script>
 
+			var pre = document.getElementById("pre");
+
+			function log(msg){
+				pre.innerHTML = pre.innerHTML + msg + "\n";
+				pre.scrollTop = pre.scrollHeight;
+			}
+
 			if(confirm("play background audio?")){
 				var backgroundAudio = new Audio("/static/audio/multi-player-start.wav");
 				backgroundAudio.volume = 0;
 
-				console.log("play");
+				log("playing background audio at 0 volume");
 				backgroundAudio.play();
 
 				backgroundAudio.onended = function(){
 					backgroundAudio.play();
-					console.log("replay");
+					log("replaying muted audio");
 				};
 			}
 
 			var jsCoin = new Audio("/static/audio/coin.wav");
 			var playJs = document.getElementById("play-js-audio");
 			playJs.addEventListener("click", function(){
+				log("playing audio using <em>Audio()</em>");
 				jsCoin.currentTime = 0;
 				jsCoin.play();
 			});
@@ -50,8 +73,13 @@
 			var htmlCoin = document.getElementById("html-audio");
 			var playHtml = document.getElementById("play-html-audio");
 			playHtml.addEventListener("click", function(){
+				log("playing audio using <em>&lt;audio&gt;</em>");
 				htmlCoin.currentTime = 0;
 				htmlCoin.play();
+			});
+
+			document.getElementById("audio").addEventListener("play", function(){
+				log("playing audio using <em>native html5 controls</em>");
 			});
 
 		</script>
