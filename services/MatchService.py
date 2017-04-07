@@ -2,6 +2,7 @@ import Service
 from models import MatchModel, TeamModel, GameModel
 from datetime import datetime
 from flask import current_app as app
+from sqlalchemy import or_
 
 class MatchService(Service.Service):
 
@@ -24,14 +25,14 @@ class MatchService(Service.Service):
 		return self.session.query(self.model)
 
 	def selectComplete(self):
-		app.logger.info("Selecting ready for play matches")
+		app.logger.info("Selecting copmleted matches")
 
 		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc())
 
-	def selectIncomplete(self):
-		app.logger.info("Selecting incomplete matches")
+	def selectCompleteOrReady(self):
+		app.logger.info("Selecting complete or ready for play matches")
 
-		return self.session.query(self.model).filter(self.model.complete == False).order_by(self.model.id.desc())
+		return self.session.query(self.model).filter(or_(self.model.complete == True, self.model.ready == True)).order_by(self.model.id.desc())
 
 	def selectActiveMatch(self):
 		app.logger.info("Selecting active match")

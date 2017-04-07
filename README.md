@@ -57,7 +57,6 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
-Remove audio
 ELO rating system
 Fix doubles opponent stats
 
