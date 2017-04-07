@@ -19,7 +19,13 @@ def index():
 @app.route("/matches/page/<int:page>", methods = ["GET"])
 def matches_index(page):
 	matches = pagingService.pager(matchService.selectComplete(), page)
-	return render_template("matches/index.html", matches = matches, paging = pagingService.data())
+	return render_template("matches/index.html", matches = matches, url = "/matches/page", paging = pagingService.data())
+
+@app.route("/matches/incomplete", methods = ["GET"], defaults = { "page": 1 })
+@app.route("/matches/incomplete/page/<int:page>", methods = ["GET"])
+def matches_incomplete(page):
+	matches = pagingService.pager(matchService.selectIncomplete(), page)
+	return render_template("matches/index.html", matches = matches, url = "/matches/incomplete/page", paging = pagingService.data(),)
 
 @app.route("/matches/new", methods = ["GET"])
 def matches_new():

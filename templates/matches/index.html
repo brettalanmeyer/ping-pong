@@ -5,11 +5,20 @@
 
 {% block body %}
 
-	<div class="container">
+	<div class="container matches-container">
 
 		<h1>Previous Matches</h1>
 
-		<table class="table previous-matches">
+		<ul class="nav nav-tabs">
+			<li role="presentation" class="{% if request.endpoint == 'matches_index' %}active{% endif %}">
+				<a href="/matches">Complete</a>
+			</li>
+			<li role="presentation" class="{% if request.endpoint == 'matches_incomplete' %}active{% endif %}">
+				<a href="/matches/incomplete">Incomplete</a>
+			</li>
+		</ul>
+
+		<table class="table">
 
 			<thead>
 
@@ -100,7 +109,7 @@
 
 		</table>
 
-		{% with url = "/matches/page", paging = paging %}
+		{% with url = url, paging = paging %}
 			{% include 'partials/pagination.html' %}
 		{% endwith %}
 

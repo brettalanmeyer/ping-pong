@@ -28,6 +28,11 @@ class MatchService(Service.Service):
 
 		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc())
 
+	def selectIncomplete(self):
+		app.logger.info("Selecting incomplete matches")
+
+		return self.session.query(self.model).filter(self.model.complete == False).order_by(self.model.id.desc())
+
 	def selectActiveMatch(self):
 		app.logger.info("Selecting active match")
 
