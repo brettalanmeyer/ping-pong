@@ -1,0 +1,10 @@
+
+<td data-sort-value="{{ value }}" class="win-streak">
+	{% if value > 0 %}
+		<span class="win-streak-positive">+{{ value }}</span>
+	{% elif value < 0 %}
+		<span class="win-streak-negative">{{ value }}</span>
+	{% else %}
+		<span class="win-streak-neutral">{{ value }}</span>
+	{% endif %}
+</td>

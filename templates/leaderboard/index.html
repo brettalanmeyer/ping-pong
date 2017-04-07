@@ -24,17 +24,83 @@
 
 					<tr>
 
-						{% for label in stats.labels %}
+						<th data-sort="string">
+							Player
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
 
-							<th data-sort="{{ label.sort }}">
-								{{ label.name }}
-								<div class="sorting-container">
-									<span class="glyphicon glyphicon-chevron-up"></span>
-									<span class="glyphicon glyphicon-chevron-down"></span>
-								</div>
-							</th>
 
-						{% endfor %}
+						<th data-sort="int">
+							Matches
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+
+						<th data-sort="float">
+							Win %
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+
+						<th data-sort="int">
+							Points For
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+
+						<th data-sort="int">
+							Points Against
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+						<th data-sort="int">
+							Wins
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+
+						<th data-sort="int">
+							Losses
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+
+						<th data-sort="int">
+							Point Streak
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+						<th data-sort="int">
+							Current Wins
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
 
 					</tr>
 
@@ -55,7 +121,10 @@
 							<td data-sort-value="{{ row.pointsAgainst }}">{{ "{:,}".format(row.pointsAgainst) }}</td>
 							<td data-sort-value="{{ row.wins }}">{{ row.wins }}</td>
 							<td data-sort-value="{{ row.losses }}">{{ row.losses }}</td>
-							<td data-sort-value="{{ row.longestStreak }}">{{ row.longestStreak }}</td>
+							<td data-sort-value="{{ row.pointStreak }}">{{ row.pointStreak }}</td>
+							{% with value = row.winStreak %}
+								{% include 'leaderboard/win-streak.html' %}
+							{% endwith %}
 
 						</tr>
 
@@ -74,6 +143,7 @@
 						<th>{{ stats.totals["pointsAgainst"] }}</th>
 						<th>{{ stats.totals["wins"] }}</th>
 						<th>{{ stats.totals["losses"] }}</th>
+						<td></td>
 
 					</tr>
 

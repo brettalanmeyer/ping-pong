@@ -19,10 +19,10 @@ class LeaderboardService(Service.Service):
 		times = self.times(matchType)
 		pointsFor = self.pointsForByMatchType(matchType)
 		pointsAgainst = self.pointsAgainstByMatchType(pointsFor, matchType)
-		streakData = self.selectMatchScoresByMatchType(matchType)
+		pointStreakData = self.selectMatchScoresByMatchType(matchType)
+		winStreakData = self.selectTeamResultsByMatchType(matchType)
 
 		stats = {
-			"labels": self.labels(),
 			"matchType": matchType,
 			"rows": [],
 			"totals": {}
@@ -40,7 +40,8 @@ class LeaderboardService(Service.Service):
 				"losses": matches[player.id]["losses"] if player.id in matches else 0,
 				"seconds": times[player.id] if player.id in matches else 0,
 				"time": self.formatTime(times[player.id]) if player.id in times else 0,
-				"longestStreak": self.streakByPlayer(streakData, player.id)
+				"pointStreak": self.pointStreakByPlayer(pointStreakData, player.id),
+				"winStreak": self.winStreakByPlayer(winStreakData, player.id)
 			})
 
 		stats["totals"] = self.totals(stats["rows"])
@@ -52,6 +53,7 @@ class LeaderboardService(Service.Service):
 		matches = self.matchesByPlayer(player.id)
 		pointsFor = self.pointsForByPlayer(player.id)
 		pointsAgainst = self.pointsAgainstByPlayer(pointsFor, player.id)
+		winStreakData = self.selectTeamResultsByPlayer(player.id)
 
 		stats = {
 			"playerId": player.id,
@@ -66,7 +68,8 @@ class LeaderboardService(Service.Service):
 				"percentage": 0,
 				"pointsFor": 0,
 				"pointsAgainst": 0,
-				"matchups": []
+				"matchups": [],
+				"winStreak": self.winStreakByMatchType(winStreakData, matchType)
 			}
 
 			if matchType in matches:
@@ -86,6 +89,7 @@ class LeaderboardService(Service.Service):
 		for result in results:
 			pointsFor = self.pointsForByOpponent(player.id, result.playerId)
 			pointsAgainst = self.pointsAgainstByOpponent(pointsFor, player.id, result.playerId)
+			winStreakData = self.selectTeamResultsByOpponent(player.id, result.playerId)
 
 			# points and win/loss are inverted because these stats show the player vs this opponent
 			stats[result.matchType]["matchups"].append({
@@ -96,37 +100,11 @@ class LeaderboardService(Service.Service):
 				"pointsAgainst": pointsFor[result.matchType],
 				"wins": int(result.losses),
 				"losses": int(result.wins),
-				"percentage": float(result.losses) / float(result.numOfMatches) * 100
+				"percentage": float(result.losses) / float(result.numOfMatches) * 100,
+				"winStreak": winStreakData[result.matchType]
 			})
 
 		return stats
-
-	def labels(self):
-		return [{
-			"sort": "string",
-			"name": "Player"
-		}, {
-			"sort": "int",
-			"name": "Matches"
-		}, {
-			"sort": "float",
-			"name": "Win %"
-		}, {
-			"sort": "int",
-			"name": "Points For"
-		}, {
-			"sort": "int",
-			"name": "Points Against"
-		}, {
-			"sort": "int",
-			"name": "Wins"
-		}, {
-			"sort": "int",
-			"name": "Losses"
-		}, {
-			"sort": "int",
-			"name": "Longest Streak"
-		}]
 
 	def matchesByMatchType(self, matchType):
 		query = "\
@@ -374,6 +352,48 @@ class LeaderboardService(Service.Service):
 
 		return data
 
+	def selectTeamResultsByOpponent(self, playerId, opponentId):
+		query = "\
+			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
+			FROM teams\
+			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+			LEFT JOIN matches ON teams.matchId = matches.id\
+			WHERE matches.complete = 1 AND teams_players.playerId = :opponentId\
+				AND matches.id IN (\
+					SELECT matches.id AS matchIds\
+					FROM matches\
+					LEFT JOIN teams ON matches.id = teams.matchId\
+					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+					WHERE teams_players.playerId = :playerId\
+						AND matches.complete = 1\
+				)\
+			GROUP BY teams.id\
+			ORDER BY matches.matchType, teams.id DESC\
+		"
+
+		connection = self.session.connection()
+		results = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
+
+		data = []
+
+		for row in results:
+			data.append({
+				"id": row.id,
+				"win": row.win,
+				"matchType": row.matchType,
+				"playerIds": map(int, row.playerIds.split(","))
+			})
+
+		streaks = {}
+		for matchType in self.matchTypes:
+			streaks[matchType] = self.winStreakByMatchType(data, matchType)
+
+			# invert due to opponent's streak
+			if matchType != "nines":
+				streaks[matchType] *= -1
+
+		return streaks
+
 	def totals(self, rows):
 		totals = {
 			"matches": 0,
@@ -430,7 +450,7 @@ class LeaderboardService(Service.Service):
 		connection = self.session.connection()
 		return connection.execute(text(query), playerId = playerId)
 
-	def streakByPlayer(self, streakData, playerId):
+	def pointStreakByPlayer(self, streakData, playerId):
 		currentStreak = -1
 		longestStreak = -1
 
@@ -449,14 +469,55 @@ class LeaderboardService(Service.Service):
 
 			currentStreak += 1
 
-			if playerId == 38 and currentStreak > longestStreak:
-				print("matchId:" + str(item["matchId"]))
-				print("teamId:" + str(item["teamId"]))
-				print("streak:" + str(currentStreak))
-
 			longestStreak = max(currentStreak, longestStreak)
 
 		return longestStreak
+
+	def winStreakByPlayer(self, streakData, playerId):
+
+		streak = 0
+		value = None
+
+		for item in streakData:
+			if playerId not in item["playerIds"]:
+				continue
+
+			if value == None:
+				value = item["win"]
+				streak = 1 if value == 1 else -1
+				continue
+
+			if value == 1 and item["win"] == 1:
+				streak += 1
+			elif value == 0 and item["win"] == 0:
+				streak -= 1
+			elif value != item["win"]:
+				return streak
+
+		return streak
+
+	def winStreakByMatchType(self, streakData, matchType):
+
+		streak = 0
+		value = None
+
+		for item in streakData:
+			if item["matchType"] != matchType:
+				continue
+
+			if value == None:
+				value = item["win"]
+				streak = 1 if value == 1 else -1
+				continue
+
+			if value == 1 and item["win"] == 1:
+				streak += 1
+			elif value == 0 and item["win"] == 0:
+				streak -= 1
+			elif value != item["win"]:
+				return streak
+
+		return streak
 
 	def selectMatchScoresByMatchType(self, matchType):
 		query = "\
@@ -479,6 +540,57 @@ class LeaderboardService(Service.Service):
 				"matchId": row.matchId,
 				"teamId": row.teamId,
 				"game": row.game,
+				"matchType": row.matchType,
+				"playerIds": map(int, row.playerIds.split(","))
+			})
+
+		return data
+
+	def selectTeamResultsByMatchType(self, matchType):
+		query  = "\
+			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
+			FROM teams\
+			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+			LEFT JOIN matches ON teams.matchId = matches.id\
+			WHERE matches.matchType = :matchType AND matches.complete = 1\
+			GROUP BY teams.id\
+			ORDER BY teams.id DESC\
+		"
+
+		connection = self.session.connection()
+		results = connection.execute(text(query), matchType = matchType)
+
+		data = []
+
+		for row in results:
+			data.append({
+				"id": row.id,
+				"win": row.win,
+				"matchType": row.matchType,
+				"playerIds": map(int, row.playerIds.split(","))
+			})
+
+		return data
+
+	def selectTeamResultsByPlayer(self, playerId):
+		query  = "\
+			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
+			FROM teams\
+			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+			LEFT JOIN matches ON teams.matchId = matches.id\
+			WHERE matches.complete = 1 AND teams_players.playerId = :playerId\
+			GROUP BY teams.id\
+			ORDER BY matches.matchType, teams.id DESC\
+		"
+		connection = self.session.connection()
+		results = connection.execute(text(query), playerId = playerId)
+
+		data = []
+
+		for row in results:
+			data.append({
+				"id": row.id,
+				"win": row.win,
 				"matchType": row.matchType,
 				"playerIds": map(int, row.playerIds.split(","))
 			})

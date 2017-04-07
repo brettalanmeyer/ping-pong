@@ -1,5 +1,5 @@
 .leaderboard-player-container {
-	width: 800px;
+	width: 950px;
 	margin: auto;
 }
 
@@ -48,4 +48,25 @@
 .table.table-sortable .sorting-asc .glyphicon-chevron-up,
 .table.table-sortable .sorting-desc .glyphicon-chevron-down {
 	color: #333
+}
+
+.leaderboard-container .win-streak,
+.leaderboard-player-container .win-streak {
+	font-weight: bold;
+}
+
+.leaderboard-container .win-streak-positive,
+.leaderboard-player-container .win-streak-positive {
+	color: green;
+}
+
+.leaderboard-container .win-streak-negative,
+.leaderboard-player-container .win-streak-negative {
+	color: red;
+	padding-left: 3px;
+}
+
+.leaderboard-container .win-streak-neutral,
+.leaderboard-player-container .win-streak-neutral {
+	padding-left: 8px;
 }

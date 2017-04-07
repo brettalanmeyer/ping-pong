@@ -23,6 +23,7 @@
 						<th>Points Against</th>
 						<th>Wins</th>
 						<th>Losses</th>
+						<th>Current Wins</th>
 
 					</tr>
 
@@ -30,18 +31,20 @@
 
 				<tbody>
 
-					{% for item in matchTypes %}
+					{% for matchType in matchTypes %}
 
 						<tr>
 
-							<th>{{ item.title() }}</th>
-							<td>{{ stats[item].matches }}</td>
-							<td>{{ "{:.3f}".format(stats[item].percentage) }}</td>
-							<td>{{ "{:,}".format(stats[item].pointsFor) }}</td>
-							<td>{{ "{:,}".format(stats[item].pointsAgainst) }}</td>
-							<td>{{ stats[item].wins }}</td>
-							<td>{{ stats[item].losses }}</td>
-
+							<th>{{ matchType.title() }}</th>
+							<td>{{ stats[matchType].matches }}</td>
+							<td>{{ "{:.3f}".format(stats[matchType].percentage) }}</td>
+							<td>{{ "{:,}".format(stats[matchType].pointsFor) }}</td>
+							<td>{{ "{:,}".format(stats[matchType].pointsAgainst) }}</td>
+							<td>{{ stats[matchType].wins }}</td>
+							<td>{{ stats[matchType].losses }}</td>
+							{% with value = stats[matchType].winStreak %}
+								{% include 'leaderboard/win-streak.html' %}
+							{% endwith %}
 						</tr>
 
 					{% endfor %}
@@ -51,16 +54,16 @@
 			</table>
 
 			<ul class="nav nav-tabs">
-				{% for item in matchTypes %}
-					<li role="presentation" data-matchtype="{{ item }}">
-						<span>{{ item.title() }}</span>
+				{% for matchType in matchTypes %}
+					<li role="presentation" data-matchtype="{{ matchType }}">
+						<span>{{ matchType.title() }}</span>
 					</li>
 				{% endfor %}
 			</ul>
 
-			{% for item in matchTypes %}
+			{% for matchType in matchTypes %}
 
-				<table class="table opponent-table table-sortable hidden" data-matchtype="{{ item }}">
+				<table class="table opponent-table table-sortable hidden" data-matchtype="{{ matchType }}">
 
 					<thead>
 
@@ -114,13 +117,21 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+							<th data-sort="int">
+								Current Wins
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+
 						</tr>
 
 					</thead>
 
 					<tbody>
 
-						{% for matchup in stats[item].matchups %}
+						{% for matchup in stats[matchType].matchups %}
 
 							<tr class="matchup">
 								<td data-sort-value="{{ matchup.playerName }}">
@@ -132,6 +143,9 @@
 								<td data-sort-value="{{ matchup.pointsAgainst }}">{{ matchup.pointsAgainst }}</td>
 								<td data-sort-value="{{ matchup.wins }}">{{ matchup.wins }}</td>
 								<td data-sort-value="{{ matchup.losses }}">{{ matchup.losses }}</td>
+								{% with value = matchup.winStreak %}
+									{% include 'leaderboard/win-streak.html' %}
+								{% endwith %}
 							</tr>
 
 						{% endfor %}
