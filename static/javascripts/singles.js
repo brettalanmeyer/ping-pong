@@ -1,6 +1,10 @@
 $(function(){
 
-	if($("#singles").length > 0){
+	var singles = $("#singles");
+
+	if(singles.exists()){
+
+		var matchId = singles.data("matchid");
 
 		var socket = io.connect();
 		socket.on("response", update);
@@ -25,7 +29,7 @@ $(function(){
 
 		function update(data){
 			if(data == null) return;
-			if(data.matchType != "singles") return;
+			if(data.matchId != matchId) return;
 
 			set.html(data.game);
 

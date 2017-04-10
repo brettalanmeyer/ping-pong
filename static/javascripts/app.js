@@ -16,6 +16,12 @@ $(function(){
 		return confirm("Are you sure you want to delete this?");
 	});
 
+	jQuery.fn.extend({
+		exists: function(){
+			return this.length > 0;
+		}
+	});
+
 });
 
 function shuffle(a) {

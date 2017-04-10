@@ -1,6 +1,6 @@
 $(function(){
 
-	if($("#players").length > 0){
+	if($("#players").exists()){
 
 		var play = $("#players-form-play");
 		var players = $(".player");

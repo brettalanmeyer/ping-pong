@@ -1,6 +1,10 @@
 $(function(){
 
-	if($("#doubles").length > 0){
+	var doubles = $("#doubles");
+
+	if(doubles.exists()){
+
+		var matchId = doubles.data("matchid");
 
 		var socket = io.connect();
 		socket.on("response", update);
@@ -31,7 +35,7 @@ $(function(){
 
 		function update(data){
 			if(data == null) return;
-			if(data.matchType != "doubles") return;
+			if(data.matchId != matchId) return;
 
 			set.html(data.game);
 

@@ -1,6 +1,10 @@
 $(function(){
 
-	if($("#nines").length > 0){
+	var nines = $("#nines");
+
+	if(nines.exists()){
+
+		var matchId = nines.data("matchid");
 
 		var socket = io.connect();
 		socket.on("response", update);
@@ -20,7 +24,7 @@ $(function(){
 
 		function update(data){
 			if(data == null) return;
-			if(data.matchType != "nines") return;
+			if(data.matchId != matchId) return;
 
 			if(data.redirect){
 				window.location = "/matches/" + data.matchId

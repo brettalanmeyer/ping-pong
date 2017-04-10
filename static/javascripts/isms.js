@@ -21,7 +21,7 @@ function sayings(left, right){
 
 $(function(){
 
-	if($("#singles").length > 0 || $("#doubles").length > 0){
+	if($("#singles").exists() || $("#doubles").exists()){
 
 		ismContainer = $("<div />").addClass("ism-container").html("Jet Fuel Can't Melt Steel Beamz");
 		$("body").append(ismContainer);
