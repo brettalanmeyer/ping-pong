@@ -248,6 +248,13 @@ def buttons_delete_scores(button):
 	socketio.emit("response", data, broadcast = True)
 	return button
 
+@app.route("/debug-mode")
+def debug_mode():
+	if app.config["DEBUG"]:
+		app.config["DEBUG_TOOLS"] = not app.config["DEBUG_TOOLS"]
+
+	return redirect("/")
+
 @app.route("/favicon.ico")
 def favicon():
 	return send_from_directory("{}/static/images".format(app.root_path), "ping-pong-icon.png", mimetype = "image/vnd.microsoft.icon")
@@ -298,5 +305,7 @@ if __name__ == "__main__":
 	singles = Singles.Singles(session)
 	doubles = Doubles.Doubles(session)
 	nines = Nines.Nines(session)
+
+	app.config["DEBUG_TOOLS"] = False
 
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])
