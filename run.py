@@ -283,10 +283,6 @@ def getMatchType(match):
 	elif nines.isMatchType(match.matchType):
 		return nines
 
-@app.route("/audio-test", methods = ["GET"])
-def audioTest():
-	return render_template("audio-test.html")
-
 if __name__ == "__main__":
 	logger.setupLogging(app)
 	assets.setupAssets(app)
