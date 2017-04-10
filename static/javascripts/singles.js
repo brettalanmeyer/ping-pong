@@ -66,11 +66,12 @@ $(function(){
 
 				for(var i = 0; i < team.games.length; i++){
 					var game = team.games[i];
+					var cell = cells.eq(i + 1).html("").removeClass("win");
 
 					if(game.score != null){
-						cells.eq(i + 1).html(pad(game.score));
+						cell.html(pad(game.score));
 						if(game.win){
-							cells.eq(i + 1).addClass("win");
+							cell.addClass("win");
 						}
 					}
 				}

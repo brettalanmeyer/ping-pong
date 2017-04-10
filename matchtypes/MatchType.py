@@ -23,7 +23,15 @@ class MatchType():
 		return self.matchType == matchType
 
 	def undo(self, match, button):
-		self.scoreService.undo(match.id)
+		score = self.scoreService.selectLastScoreByMatchId(match.id)
+
+		if score != None:
+			if score.game != match.game:
+				self.gameService.resetGame(match.id, score.game)
+				self.matchService.updateGame(match.id, score.game)
+
+			self.scoreService.delete(score)
+
 		return self.matchData(match)
 
 	def determineMatchWinner(self, match):

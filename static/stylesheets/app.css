@@ -27,7 +27,10 @@ header a {
 	font-family: digital;
 }
 
+header a,
+header a:focus,
 header a:hover {
+    color: #333;
 	text-decoration: none;
 }
 

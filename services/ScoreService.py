@@ -9,6 +9,11 @@ class ScoreService(Service.Service):
 	def __init__(self, session):
 		Service.Service.__init__(self, session, ScoreModel.ScoreModel)
 
+	def selectById(self, id):
+		app.logger.info("Selecting match=%d", id)
+
+		return self.session.query(self.model).filter(self.model.id == id).one()
+
 	def score(self, matchId, teamId, game):
 		score = self.model(matchId, teamId, game, datetime.now())
 		self.session.add(score)
@@ -21,13 +26,18 @@ class ScoreService(Service.Service):
 
 		return self.session.query(self.model.matchId).count()
 
-	def undo(self, matchId):
-		score = self.session.query(self.model).filter(self.model.matchId == matchId).order_by(self.model.id.desc()).first()
-		if score != None:
-			self.session.query(self.model).filter(self.model.id == score.id).delete()
-			self.session.commit()
+	def selectLastScoreByMatchId(self, matchId):
+		scores = self.session.query(self.model).filter(self.model.matchId == matchId).order_by(self.model.id.desc())
 
-		app.logger.info("Undo score for match=%d", matchId)
+		if scores.count() > 0:
+			return scores.first()
+
+		return None
+
+	def delete(self, score):
+		self.session.delete(score)
+		self.session.commit()
+		app.logger.info("Deleting score=%d", score.id)
 
 	def getScore(self, matchId, teamId, game):
 		app.logger.info("Getting score for match=%d team=%d game=%d", matchId, teamId, game)

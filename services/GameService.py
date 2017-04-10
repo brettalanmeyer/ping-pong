@@ -30,6 +30,18 @@ class GameService(Service.Service):
 		existingGame.completedAt = datetime.now()
 		self.session.commit()
 
+	def resetGame(self, matchId, game):
+		games = self.session.query(self.model).filter_by(matchId = matchId, game = game)
+
+		if games.count() == 1:
+			game = games.one()
+			game.winner = None
+			game.winnerScore = None
+			game.loser = None
+			game.loserScore = None
+			game.completedAt = None
+			self.session.commit()
+
 	def getTeamWins(self, matchId, teamId):
 		app.logger.info("Getting wins for match=%d and team=%d", matchId, teamId)
 

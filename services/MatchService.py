@@ -25,7 +25,7 @@ class MatchService(Service.Service):
 		return self.session.query(self.model)
 
 	def selectComplete(self):
-		app.logger.info("Selecting copmleted matches")
+		app.logger.info("Selecting completed matches")
 
 		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc())
 
