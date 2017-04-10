@@ -248,7 +248,7 @@ def buttons_delete_scores(button):
 	socketio.emit("response", data, broadcast = True)
 	return button
 
-@app.route("/debug-mode")
+@app.route("/debug-mode", methods = ["GET"])
 def debug_mode():
 	if app.config["DEBUG"]:
 		app.config["DEBUG_TOOLS"] = not app.config["DEBUG_TOOLS"]

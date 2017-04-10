@@ -59,6 +59,8 @@ TODO
 
 ELO rating system
 Fix doubles opponent stats
+Be able to undo after match
+move generate data to another file and route only in debug mode
 
 Leaderboard:
 	current win/loss streak
