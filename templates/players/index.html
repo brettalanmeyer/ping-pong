@@ -21,7 +21,9 @@
 
 					<tr>
 
-						<td>{{ player.name }}</td>
+						<td>
+							<a href="/leaderboard/players/{{ player.id }}" class="link">{{ player.name }}</a>
+						</td>
 
 						<td class="text-right">
 							<a href="/players/{{ player.id }}/edit" class="btn btn-default btn-sm">

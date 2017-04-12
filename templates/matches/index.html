@@ -40,11 +40,13 @@
 									{% for team in match.teams %}
 
 										{% for player in team.players %}
-											{% if team.win %}
-												<strong>{{ player.name }}</strong>
-											{% else %}
-												{{ player.name }}
-											{% endif %}
+											<a href="/leaderboard/players/{{ player.id }}">
+												{% if team.win %}
+													<strong>{{ player.name }}</strong>
+												{% else %}
+													{{ player.name }}
+												{% endif %}
+											</a>
 										{% endfor %}
 
 										{% if loop.index < 4 %}
@@ -66,7 +68,7 @@
 														{% if loop.index == 2 %}
 															&amp;
 														{% endif %}
-														{{ player.name }}
+														<a href="/leaderboard/players/{{ player.id }}">{{ player.name }}</a>
 													{% endfor %}
 												</td>
 
