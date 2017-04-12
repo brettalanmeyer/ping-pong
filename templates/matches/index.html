@@ -7,7 +7,14 @@
 
 	<div class="container matches-container">
 
-		<h1>Previous Matches</h1>
+		<select id="matches-player-filter" class="player-filter form-control" autofocus>
+			<option value="">Filter by player...</option>
+			{% for player in players %}
+				<option value="{{ player.id }}" {% if playerId == player.id %}selected{% endif %}>{{ player.name }}</option>
+			{% endfor %}
+		</select>
+
+		<h1>Previous Matches - {{ count }}</h1>
 
 		<table class="table">
 

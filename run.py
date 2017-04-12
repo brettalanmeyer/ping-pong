@@ -15,11 +15,20 @@ def index():
 	scores = scoreService.selectCount()
 	return render_template("main/index.html", matches = matches, scores = scores)
 
-@app.route("/matches", methods = ["GET"], defaults = { "page": 1 })
-@app.route("/matches/page/<int:page>", methods = ["GET"])
-def matches_index(page):
-	matches = pagingService.pager(matchService.selectCompleteOrReady(), page)
-	return render_template("matches/index.html", matches = matches, url = "/matches/page", paging = pagingService.data())
+@app.route("/matches", methods = ["GET"], defaults = { "page": 1, "playerId": None })
+@app.route("/matches/page/<int:page>", defaults = { "playerId": 1 },  methods = ["GET"])
+@app.route("/matches/players/<int:playerId>", defaults = { "page": 1 }, methods = ["GET"])
+@app.route("/matches/players/<int:playerId>/page/<int:page>", methods = ["GET"])
+def matches_index(page, playerId):
+	players = playerService.select()
+	matches = matchService.selectCompleteOrReady(playerId)
+	pagedMatches = pagingService.pager(matches, page)
+
+	url = "/matches"
+	if playerId != None:
+		url += "/players/" + str(playerId)
+
+	return render_template("matches/index.html", matches = pagedMatches, count = matches.count(), url = url, paging = pagingService.data(), playerId = playerId, players = players)
 
 @app.route("/matches/new", methods = ["GET"])
 def matches_new():

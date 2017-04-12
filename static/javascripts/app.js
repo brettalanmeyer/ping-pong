@@ -16,6 +16,15 @@ $(function(){
 		return confirm("Are you sure you want to delete this?");
 	});
 
+	$("#matches-player-filter").on("change", function(){
+		var playerId = $(this).val();
+		if(playerId.length == 0){
+			window.location = "/matches";
+		} else {
+			window.location = "/matches/players/" + playerId;
+		}
+	});
+
 	jQuery.fn.extend({
 		exists: function(){
 			return this.length > 0;

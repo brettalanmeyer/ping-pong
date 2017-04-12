@@ -130,7 +130,16 @@ a.link {
 	font-size: 13px;
 }
 
-.matches-container {}
+.matches-container {
+	position: relative;
+}
+
+.matches-container .player-filter {
+	position: absolute;
+	right: 0px;
+	top: 20px;
+	width: 160px;
+}
 
 .matches-container .nav-tabs {
 	margin-bottom: 12px;
