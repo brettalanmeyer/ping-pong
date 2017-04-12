@@ -1,3 +1,4 @@
 *.pyc
 /config.cfg
+/pingpong/config.cfg
 /pingpong/static/.webassets-cache/
