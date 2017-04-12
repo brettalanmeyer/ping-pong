@@ -1,24 +1,23 @@
-import Service
-from models import TeamModel
-from services import PlayerService
 from datetime import datetime
 from flask import current_app as app
+from flask_sqlalchemy import SQLAlchemy
+from pingpong.models.Model import TeamModel
+from pingpong.services import PlayerService
 
-class TeamService(Service.Service):
+db = SQLAlchemy()
+playerService = PlayerService.PlayerService()
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, TeamModel.TeamModel)
-		self.playerService = PlayerService.PlayerService(session)
+class TeamService():
 
 	def selectById(self, id):
 		app.logger.info("Selecting team=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return db.session.query(TeamModel).filter(TeamModel.id == id).one()
 
 	def create(self, matchId):
-		team = self.model(matchId, datetime.now(), datetime.now())
-		self.session.add(team)
-		self.session.commit()
+		team = TeamModel(matchId, datetime.now(), datetime.now())
+		db.session.add(team)
+		db.session.commit()
 
 		app.logger.info("Creating team=%d match=%d", team.id, team.matchId)
 
@@ -26,7 +25,8 @@ class TeamService(Service.Service):
 
 	def createOnePlayer(self, matchId, playerId):
 		team = self.create(matchId)
-		team.players.append(self.playerService.selectById(playerId))
+		team.players.append(playerService.selectById(playerId))
+		db.session.commit()
 
 		app.logger.info("Creating single player team=%d match=%d player=%d", team.id, matchId, playerId)
 
@@ -34,9 +34,9 @@ class TeamService(Service.Service):
 
 	def createTwoPlayer(self, matchId, player1Id, player2Id):
 		team = self.create(matchId)
-		team.players.append(self.playerService.selectById(player1Id))
-		team.players.append(self.playerService.selectById(player2Id))
-		self.session.commit()
+		team.players.append(playerService.selectById(player1Id))
+		team.players.append(playerService.selectById(player2Id))
+		db.session.commit()
 
 		app.logger.info("Creating two player team=%d match=%d player1=%d player2=%d", team.id, matchId, player1Id, player2Id)
 
@@ -51,6 +51,6 @@ class TeamService(Service.Service):
 	def status(self, team, win):
 		team.win = win
 		team.modifiedAt = datetime.now()
-		self.session.commit()
+		db.session.commit()
 
 		app.logger.info("Team win=%s team=%d", win, team.id)

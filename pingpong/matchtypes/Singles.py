@@ -2,8 +2,8 @@ import MatchType, random
 
 class Singles(MatchType.MatchType):
 
-	def __init__(self, session):
-		MatchType.MatchType.__init__(self, session, "Singles", "singles", "matches/singles.html", 21, 2, 2)
+	def __init__(self):
+		MatchType.MatchType.__init__(self, "Singles", "singles", "matches/singles.html", 21, 2, 2)
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]

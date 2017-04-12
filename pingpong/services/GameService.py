@@ -1,37 +1,36 @@
-import Service
-from models import GameModel
 from datetime import datetime
-from sqlalchemy import text
 from flask import current_app as app
+from flask_sqlalchemy import SQLAlchemy
+from pingpong.models.Model import GameModel
+from sqlalchemy import text
 
-class GameService(Service.Service):
+db = SQLAlchemy()
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, GameModel.GameModel)
+class GameService():
 
 	def create(self, matchId, game, green, yellow, blue, red):
 		app.logger.info("Creating game for match=%d", matchId)
 
-		game = self.model(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
-		self.session.add(game)
-		self.session.commit()
+		game = GameModel(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
+		db.session.add(game)
+		db.session.commit()
 
 		return game
 
 	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
 		app.logger.info("Setting match=%d and game=%d as complete", matchId, game)
 
-		existingGame = self.session.query(self.model).filter_by(matchId = matchId, game = game).one()
+		existingGame = db.session.query(GameModel).filter_by(matchId = matchId, game = game).one()
 		existingGame.winner = winner
 		existingGame.winnerScore = winnerScore
 		existingGame.loser = loser
 		existingGame.loserScore = loserScore
 		existingGame.modifiedAt = datetime.now()
 		existingGame.completedAt = datetime.now()
-		self.session.commit()
+		db.session.commit()
 
 	def resetGame(self, matchId, game):
-		games = self.session.query(self.model).filter_by(matchId = matchId, game = game)
+		games = db.session.query(GameModel).filter_by(matchId = matchId, game = game)
 
 		if games.count() == 1:
 			game = games.one()
@@ -40,7 +39,7 @@ class GameService(Service.Service):
 			game.loser = None
 			game.loserScore = None
 			game.completedAt = None
-			self.session.commit()
+			db.session.commit()
 
 	def getTeamWins(self, matchId, teamId):
 		app.logger.info("Getting wins for match=%d and team=%d", matchId, teamId)
@@ -50,7 +49,7 @@ class GameService(Service.Service):
 			FROM games\
 			WHERE matchId = :matchId AND winner = :teamId\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		data = connection.execute(text(query), matchId = matchId, teamId = teamId).first()
 
 		if data == None:

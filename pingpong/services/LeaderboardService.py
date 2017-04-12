@@ -1,19 +1,18 @@
-import Service, logging, json
 from datetime import datetime
-from sqlalchemy import text
-from models import PlayerModel
-from sqlalchemy import text
 from flask import current_app as app
+from flask_sqlalchemy import SQLAlchemy
+from pingpong.models.Model import PlayerModel
+from sqlalchemy import text
+import Service
+
+db = SQLAlchemy()
 
 class LeaderboardService(Service.Service):
-
-	def __init__(self, session):
-		Service.Service.__init__(self, session, None)
 
 	def matchTypeStats(self, matchType):
 		app.logger.info("Querying Leaderboard Statistics")
 
-		players = self.session.query(PlayerModel.PlayerModel).order_by(PlayerModel.PlayerModel.name)
+		players = db.session.query(PlayerModel).order_by(PlayerModel.name)
 
 		matches = self.matchesByMatchType(matchType)
 		times = self.times(matchType)
@@ -116,7 +115,7 @@ class LeaderboardService(Service.Service):
 			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 			GROUP BY players.id\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		matches = connection.execute(text(query), matchType = matchType)
 
 		data = {}
@@ -140,7 +139,7 @@ class LeaderboardService(Service.Service):
 			WHERE matches.complete = 1 AND players.id = :playerId\
 			GROUP BY matches.matchType\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		matches = connection.execute(text(query), playerId = playerId)
 
 		data = {}
@@ -164,7 +163,7 @@ class LeaderboardService(Service.Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		times = connection.execute(text(query), matchType = matchType)
 
 		data = {}
@@ -189,7 +188,7 @@ class LeaderboardService(Service.Service):
 			GROUP BY players.id\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		points = connection.execute(text(query), matchType = matchType)
 
 		data = {}
@@ -211,7 +210,7 @@ class LeaderboardService(Service.Service):
 			GROUP BY matches.matchType\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		points = connection.execute(text(query), playerId = playerId)
 
 		data = {}
@@ -241,7 +240,7 @@ class LeaderboardService(Service.Service):
 			GROUP BY matches.matchType\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		points = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
 
 		data = {}
@@ -261,7 +260,7 @@ class LeaderboardService(Service.Service):
 			WHERE matches.complete = 1 AND matches.matchType = :matchType\
 			GROUP BY players.id\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		matches = connection.execute(text(query), matchType = matchType)
 
 		data = {}
@@ -275,7 +274,7 @@ class LeaderboardService(Service.Service):
 				FROM scores\
 				WHERE matchId IN :matchIds\
 			"
-			connection = self.session.connection()
+			connection = db.session.connection()
 			points = connection.execute(text(query), matchIds = matchIds).first()
 
 			data[match.playerId] = points.points - pointsFor[match.playerId]
@@ -292,7 +291,7 @@ class LeaderboardService(Service.Service):
 			WHERE matches.complete = 1 AND players.id = :playerId\
 			GROUP BY matches.matchType\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		matches = connection.execute(text(query), playerId = playerId)
 
 		data = {}
@@ -306,7 +305,7 @@ class LeaderboardService(Service.Service):
 				FROM scores\
 				WHERE matchId IN :matchIds\
 			"
-			connection = self.session.connection()
+			connection = db.session.connection()
 			points = connection.execute(text(query), matchIds = matchIds).first()
 
 			data[match.matchType] = points.points - pointsFor[match.matchType]
@@ -331,7 +330,7 @@ class LeaderboardService(Service.Service):
 				)\
 			GROUP BY matches.matchType\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		matches = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
 
 		data = {}
@@ -345,7 +344,7 @@ class LeaderboardService(Service.Service):
 				FROM scores\
 				WHERE matchId IN :matchIds\
 			"
-			connection = self.session.connection()
+			connection = db.session.connection()
 			points = connection.execute(text(query), matchIds = matchIds).first()
 
 			data[match.matchType] = points.points - pointsFor[match.matchType]
@@ -371,7 +370,7 @@ class LeaderboardService(Service.Service):
 			ORDER BY matches.matchType, teams.id DESC\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		results = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
 
 		data = []
@@ -447,7 +446,7 @@ class LeaderboardService(Service.Service):
 			GROUP BY players.id, matches.matchType\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		return connection.execute(text(query), playerId = playerId)
 
 	def pointStreakByPlayer(self, streakData, playerId):
@@ -529,7 +528,7 @@ class LeaderboardService(Service.Service):
 			GROUP BY scores.id\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		results = connection.execute(text(query), matchType = matchType)
 
 		data = []
@@ -557,7 +556,7 @@ class LeaderboardService(Service.Service):
 			ORDER BY teams.id DESC\
 		"
 
-		connection = self.session.connection()
+		connection = db.session.connection()
 		results = connection.execute(text(query), matchType = matchType)
 
 		data = []
@@ -582,7 +581,7 @@ class LeaderboardService(Service.Service):
 			GROUP BY teams.id\
 			ORDER BY matches.matchType, teams.id DESC\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		results = connection.execute(text(query), playerId = playerId)
 
 		data = []

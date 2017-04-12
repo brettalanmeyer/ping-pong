@@ -1,32 +1,32 @@
-import Service, logging, json
-from models import IsmModel
 from datetime import datetime
 from flask import current_app as app
+from flask_sqlalchemy import SQLAlchemy
+from pingpong.models.Model import IsmModel
+import json
 
-class IsmService(Service.Service):
+db = SQLAlchemy()
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, IsmModel.IsmModel)
+class IsmService():
 
 	def select(self):
 		app.logger.info("Selecting isms")
 
-		return self.session.query(self.model).filter(self.model.approved == True)
+		return db.session.query(IsmModel).filter(IsmModel.approved == True)
 
 	def selectById(self, id):
 		app.logger.info("Selecting ism=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return db.session.query(IsmModel).filter(IsmModel.id == id).one()
 
 	def new(self):
 		app.logger.info("New ism")
 
-		return self.model(0, 0, "", False, None, None)
+		return IsmModel(0, 0, "", False, None, None)
 
 	def create(self, form):
-		ism = self.model(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
-		self.session.add(ism)
-		self.session.commit()
+		ism = IsmModel(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
+		db.session.add(ism)
+		db.session.commit()
 
 		app.logger.info("Creating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
 
@@ -40,7 +40,7 @@ class IsmService(Service.Service):
 		ism.saying = form["saying"]
 		ism.approved = True
 		ism.modifiedAt = datetime.now()
-		self.session.commit()
+		db.session.commit()
 
 		app.logger.info("Updating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
 
@@ -50,8 +50,8 @@ class IsmService(Service.Service):
 		app.logger.info("Deleting ism=%d", id)
 
 		ism = self.selectById(id)
-		self.session.delete(ism)
-		self.session.commit()
+		db.session.delete(ism)
+		db.session.commit()
 
 		return ism
 

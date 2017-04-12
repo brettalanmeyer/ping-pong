@@ -1,33 +1,32 @@
-import Service
-from models import ScoreModel, MatchModel
-from sqlalchemy import text
 from datetime import datetime
 from flask import current_app as app
+from flask_sqlalchemy import SQLAlchemy
+from pingpong.models.Model import MatchModel, ScoreModel
+from sqlalchemy import text
 
-class ScoreService(Service.Service):
+db = SQLAlchemy()
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, ScoreModel.ScoreModel)
+class ScoreService():
 
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return db.session.query(ScoreModel).filter(ScoreModel.id == id).one()
 
 	def score(self, matchId, teamId, game):
-		score = self.model(matchId, teamId, game, datetime.now())
-		self.session.add(score)
-		self.session.commit()
+		score = ScoreModel(matchId, teamId, game, datetime.now())
+		db.session.add(score)
+		db.session.commit()
 
 		app.logger.info("Scoring for match=%d team=%d game=%d", matchId, teamId, game)
 
 	def selectCount(self):
 		app.logger.info("Selecting number of scores")
 
-		return self.session.query(self.model.matchId).count()
+		return db.session.query(ScoreModel.matchId).count()
 
 	def selectLastScoreByMatchId(self, matchId):
-		scores = self.session.query(self.model).filter(self.model.matchId == matchId).order_by(self.model.id.desc())
+		scores = db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).order_by(ScoreModel.id.desc())
 
 		if scores.count() > 0:
 			return scores.first()
@@ -35,8 +34,8 @@ class ScoreService(Service.Service):
 		return None
 
 	def delete(self, score):
-		self.session.delete(score)
-		self.session.commit()
+		db.session.delete(score)
+		db.session.commit()
 		app.logger.info("Deleting score=%d", score.id)
 
 	def getScore(self, matchId, teamId, game):
@@ -48,7 +47,7 @@ class ScoreService(Service.Service):
 			WHERE matchId = :matchId AND teamId = :teamId AND game = :game\
 			GROUP BY matchId, teamId, game\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		data = connection.execute(text(query), matchId = matchId, teamId = teamId, game = game).first()
 
 		if data == None:
@@ -59,5 +58,5 @@ class ScoreService(Service.Service):
 	def deleteByMatch(self, matchId):
 		app.logger.info("Delete all scores for match=%d", matchId)
 
-		self.session.query(self.model).filter(self.model.matchId == matchId).delete()
-		self.session.commit()
+		db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).delete()
+		db.session.commit()

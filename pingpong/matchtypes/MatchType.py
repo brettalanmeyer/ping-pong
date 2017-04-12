@@ -1,23 +1,23 @@
-from services import MatchService, GameService, TeamService, ScoreService, PlayerService
+from pingpong.services import MatchService, GameService, TeamService, ScoreService, PlayerService
 import math
 
 class MatchType():
 
-	def __init__(self, session, label, matchType, matchTemplate, defaultPoints, numOfPlayers, numOfTeams):
-		self.matchService = MatchService.MatchService(session)
-		self.gameService = GameService.GameService(session)
-		self.teamService = TeamService.TeamService(session)
-		self.scoreService = ScoreService.ScoreService(session)
+	matchTypes = ["singles", "doubles", "nines"]
+	colors = ["green", "yellow", "blue", "red"]
 
+	matchService = MatchService.MatchService()
+	gameService = GameService.GameService()
+	teamService = TeamService.TeamService()
+	scoreService = ScoreService.ScoreService()
+
+	def __init__(self, label, matchType, matchTemplate, defaultPoints, numOfPlayers, numOfTeams):
 		self.label = label
 		self.matchType = matchType
 		self.matchTemplate = matchTemplate
 		self.defaultPoints = defaultPoints
 		self.numOfPlayers = numOfPlayers
 		self.numOfTeams = numOfTeams
-
-		self.matchTypes = ["singles", "doubles", "nines"]
-		self.colors = ["green", "yellow", "blue", "red"]
 
 	def isMatchType(self, matchType):
 		return self.matchType == matchType

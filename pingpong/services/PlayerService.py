@@ -1,42 +1,41 @@
-import Service
-from models import PlayerModel
 from datetime import datetime
 from flask import current_app as app
+from flask_sqlalchemy import SQLAlchemy
+from pingpong.models.Model import PlayerModel
 
-class PlayerService(Service.Service):
+db = SQLAlchemy()
 
-	def __init__(self, session):
-		Service.Service.__init__(self, session, PlayerModel.PlayerModel)
+class PlayerService():
 
 	def select(self):
 		app.logger.info("Selecting players")
 
-		return self.session.query(self.model).order_by(self.model.name)
+		return db.session.query(PlayerModel).order_by(PlayerModel.name)
 
 	def selectById(self, id):
 		app.logger.info("Selecting player=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return db.session.query(PlayerModel).filter(PlayerModel.id == id).one()
 
 	def	selectActive(self):
 		app.logger.info("Selecting active players")
 
-		return self.session.query(self.model).filter(self.model.enabled == 1).order_by(self.model.name)
+		return db.session.query(PlayerModel).filter(PlayerModel.enabled == 1).order_by(PlayerModel.name)
 
 	def selectByName(self, name):
 		app.logger.info("Selecting player by name=%s", name)
 
-		return self.session.query(self.model).filter_by(name = name)
+		return db.session.query(PlayerModel).filter_by(name = name)
 
 	def new(self):
 		app.logger.info("New player")
 
-		return self.model("", True, None, None)
+		return PlayerModel("", True, None, None)
 
 	def create(self, form):
-		player = self.model(form["name"], True, datetime.now(), datetime.now())
-		self.session.add(player)
-		self.session.commit()
+		player = PlayerModel(form["name"], True, datetime.now(), datetime.now())
+		db.session.add(player)
+		db.session.commit()
 
 		app.logger.info("Creating player=%d name=%s", player.id, player.name)
 
@@ -46,7 +45,7 @@ class PlayerService(Service.Service):
 		player = self.selectById(id)
 		player.name = name
 		player.modifiedAt = datetime.now()
-		self.session.commit()
+		db.session.commit()
 
 		app.logger.info("Updating player=%d name=%s", player.id, player.name)
 
@@ -55,5 +54,5 @@ class PlayerService(Service.Service):
 	def excludeByName(self, id, name):
 		app.logger.info("Selecting player=%d not by name=%s", id, name)
 
-		return self.session.query(self.model).filter(self.model.id != id, self.model.name == name)
+		return db.session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
 
