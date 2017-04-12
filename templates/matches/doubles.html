@@ -48,9 +48,9 @@
 				<h2>Play Again</h2>
 
 				<form id="play-again" method="POST" action="/matches/{{ data.matchId }}/play-again" class="play-again">
-					<button type="submit" class="btn btn-default btn-block btn-lg" name="numOfGames" value="1">Best Of 1</button>
-					<button type="submit" class="btn btn-default btn-block btn-lg" name="numOfGames" value="3">Best Of 3</button>
-					<button type="submit" class="btn btn-default btn-block btn-lg" name="numOfGames" value="5">Best Of 5</button>
+					<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="1">Best Of 1</button>
+					<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="3">Best Of 3</button>
+					<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="5">Best Of 5</button>
 
 					<div class="form-group">
 						<label>Same Teams:</label>
@@ -60,9 +60,13 @@
 
 				</form>
 
-				<a href="/" class="btn btn-block btn-lg btn-default">
+				<a href="/" class="btn btn-block btn-default">
 					Main Menu
 				</a>
+
+				<form id="undo" method="POST" action="/matches/{{ data.matchId }}/undo" class="undo">
+					<button type="submit" class="btn btn-default btn-block">Undo</button>
+				</form>
 
 			</div>
 

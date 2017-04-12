@@ -117,14 +117,28 @@
 	width: 30%;
 	float: left;
 	overflow: hidden;
-	padding: 16px;
+	padding: 0 16px;
 	text-align: left;
 }
 
+.singles-container .play-again-container .btn {
+	padding: 9px 16px;
+	font-size: 16px;
+	line-height: 1.3333333;
+	border-radius: 6px;
+}
+
 .singles-container .play-again-container h2 {
+	font-size: 28px;
 	margin: 0 0 16px 0;
 }
 
 .singles-container .play-again-container a {
-	margin-top: 24px;
+	margin: 24px 0 8px 0;
+}
+
+.singles-container .play-again-container .undo .btn {
+	font-size: 12px;
+	padding: 6px 0;
+	background: #f0f0f0;
 }

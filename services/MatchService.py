@@ -95,6 +95,14 @@ class MatchService(Service.Service):
 
 		app.logger.info("Play match=%d", match.id)
 
+	def incomplete(self, match):
+		match.complete = False
+		match.modifiedAt = datetime.now()
+		match.completedAt = datetime.now()
+		self.session.commit()
+
+		app.logger.info("Incompleting match=%d", match.id)
+
 	def complete(self, match):
 		match.complete = True
 		match.modifiedAt = datetime.now()

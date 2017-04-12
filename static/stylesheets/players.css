@@ -36,6 +36,10 @@
 
 .player-selector-container .player-list-columns .player {
 	break-inside: avoid-column;
-	margin: 4px 0;
+	margin-top: 4px;
 	padding: 8px 0 8px 23px;
+}
+
+.player-selector-container .player-list-columns .player:first-child {
+	margin-top: 0;
 }

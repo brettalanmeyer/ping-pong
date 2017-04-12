@@ -26,6 +26,12 @@ class MatchType():
 		score = self.scoreService.selectLastScoreByMatchId(match.id)
 
 		if score != None:
+
+			if match.complete == True:
+				self.matchService.incomplete(match)
+				for team in match.teams:
+					self.teamService.status(team, None)
+
 			if score.game != match.game:
 				self.gameService.resetGame(match.id, score.game)
 				self.matchService.updateGame(match.id, score.game)
