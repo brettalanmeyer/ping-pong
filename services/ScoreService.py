@@ -4,31 +4,29 @@ from models.MatchModel import MatchModel
 from sqlalchemy import text
 from datetime import datetime
 from flask import current_app as app
+from utils import database as db
 
 class ScoreService(Service):
-
-	def __init__(self, session):
-		Service.__init__(self, session)
 
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
-		return self.session.query(ScoreModel).filter(ScoreModel.id == id).one()
+		return db.session.query(ScoreModel).filter(ScoreModel.id == id).one()
 
 	def score(self, matchId, teamId, game):
 		score = ScoreModel(matchId, teamId, game, datetime.now())
-		self.session.add(score)
-		self.session.commit()
+		db.session.add(score)
+		db.session.commit()
 
 		app.logger.info("Scoring for match=%d team=%d game=%d", matchId, teamId, game)
 
 	def selectCount(self):
 		app.logger.info("Selecting number of scores")
 
-		return self.session.query(ScoreModel.matchId).count()
+		return db.session.query(ScoreModel.matchId).count()
 
 	def selectLastScoreByMatchId(self, matchId):
-		scores = self.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).order_by(ScoreModel.id.desc())
+		scores = db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).order_by(ScoreModel.id.desc())
 
 		if scores.count() > 0:
 			return scores.first()
@@ -36,8 +34,8 @@ class ScoreService(Service):
 		return None
 
 	def delete(self, score):
-		self.session.delete(score)
-		self.session.commit()
+		db.session.delete(score)
+		db.session.commit()
 		app.logger.info("Deleting score=%d", score.id)
 
 	def getScore(self, matchId, teamId, game):
@@ -49,7 +47,7 @@ class ScoreService(Service):
 			WHERE matchId = :matchId AND teamId = :teamId AND game = :game\
 			GROUP BY matchId, teamId, game\
 		"
-		connection = self.session.connection()
+		connection = db.session.connection()
 		data = connection.execute(text(query), matchId = matchId, teamId = teamId, game = game).first()
 
 		if data == None:
@@ -60,5 +58,5 @@ class ScoreService(Service):
 	def deleteByMatch(self, matchId):
 		app.logger.info("Delete all scores for match=%d", matchId)
 
-		self.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).delete()
-		self.session.commit()
+		db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).delete()
+		db.session.commit()

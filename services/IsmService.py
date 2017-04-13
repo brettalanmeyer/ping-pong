@@ -3,21 +3,19 @@ import json
 from models.IsmModel import IsmModel
 from datetime import datetime
 from flask import current_app as app
+from utils import database as db
 
 class IsmService(Service):
-
-	def __init__(self, session):
-		Service.__init__(self, session)
 
 	def select(self):
 		app.logger.info("Selecting isms")
 
-		return self.session.query(IsmModel).filter(IsmModel.approved == True)
+		return db.session.query(IsmModel).filter(IsmModel.approved == True)
 
 	def selectById(self, id):
 		app.logger.info("Selecting ism=%d", id)
 
-		return self.session.query(IsmModel).filter(IsmModel.id == id).one()
+		return db.session.query(IsmModel).filter(IsmModel.id == id).one()
 
 	def new(self):
 		app.logger.info("New ism")
@@ -26,8 +24,8 @@ class IsmService(Service):
 
 	def create(self, form):
 		ism = IsmModel(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
-		self.session.add(ism)
-		self.session.commit()
+		db.session.add(ism)
+		db.session.commit()
 
 		app.logger.info("Creating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
 
@@ -41,7 +39,7 @@ class IsmService(Service):
 		ism.saying = form["saying"]
 		ism.approved = True
 		ism.modifiedAt = datetime.now()
-		self.session.commit()
+		db.session.commit()
 
 		app.logger.info("Updating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
 
@@ -51,8 +49,8 @@ class IsmService(Service):
 		app.logger.info("Deleting ism=%d", id)
 
 		ism = self.selectById(id)
-		self.session.delete(ism)
-		self.session.commit()
+		db.session.delete(ism)
+		db.session.commit()
 
 		return ism
 

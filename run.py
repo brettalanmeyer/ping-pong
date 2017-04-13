@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, redirect, request, abort, send_from_directory
 from flask_socketio import SocketIO, emit
 import json
-from utils import database, logger, assets
+from utils import database as db, logger, assets
 from services import IsmService, PlayerService, MatchService, ScoreService, LeaderboardService, PagingService
 from matchtypes import Singles, Doubles, Nines
 
@@ -275,7 +275,7 @@ def beforeRequest():
 
 @app.after_request
 def afterRequest(response):
-	session.close()
+	db.session.close()
 	return response
 
 @app.errorhandler(404)
@@ -303,17 +303,16 @@ def getMatchType(match):
 if __name__ == "__main__":
 	logger.setupLogging(app)
 	assets.setupAssets(app)
-	session = database.setupSession(app)
 
-	ismService = IsmService.IsmService(session)
-	playerService = PlayerService.PlayerService(session)
-	matchService = MatchService.MatchService(session)
-	scoreService = ScoreService.ScoreService(session)
-	leaderboardService = LeaderboardService.LeaderboardService(session)
+	ismService = IsmService.IsmService()
+	playerService = PlayerService.PlayerService()
+	matchService = MatchService.MatchService()
+	scoreService = ScoreService.ScoreService()
+	leaderboardService = LeaderboardService.LeaderboardService()
 	pagingService = PagingService.PagingService()
 
-	singles = Singles.Singles(session)
-	doubles = Doubles.Doubles(session)
-	nines = Nines.Nines(session)
+	singles = Singles.Singles()
+	doubles = Doubles.Doubles()
+	nines = Nines.Nines()
 
 	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])

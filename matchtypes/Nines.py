@@ -1,9 +1,10 @@
-import MatchType, random
+from MatchType import MatchType
+import random
 
-class Nines(MatchType.MatchType):
+class Nines(MatchType):
 
-	def __init__(self, session):
-		MatchType.MatchType.__init__(self, session, "Nines", "nines", "matches/nines.html", 9, 4, 4)
+	def __init__(self):
+		MatchType.__init__(self, "Nines", "nines", "matches/nines.html", 9, 4, 4)
 
 	def matchData(self, match):
 		game = match.games[0]
