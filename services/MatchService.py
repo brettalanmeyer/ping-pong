@@ -1,58 +1,61 @@
-import Service
-from models import MatchModel, TeamModel, GameModel, PlayerModel
+from Service import Service
+from models.MatchModel import MatchModel
+from models.TeamModel import TeamModel
+from models.GameModel import GameModel
+from models.PlayerModel import PlayerModel
 from datetime import datetime
 from flask import current_app as app
 from sqlalchemy import or_
 
-class MatchService(Service.Service):
+class MatchService(Service):
 
 	def __init__(self, session):
-		Service.Service.__init__(self, session, MatchModel.MatchModel)
+		Service.__init__(self, session)
 
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return self.session.query(MatchModel).filter(MatchModel.id == id).one()
 
 	def selectNotById(self, id):
 		app.logger.info("Selecting matches excluding match=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id != id)
+		return self.session.query(MatchModel).filter(MatchModel.id != id)
 
 	def select(self):
 		app.logger.info("Selecting matches")
 
-		return self.session.query(self.model)
+		return self.session.query(MatchModel)
 
 	def selectComplete(self):
 		app.logger.info("Selecting completed matches")
 
-		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc())
+		return self.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
 
 	def selectCompleteOrReady(self, playerId = None):
 		app.logger.info("Selecting complete or ready for play matches")
 
-		matches = self.session.query(self.model).filter(or_(self.model.complete == True, self.model.ready == True)).order_by(self.model.id.desc())
+		matches = self.session.query(MatchModel).filter(or_(MatchModel.complete == True, MatchModel.ready == True)).order_by(MatchModel.id.desc())
 
 		if playerId != None:
-			matches = matches.join(self.model.teams).join(TeamModel.TeamModel.players).filter(PlayerModel.PlayerModel.id == playerId)
+			matches = matches.join(MatchModel.teams).join(TeamModel.players).filter(PlayerModel.id == playerId)
 
 		return matches
 
 	def selectActiveMatch(self):
 		app.logger.info("Selecting active match")
 
-		return self.session.query(self.model).filter(self.model.ready == True, self.model.complete == False).order_by(self.model.id.desc()).first()
+		return self.session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).order_by(MatchModel.id.desc()).first()
 
 	def selectLatestMatch(self):
 		app.logger.info("Selecting latest completed match")
 
-		return self.session.query(self.model).filter(self.model.complete == True).order_by(self.model.id.desc()).first()
+		return self.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc()).first()
 
 	def setAsNotReady(self, id):
 		app.logger.info("Updateing all matches except current one to not ready")
 
-		update(self.model).where(self.model.id != id).values(ready = False)
+		update(MatchModel).where(MatchModel.id != id).values(ready = False)
 		self.session.commit()
 
 	def create(self, matchType):
@@ -60,7 +63,7 @@ class MatchService(Service.Service):
 		if matchType == "nines":
 			playTo = 9
 
-		match = self.model(matchType, playTo, 0, False, False, datetime.now(), datetime.now())
+		match = MatchModel(matchType, playTo, 0, False, False, datetime.now(), datetime.now())
 		self.session.add(match)
 		self.session.commit()
 
@@ -119,5 +122,5 @@ class MatchService(Service.Service):
 	def deleteAll(self):
 		app.logger.info("Deleting all matches")
 
-		self.session.query(self.model).delete()
+		self.session.query(MatchModel).delete()
 		self.session.commit()

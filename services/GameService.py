@@ -1,18 +1,18 @@
-import Service
-from models import GameModel
+from Service import Service
+from models.GameModel import GameModel
 from datetime import datetime
 from sqlalchemy import text
 from flask import current_app as app
 
-class GameService(Service.Service):
+class GameService(Service):
 
 	def __init__(self, session):
-		Service.Service.__init__(self, session, GameModel.GameModel)
+		Service.__init__(self, session)
 
 	def create(self, matchId, game, green, yellow, blue, red):
 		app.logger.info("Creating game for match=%d", matchId)
 
-		game = self.model(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
+		game = GameModel(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
 		self.session.add(game)
 		self.session.commit()
 
@@ -21,7 +21,7 @@ class GameService(Service.Service):
 	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
 		app.logger.info("Setting match=%d and game=%d as complete", matchId, game)
 
-		existingGame = self.session.query(self.model).filter_by(matchId = matchId, game = game).one()
+		existingGame = self.session.query(GameModel).filter_by(matchId = matchId, game = game).one()
 		existingGame.winner = winner
 		existingGame.winnerScore = winnerScore
 		existingGame.loser = loser
@@ -31,7 +31,7 @@ class GameService(Service.Service):
 		self.session.commit()
 
 	def resetGame(self, matchId, game):
-		games = self.session.query(self.model).filter_by(matchId = matchId, game = game)
+		games = self.session.query(GameModel).filter_by(matchId = matchId, game = game)
 
 		if games.count() == 1:
 			game = games.one()

@@ -1,30 +1,31 @@
-import Service, logging, json
-from models import IsmModel
+from Service import Service
+import json
+from models.IsmModel import IsmModel
 from datetime import datetime
 from flask import current_app as app
 
-class IsmService(Service.Service):
+class IsmService(Service):
 
 	def __init__(self, session):
-		Service.Service.__init__(self, session, IsmModel.IsmModel)
+		Service.__init__(self, session)
 
 	def select(self):
 		app.logger.info("Selecting isms")
 
-		return self.session.query(self.model).filter(self.model.approved == True)
+		return self.session.query(IsmModel).filter(IsmModel.approved == True)
 
 	def selectById(self, id):
 		app.logger.info("Selecting ism=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return self.session.query(IsmModel).filter(IsmModel.id == id).one()
 
 	def new(self):
 		app.logger.info("New ism")
 
-		return self.model(0, 0, "", False, None, None)
+		return IsmModel(0, 0, "", False, None, None)
 
 	def create(self, form):
-		ism = self.model(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
+		ism = IsmModel(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
 		self.session.add(ism)
 		self.session.commit()
 

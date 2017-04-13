@@ -1,19 +1,19 @@
-import Service, logging, json
+from Service import Service
 from datetime import datetime
 from sqlalchemy import text
-from models import PlayerModel
+from models.PlayerModel import PlayerModel
 from sqlalchemy import text
 from flask import current_app as app
 
-class LeaderboardService(Service.Service):
+class LeaderboardService(Service):
 
 	def __init__(self, session):
-		Service.Service.__init__(self, session, None)
+		Service.__init__(self, session)
 
 	def matchTypeStats(self, matchType):
 		app.logger.info("Querying Leaderboard Statistics")
 
-		players = self.session.query(PlayerModel.PlayerModel).order_by(PlayerModel.PlayerModel.name)
+		players = self.session.query(PlayerModel).order_by(PlayerModel.name)
 
 		matches = self.matchesByMatchType(matchType)
 		times = self.times(matchType)

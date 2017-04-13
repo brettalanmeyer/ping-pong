@@ -1,21 +1,22 @@
-import Service
-from models import ScoreModel, MatchModel
+from Service import Service
+from models.ScoreModel import ScoreModel
+from models.MatchModel import MatchModel
 from sqlalchemy import text
 from datetime import datetime
 from flask import current_app as app
 
-class ScoreService(Service.Service):
+class ScoreService(Service):
 
 	def __init__(self, session):
-		Service.Service.__init__(self, session, ScoreModel.ScoreModel)
+		Service.__init__(self, session)
 
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return self.session.query(ScoreModel).filter(ScoreModel.id == id).one()
 
 	def score(self, matchId, teamId, game):
-		score = self.model(matchId, teamId, game, datetime.now())
+		score = ScoreModel(matchId, teamId, game, datetime.now())
 		self.session.add(score)
 		self.session.commit()
 
@@ -24,10 +25,10 @@ class ScoreService(Service.Service):
 	def selectCount(self):
 		app.logger.info("Selecting number of scores")
 
-		return self.session.query(self.model.matchId).count()
+		return self.session.query(ScoreModel.matchId).count()
 
 	def selectLastScoreByMatchId(self, matchId):
-		scores = self.session.query(self.model).filter(self.model.matchId == matchId).order_by(self.model.id.desc())
+		scores = self.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).order_by(ScoreModel.id.desc())
 
 		if scores.count() > 0:
 			return scores.first()
@@ -59,5 +60,5 @@ class ScoreService(Service.Service):
 	def deleteByMatch(self, matchId):
 		app.logger.info("Delete all scores for match=%d", matchId)
 
-		self.session.query(self.model).filter(self.model.matchId == matchId).delete()
+		self.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).delete()
 		self.session.commit()

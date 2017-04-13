@@ -1,22 +1,22 @@
-import Service
-from models import TeamModel
+from Service import Service
+from models.TeamModel import TeamModel
 from services import PlayerService
 from datetime import datetime
 from flask import current_app as app
 
-class TeamService(Service.Service):
+class TeamService(Service):
 
 	def __init__(self, session):
-		Service.Service.__init__(self, session, TeamModel.TeamModel)
+		Service.__init__(self, session)
 		self.playerService = PlayerService.PlayerService(session)
 
 	def selectById(self, id):
 		app.logger.info("Selecting team=%d", id)
 
-		return self.session.query(self.model).filter(self.model.id == id).one()
+		return self.session.query(TeamModel).filter(TeamModel.id == id).one()
 
 	def create(self, matchId):
-		team = self.model(matchId, datetime.now(), datetime.now())
+		team = TeamModel(matchId, datetime.now(), datetime.now())
 		self.session.add(team)
 		self.session.commit()
 
