@@ -1,4 +1,5 @@
 from MatchType import MatchType
+from pingpong.utils import notifications
 import random
 
 class Doubles(MatchType):
@@ -228,3 +229,13 @@ class Doubles(MatchType):
 		self.matchService.play(newMatch)
 
 		return newMatch
+
+	def sendWinningMessage(self, winningTeam, winningSets, losingTeam, losingSets):
+		winnerPlayer1 = winningTeam.players[0]
+		winnerPlayer2 = winningTeam.players[1]
+		losingPlayer1 = losingTeam.players[0]
+		losingPlayer2 = losingTeam.players[1]
+
+		message = "<b>{} and {}</b> have just beaten {} and {} {} - {}".format(winnerPlayer1.name, winnerPlayer2.name, losingPlayer1.name, losingPlayer2.name, winningSets, losingSets)
+
+		notifications.send(message)

@@ -56,10 +56,12 @@ class MatchType():
 			self.teamService.win(team1)
 			self.teamService.lose(team2)
 			self.matchService.complete(match)
+			self.sendWinningMessage(team1, team1Wins, team2, team2Wins)
 		elif team2Wins == gamesNeededToWinMatch:
 			self.teamService.win(team2)
 			self.teamService.lose(team1)
 			self.matchService.complete(match)
+			self.sendWinningMessage(team2, team2Wins, team1, team1Wins)
 
 	def getTeamWins(self, matchId, teamId):
 		return self.gameService.getTeamWins(matchId, teamId)
