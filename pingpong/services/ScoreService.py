@@ -1,10 +1,10 @@
-from Service import Service
-from models.ScoreModel import ScoreModel
-from models.MatchModel import MatchModel
-from sqlalchemy import text
 from datetime import datetime
 from flask import current_app as app
-from utils import database as db
+from pingpong.models.MatchModel import MatchModel
+from pingpong.models.ScoreModel import ScoreModel
+from pingpong.services.Service import Service
+from pingpong.utils import database as db
+from sqlalchemy import text
 
 class ScoreService(Service):
 

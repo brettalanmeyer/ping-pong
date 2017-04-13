@@ -1,9 +1,9 @@
-from Service import Service
-from models.TeamModel import TeamModel
-from services import PlayerService
 from datetime import datetime
 from flask import current_app as app
-from utils import database as db
+from pingpong.models.TeamModel import TeamModel
+from pingpong.services.Service import Service
+from pingpong.services import PlayerService
+from pingpong.utils import database as db
 
 class TeamService(Service):
 

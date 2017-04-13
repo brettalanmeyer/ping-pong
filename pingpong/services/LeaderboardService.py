@@ -1,10 +1,10 @@
-from Service import Service
 from datetime import datetime
-from sqlalchemy import text
-from models.PlayerModel import PlayerModel
-from sqlalchemy import text
 from flask import current_app as app
-from utils import database as db
+from pingpong.models.PlayerModel import PlayerModel
+from pingpong.services.Service import Service
+from pingpong.utils import database as db
+from sqlalchemy import text
+from sqlalchemy import text
 
 class LeaderboardService(Service):
 

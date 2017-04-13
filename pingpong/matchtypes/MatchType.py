@@ -1,13 +1,16 @@
-from services import MatchService, GameService, TeamService, ScoreService, PlayerService
+from pingpong.services.MatchService import MatchService
+from pingpong.services.GameService import GameService
+from pingpong.services.TeamService import TeamService
+from pingpong.services.ScoreService import ScoreService
 import math
 
 class MatchType():
 
 	def __init__(self, label, matchType, matchTemplate, defaultPoints, numOfPlayers, numOfTeams):
-		self.matchService = MatchService.MatchService()
-		self.gameService = GameService.GameService()
-		self.teamService = TeamService.TeamService()
-		self.scoreService = ScoreService.ScoreService()
+		self.matchService = MatchService()
+		self.gameService = GameService()
+		self.teamService = TeamService()
+		self.scoreService = ScoreService()
 
 		self.label = label
 		self.matchType = matchType

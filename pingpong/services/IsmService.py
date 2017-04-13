@@ -1,9 +1,9 @@
-from Service import Service
-import json
-from models.IsmModel import IsmModel
 from datetime import datetime
 from flask import current_app as app
-from utils import database as db
+from pingpong.models.IsmModel import IsmModel
+from pingpong.services.Service import Service
+from pingpong.utils import database as db
+import json
 
 class IsmService(Service):
 

@@ -1,4 +1,4 @@
-from MatchType import MatchType
+from pingpong.matchtypes.MatchType import MatchType
 import random
 
 class Singles(MatchType):

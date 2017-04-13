@@ -1,9 +1,9 @@
-from Service import Service
-from models.GameModel import GameModel
 from datetime import datetime
-from sqlalchemy import text
 from flask import current_app as app
-from utils import database as db
+from pingpong.models.GameModel import GameModel
+from pingpong.services.Service import Service
+from pingpong.utils import database as db
+from sqlalchemy import text
 
 class GameService(Service):
 

@@ -62,6 +62,9 @@ merge models/Base.py and utils/database.py
 ELO rating system
 Fix doubles opponent stats
 move generate data to another file and route only in debug mode
+put getMatchType() somewhere shared
+different log format for access than app
+post results into skype chat
 
 Leaderboard:
 	current win/loss streak

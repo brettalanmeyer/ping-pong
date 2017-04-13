@@ -1,12 +1,12 @@
-from Service import Service
-from models.MatchModel import MatchModel
-from models.TeamModel import TeamModel
-from models.GameModel import GameModel
-from models.PlayerModel import PlayerModel
 from datetime import datetime
 from flask import current_app as app
+from pingpong.models.GameModel import GameModel
+from pingpong.models.MatchModel import MatchModel
+from pingpong.models.PlayerModel import PlayerModel
+from pingpong.models.TeamModel import TeamModel
+from pingpong.services.Service import Service
+from pingpong.utils import database as db
 from sqlalchemy import or_
-from utils import database as db
 
 class MatchService(Service):
 
