@@ -24,11 +24,12 @@ $(function(){
 
 		function update(data){
 			if(data == null) return;
-			if(data.matchId != matchId) return;
 
 			if(data.redirect){
 				window.location = "/matches/" + data.matchId
 			}
+
+			if(data.matchId != matchId) return;
 
 			if(data.complete){
 				$("#play-again").removeClass("hidden");
