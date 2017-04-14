@@ -34,21 +34,31 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 
 	create config.cfg
 
-		DEBUG = False
+		DEBUG = True
+		DEBUG_TOOLS = True
 		ASSETS_DEBUG = False
 		HOST = '0.0.0.0'
-		PORT = 5000
+		PORT = 5010
 		SECRET_KEY = ''
-		MYSQL_USERNAME = ''
-		MYSQL_PASSWORD = ''
-		MYSQL_HOST = ''
-		MYSQL_DATABASE = ''
 		LOG_FILE_APPLICATION = 'logs/app.log'
 		LOG_FILE_ACCESS = 'logs/access.log'
-		LOG_FORMAT = '%(asctime)s %(levelname)s %(process)d %(message)s %(pathname)s:%(lineno)d:%(funcName)s()'
+		LOG_ACCESS_FORMAT = '%(asctime)s %(process)d %(message)s'
+		LOG_APP_FORMAT = '%(asctime)s %(levelname)s %(process)d %(message)s %(pathname)s:%(lineno)d:%(funcName)s()'
 		LOG_WHEN = 'midnight'
 		LOG_INTERVAL = 1
 		LOG_BACKUP_COUNT = 14
+		SKYPE_URL = ''
+
+	create dbconfig.cfg
+
+		[db]
+		mysql_username =
+		mysql_password =
+		mysql_host =
+		mysql_database =
+		pool_recycle = 3600
+		autocommit = False
+		autoflush = False
 
 
 ## Raspberry pi
@@ -57,14 +67,12 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
-Access app config from database.py
 merge models/Base.py and utils/database.py
 ELO rating system
 Fix doubles opponent stats
 move generate data to another file and route only in debug mode
 put getMatchType() somewhere shared
-different log format for access than app
-post results into skype chat
+try to put skype stuff in this app if possible
 
 Leaderboard:
 	current win/loss streak

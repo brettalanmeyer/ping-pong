@@ -1,3 +1,4 @@
 *.pyc
 /config.cfg
+/dbconfig.cfg
 /pingpong/static/.webassets-cache/
