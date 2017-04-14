@@ -30,12 +30,14 @@ class MatchType():
 
 		if score != None:
 
-			if match.complete == True:
+			completed = match.complete
+
+			if completed:
 				self.matchService.incomplete(match)
 				for team in match.teams:
 					self.teamService.status(team, None)
 
-			if score.game != match.game:
+			if completed or score.game != match.game:
 				self.gameService.resetGame(match.id, score.game)
 				self.matchService.updateGame(match.id, score.game)
 
