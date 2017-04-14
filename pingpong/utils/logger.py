@@ -18,24 +18,24 @@ def setupLogging(app):
 	logging.addLevelName(ACCESS_LEVEL, "ACCESS")
 	logging.Logger.access = access
 
-	handlerApp = TimedRotatingFileHandler(
-		app.config["LOG_FILE_APPLICATION"],
-		when = app.config["LOG_WHEN"],
-		interval = app.config["LOG_INTERVAL"],
-		backupCount = app.config["LOG_BACKUP_COUNT"]
-	)
-	handlerApp.setFormatter(logging.Formatter(app.config["LOG_ACCESS_FORMAT"]))
-	handlerApp.addFilter(FilterAppLogs())
-
 	handlerAccess = TimedRotatingFileHandler(
 		app.config["LOG_FILE_ACCESS"],
 		when = app.config["LOG_WHEN"],
 		interval = app.config["LOG_INTERVAL"],
 		backupCount = app.config["LOG_BACKUP_COUNT"]
 	)
-	handlerAccess.setFormatter(logging.Formatter(app.config["LOG_APP_FORMAT"]))
+	handlerAccess.setFormatter(logging.Formatter(app.config["LOG_ACCESS_FORMAT"]))
 	handlerAccess.addFilter(FilterAccessLogs())
-
-	app.logger.addHandler(handlerApp)
 	app.logger.addHandler(handlerAccess)
+
+	handlerApp = TimedRotatingFileHandler(
+		app.config["LOG_FILE_APPLICATION"],
+		when = app.config["LOG_WHEN"],
+		interval = app.config["LOG_INTERVAL"],
+		backupCount = app.config["LOG_BACKUP_COUNT"]
+	)
+	handlerApp.setFormatter(logging.Formatter(app.config["LOG_APP_FORMAT"]))
+	handlerApp.addFilter(FilterAppLogs())
+	app.logger.addHandler(handlerApp)
+
 	app.logger.setLevel(logging.INFO)
