@@ -177,10 +177,27 @@ class Singles(MatchType):
 
 		return newMatch
 
-	def sendWinningMessage(self, winningTeam, winningSets, losingTeam, losingSets):
+	def sendWinningMessage(self, match, winningTeam, winningSets, losingTeam, losingSets):
 		winnerPlayer = winningTeam.players[0]
 		losingPlayer = losingTeam.players[0]
 
-		message = "<b>{}</b> has just beaten {} {} - {}".format(winnerPlayer.name, losingPlayer.name, winningSets, losingSets)
+		message = "<b>{}</b> has defeated {}, {} - {}".format(winnerPlayer.name, losingPlayer.name, winningSets, losingSets)
+
+		winnerScores = "\n"
+		loserScores = "\n"
+
+		for game in match.games:
+			if game.completedAt == None:
+				continue
+
+			if game.winner == winningTeam.id:
+				winnerScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
+				loserScores += "{}\t\t\t".format(game.loserScore)
+			else:
+				winnerScores += "{}\t\t\t".format(game.loserScore)
+				loserScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
+
+		message += winnerScores
+		message += loserScores
 
 		notifications.send(message)

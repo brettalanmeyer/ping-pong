@@ -230,12 +230,29 @@ class Doubles(MatchType):
 
 		return newMatch
 
-	def sendWinningMessage(self, winningTeam, winningSets, losingTeam, losingSets):
+	def sendWinningMessage(self, match, winningTeam, winningSets, losingTeam, losingSets):
 		winnerPlayer1 = winningTeam.players[0]
 		winnerPlayer2 = winningTeam.players[1]
 		losingPlayer1 = losingTeam.players[0]
 		losingPlayer2 = losingTeam.players[1]
 
-		message = "<b>{} and {}</b> have just beaten {} and {} {} - {}".format(winnerPlayer1.name, winnerPlayer2.name, losingPlayer1.name, losingPlayer2.name, winningSets, losingSets)
+		message = "<b>{}</b> and <b>{}</b> have defeated {} and {}, {} - {}".format(winnerPlayer1.name, winnerPlayer2.name, losingPlayer1.name, losingPlayer2.name, winningSets, losingSets)
+
+		winnerScores = "\n"
+		loserScores = "\n"
+
+		for game in match.games:
+			if game.completedAt == None:
+				continue
+
+			if game.winner == winningTeam.id:
+				winnerScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
+				loserScores += "{}\t\t\t".format(game.loserScore)
+			else:
+				winnerScores += "{}\t\t\t".format(game.loserScore)
+				loserScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
+
+		message += winnerScores
+		message += loserScores
 
 		notifications.send(message)

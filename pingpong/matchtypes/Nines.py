@@ -172,6 +172,6 @@ class Nines(MatchType):
 		player3 = losingTeams[1].players[0]
 		player4 = losingTeams[2].players[0]
 
-		message = "<b>{}</b> has defeated {}, {}, and {} in a game of nines".format(player1.name, player2.name, player3.name, player4.name)
+		message = "<b>{}</b> has defeated {}, {}, and {} in nines".format(player1.name, player2.name, player3.name, player4.name)
 
 		notifications.send(message)
