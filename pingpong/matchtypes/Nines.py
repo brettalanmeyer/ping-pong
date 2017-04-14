@@ -1,4 +1,5 @@
 from MatchType import MatchType
+from pingpong.utils import notifications
 import random
 
 class Nines(MatchType):
@@ -140,6 +141,8 @@ class Nines(MatchType):
 				else:
 					self.teamService.lose(team)
 
+			self.sendWinningMessage(match)
+
 			data = self.matchData(match)
 
 		return data
@@ -153,3 +156,22 @@ class Nines(MatchType):
 		self.matchService.play(newMatch)
 
 		return newMatch
+
+	def sendWinningMessage(self, match):
+		winningTeam = None
+		losingTeams = []
+
+		for team in match.teams:
+			if team.win:
+				winningTeam = team
+			else:
+				losingTeams.append(team)
+
+		player1 = winningTeam.players[0]
+		player2 = losingTeams[0].players[0]
+		player3 = losingTeams[1].players[0]
+		player4 = losingTeams[2].players[0]
+
+		message = "<b>{}</b> has defeated {}, {}, and {} in a game of nines".format(player1.name, player2.name, player3.name, player4.name)
+
+		notifications.send(message)
