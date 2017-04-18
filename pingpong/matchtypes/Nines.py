@@ -1,6 +1,16 @@
-from MatchType import MatchType
+from flask import request
+from pingpong.matchtypes.MatchType import MatchType
+from pingpong.services.GameService import GameService
+from pingpong.services.MatchService import MatchService
+from pingpong.services.ScoreService import ScoreService
+from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
 import random
+
+gameService = GameService()
+matchService = MatchService()
+scoreService = ScoreService()
+teamService = TeamService()
 
 class Nines(MatchType):
 
@@ -43,7 +53,7 @@ class Nines(MatchType):
 	def setPlayerData(self, match, players):
 		for team in match.teams:
 
-			points = self.scoreService.getScore(match.id, team.id, match.game)
+			points = scoreService.getScore(match.id, team.id, match.game)
 
 			for player in team.players:
 				for color in self.colors:
@@ -87,12 +97,12 @@ class Nines(MatchType):
 		if randomize:
 			random.shuffle(ids)
 
-		team1 = self.teamService.createOnePlayer(match.id, ids[0])
-		team2 = self.teamService.createOnePlayer(match.id, ids[1])
-		team3 = self.teamService.createOnePlayer(match.id, ids[2])
-		team4 = self.teamService.createOnePlayer(match.id, ids[3])
+		team1 = teamService.createOnePlayer(match.id, ids[0])
+		team2 = teamService.createOnePlayer(match.id, ids[1])
+		team3 = teamService.createOnePlayer(match.id, ids[2])
+		team4 = teamService.createOnePlayer(match.id, ids[3])
 
-		self.gameService.create(match.id, 0, ids[0], ids[1], ids[2], ids[3])
+		gameService.create(match.id, 0, ids[0], ids[1], ids[2], ids[3])
 
 	def score(self, match, button):
 		data = self.matchData(match)
@@ -113,7 +123,7 @@ class Nines(MatchType):
 				player = players["yellow"]
 
 		if player["points"] > 0:
-			self.scoreService.score(match.id, player["teamId"], match.game)
+			scoreService.score(match.id, player["teamId"], match.game)
 
 		data = self.matchData(match)
 		data = self.determineMatchWinner(match, data)
@@ -128,18 +138,18 @@ class Nines(MatchType):
 
 		for color in self.colors:
 			if data["players"][color]["winner"]:
-				self.matchService.complete(match)
+				matchService.complete(match)
 				hasWinner = True
 				break
 
 		if hasWinner:
 			for color in self.colors:
-				team = self.teamService.selectById(data["players"][color]["teamId"])
+				team = teamService.selectById(data["players"][color]["teamId"])
 
 				if data["players"][color]["winner"]:
-					self.teamService.win(team)
+					teamService.win(team)
 				else:
-					self.teamService.lose(team)
+					teamService.lose(team)
 
 			self.sendWinningMessage(match)
 
@@ -147,13 +157,24 @@ class Nines(MatchType):
 
 		return data
 
+	def play(self, match):
+		matchService.play(match)
+
+		player1 = match.teams[0].players[0]
+		player2 = match.teams[1].players[0]
+		player3 = match.teams[2].players[0]
+		player4 = match.teams[3].players[0]
+
+		message = '<a href="{}matches/{}">{}, {}, {} and {} are playing nines</a>'.format(request.url_root, match.id, player1.name, player2.name, player3.name, player4.name)
+		notifications.send(message)
+
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
 		playerIds = [game.yellow, game.blue, game.red, game.green]
 
-		newMatch = self.matchService.create(self.matchType)
+		newMatch = matchService.create(self.matchType)
 		self.createTeams(newMatch, playerIds, True)
-		self.matchService.play(newMatch)
+		matchService.play(newMatch)
 
 		return newMatch
 
@@ -172,6 +193,6 @@ class Nines(MatchType):
 		player3 = losingTeams[1].players[0]
 		player4 = losingTeams[2].players[0]
 
-		message = "<b>{}</b> has defeated {}, {}, and {} in nines".format(player1.name, player2.name, player3.name, player4.name)
+		message = "<b>{}</b> defeated {}, {}, and {} in nines".format(player1.name, player2.name, player3.name, player4.name)
 
 		notifications.send(message)

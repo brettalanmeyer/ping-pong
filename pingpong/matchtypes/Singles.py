@@ -1,6 +1,16 @@
+from flask import request
 from pingpong.matchtypes.MatchType import MatchType
+from pingpong.services.GameService import GameService
+from pingpong.services.MatchService import MatchService
+from pingpong.services.ScoreService import ScoreService
+from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
 import random
+
+gameService = GameService()
+matchService = MatchService()
+scoreService = ScoreService()
+teamService = TeamService()
 
 class Singles(MatchType):
 
@@ -49,7 +59,7 @@ class Singles(MatchType):
 		for team in match.teams:
 			for player in team.players:
 
-				points = self.scoreService.getScore(match.id, team.id, match.game)
+				points = scoreService.getScore(match.id, team.id, match.game)
 
 				color = "green"
 				if teams["yellow"]["playerId"] == player.id:
@@ -124,12 +134,12 @@ class Singles(MatchType):
 				loser = data["teams"]["green"]["teamId"]
 				loserScore = data["teams"]["green"]["points"]
 
-			self.gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
+			gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
 
 			self.determineMatchWinner(match)
 
 			if not match.complete and data["game"] < data["numOfGames"]:
-				self.matchService.updateGame(match.id, match.game + 1)
+				matchService.updateGame(match.id, match.game + 1)
 
 	def score(self, match, button):
 		data = self.matchData(match)
@@ -139,7 +149,7 @@ class Singles(MatchType):
 		elif button == "yellow" or button == "blue":
 			teamId = data["teams"]["yellow"]["teamId"]
 
-		self.scoreService.score(match.id, teamId, match.game)
+		scoreService.score(match.id, teamId, match.game)
 
 		self.determineGameWinner(match)
 
@@ -151,8 +161,8 @@ class Singles(MatchType):
 		if randomize:
 			random.shuffle(ids)
 
-		team1 = self.teamService.createOnePlayer(match.id, ids[0])
-		team2 = self.teamService.createOnePlayer(match.id, ids[1])
+		team1 = teamService.createOnePlayer(match.id, ids[0])
+		team2 = teamService.createOnePlayer(match.id, ids[1])
 
 		for i in range(1, match.numOfGames + 1):
 
@@ -163,17 +173,27 @@ class Singles(MatchType):
 				green = ids[1]
 				yellow = ids[0]
 
-			self.gameService.create(match.id, i, green, yellow, None, None)
+			gameService.create(match.id, i, green, yellow, None, None)
+
+	def play(self, match):
+		matchService.play(match)
+
+		player1 = match.teams[0].players[0]
+		player2 = match.teams[1].players[0]
+
+		message = '<a href="{}matches/{}">{} is playing {} in a best of {}</a>'.format(request.url_root, match.id, player1.name, player2.name, match.numOfGames)
+
+		notifications.send(message)
 
 	def playAgain(self, match, numOfGames, persistTeams):
 		game = match.games[0]
 		playerIds = [game.green, game.yellow]
 
-		newMatch = self.matchService.create(self.matchType)
+		newMatch = matchService.create(self.matchType)
 		newMatch.numOfGames = numOfGames
 		newMatch.game = 1
 		self.createTeams(newMatch, playerIds, True)
-		self.matchService.play(newMatch)
+		matchService.play(newMatch)
 
 		return newMatch
 
@@ -181,7 +201,7 @@ class Singles(MatchType):
 		winnerPlayer = winningTeam.players[0]
 		losingPlayer = losingTeam.players[0]
 
-		message = "<b>{}</b> has defeated {}, {} - {}".format(winnerPlayer.name, losingPlayer.name, winningSets, losingSets)
+		message = "<b>{}</b> defeated {}, {} - {}".format(winnerPlayer.name, losingPlayer.name, winningSets, losingSets)
 
 		winnerScores = "\n"
 		loserScores = "\n"

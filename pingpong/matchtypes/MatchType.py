@@ -4,14 +4,14 @@ from pingpong.services.TeamService import TeamService
 from pingpong.services.ScoreService import ScoreService
 import math
 
+gameService = GameService()
+matchService = MatchService()
+scoreService = ScoreService()
+teamService = TeamService()
+
 class MatchType():
 
 	def __init__(self, label, matchType, matchTemplate, defaultPoints, numOfPlayers, numOfTeams):
-		self.matchService = MatchService()
-		self.gameService = GameService()
-		self.teamService = TeamService()
-		self.scoreService = ScoreService()
-
 		self.label = label
 		self.matchType = matchType
 		self.matchTemplate = matchTemplate
@@ -26,22 +26,22 @@ class MatchType():
 		return self.matchType == matchType
 
 	def undo(self, match, button):
-		score = self.scoreService.selectLastScoreByMatchId(match.id)
+		score = scoreService.selectLastScoreByMatchId(match.id)
 
 		if score != None:
 
 			completed = match.complete
 
 			if completed:
-				self.matchService.incomplete(match)
+				matchService.incomplete(match)
 				for team in match.teams:
-					self.teamService.status(team, None)
+					teamService.status(team, None)
 
 			if completed or score.game != match.game:
-				self.gameService.resetGame(match.id, score.game)
-				self.matchService.updateGame(match.id, score.game)
+				gameService.resetGame(match.id, score.game)
+				matchService.updateGame(match.id, score.game)
 
-			self.scoreService.delete(score)
+			scoreService.delete(score)
 
 		return self.matchData(match)
 
@@ -55,15 +55,15 @@ class MatchType():
 		gamesNeededToWinMatch = int(math.ceil(float(match.numOfGames) / 2.0))
 
 		if team1Wins == gamesNeededToWinMatch:
-			self.teamService.win(team1)
-			self.teamService.lose(team2)
-			self.matchService.complete(match)
+			teamService.win(team1)
+			teamService.lose(team2)
+			matchService.complete(match)
 			self.sendWinningMessage(match, team1, team1Wins, team2, team2Wins)
 		elif team2Wins == gamesNeededToWinMatch:
-			self.teamService.win(team2)
-			self.teamService.lose(team1)
-			self.matchService.complete(match)
+			teamService.win(team2)
+			teamService.lose(team1)
+			matchService.complete(match)
 			self.sendWinningMessage(match, team2, team2Wins, team1, team1Wins)
 
 	def getTeamWins(self, matchId, teamId):
-		return self.gameService.getTeamWins(matchId, teamId)
+		return gameService.getTeamWins(matchId, teamId)

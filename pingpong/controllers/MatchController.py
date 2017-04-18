@@ -72,7 +72,7 @@ def matches_players_create(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
 	matchType.createTeams(match, request.form.getlist("playerId"), True)
-	matchService.play(match)
+	matchType.play(match)
 	return redirect("/matches/%d" % id)
 
 @matchController.route("/matches/<int:id>", methods = ["GET"])

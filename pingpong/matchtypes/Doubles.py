@@ -1,6 +1,16 @@
-from MatchType import MatchType
+from flask import request
+from pingpong.matchtypes.MatchType import MatchType
+from pingpong.services.GameService import GameService
+from pingpong.services.MatchService import MatchService
+from pingpong.services.ScoreService import ScoreService
+from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
 import random
+
+gameService = GameService()
+matchService = MatchService()
+scoreService = ScoreService()
+teamService = TeamService()
 
 class Doubles(MatchType):
 
@@ -54,7 +64,7 @@ class Doubles(MatchType):
 	def setTeamData(self, match, players, teams):
 		for team in match.teams:
 
-			points = self.scoreService.getScore(match.id, team.id, match.game)
+			points = scoreService.getScore(match.id, team.id, match.game)
 
 			for player in team.players:
 				if players["green"]["playerId"] == player.id:
@@ -143,12 +153,12 @@ class Doubles(MatchType):
 				loser = north["teamId"]
 				loserScore = north["points"]
 
-			self.gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
+			gameService.complete(data["matchId"], data["game"], winner, winnerScore, loser, loserScore)
 
 			self.determineMatchWinner(match)
 
 			if not match.complete and match.game < match.numOfGames:
-				self.matchService.updateGame(match.id, match.game + 1)
+				matchService.updateGame(match.id, match.game + 1)
 
 	def createTeams(self, match, data, randomize):
 		ids = map(int, data)
@@ -161,8 +171,8 @@ class Doubles(MatchType):
 		blue = ids[2]
 		red = ids[3]
 
-		team1 = self.teamService.createTwoPlayer(match.id, green, red)
-		team2 = self.teamService.createTwoPlayer(match.id, yellow, blue)
+		team1 = teamService.createTwoPlayer(match.id, green, red)
+		team2 = teamService.createTwoPlayer(match.id, yellow, blue)
 
 		for i in range(0, match.numOfGames):
 
@@ -202,7 +212,7 @@ class Doubles(MatchType):
 				c = green
 				d = yellow
 
-			self.gameService.create(match.id, i + 1, a, b, c, d)
+			gameService.create(match.id, i + 1, a, b, c, d)
 
 	def score(self, match, button):
 		data = self.matchData(match)
@@ -212,21 +222,33 @@ class Doubles(MatchType):
 		elif button == "yellow" or button == "blue":
 			teamId = data["teams"]["south"]["teamId"]
 
-		self.scoreService.score(match.id, teamId, match.game)
+		scoreService.score(match.id, teamId, match.game)
 
 		self.determineGameWinner(match)
 
 		return self.matchData(match)
 
+	def play(self, match):
+		matchService.play(match)
+
+		t1p1 = match.teams[0].players[0]
+		t1p2 = match.teams[0].players[1]
+		t2p1 = match.teams[1].players[0]
+		t2p2 = match.teams[1].players[1]
+
+		message = '<a href="{}matches/{}">{} and {} are playing {} and {} in a best of {}</a>'.format(request.url_root, match.id, t1p1.name, t1p2.name, t2p1.name, t2p2.name, match.numOfGames)
+
+		notifications.send(message)
+
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
 		playerIds = [game.green, game.yellow, game.blue, game.red]
 
-		newMatch = self.matchService.create(self.matchType)
+		newMatch = matchService.create(self.matchType)
 		newMatch.numOfGames = numOfGames
 		newMatch.game = 1
 		self.createTeams(newMatch, playerIds, randomize)
-		self.matchService.play(newMatch)
+		matchService.play(newMatch)
 
 		return newMatch
 
@@ -236,7 +258,7 @@ class Doubles(MatchType):
 		losingPlayer1 = losingTeam.players[0]
 		losingPlayer2 = losingTeam.players[1]
 
-		message = "<b>{}</b> and <b>{}</b> have defeated {} and {}, {} - {}".format(winnerPlayer1.name, winnerPlayer2.name, losingPlayer1.name, losingPlayer2.name, winningSets, losingSets)
+		message = "<b>{}</b> and <b>{}</b> defeated {} and {}, {} - {}".format(winnerPlayer1.name, winnerPlayer2.name, losingPlayer1.name, losingPlayer2.name, winningSets, losingSets)
 
 		winnerScores = "\n"
 		loserScores = "\n"
