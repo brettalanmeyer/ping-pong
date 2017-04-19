@@ -48,6 +48,8 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 		LOG_INTERVAL = 1
 		LOG_BACKUP_COUNT = 14
 		SKYPE_URL = ''
+		ELO_K_VALUE = 32
+		ELO_PERFORMANCE_RATING = 1500
 
 	create dbconfig.cfg
 
@@ -73,6 +75,9 @@ Fix doubles opponent stats
 move generate data to another file and route only in debug mode
 put getMatchType() somewhere shared
 try to put skype stuff in this app if possible
+flask messages
+form validation
+section headers
 
 Leaderboard:
 	current win/loss streak
