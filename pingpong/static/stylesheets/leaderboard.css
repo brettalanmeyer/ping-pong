@@ -50,6 +50,11 @@
 	color: #333
 }
 
+.leaderboard-container {
+	width: 1310px;
+	margin: auto;
+}
+
 .leaderboard-container .win-streak,
 .leaderboard-player-container .win-streak {
 	font-weight: bold;
@@ -69,4 +74,10 @@
 .leaderboard-container .win-streak-neutral,
 .leaderboard-player-container .win-streak-neutral {
 	padding-left: 8px;
+}
+
+.leaderboard-container .table.singles .elo,
+.leaderboard-container .table.doubles .elo,
+.leaderboard-container .table.nines .elo {
+	display: none;
 }

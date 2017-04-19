@@ -4,7 +4,7 @@
 
 {% block body %}
 
-	<div class="container">
+	<div class="container-fluid">
 
 		<div class="leaderboard-container">
 
@@ -18,7 +18,7 @@
 				{% endfor %}
 			</ul>
 
-			<table id="leaderboard" class="leaderboard-table table table-sortable">
+			<table id="leaderboard" class="leaderboard-table table table-sortable {{ matchType }}">
 
 				<thead>
 
@@ -32,6 +32,13 @@
 							</div>
 						</th>
 
+						<th data-sort="int" class="elo">
+							ELO
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
 
 						<th data-sort="int">
 							Matches
@@ -41,7 +48,6 @@
 							</div>
 						</th>
 
-
 						<th data-sort="float">
 							Win %
 							<div class="sorting-container">
@@ -50,7 +56,6 @@
 							</div>
 						</th>
 
-
 						<th data-sort="int">
 							Points For
 							<div class="sorting-container">
@@ -58,7 +63,6 @@
 								<span class="glyphicon glyphicon-chevron-down"></span>
 							</div>
 						</th>
-
 
 						<th data-sort="int">
 							Points Against
@@ -76,7 +80,6 @@
 							</div>
 						</th>
 
-
 						<th data-sort="int">
 							Losses
 							<div class="sorting-container">
@@ -84,7 +87,6 @@
 								<span class="glyphicon glyphicon-chevron-down"></span>
 							</div>
 						</th>
-
 
 						<th data-sort="int">
 							Point Streak
@@ -115,6 +117,7 @@
 							<td data-sort-value="{{ row.playerName }}">
 								<a href="/leaderboard/players/{{ row.playerId }}" class="link">{{ row.playerName }}</a>
 							</td>
+							<td data-sort-value="{{ row.elo }}" class="elo">{{ row.elo }}</td>
 							<td data-sort-value="{{ row.matches }}">{{ row.matches }}</td>
 							<td data-sort-value="{{ row.percentage }}">{{ "{:.3f}".format(row.percentage) }}</td>
 							<td data-sort-value="{{ row.pointsFor }}">{{ "{:,}".format(row.pointsFor) }}</td>
@@ -137,6 +140,7 @@
 					<tr>
 
 						<th>Totals:</th>
+						<th class="elo"></th>
 						<th>{{ stats.totals["matches"] }}</th>
 						<th></th>
 						<th>{{ stats.totals["pointsFor"] }}</th>

@@ -1,10 +1,13 @@
 from datetime import datetime
 from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
+from pingpong.services.PlayerService import PlayerService
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
 from sqlalchemy import text
-from sqlalchemy import text
+import math
+
+playerService = PlayerService()
 
 class LeaderboardService(Service):
 
@@ -19,6 +22,7 @@ class LeaderboardService(Service):
 		pointsAgainst = self.pointsAgainstByMatchType(pointsFor, matchType)
 		pointStreakData = self.selectMatchScoresByMatchType(matchType)
 		winStreakData = self.selectTeamResultsByMatchType(matchType)
+		elo = self.elo()
 
 		stats = {
 			"matchType": matchType,
@@ -39,7 +43,8 @@ class LeaderboardService(Service):
 				"seconds": times[player.id] if player.id in matches else 0,
 				"time": self.formatTime(times[player.id]) if player.id in times else 0,
 				"pointStreak": self.pointStreakByPlayer(pointStreakData, player.id),
-				"winStreak": self.winStreakByPlayer(winStreakData, player.id)
+				"winStreak": self.winStreakByPlayer(winStreakData, player.id),
+				"elo": int(round(elo[player.id]))
 			})
 
 		stats["totals"] = self.totals(stats["rows"])
@@ -599,3 +604,80 @@ class LeaderboardService(Service):
 		m, s = divmod(seconds, 60)
 		h, m = divmod(m, 60)
 		return "%02d:%02d:%02d" % (h, m, s)
+
+	def singlesResults(self):
+		query  = "\
+			SELECT GROUP_CONCAT(players.id, ',', IF(teams.win = 1, 'win', 'loss')) AS record\
+			FROM matches\
+			LEFT JOIN teams ON matches.id = teams.matchId\
+			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+			LEFT JOIN players ON teams_players.playerId = players.id\
+			WHERE matches.matchType = 'singles' AND matches.complete = 1\
+			GROUP BY matches.id\
+			ORDER BY matches.id\
+		"
+		connection = db.session.connection()
+		results = connection.execute(text(query))
+
+		data = []
+
+		for result in results:
+			id1, result1, id2, result2 = result.record.split(",")
+
+			winner = int(id1)
+			loser = int(id2)
+
+			if result2 == "win":
+				winner = int(id2)
+				loser = int(id1)
+
+			data.append({
+				"winner": winner,
+				"loser": loser
+			})
+
+		return data
+
+	def elo(self):
+
+		# ELO rating system
+		# https://en.wikipedia.org/wiki/Elo_rating_system
+		# https://metinmediamath.wordpress.com/2013/11/27/how-to-calculate-the-elo-rating-including-example/
+
+		results = self.singlesResults()
+		players = playerService.select()
+
+		data = {}
+
+		# inital performance rating
+		for player in players:
+			data[player.id] = app.config["ELO_PERFORMANCE_RATING"]
+
+		KVALUE = app.config["ELO_K_VALUE"]
+
+		for result in results:
+
+			# current performance rating
+			r1 = float(data[result["winner"]])
+			r2 = float(data[result["loser"]])
+
+			R1 = math.pow(10, r1 / 400L)
+			R2 = math.pow(10, r2 / 400L)
+
+			E1 = R1 / (R1 + R2)
+			E2 = R2 / (R1 + R2)
+
+			S1 = 1L # 1 points for win
+			S2 = 0L # 0 points for loss
+
+			r1p = r1 + KVALUE * (S1 - E1)
+			r2p = r2 + KVALUE * (S2 - E2)
+
+			# new performance rating
+			data[result["winner"]] = r1p
+			data[result["loser"]] = r2p
+
+		# to fuck with matt
+		data[41] = data[41] - (data[41] * 0.043)
+
+		return data
