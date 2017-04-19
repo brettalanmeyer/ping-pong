@@ -8,10 +8,6 @@
 
 		<h1>Create Player</h1>
 
-		{% if error %}
-			<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>
-		{% endif %}
-
 		<form action="/players{% if matchId != None %}/matches/{{ matchId}}{% endif %}" method="POST">
 
 			{% include 'players/_form.html' %}

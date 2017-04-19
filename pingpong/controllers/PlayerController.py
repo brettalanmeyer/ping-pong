@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -28,18 +29,25 @@ def players_create(matchId):
 	if players.count() > 0:
 		player = playerService.new()
 		player.name = name
-		return render_template("players/new.html", player = player, matchId = matchId, error = True)
+		flash("The name '{}' is already taken. Please specify a unique name.".format(name), "danger")
+		return render_template("players/new.html", player = player, matchId = matchId)
 
 	playerService.create(request.form)
 
 	if matchId != None:
 		return redirect("/matches/%d/players" % matchId)
 
+	flash("Player '{}' has been successfully created.".format(name), "success")
 	return redirect("/players")
 
 @playerController.route("/players/<int:id>/edit", methods = ["GET"])
 def players_edit(id):
 	player = playerService.selectById(id)
+
+	if player == None:
+		flash("Player {} does not exist.".format(id), "warning")
+		return redirect("/players")
+
 	return render_template("players/edit.html", player = player)
 
 @playerController.route("/players/<int:id>", methods = ["POST"])
@@ -50,8 +58,10 @@ def players_update(id):
 	if players.count() > 0:
 		player = playerService.selectById(id)
 		player.name = name
-		return render_template("players/edit.html", player = player, error = True)
+		flash("The name '{}' is already taken. Please specify a unique name.".format(name), "danger")
+		return render_template("players/edit.html", player = player)
 
 	playerService.update(id, name)
 
+	flash("Player '{}' has been successfully updated.".format(name), "success")
 	return redirect("/players")

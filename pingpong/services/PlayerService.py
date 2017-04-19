@@ -14,7 +14,12 @@ class PlayerService(Service):
 	def selectById(self, id):
 		app.logger.info("Selecting player=%d", id)
 
-		return db.session.query(PlayerModel).filter(PlayerModel.id == id).one()
+		players = db.session.query(PlayerModel).filter(PlayerModel.id == id)
+
+		if players.count() == 0:
+			return None
+
+		return players.one()
 
 	def	selectActive(self):
 		app.logger.info("Selecting active players")
