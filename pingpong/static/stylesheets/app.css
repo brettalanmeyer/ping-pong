@@ -12,8 +12,8 @@ body {
 }
 
 body {
-    background: #f0f0f0;
-    color: #333;
+	background: #f0f0f0;
+	color: #333;
 }
 
 header {
@@ -30,7 +30,7 @@ header a {
 header a,
 header a:focus,
 header a:hover {
-    color: #333;
+	color: #333;
 	text-decoration: none;
 }
 
@@ -77,6 +77,11 @@ a.link {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.flash-messages {
+	width: 1200px;
+	margin: 20px auto -20px;
 }
 
 .main-container {
