@@ -6,6 +6,7 @@ from pingpong.matchtypes.Singles import Singles
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.PlayerService import PlayerService
 import json
+from pingpong.utils.cache import cache
 
 leaderboardController = Blueprint("leaderboardController", __name__)
 
@@ -15,6 +16,7 @@ singles = Singles()
 
 @leaderboardController.route("/leaderboard", methods = ["GET"], defaults = { "matchType": "singles" })
 @leaderboardController.route("/leaderboard/<path:matchType>", methods = ["GET"])
+@cache.memoize(timeout = 10)
 def leaderboard_index(matchType):
 	if matchType not in singles.matchTypes:
 		abort(404)
@@ -29,6 +31,7 @@ def leaderboard_json(matchType):
 	return Response(json.dumps(stats), status = 200, mimetype = "application/json")
 
 @leaderboardController.route("/leaderboard/players/<int:id>", methods = ["GET"])
+@cache.memoize(timeout = 10)
 def leaderboard_players(id):
 	player = playerService.selectById(id)
 	stats = leaderboardService.playerStats(player)

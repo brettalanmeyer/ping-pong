@@ -9,6 +9,7 @@ from pingpong.controllers.PlayerController import playerController
 from pingpong.controllers.RuleController import ruleController
 from pingpong.utils import assets
 from pingpong.utils import logger
+from pingpong.utils.cache import cache
 
 socketio = SocketIO()
 
@@ -18,6 +19,7 @@ def create_app(debug = False):
 
 	logger.setupLogging(app)
 	assets.setupAssets(app)
+	cache.init_app(app)
 
 	app.url_map.strict_slashes = False
 

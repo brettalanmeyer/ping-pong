@@ -6,6 +6,7 @@ from flask import send_from_directory
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.utils import database as db
+from pingpong.utils.cache import cache
 
 mainController = Blueprint("mainController", __name__)
 
@@ -13,6 +14,7 @@ matchService = MatchService()
 scoreService = ScoreService()
 
 @mainController.route("/", methods = ["GET"])
+@cache.cached(timeout = 60)
 def index():
 	matches = matchService.selectComplete().count()
 	scores = scoreService.selectCount()
@@ -42,3 +44,4 @@ def server_error(error):
 	app.logger.error(error)
 	app.logger.error(request.url)
 	return render_template("errors/500.html"), 500
+
