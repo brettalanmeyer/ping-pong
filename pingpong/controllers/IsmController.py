@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -25,20 +26,28 @@ def isms_new():
 
 @ismController.route("/isms", methods = ["POST"])
 def isms_create():
-	ismService.create(request.form)
+	ism = ismService.create(request.form)
+	flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
 	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/edit", methods = ["GET"])
 def isms_edit(id):
 	ism = ismService.selectById(id)
+
+	if ism == None:
+		flash("Ism {} does not exist.".format(id), "warning")
+		return redirect("/isms")
+
 	return render_template("isms/edit.html", ism = ism)
 
 @ismController.route("/isms/<int:id>", methods = ["POST"])
 def isms_update(id):
-	ismService.update(id, request.form)
+	ism = ismService.update(id, request.form)
+	flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
 	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
 def isms_delete(id):
-	ismService.delete(id)
+	ism = ismService.delete(id)
+	flash("Ism '{}' has been successfully deleted.".format(ism.saying), "success")
 	return redirect("/isms")

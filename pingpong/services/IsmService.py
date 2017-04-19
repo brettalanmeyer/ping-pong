@@ -15,7 +15,12 @@ class IsmService(Service):
 	def selectById(self, id):
 		app.logger.info("Selecting ism=%d", id)
 
-		return db.session.query(IsmModel).filter(IsmModel.id == id).one()
+		isms = db.session.query(IsmModel).filter(IsmModel.id == id)
+
+		if isms.count() == 0:
+			return None
+
+		return isms.one()
 
 	def new(self):
 		app.logger.info("New ism")
