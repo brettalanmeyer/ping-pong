@@ -107,8 +107,9 @@ def matches_again(id):
 @matchController.route("/matches/<int:id>/undo", methods = ["POST"])
 def matches_undo(id):
 	match = matchService.selectById(id)
-	matchType = getMatchType(match)
-	matchType.undo(match, None)
+	if match.ready:
+		matchType = getMatchType(match)
+		matchType.undo(match, None)
 
 	return redirect("/matches/%d" % match.id)
 

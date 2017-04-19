@@ -33,6 +33,7 @@ $(function(){
 
 			if(data.complete){
 				$("#play-again").removeClass("hidden");
+				$("#undo").removeClass("hidden");
 			}
 
 			for(var i = 0; i < colors.length; i++){

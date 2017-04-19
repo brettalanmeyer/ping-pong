@@ -104,7 +104,7 @@ class MatchService(Service):
 	def incomplete(self, match):
 		match.complete = False
 		match.modifiedAt = datetime.now()
-		match.completedAt = datetime.now()
+		match.completedAt = None
 		db.session.commit()
 
 		app.logger.info("Incompleting match=%d", match.id)

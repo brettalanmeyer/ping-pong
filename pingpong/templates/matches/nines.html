@@ -32,6 +32,9 @@
 			<form id="play-again" method="POST" action="/matches/{{ data.matchId }}/play-again" class="play-again {% if not data.complete %}hidden{% endif %}">
 				<button class="btn btn-block btn-info">Press any button to play again</button>
 			</form>
+			<form id="undo" method="POST" action="/matches/{{ data.matchId }}/undo" class="undo {% if not data.complete %}hidden{% endif %}">
+				<button type="submit" class="btn btn-default btn-warning btn-block">Undo</button>
+			</form>
 
 		</div>
 

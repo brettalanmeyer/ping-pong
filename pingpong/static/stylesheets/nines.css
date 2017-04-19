@@ -76,11 +76,13 @@
 	width: 25%;
 }
 
-.nines-container .play-again {
+.nines-container .play-again,
+.nines-container .undo {
 	padding-top: 20px;
 	clear: both;
 }
 
-.nines-container .play-again .btn {
+.nines-container .play-again .btn,
+.nines-container .undo .btn {
 	font-size: 24px;
 }
