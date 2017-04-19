@@ -21,7 +21,7 @@ doubles = Doubles()
 nines = Nines()
 
 @matchController.route("/matches", methods = ["GET"], defaults = { "page": 1, "playerId": None })
-@matchController.route("/matches/page/<int:page>", defaults = { "playerId": 1 },  methods = ["GET"])
+@matchController.route("/matches/page/<int:page>", defaults = { "playerId": None },  methods = ["GET"])
 @matchController.route("/matches/players/<int:playerId>", defaults = { "page": 1 }, methods = ["GET"])
 @matchController.route("/matches/players/<int:playerId>/page/<int:page>", methods = ["GET"])
 def matches_index(page, playerId):
