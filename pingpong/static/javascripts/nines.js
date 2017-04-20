@@ -50,6 +50,7 @@ $(function(){
 					playerNames[color].addClass("scored");
 				}
 			}
+
 			setTimeout(function(){
 				for(var i in colors){
 					var color = colors[i];
@@ -57,6 +58,9 @@ $(function(){
 				}
 			}, 2000);
 		}
+
+		enableUndo();
+
 	}
 
 });

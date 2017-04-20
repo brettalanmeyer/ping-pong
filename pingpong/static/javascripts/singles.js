@@ -96,6 +96,8 @@ $(function(){
 
 		}
 
+		enableUndo();
+
 	}
 
 });
