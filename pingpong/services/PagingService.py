@@ -7,7 +7,7 @@ class PagingService():
 	limit = 10
 	pages = 0
 
-	def __init__(self, limit = 20):
+	def __init__(self, limit = 25):
 		self.limit = limit
 
 	def pager(self, records, page):

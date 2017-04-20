@@ -17,7 +17,7 @@
 
 .nines-container .score-board:nth-child(1),
 .nines-container .score-board:nth-child(2) {
-	margin-bottom: 60px;
+	margin-bottom: 30px;
 }
 .nines-container .score-board:nth-child(2n) {
 	border-left: none;
@@ -76,13 +76,16 @@
 	width: 25%;
 }
 
-.nines-container .play-again,
-.nines-container .undo {
-	padding-top: 20px;
+.nines-container .play-again {
+	padding-top: 24px;
 	clear: both;
+}
+
+.nines-container .undo {
+	padding-top: 8px;
 }
 
 .nines-container .play-again .btn,
 .nines-container .undo .btn {
-	font-size: 24px;
+	font-size: 20px;
 }

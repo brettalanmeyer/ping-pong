@@ -70,14 +70,10 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 TODO
 
 merge models/Base.py and utils/database.py
-ELO rating system
 Fix doubles opponent stats
 move generate data to another file and route only in debug mode
 put getMatchType() somewhere shared
 try to put skype stuff in this app if possible
-flask messages
-form validation
-section headers
 
 Leaderboard:
 	current win/loss streak
@@ -92,3 +88,6 @@ List Screen Processes
 	screen -ls
 Kill Screen Process
 	screen -X -S PID quit
+
+Raspberry pi resolution
+1184x624
