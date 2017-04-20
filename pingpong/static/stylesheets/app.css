@@ -87,8 +87,10 @@ a.link {
 }
 
 .flash-messages {
-	width: 1200px;
+	width: 900px;
 	margin: 20px auto -20px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 .main-container {

@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, DateTime, String, ForeignKey
 from sqlalchemy.orm import relationship
-from base import Base
+from pingpong.utils.database import Base
 
 class TeamModel(Base):
 

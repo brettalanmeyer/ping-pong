@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 import ConfigParser
 
@@ -18,3 +19,5 @@ url = "mysql+mysqldb://{}:{}@{}/{}".format(username, password, host, database)
 
 engine = create_engine(url, pool_recycle = pool_recycle)
 session = scoped_session(sessionmaker(autocommit = autocommit, autoflush = autoflush, bind = engine))
+
+Base = declarative_base()
