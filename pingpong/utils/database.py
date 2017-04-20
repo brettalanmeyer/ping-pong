@@ -18,7 +18,7 @@ pool_recycle = int(config.get("db", "pool_recycle"))
 autocommit = config.get("db", "autocommit") == "True"
 autoflush = config.get("db", "autoflush") == "True"
 
-url = "mysql+mysqldb://{}:{}@{}/{}".format(username, password, host, database)
+url = "mysql+mysqldb://{}:{}@{}/{}?charset=utf8".format(username, password, host, database)
 
 engine = create_engine(url, pool_recycle = pool_recycle)
 session = scoped_session(sessionmaker(autocommit = autocommit, autoflush = autoflush, bind = engine))
