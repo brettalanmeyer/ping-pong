@@ -2,6 +2,8 @@ $(function(){
 
 	$(".table-sortable").stupidtable();
 
+	$("#leaderboard").find("th.elo").stupidsort("desc");
+
 	$(".leaderboard-player-container .nav-tabs li").on("click", function(){
 		$(".leaderboard-player-container .nav-tabs li").removeClass("active");
 

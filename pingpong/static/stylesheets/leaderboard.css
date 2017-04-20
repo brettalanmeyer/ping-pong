@@ -76,7 +76,6 @@
 	padding-left: 8px;
 }
 
-.leaderboard-container .table.singles .elo,
 .leaderboard-container .table.doubles .elo,
 .leaderboard-container .table.nines .elo {
 	display: none;

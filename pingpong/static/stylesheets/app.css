@@ -50,6 +50,13 @@ h1.with-action {
 	text-align: left;
 }
 
+h1 a,
+h1 a:hover,
+h1 a:focus,
+h1 a:active {
+	text-decoration: none;
+}
+
 h2 {
 	text-align: center;
 	margin: 12px 0;
@@ -152,7 +159,30 @@ a.link {
 
 .matches-container .nav-tabs > li > a {
 	padding: 6px 12px;
+}
 
+.matches-container .match-list {
+	width: initial;
+	margin: auto;
+}
+
+.matches-container .match-list > thead > tr > th:nth-child(1),
+.matches-container .match-list > tbody > tr > td:nth-child(1) {
+	width: 180px;
+	text-align: center;
+}
+.matches-container .match-list > thead > tr > th:nth-child(2),
+.matches-container .match-list > tbody > tr > td:nth-child(2) {
+	width: 120px;
+	text-align: center;
+}
+.matches-container .match-list > thead > tr > th:nth-child(3),
+.matches-container .match-list > tbody > tr > td:nth-child(3) {
+	width: 520px;
+}
+.matches-container .match-list > thead > tr > th:nth-child(4),
+.matches-container .match-list > tbody > tr > td:nth-child(4) {
+	text-align: center;
 }
 
 .matches-container .score-cell {
@@ -215,14 +245,19 @@ a.link {
 		width: 750px;
 	}
 }
+
 @media (min-width: 992px) {
 	.container {
-		width: 970px;
+		width: 870px;
 	}
 }
+
 @media (min-width: 1200px) {
 	.container {
-		width: 1300px;
+		width: 900px;
+	}
+	.matches-container {
+		width: 965px;
 	}
 }
 

@@ -6,7 +6,11 @@
 
 	<div class="container">
 
-		<h1>Update Ism</h1>
+		<h1>
+			<a href="/isms">Isms</a>
+			/
+			<a href="/isms/{{ ism.id }}/edit">Update Ism</a>
+		</h1>
 
 		{% if error %}
 			<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>

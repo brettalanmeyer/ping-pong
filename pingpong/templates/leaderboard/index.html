@@ -141,12 +141,12 @@
 
 						<th>Totals:</th>
 						<th class="elo"></th>
-						<th>{{ stats.totals["matches"] }}</th>
+						<th>{{ "{:,}".format(stats.totals["matches"]) }}</th>
 						<th></th>
-						<th>{{ stats.totals["pointsFor"] }}</th>
-						<th>{{ stats.totals["pointsAgainst"] }}</th>
-						<th>{{ stats.totals["wins"] }}</th>
-						<th>{{ stats.totals["losses"] }}</th>
+						<th>{{ "{:,}".format(stats.totals["pointsFor"]) }}</th>
+						<th>{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
+						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
+						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
 						<td></td>
 
 					</tr>
