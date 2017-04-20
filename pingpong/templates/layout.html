@@ -26,29 +26,7 @@
 			</header>
 		{% endif %}
 
-		{% with messages = get_flashed_messages(with_categories = true) %}
-			{% if messages %}
-
-				<div class="flash-messages">
-
-					{% for category, message in messages %}
-
-						<div class="alert alert-{{ category }} alert-dismissible {% if category == 'success' %}auto-close{% endif %}">
-
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-
-							<strong>{{ message }}</strong>
-
-						</div>
-
-					{% endfor %}
-
-					</div>
-
-			{% endif %}
-		{% endwith %}
+		{% include 'partials/messages.html' %}
 
 		{% block body %}{% endblock %}
 

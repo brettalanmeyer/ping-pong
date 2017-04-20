@@ -5,10 +5,12 @@ from flask import render_template
 from flask import request
 from flask import Response
 from pingpong.services.IsmService import IsmService
+from pingpong.forms.IsmForm import IsmForm
 
 ismController = Blueprint("ismController", __name__)
 
 ismService = IsmService()
+ismForm = IsmForm()
 
 @ismController.route("/isms", methods = ["GET"])
 def isms():
@@ -26,9 +28,16 @@ def isms_new():
 
 @ismController.route("/isms", methods = ["POST"])
 def isms_create():
-	ism = ismService.create(request.form)
-	flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
-	return redirect("/isms")
+	hasErrors = ismForm.validate(request.form)
+
+	if hasErrors:
+		ism = ismService.new()
+		ismForm.load(ism, request.form)
+		return render_template("isms/new.html", ism = ism)
+	else:
+		ism = ismService.create(request.form)
+		flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
+		return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/edit", methods = ["GET"])
 def isms_edit(id):
@@ -42,9 +51,16 @@ def isms_edit(id):
 
 @ismController.route("/isms/<int:id>", methods = ["POST"])
 def isms_update(id):
-	ism = ismService.update(id, request.form)
-	flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
-	return redirect("/isms")
+	hasErrors = ismForm.validate(request.form)
+
+	if hasErrors:
+		ism = ismService.selectById(id)
+		ismForm.load(ism, request.form)
+		return render_template("isms/edit.html", ism = ism)
+	else:
+		ism = ismService.update(id, request.form)
+		flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
+		return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
 def isms_delete(id):

@@ -45,9 +45,9 @@ class PlayerService(Service):
 
 		return player
 
-	def update(self, id, name):
+	def update(self, id, form):
 		player = self.selectById(id)
-		player.name = name
+		player.name = form["name"]
 		player.modifiedAt = datetime.now()
 		db.session.commit()
 
