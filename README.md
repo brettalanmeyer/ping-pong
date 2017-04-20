@@ -69,11 +69,14 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 
 TODO
 
+Make UNDO a global button on the app - also bind to "U" button
+
 merge models/Base.py and utils/database.py
 Fix doubles opponent stats
 move generate data to another file and route only in debug mode
 put getMatchType() somewhere shared
 try to put skype stuff in this app if possible
+ELO previous rank, +-
 
 Leaderboard:
 	current win/loss streak

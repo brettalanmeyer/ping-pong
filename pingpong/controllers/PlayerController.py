@@ -30,7 +30,7 @@ def players_create(matchId):
 	if hasErrors:
 		player = playerService.new()
 		playerForm.load(player, request.form)
-		return render_template("players/new.html", player = player, matchId = matchId)
+		return render_template("players/new.html", player = player, matchId = matchId), 400
 	else:
 		playerService.create(request.form)
 
@@ -56,7 +56,7 @@ def players_update(id):
 	if hasErrors:
 		player = playerService.selectById(id)
 		playerForm.load(player, request.form)
-		return render_template("players/edit.html", player = player)
+		return render_template("players/edit.html", player = player), 400
 	else:
 		player = playerService.update(id, request.form)
 		flash("Player '{}' has been successfully updated.".format(player.name), "success")

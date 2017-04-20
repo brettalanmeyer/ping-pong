@@ -2,9 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 import ConfigParser
+import os
+
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 config = ConfigParser.ConfigParser()
-config.read("dbconfig.cfg")
+config.read("{}/../dbconfig.cfg".format(path))
 
 username = config.get("db", "mysql_username")
 password = config.get("db", "mysql_password")

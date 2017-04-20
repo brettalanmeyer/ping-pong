@@ -33,7 +33,7 @@ def isms_create():
 	if hasErrors:
 		ism = ismService.new()
 		ismForm.load(ism, request.form)
-		return render_template("isms/new.html", ism = ism)
+		return render_template("isms/new.html", ism = ism), 400
 	else:
 		ism = ismService.create(request.form)
 		flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
@@ -56,7 +56,7 @@ def isms_update(id):
 	if hasErrors:
 		ism = ismService.selectById(id)
 		ismForm.load(ism, request.form)
-		return render_template("isms/edit.html", ism = ism)
+		return render_template("isms/edit.html", ism = ism), 400
 	else:
 		ism = ismService.update(id, request.form)
 		flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
