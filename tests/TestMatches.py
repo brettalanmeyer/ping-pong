@@ -27,7 +27,7 @@ class TestMatches(BaseTest):
 		assert rv.status == self.ok
 
 	def test_matches_page1(self):
-		rv = self.app.get("/matches/page/1", follow_redirects = True)
+		rv = self.app.get("/matches?page=1")
 		assert rv.status == self.ok
 
 	# def test_matches(self):
