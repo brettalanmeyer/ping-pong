@@ -22,26 +22,32 @@ singles = Singles()
 doubles = Doubles()
 nines = Nines()
 
-@matchController.route("/matches", methods = ["GET"], defaults = { "page": 1, "playerId": None })
-@matchController.route("/matches/page/<int:page>", defaults = { "playerId": None },  methods = ["GET"])
-@matchController.route("/matches/players/<int:playerId>", defaults = { "page": 1 }, methods = ["GET"])
-@matchController.route("/matches/players/<int:playerId>/page/<int:page>", methods = ["GET"])
-def matches_index(page, playerId):
+@matchController.route("/matches", methods = ["GET"])
+def matches_index():
+	page = request.args.get("page")
+	playerId = request.args.get("playerId")
+	matchType = request.args.get("matchType")
+
+	if page == None:
+		page = 1
+	else:
+		page = int(page)
+
+	if playerId != None:
+		playerId = int(playerId)
+
 	players = playerService.select()
-	matches = matchService.selectCompleteOrReady(playerId)
+	matches = matchService.selectCompleteOrReady(playerId, matchType)
 	pagedMatches = pagingService.pager(matches, page)
 	elo = leaderboardService.elo()
-
-	url = "/matches"
-	if playerId != None:
-		url += "/players/" + str(playerId)
 
 	return render_template("matches/index.html",
 		matches = pagedMatches,
 		count = matches.count(),
-		url = url,
 		paging = pagingService.data(),
 		playerId = playerId,
+		matchType = matchType,
+		matchTypes = singles.matchTypes,
 		players = players,
 		elo = elo
 	)

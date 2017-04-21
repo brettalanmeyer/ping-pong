@@ -18,14 +18,24 @@ $(function(){
 		return confirm("Are you sure you want to delete this?");
 	});
 
-	$("#matches-player-filter").on("change", function(){
-		var playerId = $(this).val();
-		if(playerId.length == 0){
-			window.location = "/matches";
-		} else {
-			window.location = "/matches/players/" + playerId;
+	var playerFilter = $("#matches-player-filter").on("change", matchsfilters);
+	var matchTypeFilter = $("#matches-match-type-filter").on("change", matchsfilters);
+	function matchsfilters(){
+		params = [];
+
+		var playerId = playerFilter.val();
+		var matchType = matchTypeFilter.val();
+
+		if(playerId.length){
+			params.push("playerId=" + playerId);
 		}
-	});
+
+		if(matchType.length){
+			params.push("matchType=" + matchType);
+		}
+
+		window.location = "/matches" + (params.length ? "?" : "") + params.join("&");
+	}
 
 	$(".alert-dismissible").each(function(){
 		var source = $(this);

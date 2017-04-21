@@ -1,9 +1,21 @@
+{% set params = "" %}
+{% set playerId = request.args.get("playerId") %}
+{% set matchType = request.args.get("matchType") %}
+
+{% if playerId != None %}
+	{% set params = params + "&playerId=" + playerId %}
+{% endif %}
+
+{% if matchType != None %}
+	{% set params = params + "&matchType=" + matchType %}
+{% endif %}
+
 <div class="text-center">
 
 	<ul class="pagination">
 		{% if paging.page > 1 %}
 			<li>
-				<a href="{{ url }}/page/{{ paging.page - 1 }}" aria-label="Previous">
+				<a href="/matches{{ url }}?page={{ paging.page - 1 }}{{ params }}" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
@@ -11,13 +23,13 @@
 
 		{% for i in range(1, paging.pages + 1): %}
 			<li {% if paging.page == i %}class="active"{% endif %}>
-				<a href="{{ url }}/page/{{ i }}">{{ i }}</a>
+				<a href="/matches{{ url }}?page={{ i }}{{ params }}">{{ i }}</a>
 			</li>
 		{% endfor %}
 
 		{% if paging.page < paging.pages %}
 			<li>
-				<a href="{{ url }}/page/{{ paging.page + 1 }}" aria-label="Next">
+				<a href="/matches{{ url }}?page={{ paging.page + 1 }}{{ params }}" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>

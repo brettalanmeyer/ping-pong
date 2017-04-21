@@ -8,7 +8,11 @@
 
 		<div class="leaderboard-player-container">
 
-			<h1>Leaderboard - {{ player.name }}</h1>
+			<h1>
+				<a href="/leaderboard">Leaderboard</a>
+				-
+				<a href="/leaderboard/players/{{ player.id }}">{{ player.name }}</a>
+			</h1>
 
 			<table class="table player-table">
 

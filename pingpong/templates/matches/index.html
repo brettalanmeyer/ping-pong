@@ -7,10 +7,17 @@
 
 	<div class="container matches-container">
 
-		<select id="matches-player-filter" class="player-filter form-control" autofocus>
-			<option value="">Filter by player...</option>
+		<select id="matches-player-filter" name="playerId" class="player-filter form-control input-sm" title="Filter By Player" autofocus>
+			<option value="">Player...</option>
 			{% for player in players %}
 				<option value="{{ player.id }}" {% if playerId == player.id %}selected{% endif %}>{{ player.name }}</option>
+			{% endfor %}
+		</select>
+
+		<select id="matches-match-type-filter" name="matchType" class="match-type-filter form-control input-sm" title="Filter By Match Type" autofocus>
+			<option value="">Match Type...</option>
+			{% for item in matchTypes %}
+				<option value="{{ item }}" {% if matchType == item %}selected{% endif %}>{{ item.title() }}</option>
 			{% endfor %}
 		</select>
 
@@ -143,7 +150,7 @@
 
 		</table>
 
-		{% with url = url, paging = paging %}
+		{% with paging = paging %}
 			{% include 'partials/pagination.html' %}
 		{% endwith %}
 

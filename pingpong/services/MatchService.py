@@ -30,10 +30,13 @@ class MatchService(Service):
 
 		return db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
 
-	def selectCompleteOrReady(self, playerId = None):
+	def selectCompleteOrReady(self, playerId = None, matchType = None):
 		app.logger.info("Selecting complete or ready for play matches")
 
 		matches = db.session.query(MatchModel).filter(or_(MatchModel.complete == True, MatchModel.ready == True)).order_by(MatchModel.id.desc())
+
+		if matchType != None:
+			matches = matches.filter(MatchModel.matchType == matchType)
 
 		if playerId != None:
 			matches = matches.join(MatchModel.teams).join(TeamModel.players).filter(PlayerModel.id == playerId)
