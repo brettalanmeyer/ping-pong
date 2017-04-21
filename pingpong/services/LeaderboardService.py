@@ -708,7 +708,8 @@ class LeaderboardService(Service):
 		for player in players:
 			data["players"][player.id] = {
 				"current": app.config["ELO_PERFORMANCE_RATING"],
-				"previous": 0
+				"previous": 0,
+				"change": 0
 			}
 
 		KVALUE = app.config["ELO_K_VALUE"]
