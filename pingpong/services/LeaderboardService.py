@@ -677,7 +677,4 @@ class LeaderboardService(Service):
 			data[result["winner"]] = r1p
 			data[result["loser"]] = r2p
 
-		# to fuck with matt
-		data[41] = data[41] - (data[41] * 0.043)
-
 		return data
