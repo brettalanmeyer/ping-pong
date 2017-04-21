@@ -73,20 +73,52 @@
 											<tr>
 
 												<td class="name {% if team.win %}winner{% endif %}">
+
 													{% for player in team.players %}
+
 														{% if loop.index == 2 %}
 															&amp;
 														{% endif %}
-														<a href="/leaderboard/players/{{ player.id }}">{{ player.name }}</a>
+
+														<a href="/leaderboard/players/{{ player.id }}">
+															{{ player.name }}
+														</a>
+
+														<span class="elo-change">
+
+															{% if match.id in elo["matches"] %}
+																{% if player.id in elo["matches"][match.id] %}
+
+																	{% set eloCurrent = elo["matches"][match.id][player.id]["current"]|round|int %}
+																	{% set eloChange = elo["matches"][match.id][player.id]["change"]|round|int %}
+
+																	{{ eloCurrent }}
+
+																	{% if eloChange > 0 %}
+																		<span class="positive">(+{{ eloChange }})</span>
+																	{% elif eloChange < 0 %}
+																		<span class="negative">({{ eloChange }})</span>
+																	{% else %}
+																		({{ eloChange }})
+																	{% endif %}
+
+																{% endif %}
+															{% endif %}
+
+														</span>
+
 													{% endfor %}
+
 												</td>
 
 												{% for game in match.games %}
+
 													{% if game.winner == team.id %}
 														<td class="score winner">{{ game.winnerScore }}</td>
 													{% elif game.loser == team.id %}
 														<td class="score loser">{{ game.loserScore }}</td>
 													{% endif %}
+
 												{% endfor %}
 
 											</tr>

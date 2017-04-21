@@ -6,6 +6,7 @@ from flask import Response
 from pingpong.matchtypes.Doubles import Doubles
 from pingpong.matchtypes.Nines import Nines
 from pingpong.matchtypes.Singles import Singles
+from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
@@ -15,6 +16,7 @@ matchController = Blueprint("matchController", __name__)
 playerService = PlayerService()
 matchService = MatchService()
 pagingService = PagingService()
+leaderboardService = LeaderboardService()
 
 singles = Singles()
 doubles = Doubles()
@@ -28,12 +30,21 @@ def matches_index(page, playerId):
 	players = playerService.select()
 	matches = matchService.selectCompleteOrReady(playerId)
 	pagedMatches = pagingService.pager(matches, page)
+	elo = leaderboardService.elo()
 
 	url = "/matches"
 	if playerId != None:
 		url += "/players/" + str(playerId)
 
-	return render_template("matches/index.html", matches = pagedMatches, count = matches.count(), url = url, paging = pagingService.data(), playerId = playerId, players = players)
+	return render_template("matches/index.html",
+		matches = pagedMatches,
+		count = matches.count(),
+		url = url,
+		paging = pagingService.data(),
+		playerId = playerId,
+		players = players,
+		elo = elo
+	)
 
 @matchController.route("/matches/new", methods = ["GET"])
 def matches_new():

@@ -210,9 +210,27 @@ a.link {
 	font-weight: bold;
 }
 
+.matches-container .score-table td.name .elo-change {
+	font-size: 12px;
+	font-weight: normal;
+	padding-left: 8px;
+}
+
+.matches-container .score-table td.name .elo-change .positive {
+	color: green;
+}
+.matches-container .score-table td.name .elo-change .negative {
+	color: red;
+}
+
 .matches-container .score-table td.score {
 	width: 40px;
 	text-align: center;
+	font-family: digital;
+	font-size: 20px;
+	line-height: 18px;
+	position: relative;
+	top: 1px;
 }
 
 .matches-container .score-table td.score.winner {

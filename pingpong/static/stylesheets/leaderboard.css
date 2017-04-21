@@ -77,3 +77,18 @@
 .leaderboard-container .table.nines .elo {
 	display: none;
 }
+
+.leaderboard-container .elo-change {
+	font-size: 11px;
+	display: inline-block;
+	width: 34px;
+	text-align: right;
+}
+
+.leaderboard-container .elo-change.positive {
+	color: green;
+}
+
+.leaderboard-container .elo-change.negative {
+	color: red;
+}

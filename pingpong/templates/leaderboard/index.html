@@ -117,7 +117,17 @@
 							<td data-sort-value="{{ row.playerName }}">
 								<a href="/leaderboard/players/{{ row.playerId }}" class="link">{{ row.playerName }}</a>
 							</td>
-							<td data-sort-value="{{ row.elo }}" class="elo">{{ row.elo }}</td>
+							<td data-sort-value="{{ row.elo.current }}" class="elo">
+								{{ row.elo.current|round|int }}
+
+								{% if row.elo.change > 0 %}
+									<span class="elo-change positive">(+{{ row.elo.change|round|int }})</span>
+								{% elif row.elo.change < 0 %}
+									<span class="elo-change negative">({{ row.elo.change|round|int }})</span>
+								{% else %}
+									<span class="elo-change">({{ row.elo.change|round|int }})</span>
+								{% endif %}
+							</td>
 							<td data-sort-value="{{ row.matches }}">{{ row.matches }}</td>
 							<td data-sort-value="{{ row.percentage }}">{{ "{:.3f}".format(row.percentage) }}</td>
 							<td data-sort-value="{{ row.pointsFor }}">{{ "{:,}".format(row.pointsFor) }}</td>

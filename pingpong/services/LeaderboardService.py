@@ -9,6 +9,9 @@ import math
 
 playerService = PlayerService()
 
+start = '2017-03-01'
+end = '2018-01-01'
+
 class LeaderboardService(Service):
 
 	def matchTypeStats(self, matchType):
@@ -31,6 +34,9 @@ class LeaderboardService(Service):
 		}
 
 		for player in players:
+
+			playerElo = elo["players"][player.id]
+
 			stats["rows"].append({
 				"playerId": player.id,
 				"playerName": player.name,
@@ -44,7 +50,11 @@ class LeaderboardService(Service):
 				"time": self.formatTime(times[player.id]) if player.id in times else 0,
 				"pointStreak": self.pointStreakByPlayer(pointStreakData, player.id),
 				"winStreak": self.winStreakByPlayer(winStreakData, player.id),
-				"elo": int(round(elo[player.id]))
+				"elo": {
+					"current": playerElo["current"],
+					"previous": playerElo["previous"],
+					"change": playerElo["change"]
+				}
 			})
 
 		stats["totals"] = self.totals(stats["rows"])
@@ -116,11 +126,14 @@ class LeaderboardService(Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType = :matchType\
+			WHERE matches.complete = 1\
+				AND matches.matchType = :matchType\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY players.id\
 		"
 		connection = db.session.connection()
-		matches = connection.execute(text(query), matchType = matchType)
+		matches = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -140,11 +153,14 @@ class LeaderboardService(Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND players.id = :playerId\
+			WHERE matches.complete = 1\
+				AND players.id = :playerId\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY matches.matchType\
 		"
 		connection = db.session.connection()
-		matches = connection.execute(text(query), playerId = playerId)
+		matches = connection.execute(text(query), playerId = playerId, start = start, end = end)
 
 		data = {}
 
@@ -165,10 +181,13 @@ class LeaderboardService(Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType = :matchType\
+			WHERE matches.complete = 1\
+				AND matches.matchType = :matchType\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 		"
 		connection = db.session.connection()
-		times = connection.execute(text(query), matchType = matchType)
+		times = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -188,12 +207,15 @@ class LeaderboardService(Service):
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
-			WHERE matches.complete = 1 AND matches.matchType = :matchType\
+			WHERE matches.complete = 1\
+				AND matches.matchType = :matchType\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY players.id\
 		"
 
 		connection = db.session.connection()
-		points = connection.execute(text(query), matchType = matchType)
+		points = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -210,12 +232,15 @@ class LeaderboardService(Service):
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
-			WHERE matches.complete = 1 AND players.id = :playerId\
+			WHERE matches.complete = 1\
+				AND players.id = :playerId\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY matches.matchType\
 		"
 
 		connection = db.session.connection()
-		points = connection.execute(text(query), playerId = playerId)
+		points = connection.execute(text(query), playerId = playerId, start = start, end = end)
 
 		data = {}
 
@@ -232,7 +257,7 @@ class LeaderboardService(Service):
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
-			WHERE matches.complete = 1 AND players.id = :opponentId\
+			WHERE players.id = :opponentId\
 				AND matches.id IN (\
 					SELECT matches.id AS matchIds\
 					FROM matches\
@@ -240,12 +265,14 @@ class LeaderboardService(Service):
 					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 					WHERE teams_players.playerId = :playerId\
 						AND matches.complete = 1\
+						AND matches.completedAt >= :start\
+						AND matches.completedAt <= :end\
 				)\
 			GROUP BY matches.matchType\
 		"
 
 		connection = db.session.connection()
-		points = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
+		points = connection.execute(text(query), playerId = playerId, opponentId = opponentId, start = start, end = end)
 
 		data = {}
 
@@ -261,11 +288,14 @@ class LeaderboardService(Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType = :matchType\
+			WHERE matches.complete = 1\
+				AND matches.matchType = :matchType\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY players.id\
 		"
 		connection = db.session.connection()
-		matches = connection.execute(text(query), matchType = matchType)
+		matches = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -292,11 +322,14 @@ class LeaderboardService(Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND players.id = :playerId\
+			WHERE matches.complete = 1\
+				AND players.id = :playerId\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY matches.matchType\
 		"
 		connection = db.session.connection()
-		matches = connection.execute(text(query), playerId = playerId)
+		matches = connection.execute(text(query), playerId = playerId, start = start, end = end)
 
 		data = {}
 
@@ -323,7 +356,7 @@ class LeaderboardService(Service):
 			LEFT JOIN teams_players ON players.id = teams_players.playerId\
 			LEFT JOIN teams ON teams_players.teamId = teams.id\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND players.id = :opponentId\
+			WHERE players.id = :opponentId\
 				AND matches.id IN (\
 					SELECT matches.id AS matchIds\
 					FROM matches\
@@ -331,11 +364,13 @@ class LeaderboardService(Service):
 					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 					WHERE teams_players.playerId = :playerId\
 						AND matches.complete = 1\
+						AND matches.completedAt >= :start\
+						AND matches.completedAt <= :end\
 				)\
 			GROUP BY matches.matchType\
 		"
 		connection = db.session.connection()
-		matches = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
+		matches = connection.execute(text(query), playerId = playerId, opponentId = opponentId, start = start, end = end)
 
 		data = {}
 
@@ -361,7 +396,7 @@ class LeaderboardService(Service):
 			FROM teams\
 			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND teams_players.playerId = :opponentId\
+			WHERE teams_players.playerId = :opponentId\
 				AND matches.id IN (\
 					SELECT matches.id AS matchIds\
 					FROM matches\
@@ -369,13 +404,15 @@ class LeaderboardService(Service):
 					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 					WHERE teams_players.playerId = :playerId\
 						AND matches.complete = 1\
+						AND matches.completedAt >= :start\
+						AND matches.completedAt <= :end\
 				)\
 			GROUP BY teams.id\
 			ORDER BY matches.matchType, teams.id DESC\
 		"
 
 		connection = db.session.connection()
-		results = connection.execute(text(query), playerId = playerId, opponentId = opponentId)
+		results = connection.execute(text(query), playerId = playerId, opponentId = opponentId, start = start, end = end)
 
 		data = []
 
@@ -444,6 +481,8 @@ class LeaderboardService(Service):
 							LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 							WHERE teams_players.playerId = :playerId\
 								AND matches.complete = 1\
+								AND matches.completedAt >= :start\
+								AND matches.completedAt <= :end\
 						)\
 						AND teams_players.playerId != :playerId\
 				)\
@@ -451,7 +490,7 @@ class LeaderboardService(Service):
 		"
 
 		connection = db.session.connection()
-		return connection.execute(text(query), playerId = playerId)
+		return connection.execute(text(query), playerId = playerId, start = start, end = end)
 
 	def pointStreakByPlayer(self, streakData, playerId):
 		currentStreak = -1
@@ -528,12 +567,15 @@ class LeaderboardService(Service):
 			FROM scores\
 			LEFT JOIN teams_players ON scores.teamId = teams_players.teamId\
 			LEFT JOIN matches ON scores.matchId = matches.id\
-			WHERE matches.complete = 1 AND matches.matchType = :matchType\
+			WHERE matches.complete = 1\
+				AND matches.matchType = :matchType\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY scores.id\
 		"
 
 		connection = db.session.connection()
-		results = connection.execute(text(query), matchType = matchType)
+		results = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
 		data = []
 
@@ -555,13 +597,16 @@ class LeaderboardService(Service):
 			FROM teams\
 			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.matchType = :matchType AND matches.complete = 1\
+			WHERE matches.matchType = :matchType\
+				AND matches.complete = 1\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY teams.id\
 			ORDER BY teams.id DESC\
 		"
 
 		connection = db.session.connection()
-		results = connection.execute(text(query), matchType = matchType)
+		results = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
 		data = []
 
@@ -581,12 +626,15 @@ class LeaderboardService(Service):
 			FROM teams\
 			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 			LEFT JOIN matches ON teams.matchId = matches.id\
-			WHERE matches.complete = 1 AND teams_players.playerId = :playerId\
+			WHERE matches.complete = 1\
+				AND teams_players.playerId = :playerId\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY teams.id\
 			ORDER BY matches.matchType, teams.id DESC\
 		"
 		connection = db.session.connection()
-		results = connection.execute(text(query), playerId = playerId)
+		results = connection.execute(text(query), playerId = playerId, start = start, end = end)
 
 		data = []
 
@@ -607,17 +655,20 @@ class LeaderboardService(Service):
 
 	def singlesResults(self):
 		query  = "\
-			SELECT GROUP_CONCAT(players.id, ',', IF(teams.win = 1, 'win', 'loss')) AS record\
+			SELECT matches.id AS matchId, GROUP_CONCAT(players.id, ',', IF(teams.win = 1, 'win', 'loss')) AS record\
 			FROM matches\
 			LEFT JOIN teams ON matches.id = teams.matchId\
 			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 			LEFT JOIN players ON teams_players.playerId = players.id\
-			WHERE matches.matchType = 'singles' AND matches.complete = 1\
+			WHERE matches.matchType = 'singles'\
+				AND matches.complete = 1\
+				AND matches.completedAt >= :start\
+				AND matches.completedAt <= :end\
 			GROUP BY matches.id\
 			ORDER BY matches.id\
 		"
 		connection = db.session.connection()
-		results = connection.execute(text(query))
+		results = connection.execute(text(query), start = start, end = end)
 
 		data = []
 
@@ -632,6 +683,7 @@ class LeaderboardService(Service):
 				loser = int(id1)
 
 			data.append({
+				"matchId": result.matchId,
 				"winner": winner,
 				"loser": loser
 			})
@@ -647,19 +699,28 @@ class LeaderboardService(Service):
 		results = self.singlesResults()
 		players = playerService.select()
 
-		data = {}
+		data = {
+			"matches": {},
+			"players": {}
+		}
 
 		# inital performance rating
 		for player in players:
-			data[player.id] = app.config["ELO_PERFORMANCE_RATING"]
+			data["players"][player.id] = {
+				"current": app.config["ELO_PERFORMANCE_RATING"],
+				"previous": 0
+			}
 
 		KVALUE = app.config["ELO_K_VALUE"]
 
 		for result in results:
 
+			winner = data["players"][result["winner"]]
+			loser = data["players"][result["loser"]]
+
 			# current performance rating
-			r1 = float(data[result["winner"]])
-			r2 = float(data[result["loser"]])
+			r1 = float(winner["current"])
+			r2 = float(loser["current"])
 
 			R1 = math.pow(10, r1 / 400L)
 			R2 = math.pow(10, r2 / 400L)
@@ -673,8 +734,27 @@ class LeaderboardService(Service):
 			r1p = r1 + KVALUE * (S1 - E1)
 			r2p = r2 + KVALUE * (S2 - E2)
 
+			# set previous to current before updating
+			winner["previous"] = winner["current"]
+			loser["previous"] = loser["current"]
+
 			# new performance rating
-			data[result["winner"]] = r1p
-			data[result["loser"]] = r2p
+			winner["current"] = r1p
+			loser["current"] = r2p
+
+			winner["change"] = winner["current"] - winner["previous"]
+			loser["change"] = loser["current"] - loser["previous"]
+
+			data["matches"][result["matchId"]] = {}
+			data["matches"][result["matchId"]][result["winner"]] = {
+				"current": winner["current"],
+				"previous": winner["previous"],
+				"change": winner["change"]
+			}
+			data["matches"][result["matchId"]][result["loser"]] = {
+				"current": loser["current"],
+				"previous": loser["previous"],
+				"change": loser["change"]
+			}
 
 		return data
