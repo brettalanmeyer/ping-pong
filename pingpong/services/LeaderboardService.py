@@ -1,4 +1,5 @@
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
 from pingpong.services.PlayerService import PlayerService
@@ -9,26 +10,28 @@ import math
 
 playerService = PlayerService()
 
-start = '2017-03-01'
-end = '2018-01-01'
-
 class LeaderboardService(Service):
 
-	def matchTypeStats(self, matchType):
+	def matchTypeStats(self, matchType, season):
 		app.logger.info("Querying Leaderboard Statistics")
 
 		players = db.session.query(PlayerModel).order_by(PlayerModel.name)
+		seasons, season, start, end = self.seasons(season)
 
-		matches = self.matchesByMatchType(matchType)
-		times = self.times(matchType)
-		pointsFor = self.pointsForByMatchType(matchType)
-		pointsAgainst = self.pointsAgainstByMatchType(pointsFor, matchType)
-		pointStreakData = self.selectMatchScoresByMatchType(matchType)
-		winStreakData = self.selectTeamResultsByMatchType(matchType)
-		elo = self.elo()
+		matches = self.matchesByMatchType(matchType, start, end)
+		times = self.times(matchType, start, end)
+		pointsFor = self.pointsForByMatchType(matchType, start, end)
+		pointsAgainst = self.pointsAgainstByMatchType(pointsFor, matchType, start, end)
+		pointStreakData = self.selectMatchScoresByMatchType(matchType, start, end)
+		winStreakData = self.selectTeamResultsByMatchType(matchType, start, end)
+		elo = self.elo(start, end)
 
 		stats = {
 			"matchType": matchType,
+			"season": season,
+			"seasons": seasons,
+			"start": start,
+			"end": end,
 			"rows": [],
 			"totals": {}
 		}
@@ -61,16 +64,23 @@ class LeaderboardService(Service):
 
 		return stats
 
-	def playerStats(self, player):
+	def playerStats(self, player, season):
 
-		matches = self.matchesByPlayer(player.id)
-		pointsFor = self.pointsForByPlayer(player.id)
-		pointsAgainst = self.pointsAgainstByPlayer(pointsFor, player.id)
-		winStreakData = self.selectTeamResultsByPlayer(player.id)
+		seasons, season, start, end = self.seasons(season)
+
+		matches = self.matchesByPlayer(player.id, start, end)
+		pointsFor = self.pointsForByPlayer(player.id, start, end)
+		pointsAgainst = self.pointsAgainstByPlayer(pointsFor, player.id, start, end)
+		winStreakData = self.selectTeamResultsByPlayer(player.id, start, end)
 
 		stats = {
 			"playerId": player.id,
-			"playerName": player.name
+			"playerName": player.name,
+			"season": season,
+			"seasons": seasons,
+			"start": start,
+			"end": end
+
 		}
 
 		for matchType in self.matchTypes:
@@ -97,12 +107,12 @@ class LeaderboardService(Service):
 			if matchType in pointsAgainst:
 				stats[matchType]["pointsAgainst"] = pointsAgainst[matchType]
 
-		results = self.matchups(player.id)
+		results = self.matchups(player.id, start, end)
 
 		for result in results:
-			pointsFor = self.pointsForByOpponent(player.id, result.playerId)
-			pointsAgainst = self.pointsAgainstByOpponent(pointsFor, player.id, result.playerId)
-			winStreakData = self.selectTeamResultsByOpponent(player.id, result.playerId)
+			pointsFor = self.pointsForByOpponent(player.id, result.playerId, start, end)
+			pointsAgainst = self.pointsAgainstByOpponent(pointsFor, player.id, result.playerId, start, end)
+			winStreakData = self.selectTeamResultsByOpponent(player.id, result.playerId, start, end)
 
 			# points and win/loss are inverted because these stats show the player vs this opponent
 			stats[result.matchType]["matchups"].append({
@@ -119,7 +129,7 @@ class LeaderboardService(Service):
 
 		return stats
 
-	def matchesByMatchType(self, matchType):
+	def matchesByMatchType(self, matchType, start, end):
 		query = "\
 			SELECT players.id AS playerId, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.win = 0) AS losses\
 			FROM players\
@@ -128,10 +138,14 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY players.id\
 		"
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY players.id "
+
 		connection = db.session.connection()
 		matches = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
@@ -146,7 +160,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def matchesByPlayer(self, playerId):
+	def matchesByPlayer(self, playerId, start, end):
 		query = "\
 			SELECT players.id AS playerId, matches.matchType, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.win = 0) AS losses\
 			FROM players\
@@ -155,10 +169,15 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND players.id = :playerId\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY matches.matchType\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY matches.matchType "
+
 		connection = db.session.connection()
 		matches = connection.execute(text(query), playerId = playerId, start = start, end = end)
 
@@ -174,7 +193,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def times(self, matchType):
+	def times(self, matchType, start, end):
 		query = "\
 			SELECT DISTINCT players.id as playerId, UNIX_TIMESTAMP(matches.createdAt) as gameTime, UNIX_TIMESTAMP(matches.completedAt) as resultTime\
 			FROM players\
@@ -183,9 +202,13 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
 		connection = db.session.connection()
 		times = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
@@ -199,7 +222,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsForByMatchType(self, matchType):
+	def pointsForByMatchType(self, matchType, start, end):
 		query = "\
 			SELECT players.id AS playerId, COUNT(scores.id) as points\
 			FROM players\
@@ -209,10 +232,14 @@ class LeaderboardService(Service):
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY players.id\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY players.id "
 
 		connection = db.session.connection()
 		points = connection.execute(text(query), matchType = matchType, start = start, end = end)
@@ -224,7 +251,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsForByPlayer(self, playerId):
+	def pointsForByPlayer(self, playerId, start, end):
 		query = "\
 			SELECT players.id AS playerId, matches.matchType, COUNT(scores.id) as points\
 			FROM players\
@@ -234,10 +261,14 @@ class LeaderboardService(Service):
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
 			WHERE matches.complete = 1\
 				AND players.id = :playerId\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY matches.matchType\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY matches.matchType "
 
 		connection = db.session.connection()
 		points = connection.execute(text(query), playerId = playerId, start = start, end = end)
@@ -249,7 +280,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsForByOpponent(self, playerId, opponentId):
+	def pointsForByOpponent(self, playerId, opponentId, start, end):
 		query = "\
 			SELECT players.id AS playerId, matches.matchType, COUNT(scores.id) as points\
 			FROM players\
@@ -265,8 +296,14 @@ class LeaderboardService(Service):
 					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 					WHERE teams_players.playerId = :playerId\
 						AND matches.complete = 1\
-						AND matches.completedAt >= :start\
-						AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 				)\
 			GROUP BY matches.matchType\
 		"
@@ -281,7 +318,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsAgainstByMatchType(self, pointsFor, matchType):
+	def pointsAgainstByMatchType(self, pointsFor, matchType, start, end):
 		query = "\
 			SELECT players.id as playerId, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
@@ -290,10 +327,15 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY players.id\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY players.id "
+
 		connection = db.session.connection()
 		matches = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
@@ -315,7 +357,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsAgainstByPlayer(self, pointsFor, playerId):
+	def pointsAgainstByPlayer(self, pointsFor, playerId, start, end):
 		query = "\
 			SELECT players.id as playerId, matches.matchType, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
@@ -324,10 +366,15 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND players.id = :playerId\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY matches.matchType\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY matches.matchType "
+
 		connection = db.session.connection()
 		matches = connection.execute(text(query), playerId = playerId, start = start, end = end)
 
@@ -349,7 +396,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsAgainstByOpponent(self, pointsFor, playerId, opponentId):
+	def pointsAgainstByOpponent(self, pointsFor, playerId, opponentId, start, end):
 		query = "\
 			SELECT players.id as playerId, matches.matchType, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
@@ -364,8 +411,14 @@ class LeaderboardService(Service):
 					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 					WHERE teams_players.playerId = :playerId\
 						AND matches.complete = 1\
-						AND matches.completedAt >= :start\
-						AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 				)\
 			GROUP BY matches.matchType\
 		"
@@ -390,7 +443,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def selectTeamResultsByOpponent(self, playerId, opponentId):
+	def selectTeamResultsByOpponent(self, playerId, opponentId, start, end):
 		query = "\
 			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
 			FROM teams\
@@ -404,8 +457,14 @@ class LeaderboardService(Service):
 					LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 					WHERE teams_players.playerId = :playerId\
 						AND matches.complete = 1\
-						AND matches.completedAt >= :start\
-						AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 				)\
 			GROUP BY teams.id\
 			ORDER BY matches.matchType, teams.id DESC\
@@ -456,7 +515,7 @@ class LeaderboardService(Service):
 
 		return totals
 
-	def matchups(self, playerId):
+	def matchups(self, playerId, start, end):
 		query = "\
 			SELECT\
 				players.id as playerId,\
@@ -481,8 +540,14 @@ class LeaderboardService(Service):
 							LEFT JOIN teams_players ON teams.id = teams_players.teamId\
 							WHERE teams_players.playerId = :playerId\
 								AND matches.complete = 1\
-								AND matches.completedAt >= :start\
-								AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 						)\
 						AND teams_players.playerId != :playerId\
 				)\
@@ -561,7 +626,7 @@ class LeaderboardService(Service):
 
 		return streak
 
-	def selectMatchScoresByMatchType(self, matchType):
+	def selectMatchScoresByMatchType(self, matchType, start, end):
 		query = "\
 			SELECT scores.id, scores.matchId, scores.teamId, scores.game, matches.matchType, group_concat(teams_players.playerId) as playerIds\
 			FROM scores\
@@ -569,10 +634,14 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON scores.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
-			GROUP BY scores.id\
 		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += " GROUP BY scores.id "
 
 		connection = db.session.connection()
 		results = connection.execute(text(query), matchType = matchType, start = start, end = end)
@@ -591,7 +660,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def selectTeamResultsByMatchType(self, matchType):
+	def selectTeamResultsByMatchType(self, matchType, start, end):
 		query  = "\
 			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
 			FROM teams\
@@ -599,12 +668,17 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.matchType = :matchType\
 				AND matches.complete = 1\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 			GROUP BY teams.id\
 			ORDER BY teams.id DESC\
 		"
-
 		connection = db.session.connection()
 		results = connection.execute(text(query), matchType = matchType, start = start, end = end)
 
@@ -620,7 +694,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def selectTeamResultsByPlayer(self, playerId):
+	def selectTeamResultsByPlayer(self, playerId, start, end):
 		query  = "\
 			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
 			FROM teams\
@@ -628,8 +702,14 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND teams_players.playerId = :playerId\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 			GROUP BY teams.id\
 			ORDER BY matches.matchType, teams.id DESC\
 		"
@@ -653,7 +733,7 @@ class LeaderboardService(Service):
 		h, m = divmod(m, 60)
 		return "%02d:%02d:%02d" % (h, m, s)
 
-	def singlesResults(self):
+	def singlesResults(self, start, end):
 		query  = "\
 			SELECT matches.id AS matchId, GROUP_CONCAT(players.id, ',', IF(teams.win = 1, 'win', 'loss')) AS record\
 			FROM matches\
@@ -662,8 +742,14 @@ class LeaderboardService(Service):
 			LEFT JOIN players ON teams_players.playerId = players.id\
 			WHERE matches.matchType = 'singles'\
 				AND matches.complete = 1\
-				AND matches.completedAt >= :start\
-				AND matches.completedAt <= :end\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt <= :end "
+
+		query += "\
 			GROUP BY matches.id\
 			ORDER BY matches.id\
 		"
@@ -690,13 +776,13 @@ class LeaderboardService(Service):
 
 		return data
 
-	def elo(self):
+	def elo(self, start, end):
 
 		# ELO rating system
 		# https://en.wikipedia.org/wiki/Elo_rating_system
 		# https://metinmediamath.wordpress.com/2013/11/27/how-to-calculate-the-elo-rating-including-example/
 
-		results = self.singlesResults()
+		results = self.singlesResults(start, end)
 		players = playerService.select()
 
 		data = {
@@ -759,3 +845,51 @@ class LeaderboardService(Service):
 			}
 
 		return data
+
+
+	def seasons(self, season):
+		begin = datetime(app.config["SEASON_START_YEAR"], app.config["SEASON_START_MONTH"], 1)
+		# begin = datetime(2015, 1, 1)
+
+		index = 0
+		seasons = []
+		dateFormat = "{:%b %d, %Y}"
+
+		while True:
+			start = begin + relativedelta(months = 3 * index)
+			end = start + relativedelta(months = 3)
+			last = start + relativedelta(months = 3, days = -1)
+
+			seasons.append({
+				"start": start,
+				"end": end,
+				"last": last
+			})
+
+			if (end > datetime.now()):
+				break
+
+			index += 1
+
+		# start = begin + relativedelta(months = 3 * (index + 1))
+		# end = start + relativedelta(months = 3)
+		# last = start + relativedelta(months = 3, days = -1)
+
+		# seasons.append({
+		# 	"start": start,
+		# 	"end": end,
+		# 	"last": last
+		# })
+
+		# default to latest or current season
+		if season == None:
+			return seasons, len(seasons) - 1, seasons[len(seasons) - 1]["start"], seasons[len(seasons) - 1]["end"]
+
+		# specified season
+		elif season >= 0 and season < len(seasons):
+			return seasons, season, seasons[season]["start"], seasons[season]["end"]
+
+		# all seasons
+		else:
+			return seasons, -1, None, None
+

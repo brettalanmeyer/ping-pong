@@ -18,6 +18,10 @@ $(function(){
 		return confirm("Are you sure you want to delete this?");
 	});
 
+	$("#leaderboard-season").on("change", function(){
+		$(this).parent("form").submit();
+	});
+
 	var playerFilter = $("#matches-player-filter").on("change", matchsfilters);
 	var matchTypeFilter = $("#matches-match-type-filter").on("change", matchsfilters);
 	function matchsfilters(){

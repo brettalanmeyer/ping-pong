@@ -7,3 +7,4 @@ mysqlclient==1.3.4
 jsmin
 cssmin
 gevent-websocket
+python-dateutil

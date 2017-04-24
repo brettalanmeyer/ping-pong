@@ -9,18 +9,30 @@
 		<div class="leaderboard-container">
 
 			<h1>
-				<a href="/leaderboard">Leaderboard</a>
+				<a href="/leaderboard?season={{ stats.season }}">Leaderboard</a>
 			</h1>
+
+			<form action="/leaderboard/{{ stats.matchType }}" method="GET">
+				<select id="leaderboard-season" name="season" class="leaderboard-season form-control input-sm">
+					<option value="-1" {% if stats.season == -1 %}selected{% endif %}>All Seasons</option>
+
+					{% for item in stats.seasons %}
+						<option value="{{ loop.index - 1 }}" {% if stats.season == loop.index - 1 %}selected{% endif %}>
+							Season {{ loop.index }}: {{ "{:%b %d, %Y}".format(item.start) }} - {{ "{:%b %d, %Y}".format(item.last) }}
+						</option>
+					{% endfor %}
+				</select>
+			</form>
 
 			<ul class="nav nav-tabs">
 				{% for item in matchTypes %}
-					<li role="presentation" class="{% if matchType == item %}active{% endif %}">
-						<a href="/leaderboard/{{ item }}">{{ item.title() }}</a>
+					<li role="presentation" class="{% if stats.matchType == item %}active{% endif %}">
+						<a href="/leaderboard/{{ item }}?season={{ stats.season }}">{{ item.title() }}</a>
 					</li>
 				{% endfor %}
 			</ul>
 
-			<table id="leaderboard" class="leaderboard-table table table-sortable {{ matchType }}">
+			<table id="leaderboard" class="leaderboard-table table table-sortable {{ stats.matchType }}">
 
 				<thead>
 
@@ -117,7 +129,7 @@
 						<tr data-time="{{ row.time }}">
 
 							<td data-sort-value="{{ row.playerName }}">
-								<a href="/leaderboard/players/{{ row.playerId }}" class="link">{{ row.playerName }}</a>
+								<a href="/leaderboard/players/{{ row.playerId }}?season={{ stats.season }}" class="link">{{ row.playerName }}</a>
 							</td>
 							<td data-sort-value="{{ row.elo.current }}" class="elo">
 								{{ row.elo.current|round|int }}

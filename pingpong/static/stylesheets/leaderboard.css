@@ -1,6 +1,7 @@
 .leaderboard-player-container {
 	width: 950px;
 	margin: auto;
+	position: relative;
 }
 
 .leaderboard-player-container table {
@@ -50,6 +51,7 @@
 	max-width: 1310px;
 	width: 100%;
 	margin: auto;
+	position: relative;
 }
 
 .leaderboard-container .win-streak,
@@ -91,4 +93,12 @@
 
 .leaderboard-container .elo-change.negative {
 	color: red;
+}
+
+.leaderboard-container .leaderboard-season,
+.leaderboard-player-container .leaderboard-season {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 260px;
 }

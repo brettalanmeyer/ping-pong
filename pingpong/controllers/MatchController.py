@@ -10,6 +10,7 @@ from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
+from pingpong.utils import util
 
 matchController = Blueprint("matchController", __name__)
 
@@ -24,22 +25,14 @@ nines = Nines()
 
 @matchController.route("/matches", methods = ["GET"])
 def matches_index():
-	page = request.args.get("page")
-	playerId = request.args.get("playerId")
-	matchType = request.args.get("matchType")
-
-	if page == None:
-		page = 1
-	else:
-		page = int(page)
-
-	if playerId != None:
-		playerId = int(playerId)
+	page = util.param("page", 1, "int")
+	playerId = util.param("playerId", None, "int")
+	matchType = util.param("matchType")
 
 	players = playerService.select()
 	matches = matchService.selectCompleteOrReady(playerId, matchType)
 	pagedMatches = pagingService.pager(matches, page)
-	elo = leaderboardService.elo()
+	elo = leaderboardService.elo(None, None)
 
 	return render_template("matches/index.html",
 		matches = pagedMatches,

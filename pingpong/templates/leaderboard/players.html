@@ -9,10 +9,22 @@
 		<div class="leaderboard-player-container">
 
 			<h1>
-				<a href="/leaderboard">Leaderboard</a>
+				<a href="/leaderboard?season={{ stats.season }}">Leaderboard</a>
 				-
-				<a href="/leaderboard/players/{{ player.id }}">{{ player.name }}</a>
+				<a href="/leaderboard/players/{{ player.id }}?season={{ stats.season }}">{{ player.name }}</a>
 			</h1>
+
+			<form action="/leaderboard/players/{{ player.id }}" method="GET">
+				<select id="leaderboard-season" name="season" class="leaderboard-season form-control input-sm">
+					<option value="-1" {% if stats.season == -1 %}selected{% endif %}>All Seasons</option>
+
+					{% for item in stats.seasons %}
+						<option value="{{ loop.index - 1 }}" {% if stats.season == loop.index - 1 %}selected{% endif %}>
+							Season {{ loop.index }}: {{ "{:%b %d, %Y}".format(item.start) }} - {{ "{:%b %d, %Y}".format(item.last) }}
+						</option>
+					{% endfor %}
+				</select>
+			</form>
 
 			<table class="table player-table">
 
@@ -139,7 +151,7 @@
 
 							<tr class="matchup">
 								<td data-sort-value="{{ matchup.playerName }}">
-									<a href="/leaderboard/players/{{ matchup.playerId }}" class="link">{{ matchup.playerName }}</a>
+									<a href="/leaderboard/players/{{ matchup.playerId }}?season={{ stats.season }}" class="link">{{ matchup.playerName }}</a>
 								</td>
 								<td data-sort-value="{{ matchup.numOfMatches }}">{{ matchup.numOfMatches }}</td>
 								<td data-sort-value="{{ matchup.percentage }}">{{ "{:.3f}".format(matchup.percentage) }}</td>
