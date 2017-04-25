@@ -54,7 +54,7 @@ class Form():
 		if field["type"] == "int":
 
 			try:
-				print(int(form[field["name"]]))
+				int(form[field["name"]])
 			except:
 				message = "'{}' must be an integer.".format(field["label"])
 				self.hasErrors = True

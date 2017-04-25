@@ -67,7 +67,7 @@ class LeaderboardService(Service):
 		return stats
 
 	def playerStats(self, player, season):
-		app.logger.debug("Querying player stats: playerId=%s season=%d", player.id, season)
+		app.logger.debug("Querying player stats: playerId=%s season=%s", player.id, season)
 
 		seasons, season, start, end = self.seasons(season)
 

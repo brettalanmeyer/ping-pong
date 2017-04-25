@@ -1,6 +1,6 @@
 from BaseTest import BaseTest
 
-class TestMatches(BaseTest):
+class TestMatchController(BaseTest):
 
 	def test_matches(self):
 		rv = self.app.get("/matches")

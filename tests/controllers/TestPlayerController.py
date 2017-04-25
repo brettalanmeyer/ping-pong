@@ -4,7 +4,7 @@ import uuid
 
 playerService = PlayerService()
 
-class TestPlayers(BaseTest):
+class TestPlayerController(BaseTest):
 
 	playerName = str(uuid.uuid4())
 

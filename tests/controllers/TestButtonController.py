@@ -1,6 +1,6 @@
 from BaseTest import BaseTest
 
-class TestButtons(BaseTest):
+class TestButtonController(BaseTest):
 
 	colors = ["green", "red", "yellow", "blue"]
 

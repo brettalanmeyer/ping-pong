@@ -1,6 +1,6 @@
 from BaseTest import BaseTest
 
-class TestMain(BaseTest):
+class TestMainController(BaseTest):
 
 	def test_404(self):
 		rv = self.app.get("/non-existant-url")

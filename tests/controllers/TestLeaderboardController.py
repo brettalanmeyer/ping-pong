@@ -3,7 +3,7 @@ from pingpong.services.PlayerService import PlayerService
 
 playerService = PlayerService()
 
-class TestLeaderboard(BaseTest):
+class TestLeaderboardController(BaseTest):
 
 	def test_leaderboard(self):
 		rv = self.app.get("/leaderboard", follow_redirects = True)

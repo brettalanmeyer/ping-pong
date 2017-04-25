@@ -3,7 +3,7 @@ from pingpong.services.IsmService import IsmService
 
 ismService = IsmService()
 
-class TestIsms(BaseTest):
+class TestIsmController(BaseTest):
 
 	def test_isms(self):
 		rv = self.app.get("/isms")
