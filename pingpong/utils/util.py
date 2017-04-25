@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import request
+import random
 
 def formatTime(seconds):
 	m, s = divmod(seconds, 60)
@@ -24,3 +25,15 @@ def param(name, default = None, paramType = None):
 def jsonSerial(obj):
 	if isinstance(obj, datetime):
 		return str(obj)
+
+def shuffle(ary):
+	if len(ary) < 2:
+		return ary
+
+	newAry = ary[:]
+	random.shuffle(newAry)
+
+	if ary == newAry:
+		return shuffle(ary)
+
+	return newAry

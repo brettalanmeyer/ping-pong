@@ -5,7 +5,7 @@ from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
-import random
+from pingpong.utils import util
 
 gameService = GameService()
 matchService = MatchService()
@@ -156,10 +156,10 @@ class Singles(MatchType):
 		return self.matchData(match)
 
 	def createTeams(self, match, data, randomize):
-		ids = map(int, data)
-
 		if randomize:
-			random.shuffle(ids)
+			ids = util.shuffle(map(int, data))
+		else:
+			ids = map(int, data)
 
 		team1 = teamService.createOnePlayer(match.id, ids[0])
 		team2 = teamService.createOnePlayer(match.id, ids[1])

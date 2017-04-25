@@ -5,7 +5,7 @@ from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
-import random
+from pingpong.utils import util
 
 gameService = GameService()
 matchService = MatchService()
@@ -161,10 +161,10 @@ class Doubles(MatchType):
 				matchService.updateGame(match.id, match.game + 1)
 
 	def createTeams(self, match, data, randomize):
-		ids = map(int, data)
-
 		if randomize:
-			random.shuffle(ids)
+			ids = util.shuffle(map(int, data))
+		else:
+			ids = map(int, data)
 
 		green = ids[0]
 		yellow = ids[1]
@@ -242,7 +242,9 @@ class Doubles(MatchType):
 
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
-		playerIds = [game.green, game.yellow, game.blue, game.red]
+
+		# put in this order so if teams are not randomized, they will at least swap sides
+		playerIds = [game.yellow, game.green, game.red, game.blue]
 
 		newMatch = matchService.create(self.matchType)
 		newMatch.numOfGames = numOfGames
