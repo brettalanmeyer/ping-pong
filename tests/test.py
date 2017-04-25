@@ -3,13 +3,15 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pingpong import create_app
 from pingpong.utils import database as db
-import unittest
-from TestLeaderboard import TestLeaderboard
+
 from TestButtons import TestButtons
 from TestIsms import TestIsms
+from TestLeaderboard import TestLeaderboard
+from TestMain import TestMain
 from TestMatches import TestMatches
 from TestPlayers import TestPlayers
-from TestMain import TestMain
+
+import unittest
 
 if __name__ == "__main__":
 	unittest.main()
