@@ -4,7 +4,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pingpong import create_app
 from pingpong.utils import database as db
 import unittest
-from BaseTest import BaseTest
 from TestLeaderboard import TestLeaderboard
 from TestButtons import TestButtons
 from TestIsms import TestIsms
