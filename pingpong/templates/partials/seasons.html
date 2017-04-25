@@ -4,8 +4,8 @@
 		<option value="0" {% if season == -1 %}selected{% endif %}>All Seasons</option>
 
 		{% for item in seasons %}
-			<option value="{{ loop.index }}" {% if season == loop.index %}selected{% endif %}>
-				Season {{ loop.index }}: {{ "{:%b %d, %Y}".format(item.start) }} - {{ "{:%b %d, %Y}".format(item.last) }}
+			<option value="{{ item.id }}" {% if season == item.id %}selected{% endif %}>
+				{{ item.label }}: {{ "{:%b %d, %Y}".format(item.start) }} - {{ "{:%b %d, %Y}".format(item.last) }}
 			</option>
 		{% endfor %}
 	</select>

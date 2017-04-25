@@ -860,6 +860,8 @@ class LeaderboardService(Service):
 			last = start + relativedelta(months = 3, days = -1)
 
 			seasons.append({
+				"id": index + 1,
+				"label": "Season {}".format(index + 1),
 				"start": start,
 				"end": end,
 				"last": last

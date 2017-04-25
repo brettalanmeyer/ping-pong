@@ -28,7 +28,7 @@ def leaderboard_index(matchType):
 @leaderboardController.route("/leaderboard.json", methods = ["GET"], defaults = { "matchType": "singles" })
 @leaderboardController.route("/leaderboard/<path:matchType>.json", methods = ["GET"])
 def leaderboard_json(matchType):
-	season = util.param("season", -1, "int")
+	season = util.param("season", None, "int")
 	stats = leaderboardService.matchTypeStats(matchType, season)
 	return Response(json.dumps(stats, default = util.jsonSerial), status = 200, mimetype = "application/json")
 
