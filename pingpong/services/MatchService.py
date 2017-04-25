@@ -39,10 +39,10 @@ class MatchService(Service):
 			matches = matches.filter(MatchModel.matchType == matchType)
 
 		if start != None:
-			matches = matches.filter(MatchModel.completedAt >= start)
+			matches = matches.filter(MatchModel.createdAt >= start)
 
 		if end != None:
-			matches = matches.filter(MatchModel.completedAt < end)
+			matches = matches.filter(MatchModel.createdAt < end)
 
 		if playerId != None:
 			matches = matches.join(MatchModel.teams).join(TeamModel.players).filter(PlayerModel.id == playerId)
