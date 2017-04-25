@@ -95,8 +95,8 @@
 	color: red;
 }
 
-.leaderboard-container .leaderboard-season,
-.leaderboard-player-container .leaderboard-season {
+.leaderboard-container .season-filter,
+.leaderboard-player-container .season-filter {
 	position: absolute;
 	right: 0;
 	top: 0;

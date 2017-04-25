@@ -29,10 +29,13 @@ def matches_index():
 	playerId = util.param("playerId", None, "int")
 	matchType = util.param("matchType")
 
+	season = util.param("season", None, "int")
+	seasons, season, start, end = leaderboardService.seasons(season)
+
 	players = playerService.select()
-	matches = matchService.selectCompleteOrReady(playerId, matchType)
+	matches = matchService.selectCompleteOrReady(playerId, matchType, start, end)
 	pagedMatches = pagingService.pager(matches, page)
-	elo = leaderboardService.elo(None, None)
+	elo = leaderboardService.elo(start, end)
 
 	return render_template("matches/index.html",
 		matches = pagedMatches,
@@ -42,7 +45,9 @@ def matches_index():
 		matchType = matchType,
 		matchTypes = singles.matchTypes,
 		players = players,
-		elo = elo
+		elo = elo,
+		seasons = seasons,
+		season = season
 	)
 
 @matchController.route("/matches/new", methods = ["GET"])

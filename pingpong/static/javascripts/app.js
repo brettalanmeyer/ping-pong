@@ -18,17 +18,19 @@ $(function(){
 		return confirm("Are you sure you want to delete this?");
 	});
 
-	$("#leaderboard-season").on("change", function(){
+	$("#season-filter").on("change", function(){
 		$(this).parent("form").submit();
 	});
 
-	var playerFilter = $("#matches-player-filter").on("change", matchsfilters);
-	var matchTypeFilter = $("#matches-match-type-filter").on("change", matchsfilters);
-	function matchsfilters(){
+	var playerFilter = $("#matches-player-filter").on("change", matchesfilters);
+	var matchTypeFilter = $("#matches-match-type-filter").on("change", matchesfilters);
+	var seasonFilter = $("#matches-season-filter").on("change", matchesfilters);
+	function matchesfilters(){
 		params = [];
 
 		var playerId = playerFilter.val();
 		var matchType = matchTypeFilter.val();
+		var season = seasonFilter.val();
 
 		if(playerId.length){
 			params.push("playerId=" + playerId);
@@ -36,6 +38,10 @@ $(function(){
 
 		if(matchType.length){
 			params.push("matchType=" + matchType);
+		}
+
+		if(season.length){
+			params.push("season=" + season);
 		}
 
 		window.location = "/matches" + (params.length ? "?" : "") + params.join("&");

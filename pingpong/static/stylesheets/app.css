@@ -150,7 +150,7 @@ a.link {
 
 .matches-container .player-filter {
 	position: absolute;
-	right: 120px;
+	right: 123px;
 	top: 20px;
 	width: 130px;
 }
@@ -160,6 +160,13 @@ a.link {
 	right: 0px;
 	top: 20px;
 	width: 115px;
+}
+
+.matches-container .season-filter {
+	position: absolute;
+	right: 261px;
+	top: 20px;
+	width: 256px;
 }
 
 .matches-container .nav-tabs {

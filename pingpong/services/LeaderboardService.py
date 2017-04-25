@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from flask import abort
 from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
 from pingpong.services.PlayerService import PlayerService
@@ -142,7 +143,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY players.id "
 
@@ -174,7 +175,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY matches.matchType "
 
@@ -207,7 +208,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		connection = db.session.connection()
 		times = connection.execute(text(query), matchType = matchType, start = start, end = end)
@@ -237,7 +238,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY players.id "
 
@@ -266,7 +267,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY matches.matchType "
 
@@ -301,7 +302,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 				)\
@@ -332,7 +333,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY players.id "
 
@@ -371,7 +372,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY matches.matchType "
 
@@ -416,7 +417,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 				)\
@@ -462,7 +463,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 				)\
@@ -545,7 +546,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 						)\
@@ -639,7 +640,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += " GROUP BY scores.id "
 
@@ -673,7 +674,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 			GROUP BY teams.id\
@@ -707,7 +708,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 			GROUP BY teams.id\
@@ -747,7 +748,7 @@ class LeaderboardService(Service):
 		if start != None:
 			query += " AND matches.completedAt >= :start "
 		if end != None:
-			query += " AND matches.completedAt <= :end "
+			query += " AND matches.completedAt < :end "
 
 		query += "\
 			GROUP BY matches.id\
@@ -846,10 +847,8 @@ class LeaderboardService(Service):
 
 		return data
 
-
 	def seasons(self, season):
 		begin = datetime(app.config["SEASON_START_YEAR"], app.config["SEASON_START_MONTH"], 1)
-		# begin = datetime(2015, 1, 1)
 
 		index = 0
 		seasons = []
@@ -871,25 +870,18 @@ class LeaderboardService(Service):
 
 			index += 1
 
-		# start = begin + relativedelta(months = 3 * (index + 1))
-		# end = start + relativedelta(months = 3)
-		# last = start + relativedelta(months = 3, days = -1)
-
-		# seasons.append({
-		# 	"start": start,
-		# 	"end": end,
-		# 	"last": last
-		# })
-
 		# default to latest or current season
 		if season == None:
-			return seasons, len(seasons) - 1, seasons[len(seasons) - 1]["start"], seasons[len(seasons) - 1]["end"]
+			return seasons, len(seasons), seasons[len(seasons) - 1]["start"], seasons[len(seasons) - 1]["end"]
 
 		# specified season
-		elif season >= 0 and season < len(seasons):
-			return seasons, season, seasons[season]["start"], seasons[season]["end"]
+		elif season > 0 and season <= len(seasons):
+			return seasons, season, seasons[season - 1]["start"], seasons[season - 1]["end"]
 
 		# all seasons
-		else:
-			return seasons, -1, None, None
+		elif season == 0:
+			return seasons, 0, None, None
 
+		# invalid parameter
+		else:
+			abort(404)

@@ -1,6 +1,7 @@
 {% set params = "" %}
 {% set playerId = request.args.get("playerId") %}
 {% set matchType = request.args.get("matchType") %}
+{% set season = request.args.get("season") %}
 
 {% if playerId != None %}
 	{% set params = params + "&playerId=" + playerId %}
@@ -8,6 +9,10 @@
 
 {% if matchType != None %}
 	{% set params = params + "&matchType=" + matchType %}
+{% endif %}
+
+{% if season != None %}
+	{% set params = params + "&season=" + season %}
 {% endif %}
 
 <div class="text-center">

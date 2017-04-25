@@ -7,6 +7,10 @@
 
 	<div class="container matches-container">
 
+		{% with id = "matches-season-filter", action = "/matches", season = season, seasons = seasons %}
+			{% include 'partials/seasons.html' %}
+		{% endwith %}
+
 		<select id="matches-player-filter" name="playerId" class="player-filter form-control input-sm" title="Filter By Player" autofocus>
 			<option value="">Player...</option>
 			{% for player in players %}
@@ -21,7 +25,7 @@
 			{% endfor %}
 		</select>
 
-		<h1>
+		<h1 class="with-action">
 			<a href="/matches">Previous Matches - {{ count }}</a>
 		</h1>
 
@@ -144,6 +148,14 @@
 
 						</tr>
 
+				{% else %}
+
+					<tr>
+
+						<td colspan="4">No matches found.</td>
+
+					</tr>
+
 				{% endfor %}
 
 			</tbody>
@@ -157,3 +169,4 @@
 	</div>
 
 {% endblock %}
+
