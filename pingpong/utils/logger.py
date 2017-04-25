@@ -38,4 +38,9 @@ def setupLogging(app):
 	handlerApp.addFilter(FilterAppLogs())
 	app.logger.addHandler(handlerApp)
 
-	app.logger.setLevel(logging.INFO)
+
+	if app.config["DEBUG"]:
+		app.logger.setLevel(logging.DEBUG)
+	else:
+		app.logger.setLevel(logging.INFO)
+

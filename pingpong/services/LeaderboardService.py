@@ -6,6 +6,7 @@ from pingpong.models.PlayerModel import PlayerModel
 from pingpong.services.PlayerService import PlayerService
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from pingpong.utils import util
 from sqlalchemy import text
 import math
 
@@ -14,7 +15,7 @@ playerService = PlayerService()
 class LeaderboardService(Service):
 
 	def matchTypeStats(self, matchType, season):
-		app.logger.info("Querying Leaderboard Statistics")
+		app.logger.info("Querying Leaderboard Statistics by matchType=%s and season=%s", matchType, season)
 
 		players = db.session.query(PlayerModel).order_by(PlayerModel.name)
 		seasons, season, start, end = self.seasons(season)
@@ -51,7 +52,7 @@ class LeaderboardService(Service):
 				"wins": matches[player.id]["wins"] if player.id in matches else 0,
 				"losses": matches[player.id]["losses"] if player.id in matches else 0,
 				"seconds": times[player.id] if player.id in matches else 0,
-				"time": self.formatTime(times[player.id]) if player.id in times else 0,
+				"time": util.formatTime(times[player.id]) if player.id in times else 0,
 				"pointStreak": self.pointStreakByPlayer(pointStreakData, player.id),
 				"winStreak": self.winStreakByPlayer(winStreakData, player.id),
 				"elo": {
@@ -66,6 +67,7 @@ class LeaderboardService(Service):
 		return stats
 
 	def playerStats(self, player, season):
+		app.logger.debug("Querying player stats: playerId=%s season=%d", player.id, season)
 
 		seasons, season, start, end = self.seasons(season)
 
@@ -131,6 +133,8 @@ class LeaderboardService(Service):
 		return stats
 
 	def matchesByMatchType(self, matchType, start, end):
+		app.logger.debug("Querying matches by matchType=%s start=%s end=%s", matchType, start, end)
+
 		query = "\
 			SELECT players.id AS playerId, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.win = 0) AS losses\
 			FROM players\
@@ -162,6 +166,8 @@ class LeaderboardService(Service):
 		return data
 
 	def matchesByPlayer(self, playerId, start, end):
+		app.logger.debug("Querying matches by playerId=%d start=%s end=%s", playerId, start, end)
+
 		query = "\
 			SELECT players.id AS playerId, matches.matchType, COUNT(*) AS matches, SUM(teams.win = 1) AS wins, SUM(teams.win = 0) AS losses\
 			FROM players\
@@ -195,6 +201,8 @@ class LeaderboardService(Service):
 		return data
 
 	def times(self, matchType, start, end):
+		app.logger.debug("Querying time played by matchType=%s start=%s end=%s", matchType, start, end)
+
 		query = "\
 			SELECT DISTINCT players.id as playerId, UNIX_TIMESTAMP(matches.createdAt) as gameTime, UNIX_TIMESTAMP(matches.completedAt) as resultTime\
 			FROM players\
@@ -224,6 +232,8 @@ class LeaderboardService(Service):
 		return data
 
 	def pointsForByMatchType(self, matchType, start, end):
+		app.logger.debug("Querying points for by matchType=%s start=%s end=%s", matchType, start, end)
+
 		query = "\
 			SELECT players.id AS playerId, COUNT(scores.id) as points\
 			FROM players\
@@ -253,6 +263,8 @@ class LeaderboardService(Service):
 		return data
 
 	def pointsForByPlayer(self, playerId, start, end):
+		app.logger.debug("Querying points for by playerId=%d start=%s end=%s", playerId, start, end)
+
 		query = "\
 			SELECT players.id AS playerId, matches.matchType, COUNT(scores.id) as points\
 			FROM players\
@@ -282,6 +294,8 @@ class LeaderboardService(Service):
 		return data
 
 	def pointsForByOpponent(self, playerId, opponentId, start, end):
+		app.logger.debug("Querying points for by opponentId=%d playerId=%d start=%s end=%s", opponentId, playerId, start, end)
+
 		query = "\
 			SELECT players.id AS playerId, matches.matchType, COUNT(scores.id) as points\
 			FROM players\
@@ -320,6 +334,8 @@ class LeaderboardService(Service):
 		return data
 
 	def pointsAgainstByMatchType(self, pointsFor, matchType, start, end):
+		app.logger.debug("Querying points against by matchType=%s start=%s end=%s", matchType, start, end)
+
 		query = "\
 			SELECT players.id as playerId, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
@@ -359,6 +375,8 @@ class LeaderboardService(Service):
 		return data
 
 	def pointsAgainstByPlayer(self, pointsFor, playerId, start, end):
+		app.logger.debug("Querying points against by playerId=%d start=%s end=%s", playerId, start, end)
+
 		query = "\
 			SELECT players.id as playerId, matches.matchType, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
@@ -398,6 +416,8 @@ class LeaderboardService(Service):
 		return data
 
 	def pointsAgainstByOpponent(self, pointsFor, playerId, opponentId, start, end):
+		app.logger.debug("Querying points against by opponent=%d playerId=%d start=%s end=%s", opponentId, playerId, start, end)
+
 		query = "\
 			SELECT players.id as playerId, matches.matchType, GROUP_CONCAT(teams.matchId) as matchIds\
 			FROM players\
@@ -445,6 +465,8 @@ class LeaderboardService(Service):
 		return data
 
 	def selectTeamResultsByOpponent(self, playerId, opponentId, start, end):
+		app.logger.debug("Querying team results by playerId=%d opponent=%d start=%s end=%s", playerId, opponentId, start, end)
+
 		query = "\
 			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
 			FROM teams\
@@ -495,6 +517,8 @@ class LeaderboardService(Service):
 		return streaks
 
 	def totals(self, rows):
+		app.logger.debug("Calculating totals")
+
 		totals = {
 			"matches": 0,
 			"pointsFor": 0,
@@ -512,11 +536,13 @@ class LeaderboardService(Service):
 			totals["wins"] += row["wins"]
 			totals["losses"] += row["losses"]
 
-		totals["time"] = self.formatTime(totals["seconds"])
+		totals["time"] = util.formatTime(totals["seconds"])
 
 		return totals
 
 	def matchups(self, playerId, start, end):
+		app.logger.debug("Calculating matchups for playerId=%d start=%s end=%s", playerId, start, end)
+
 		query = "\
 			SELECT\
 				players.id as playerId,\
@@ -605,7 +631,6 @@ class LeaderboardService(Service):
 		return streak
 
 	def winStreakByMatchType(self, streakData, matchType):
-
 		streak = 0
 		value = None
 
@@ -628,6 +653,8 @@ class LeaderboardService(Service):
 		return streak
 
 	def selectMatchScoresByMatchType(self, matchType, start, end):
+		app.logger.debug("Querying match scores by matchType=%s start=%s end=%s", matchType, start, end)
+
 		query = "\
 			SELECT scores.id, scores.matchId, scores.teamId, scores.game, matches.matchType, group_concat(teams_players.playerId) as playerIds\
 			FROM scores\
@@ -662,6 +689,8 @@ class LeaderboardService(Service):
 		return data
 
 	def selectTeamResultsByMatchType(self, matchType, start, end):
+		app.logger.debug("Querying team results by matchType=%s start=%s end=%s", matchType, start, end)
+
 		query  = "\
 			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
 			FROM teams\
@@ -696,6 +725,8 @@ class LeaderboardService(Service):
 		return data
 
 	def selectTeamResultsByPlayer(self, playerId, start, end):
+		app.logger.debug("Querying team results by playerId=%d start=%s end=%s", playerId, start, end)
+
 		query  = "\
 			SELECT teams.id, teams.win, matches.matchType, GROUP_CONCAT(teams_players.playerId) AS playerIds\
 			FROM teams\
@@ -729,12 +760,9 @@ class LeaderboardService(Service):
 
 		return data
 
-	def formatTime(self, seconds):
-		m, s = divmod(seconds, 60)
-		h, m = divmod(m, 60)
-		return "%02d:%02d:%02d" % (h, m, s)
-
 	def singlesResults(self, start, end):
+		app.logger.debug("Querying singles results start=%s end=%s", start, end)
+
 		query  = "\
 			SELECT matches.id AS matchId, GROUP_CONCAT(players.id, ',', IF(teams.win = 1, 'win', 'loss')) AS record\
 			FROM matches\
@@ -778,6 +806,7 @@ class LeaderboardService(Service):
 		return data
 
 	def elo(self, start, end):
+		app.logger.debug("Calculating ELO start=%s end=%s", start, end)
 
 		# ELO rating system
 		# https://en.wikipedia.org/wiki/Elo_rating_system
@@ -848,6 +877,8 @@ class LeaderboardService(Service):
 		return data
 
 	def seasons(self, season):
+		app.logger.debug("Generating seasons with default season=%s", season)
+
 		begin = datetime(app.config["SEASON_START_YEAR"], app.config["SEASON_START_MONTH"], 1)
 
 		index = 0
