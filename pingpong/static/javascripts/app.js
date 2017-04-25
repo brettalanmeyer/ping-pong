@@ -71,7 +71,7 @@ $(function(){
 
 function enableUndo(){
 	$(document).on("keypress", function(e){
-		$.post("/buttons/black/undo");
+		$.post("/buttons/green/undo");
 	});
 }
 
