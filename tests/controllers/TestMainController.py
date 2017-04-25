@@ -13,3 +13,7 @@ class TestMainController(BaseTest):
 	def test_rules(self):
 		rv = self.app.get("/rules")
 		assert rv.status == self.ok
+
+	def test_favicon(self):
+		rv = self.app.get("/favicon.ico")
+		assert rv.status == self.ok

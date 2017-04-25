@@ -76,3 +76,13 @@ class TestIsmController(BaseTest):
 			rv = self.app.post("/isms/{}".format(ism.id), data = {}, follow_redirects = True)
 			assert rv.status == self.badRequest
 
+	def test_isms_delete(self):
+		with self.ctx:
+			ism = ismService.create({
+				"saying": "delete this saying",
+				"left": 1,
+				"right": 2
+			})
+
+			rv = self.app.post("/isms/{}/delete".format(ism.id), follow_redirects = True)
+			assert rv.status == self.ok
