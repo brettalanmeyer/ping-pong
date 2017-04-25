@@ -30,15 +30,3 @@ def beforeRequest():
 def afterRequest(response):
 	db.session.close()
 	return response
-
-@mainController.app_errorhandler(404)
-def not_found(error):
-	app.logger.error(error)
-	app.logger.error(request.url)
-	return render_template("errors/404.html"), 404
-
-@mainController.app_errorhandler(500)
-def server_error(error):
-	app.logger.error(error)
-	app.logger.error(request.url)
-	return render_template("errors/500.html"), 500
