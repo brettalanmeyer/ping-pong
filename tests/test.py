@@ -11,6 +11,8 @@ from controllers.TestMainController import TestMainController
 from controllers.TestMatchController import TestMatchController
 from controllers.TestPlayerController import TestPlayerController
 
+from services.TestIsmService import TestIsmService
+
 import unittest
 
 if __name__ == "__main__":
