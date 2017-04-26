@@ -8,3 +8,4 @@ jsmin
 cssmin
 gevent-websocket
 python-dateutil
+flask-login

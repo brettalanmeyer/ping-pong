@@ -1,7 +1,5 @@
-from pingpong import create_app, socketio
+from pingpong.app import app, socketio
 import sys
-
-app = create_app(debug = True)
 
 def setEncoding():
 	reload(sys)

@@ -50,6 +50,10 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 		SKYPE_URL = ''
 		ELO_K_VALUE = 32
 		ELO_PERFORMANCE_RATING = 1500
+		SEASON_START_YEAR = 2000
+		SEASON_START_MONTH = 1
+		ADMIN_USERNAME = ''
+		ADMIN_PASSWORD = ''
 
 	create dbconfig.cfg
 
@@ -73,11 +77,14 @@ Fix doubles opponent stats
 move generate data to another file and route only in debug mode
 put getMatchType() somewhere shared
 try to put skype stuff in this app if possible
-ELO previous rank, +-
 Put ELO on match score board?
+
 Finish Tests - try to revert all data entered from a certain point
-Seasons - Make season 1 based, not 0 so url value matches drop down value
-Possibly make "seasons" a pagination type thing
+create a default admin dashboard
+
+Does debug need to be here?
+create_app(debug = False):
+
 
 Leaderboard:
 	current win/loss streak
