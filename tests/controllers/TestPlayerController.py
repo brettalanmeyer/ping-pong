@@ -44,7 +44,10 @@ class TestPlayerController(BaseTest):
 	def test_players_update(self):
 		with self.ctx:
 			newName = str(uuid.uuid4())
-			player = playerService.select().first()
+			player = playerService.create({
+				"name": "Bob"
+			})
+
 			rv = self.app.post("/players/{}".format(player.id), data = {
 				"name": newName
 			}, follow_redirects = True)
