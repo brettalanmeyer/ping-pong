@@ -3,6 +3,7 @@ from flask import Blueprint
 from flask import current_app as app
 from flask import render_template
 from flask import Response
+from pingpong.app import socketio
 from pingpong.matchtypes.Doubles import Doubles
 from pingpong.matchtypes.Nines import Nines
 from pingpong.matchtypes.Singles import Singles
@@ -41,7 +42,7 @@ def buttons_score(button):
 				"matchId": newMatch.id
 			}
 
-	app.socketio.emit("response", data, broadcast = True)
+	socketio.emit("response", data, broadcast = True)
 	return button
 
 @buttonController.route("/buttons/<path:button>/undo", methods = ["POST"])
@@ -53,7 +54,7 @@ def buttons_undo(button):
 	if match != None:
 		matchType = getMatchType(match)
 		data = matchType.undo(match, button)
-	app.socketio.emit("response", data, broadcast = True)
+	socketio.emit("response", data, broadcast = True)
 	return button
 
 @buttonController.route("/buttons/<path:button>/delete-scores", methods = ["POST"])
@@ -65,7 +66,7 @@ def buttons_delete_scores(button):
 	if match != None:
 		scoreService.deleteByMatch(match.id)
 		data = getMatchType(match).matchData(match)
-	app.socketio.emit("response", data, broadcast = True)
+	socketio.emit("response", data, broadcast = True)
 	return button
 
 def validateButton(button):

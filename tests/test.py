@@ -1,7 +1,7 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from pingpong import create_app
+from pingpong.app import app
 from pingpong.utils import database as db
 
 from controllers.TestButtonController import TestButtonController
