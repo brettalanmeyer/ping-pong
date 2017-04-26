@@ -1,8 +1,10 @@
 from flask import Blueprint
+from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask_login import login_required
 from pingpong.matchtypes.Doubles import Doubles
 from pingpong.matchtypes.Nines import Nines
 from pingpong.matchtypes.Singles import Singles
@@ -127,6 +129,41 @@ def matches_undo(id):
 		matchType.undo(match, None)
 
 	return redirect("/matches/%d" % match.id)
+
+@matchController.route("/matches/<int:id>/delete", methods = ["POST"])
+@login_required
+def matches_delete(id):
+	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
+	match, success = matchService.delete(match)
+
+	if success:
+		flash("Match has been successfully.", "success")
+	else:
+		flash("Match could not be deleted .", "warning")
+
+	season = util.paramForm("season")
+	playerId = util.paramForm("playerId")
+	matchType = util.paramForm("matchType")
+
+	params = []
+
+	if season != None:
+		params.append("season={}".format(season))
+
+	if playerId != None:
+		params.append("playerId={}".format(playerId))
+
+	if matchType != None:
+		params.append("matchType={}".format(matchType))
+
+	if len(params) > 0:
+		return redirect("/matches?{}".format("&".join(params)))
+	else:
+		return redirect("/matches")
 
 def getMatchType(match):
 	if singles.isMatchType(match.matchType):

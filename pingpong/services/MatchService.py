@@ -6,6 +6,7 @@ from pingpong.models.PlayerModel import PlayerModel
 from pingpong.models.TeamModel import TeamModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from sqlalchemy import exc
 from sqlalchemy import or_
 
 class MatchService(Service):
@@ -125,6 +126,24 @@ class MatchService(Service):
 		db.session.commit()
 
 		app.logger.info("Completing match=%d", match.id)
+
+	def deleteById(self, id):
+		app.logger.info("Deleting match by id=%d", id)
+		match = self.selectById(id)
+		return self.delete(match)
+
+	def delete(self, match):
+		app.logger.info("Deleting match=%d", match.id)
+
+		try:
+			db.session.delete(match)
+			db.session.commit()
+			return match, True
+
+		except exc.SQLAlchemyError, error:
+			db.session.rollback()
+			return match, False
+
 
 	def deleteAll(self):
 		app.logger.info("Deleting all matches")

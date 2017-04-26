@@ -38,7 +38,7 @@
 					<th>Date</th>
 					<th>Type</th>
 					<th>Teams</th>
-					<th></th>
+					<th colspan="2"></th>
 
 				</tr>
 
@@ -142,9 +142,23 @@
 
 							</td>
 
-							<td>
+							<td width="1">
 								<a href="/matches/{{ match.id }}" class="btn btn-default">View Match</a>
 							</td>
+
+							{% if current_user.is_authenticated %}
+								<td width="1">
+									<form action="/matches/{{ match.id }}/delete" method="POST" class="action-delete">
+										<input type="hidden" name="season" value="{{ season }}">
+										<input type="hidden" name="playerId" value="{{ playerId }}">
+										<input type="hidden" name="matchType" value="{{ matchType }}">
+										<button class="btn btn-danger btn-sm">
+											<span class="glyphicon glyphicon-trash"></span>
+											Delete
+										</button>
+									</form>
+								</td>
+							{% endif %}
 
 						</tr>
 
@@ -152,7 +166,7 @@
 
 					<tr>
 
-						<td colspan="4">No matches found.</td>
+						<td colspan="5">No matches found.</td>
 
 					</tr>
 

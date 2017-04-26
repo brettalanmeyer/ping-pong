@@ -88,6 +88,9 @@ create_app(debug = False):
 Login redirect
 Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 
+add numbers in order to elo on leaderboard
+
+make matchesController.matches_delete prettier
 
 Leaderboard:
 	current win/loss streak
