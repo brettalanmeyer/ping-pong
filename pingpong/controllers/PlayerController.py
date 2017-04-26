@@ -1,3 +1,4 @@
+from flask import abort
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -15,7 +16,7 @@ playerForm = PlayerForm()
 
 @playerController.route("/players", methods = ["GET"])
 def players():
-	return render_template("players/index.html", players = playerService.select())
+	return render_template("players/index.html", players = playerService.selectActive())
 
 @playerController.route("/players/new", methods = ["GET"], defaults = { "matchId": None })
 @playerController.route("/players/new/matches/<int:matchId>", methods = ["GET"])
@@ -47,6 +48,9 @@ def players_create(matchId):
 def players_edit(id):
 	player = playerService.selectById(id)
 
+	if not player.enabled:
+		abort(404)
+
 	if player == None:
 		flash("Player {} does not exist.".format(id), "warning")
 		return redirect("/players")
@@ -55,9 +59,13 @@ def players_edit(id):
 
 @playerController.route("/players/<int:id>", methods = ["POST"])
 def players_update(id):
+	player = playerService.selectById(id)
+
+	if not player.enabled:
+		abort(404)
+
 	hasErrors = playerForm.validate(id, request.form)
 
-	player = playerService.selectById(id)
 	originalName = player.name
 
 	if hasErrors:
