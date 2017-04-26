@@ -4,8 +4,9 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
-from pingpong.services.IsmService import IsmService
+from flask_login import login_required
 from pingpong.forms.IsmForm import IsmForm
+from pingpong.services.IsmService import IsmService
 
 ismController = Blueprint("ismController", __name__)
 
@@ -63,6 +64,7 @@ def isms_update(id):
 		return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
+@login_required
 def isms_delete(id):
 	ism = ismService.delete(id)
 	flash("Ism '{}' has been successfully deleted.".format(ism.saying), "success")

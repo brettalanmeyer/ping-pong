@@ -76,6 +76,14 @@ a.link {
 	color: #337ab7;
 }
 
+.authentication {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 13px;
+	padding: 8px 12px;
+}
+
 .table > tbody > tr > td {
 	vertical-align: middle;
 }
@@ -91,6 +99,12 @@ a.link {
 	margin: 20px auto -20px;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+
+.flash-messages.main {
+	margin: 0 auto;
+	position: relative;
+	top: 20px;
 }
 
 .main-container {

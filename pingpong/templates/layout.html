@@ -18,7 +18,14 @@
 		{% endblock %}
 
 	</head>
-	<body {% if config.DEBUG_TOOLS %}class="debug"{% endif %}>
+	<body class="{{ request.endpoint }} {% if config.DEBUG_TOOLS %}debug{% endif %}"">
+
+		{% if current_user.is_authenticated %}
+			<div class="authentication">
+				Administrator
+				<a href="/logout" class="link">Logout</a>
+			</div>
+		{% endif %}
 
 		{% if request.endpoint != "mainController.index" %}
 			<header>

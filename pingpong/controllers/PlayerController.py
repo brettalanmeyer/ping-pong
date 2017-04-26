@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask_login import login_required
 from pingpong.forms.PlayerForm import PlayerForm
 from pingpong.services.PlayerService import PlayerService
 from pingpong.utils import notifications
@@ -83,3 +84,10 @@ def players_update(id):
 			notifications.send(message)
 
 		return redirect("/players")
+
+@playerController.route("/players/<int:id>/delete", methods = ["POST"])
+@login_required
+def players_delete(id):
+	player = playerService.delete(id)
+	flash("Player '{}' has been successfully deleted.".format(player.name), "success")
+	return redirect("/players")

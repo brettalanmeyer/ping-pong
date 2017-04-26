@@ -33,6 +33,7 @@ def login():
 @login_required
 def logout():
 	logout_user()
+	flash("You've been logged out.", "success")
 	return redirect("/")
 
 @login_manager.user_loader

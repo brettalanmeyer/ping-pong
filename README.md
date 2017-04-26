@@ -85,6 +85,8 @@ create a default admin dashboard
 Does debug need to be here?
 create_app(debug = False):
 
+Login redirect
+
 
 Leaderboard:
 	current win/loss streak

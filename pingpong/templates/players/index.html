@@ -27,12 +27,23 @@
 							<a href="/leaderboard/players/{{ player.id }}" class="link">{{ player.name }}</a>
 						</td>
 
-						<td class="text-right">
+						<td width="1">
 							<a href="/players/{{ player.id }}/edit" class="btn btn-default btn-sm">
 								<span class="glyphicon glyphicon-pencil"></span>
 								Edit
 							</a>
 						</td>
+
+						{% if current_user.is_authenticated %}
+							<td width="1">
+								<form action="/players/{{ player.id }}/delete" method="POST" class="action-delete">
+									<button class="btn btn-danger btn-sm">
+										<span class="glyphicon glyphicon-trash"></span>
+										Delete
+									</button>
+								</form>
+							</td>
+						{% endif %}
 
 					</tr>
 
