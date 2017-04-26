@@ -7,7 +7,6 @@ def formatTime(seconds):
 	h, m = divmod(m, 60)
 	return "%02d:%02d:%02d" % (h, m, s)
 
-
 def param(name, default = None, paramType = None):
 	value = request.args.get(name)
 

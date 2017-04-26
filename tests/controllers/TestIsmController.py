@@ -78,11 +78,19 @@ class TestIsmController(BaseTest):
 
 	def test_isms_delete(self):
 		with self.ctx:
+			originalCount = ismService.select().count()
+
 			ism = ismService.create({
 				"saying": "delete this saying",
 				"left": 1,
 				"right": 2
 			})
 
+			createdCount = ismService.select().count()
+			assert createdCount == originalCount + 1
+
 			rv = self.app.post("/isms/{}/delete".format(ism.id), follow_redirects = True)
 			assert rv.status == self.ok
+
+			deletedCount = ismService.select().count()
+			assert originalCount == deletedCount

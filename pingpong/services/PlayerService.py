@@ -31,6 +31,11 @@ class PlayerService(Service):
 
 		return db.session.query(PlayerModel).filter_by(name = name)
 
+	def selectByNameExcludingPlayer(self, id, name):
+		app.logger.info("Selecting player=%d not by name=%s", id, name)
+
+		return db.session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
+
 	def new(self):
 		app.logger.info("New player")
 
@@ -55,8 +60,11 @@ class PlayerService(Service):
 
 		return player
 
-	def excludeByName(self, id, name):
-		app.logger.info("Selecting player=%d not by name=%s", id, name)
+	def delete(self, id):
+		app.logger.info("Deleting player=%d", id)
 
-		return db.session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
+		player = self.selectById(id)
+		db.session.delete(player)
+		db.session.commit()
 
+		return player

@@ -53,7 +53,6 @@ class TestPlayerController(BaseTest):
 			assert rv.status == self.ok
 			assert newName == updatedPlayer.name
 
-
 	def test_players_update_empty(self):
 		with self.ctx:
 			player = playerService.select().first()

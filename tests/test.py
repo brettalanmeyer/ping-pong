@@ -12,8 +12,12 @@ from controllers.TestMatchController import TestMatchController
 from controllers.TestPlayerController import TestPlayerController
 
 from services.TestIsmService import TestIsmService
+from services.TestPlayerService import TestPlayerService
 
 import unittest
 
 if __name__ == "__main__":
+	reload(sys)
+	sys.setdefaultencoding("UTF8")
+
 	unittest.main()
