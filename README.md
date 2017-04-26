@@ -86,6 +86,7 @@ Does debug need to be here?
 create_app(debug = False):
 
 Login redirect
+Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 
 
 Leaderboard:

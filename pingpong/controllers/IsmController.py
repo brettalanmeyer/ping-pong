@@ -1,3 +1,4 @@
+from flask import abort
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -66,6 +67,16 @@ def isms_update(id):
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
 @login_required
 def isms_delete(id):
-	ism = ismService.delete(id)
-	flash("Ism '{}' has been successfully deleted.".format(ism.saying), "success")
+	ism = ismService.selectById(id)
+
+	if ism == None:
+		abort(404)
+
+	ism, success = ismService.delete(ism)
+
+	if success:
+		flash("Ism '{}' has been successfully deleted.".format(ism.saying), "success")
+	else:
+		flash("Ism '{}' could not be deleted.".format(ism.saying), "warning")
+
 	return redirect("/isms")

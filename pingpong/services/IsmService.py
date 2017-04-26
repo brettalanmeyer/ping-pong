@@ -3,6 +3,7 @@ from flask import current_app as app
 from pingpong.models.IsmModel import IsmModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from sqlalchemy import exc
 import json
 
 class IsmService(Service):
@@ -50,14 +51,22 @@ class IsmService(Service):
 
 		return ism
 
-	def delete(self, id):
+	def deleteById(self, id):
+		app.logger.info("Deleting ism by id=%d", id)
+		ism = self.selectById(id)
+		return self.delete(ism)
+
+	def delete(self, ism):
 		app.logger.info("Deleting ism=%d", id)
 
-		ism = self.selectById(id)
-		db.session.delete(ism)
-		db.session.commit()
+		try:
+			db.session.delete(ism)
+			db.session.commit()
+			return ism, True
 
-		return ism
+		except exc.SQLAlchemyError, error:
+			db.session.rollback()
+			return ism, False
 
 	def serialize(self, isms):
 		app.logger.info("Serializing isms")

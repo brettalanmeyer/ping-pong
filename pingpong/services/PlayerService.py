@@ -3,6 +3,7 @@ from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from sqlalchemy import exc
 
 class PlayerService(Service):
 
@@ -60,11 +61,19 @@ class PlayerService(Service):
 
 		return player
 
-	def delete(self, id):
-		app.logger.info("Deleting player=%d", id)
-
+	def deleteById(self, id):
+		app.logger.info("Deleting player by id=%d", id)
 		player = self.selectById(id)
-		db.session.delete(player)
-		db.session.commit()
+		return self.delete(player)
 
-		return player
+	def delete(self, player):
+		app.logger.info("Deleting player=%d", player.id)
+
+		try:
+			db.session.delete(player)
+			db.session.commit()
+			return player, True
+
+		except exc.SQLAlchemyError, error:
+			db.session.rollback()
+			return player, False

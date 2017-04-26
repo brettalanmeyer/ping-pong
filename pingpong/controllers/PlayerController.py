@@ -37,6 +37,8 @@ def players_create(matchId):
 	else:
 		player = playerService.create(request.form)
 
+		flash("Player '{}' has been successfully created.".format(player.name), "success")
+
 		message = "<b>{}</b> has joined ping pong. Please consider adding them to the ping pong chat group.".format(player.name)
 		notifications.send(message)
 
@@ -88,6 +90,16 @@ def players_update(id):
 @playerController.route("/players/<int:id>/delete", methods = ["POST"])
 @login_required
 def players_delete(id):
-	player = playerService.delete(id)
-	flash("Player '{}' has been successfully deleted.".format(player.name), "success")
+	player = playerService.selectById(id)
+
+	if player == None:
+		abort(404)
+
+	player, success = playerService.delete(player)
+
+	if success:
+		flash("Player '{}' has been successfully deleted.".format(player.name), "success")
+	else:
+		flash("Player '{}' could not be deleted because of match data.".format(player.name), "warning")
+
 	return redirect("/players")
