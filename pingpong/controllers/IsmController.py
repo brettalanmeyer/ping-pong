@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask_login import current_user
 from flask_login import login_required
 from pingpong.forms.IsmForm import IsmForm
 from pingpong.services.IsmService import IsmService
@@ -16,7 +17,12 @@ ismForm = IsmForm()
 
 @ismController.route("/isms", methods = ["GET"])
 def isms():
-	return render_template("isms/index.html", isms = ismService.select())
+	if current_user.is_authenticated:
+		isms = ismService.select()
+	else:
+		isms = ismService.selectApproved()
+
+	return render_template("isms/index.html", isms = isms)
 
 @ismController.route("/isms.json", methods = ["GET"])
 def isms_json():
@@ -63,6 +69,34 @@ def isms_update(id):
 		ism = ismService.update(id, request.form)
 		flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
 		return redirect("/isms")
+
+@ismController.route("/isms/<int:id>/approve", methods = ["POST"])
+@login_required
+def isms_enable(id):
+	ism = ismService.selectById(id)
+
+	if ism == None:
+		abort(404)
+
+	ismService.approve(ism)
+
+	flash("Ism '{}' has been approved.".format(ism.saying), "success")
+
+	return redirect("/isms")
+
+@ismController.route("/isms/<int:id>/reject", methods = ["POST"])
+@login_required
+def isms_disable(id):
+	ism = ismService.selectById(id)
+
+	if ism == None:
+		abort(404)
+
+	ismService.reject(ism)
+
+	flash("Ism '{}' has been rejected.".format(ism.saying), "success")
+
+	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
 @login_required

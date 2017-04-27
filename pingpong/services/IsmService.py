@@ -11,6 +11,11 @@ class IsmService(Service):
 	def select(self):
 		app.logger.info("Selecting isms")
 
+		return db.session.query(IsmModel)
+
+	def selectApproved(self):
+		app.logger.info("Selecting approved isms")
+
 		return db.session.query(IsmModel).filter(IsmModel.approved == True)
 
 	def selectCount(self):
@@ -53,6 +58,24 @@ class IsmService(Service):
 		db.session.commit()
 
 		app.logger.info("Updating ism=%d left=%d right=%d saying=%s", ism.id, ism.left, ism.right, ism.saying)
+
+		return ism
+
+	def approve(self, ism):
+		app.logger.info("Enabling ism=%d", ism.id)
+
+		ism.approved = True
+		ism.modifiedAt = datetime.now()
+		db.session.commit()
+
+		return ism
+
+	def reject(self, ism):
+		app.logger.info("Enabling ism=%d", ism.id)
+
+		ism.approved = False
+		ism.modifiedAt = datetime.now()
+		db.session.commit()
 
 		return ism
 
