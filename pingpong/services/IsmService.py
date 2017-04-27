@@ -13,6 +13,11 @@ class IsmService(Service):
 
 		return db.session.query(IsmModel).filter(IsmModel.approved == True)
 
+	def selectCount(self):
+		app.logger.info("Selecting number of isms")
+
+		return self.select().count()
+
 	def selectById(self, id):
 		app.logger.info("Selecting ism=%d", id)
 
@@ -67,6 +72,18 @@ class IsmService(Service):
 		except exc.SQLAlchemyError, error:
 			db.session.rollback()
 			return ism, False
+
+	def deleteAll(self):
+		app.logger.info("Deleting all isms")
+
+		try:
+			db.session.query(IsmModel).delete()
+			db.session.commit()
+			return True
+
+		except exc.SQLAlchemyError, error:
+			db.session.rollback()
+			return False
 
 	def serialize(self, isms):
 		app.logger.info("Serializing isms")

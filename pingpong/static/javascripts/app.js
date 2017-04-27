@@ -53,7 +53,7 @@ $(function(){
 		if(source.hasClass("auto-close")){
 			setTimeout(function(){
 				source.fadeOut();
-			}, 2000);
+			}, 3000);
 		}
 
 		source.find(".close").on("click", function(){

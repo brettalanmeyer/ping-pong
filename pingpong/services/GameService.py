@@ -7,6 +7,16 @@ from sqlalchemy import text
 
 class GameService(Service):
 
+	def select(self):
+		app.logger.info("Selecting games")
+
+		return db.session.query(GameModel)
+
+	def selectCount(self):
+		app.logger.info("Selecting number of games")
+
+		return self.select().count()
+
 	def create(self, matchId, game, green, yellow, blue, red):
 		app.logger.info("Creating game for match=%d", matchId)
 

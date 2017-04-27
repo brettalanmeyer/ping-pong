@@ -11,6 +11,16 @@ from sqlalchemy import or_
 
 class MatchService(Service):
 
+	def select(self):
+		app.logger.info("Selecting matches")
+
+		return db.session.query(MatchModel)
+
+	def selectCount(self):
+		app.logger.info("Selecting number of matches")
+
+		return self.select().count()
+
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
@@ -20,11 +30,6 @@ class MatchService(Service):
 		app.logger.info("Selecting matches excluding match=%d", id)
 
 		return db.session.query(MatchModel).filter(MatchModel.id != id)
-
-	def select(self):
-		app.logger.info("Selecting matches")
-
-		return db.session.query(MatchModel)
 
 	def selectComplete(self):
 		app.logger.info("Selecting completed matches")
@@ -144,9 +149,14 @@ class MatchService(Service):
 			db.session.rollback()
 			return match, False
 
-
 	def deleteAll(self):
 		app.logger.info("Deleting all matches")
 
-		db.session.query(MatchModel).delete()
-		db.session.commit()
+		try:
+			db.session.query(MatchModel).delete()
+			db.session.commit()
+			return True
+
+		except exc.SQLAlchemyError, error:
+			db.session.rollback()
+			return False

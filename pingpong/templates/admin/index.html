@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>Admin</h1>
+
+		<dl class="dl-horizontal">
+			<dt>Players:</dt>
+			<dd>{{ counts.numOfPlayers }}</dd>
+
+			<dt>Matches:</dt>
+			<dd>{{ counts.numOfMatches }}</dd>
+
+			<dt>Games:</dt>
+			<dd>{{ counts.numOfGames }}</dd>
+
+			<dt>Scores:</dt>
+			<dd>{{ counts.numOfScores }}</dd>
+
+			<dt>Isms:</dt>
+			<dd>{{ counts.numOfIsms }}</dd>
+		</dl>
+
+		{% if allowed %}
+
+			<form action="/admin/isms/delete-all" method="POST" class="action-delete">
+				<button class="btn btn-danger btn-sm">
+					<span class="glyphicon glyphicon-trash"></span>
+					Delete Isms
+				</button>
+			</form>
+
+			<br />
+
+			<form action="/admin/matches/delete-all" method="POST" class="action-delete">
+				<button class="btn btn-danger btn-sm">
+					<span class="glyphicon glyphicon-trash"></span>
+					Delete Matches
+				</button>
+			</form>
+
+			<br />
+
+			<form action="/admin/players/delete-all" method="POST" class="action-delete">
+				<button class="btn btn-danger btn-sm" {% if counts.numOfMatches > 0 %}disabled{% endif %}>
+					<span class="glyphicon glyphicon-trash"></span>
+					Delete Players
+				</button>
+			</form>
+
+			<br />
+
+			<form action="/admin/delete-all" method="POST" class="action-delete">
+				<button class="btn btn-danger btn-sm">
+					<span class="glyphicon glyphicon-trash"></span>
+					Delete All Data
+				</button>
+			</form>
+
+			<br />
+
+			<form action="/admin/copy-remote-data" method="POST">
+				<button class="btn btn-danger btn-sm" {% if counts.total %}disabled{% endif %}>
+					<span class="glyphicon glyphicon-trash"></span>
+					Copy Remote Data
+				</button>
+			</form>
+
+		{% endif %}
+
+	</div>
+
+{% endblock %}

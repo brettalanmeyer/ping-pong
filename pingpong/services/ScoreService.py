@@ -8,6 +8,16 @@ from sqlalchemy import text
 
 class ScoreService(Service):
 
+	def select(self):
+		app.logger.info("Selecting scores")
+
+		return db.session.query(ScoreModel)
+
+	def selectCount(self):
+		app.logger.info("Selecting number of scores")
+
+		return self.select().count()
+
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
@@ -19,11 +29,6 @@ class ScoreService(Service):
 		db.session.commit()
 
 		app.logger.info("Scoring for match=%d team=%d game=%d", matchId, teamId, game)
-
-	def selectCount(self):
-		app.logger.info("Selecting number of scores")
-
-		return db.session.query(ScoreModel.matchId).count()
 
 	def selectLastScoreByMatchId(self, matchId):
 		scores = db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).order_by(ScoreModel.id.desc())

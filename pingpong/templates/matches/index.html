@@ -11,14 +11,14 @@
 			{% include 'partials/seasons.html' %}
 		{% endwith %}
 
-		<select id="matches-player-filter" name="playerId" class="player-filter form-control input-sm" title="Filter By Player" autofocus>
+		<select id="matches-player-filter" name="playerId" class="player-filter form-control input-sm" title="Filter By Player">
 			<option value="">Player...</option>
 			{% for player in players %}
 				<option value="{{ player.id }}" {% if playerId == player.id %}selected{% endif %}>{{ player.name }}</option>
 			{% endfor %}
 		</select>
 
-		<select id="matches-match-type-filter" name="matchType" class="match-type-filter form-control input-sm" title="Filter By Match Type" autofocus>
+		<select id="matches-match-type-filter" name="matchType" class="match-type-filter form-control input-sm" title="Filter By Match Type">
 			<option value="">Match Type...</option>
 			{% for item in matchTypes %}
 				<option value="{{ item }}" {% if matchType == item %}selected{% endif %}>{{ item.title() }}</option>

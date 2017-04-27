@@ -12,6 +12,11 @@ class PlayerService(Service):
 
 		return db.session.query(PlayerModel).order_by(PlayerModel.name)
 
+	def selectCount(self):
+		app.logger.info("Selecting number of players")
+
+		return self.select().count()
+
 	def selectById(self, id):
 		app.logger.info("Selecting player=%d", id)
 
@@ -77,3 +82,15 @@ class PlayerService(Service):
 		except exc.SQLAlchemyError, error:
 			db.session.rollback()
 			return player, False
+
+	def deleteAll(self):
+		app.logger.info("Deleting all players")
+
+		try:
+			db.session.query(PlayerModel).delete()
+			db.session.commit()
+			return True
+
+		except exc.SQLAlchemyError, error:
+			db.session.rollback()
+			return False

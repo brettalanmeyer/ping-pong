@@ -20,6 +20,7 @@ app.url_map.strict_slashes = False
 socketio = SocketIO()
 socketio.init_app(app)
 
+from pingpong.controllers.AdminController import adminController
 from pingpong.controllers.AuthenticationController import authenticationController
 from pingpong.controllers.ButtonController import buttonController
 from pingpong.controllers.ErrorController import errorController
@@ -30,6 +31,7 @@ from pingpong.controllers.MatchController import matchController
 from pingpong.controllers.PlayerController import playerController
 from pingpong.controllers.RuleController import ruleController
 
+app.register_blueprint(adminController)
 app.register_blueprint(authenticationController)
 app.register_blueprint(buttonController)
 app.register_blueprint(errorController)
