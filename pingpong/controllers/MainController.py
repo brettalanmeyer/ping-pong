@@ -6,6 +6,7 @@ from flask import send_from_directory
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.utils import database as db
+from pingpong.utils import util
 
 mainController = Blueprint("mainController", __name__)
 
