@@ -66,6 +66,24 @@ class PlayerService(Service):
 
 		return player
 
+	def enable(self, player):
+		app.logger.info("Enabling player=%d", player.id)
+
+		player.enabled = True
+		player.modifiedAt = datetime.now()
+		db.session.commit()
+
+		return player
+
+	def disable(self, player):
+		app.logger.info("Enabling player=%d", player.id)
+
+		player.enabled = False
+		player.modifiedAt = datetime.now()
+		db.session.commit()
+
+		return player
+
 	def deleteById(self, id):
 		app.logger.info("Deleting player by id=%d", id)
 		player = self.selectById(id)

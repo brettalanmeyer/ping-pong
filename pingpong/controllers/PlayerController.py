@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask_login import current_user
 from flask_login import login_required
 from pingpong.forms.PlayerForm import PlayerForm
 from pingpong.services.PlayerService import PlayerService
@@ -17,7 +18,12 @@ playerForm = PlayerForm()
 
 @playerController.route("/players", methods = ["GET"])
 def players():
-	return render_template("players/index.html", players = playerService.selectActive())
+	if current_user.is_authenticated:
+		players = playerService.select()
+	else:
+		players = playerService.selectActive()
+
+	return render_template("players/index.html", players = players)
 
 @playerController.route("/players/new", methods = ["GET"], defaults = { "matchId": None })
 @playerController.route("/players/new/matches/<int:matchId>", methods = ["GET"])
@@ -51,7 +57,10 @@ def players_create(matchId):
 def players_edit(id):
 	player = playerService.selectById(id)
 
-	if not player.enabled:
+	if player == None:
+		abort(404)
+
+	if not player.enabled and not current_user.is_authenticated:
 		abort(404)
 
 	if player == None:
@@ -64,7 +73,10 @@ def players_edit(id):
 def players_update(id):
 	player = playerService.selectById(id)
 
-	if not player.enabled:
+	if player == None:
+		abort(404)
+
+	if not player.enabled and not current_user.is_authenticated:
 		abort(404)
 
 	hasErrors = playerForm.validate(id, request.form)
@@ -86,6 +98,34 @@ def players_update(id):
 			notifications.send(message)
 
 		return redirect("/players")
+
+@playerController.route("/players/<int:id>/enable", methods = ["POST"])
+@login_required
+def players_enable(id):
+	player = playerService.selectById(id)
+
+	if player == None:
+		abort(404)
+
+	playerService.enable(player)
+
+	flash("Player '{}' has been enabled.".format(player.name), "success")
+
+	return redirect("/players")
+
+@playerController.route("/players/<int:id>/disable", methods = ["POST"])
+@login_required
+def players_disable(id):
+	player = playerService.selectById(id)
+
+	if player == None:
+		abort(404)
+
+	playerService.disable(player)
+
+	flash("Player '{}' has been disabled.".format(player.name), "success")
+
+	return redirect("/players")
 
 @playerController.route("/players/<int:id>/delete", methods = ["POST"])
 @login_required

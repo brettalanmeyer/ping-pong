@@ -36,6 +36,24 @@
 
 						{% if current_user.is_authenticated %}
 							<td width="1">
+								{% if player.enabled %}
+									<form action="/players/{{ player.id }}/disable" method="POST">
+										<button class="btn btn-success btn-sm btn-block">
+											<span class="glyphicon glyphicon glyphicon-ok"></span>
+											Enabled
+										</button>
+									</form>
+								{% else %}
+									<form action="/players/{{ player.id }}/enable" method="POST">
+										<button class="btn btn-warning btn-sm btn-block">
+											<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
+											Disabled
+										</button>
+									</form>
+								{% endif %}
+							</td>
+
+							<td width="1">
 								<form action="/players/{{ player.id }}/delete" method="POST" class="action-delete">
 									<button class="btn btn-danger btn-sm">
 										<span class="glyphicon glyphicon-trash"></span>
