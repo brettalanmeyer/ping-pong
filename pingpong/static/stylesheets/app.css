@@ -20,6 +20,10 @@ header {
 	border-bottom: solid 1px #333;
 }
 
+.maincontroller-index header {
+	display: none;
+}
+
 header a {
 	display: block;
 	text-align: center;
@@ -84,6 +88,10 @@ a.link {
 	padding: 8px 12px;
 }
 
+.authentication.unauthenticated .link {
+	color: #ccc;
+}
+
 .table > tbody > tr > td {
 	vertical-align: middle;
 }
@@ -101,7 +109,7 @@ a.link {
 	padding-right: 15px;
 }
 
-.flash-messages.main {
+.maincontroller-index .flash-messages {
 	margin: 0 auto;
 	position: relative;
 	top: 20px;

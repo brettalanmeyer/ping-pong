@@ -18,20 +18,22 @@
 		{% endblock %}
 
 	</head>
-	<body class="{{ request.endpoint }} {% if config.DEBUG_TOOLS %}debug{% endif %}"">
+	<body class="{{ request.endpoint|lower|replace('.', '-') }} {% if config.DEBUG_TOOLS %}debug{% endif %}"">
 
 		{% if current_user.is_authenticated %}
-			<div class="authentication">
+			<div class="authentication authenticated">
 				Administrator
 				<a href="/logout" class="link">Logout</a>
 			</div>
+		{% else %}
+			<div class="authentication unauthenticated">
+				<a href="/login" class="link">Login</a>
+			</div>
 		{% endif %}
 
-		{% if request.endpoint != "mainController.index" %}
-			<header>
-				<a href="/">Ping Pong</a>
-			</header>
-		{% endif %}
+		<header>
+			<a href="/">Ping Pong</a>
+		</header>
 
 		{% include 'partials/messages.html' %}
 
