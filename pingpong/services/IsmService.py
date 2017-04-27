@@ -62,7 +62,7 @@ class IsmService(Service):
 		return self.delete(ism)
 
 	def delete(self, ism):
-		app.logger.info("Deleting ism=%d", id)
+		app.logger.info("Deleting ism=%d", ism.id)
 
 		try:
 			db.session.delete(ism)

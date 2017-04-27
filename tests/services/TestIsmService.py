@@ -81,8 +81,25 @@ class TestIsmService(BaseTest):
 
 	def test_delete(self):
 		with self.ctx:
-			ism = ismService.select().first()
-			ismService.delete(ism.id)
+			ism = ismService.create({
+				"saying": "saying",
+				"left": 1,
+				"right": 1
+			})
+
+			ismService.delete(ism)
+			deletedIsm = ismService.selectById(ism.id)
+			assert deletedIsm == None
+
+	def test_deleteById(self):
+		with self.ctx:
+			ism = ismService.create({
+				"saying": "saying",
+				"left": 1,
+				"right": 1
+			})
+
+			ismService.deleteById(ism.id)
 			deletedIsm = ismService.selectById(ism.id)
 			assert deletedIsm == None
 

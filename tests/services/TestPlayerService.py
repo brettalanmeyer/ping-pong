@@ -93,6 +93,13 @@ class TestPlayerService(BaseTest):
 	def test_delete(self):
 		with self.ctx:
 			player = playerService.create({ "name": "Bob" })
-			playerService.delete(player.id)
+			playerService.delete(player)
+			deletedPlayer = playerService.selectById(player.id)
+			assert deletedPlayer == None
+
+	def test_deleteById(self):
+		with self.ctx:
+			player = playerService.create({ "name": "Bob" })
+			playerService.deleteById(player.id)
 			deletedPlayer = playerService.selectById(player.id)
 			assert deletedPlayer == None
