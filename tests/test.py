@@ -16,6 +16,7 @@ from controllers.TestPlayerController import TestPlayerController
 from controllers.TestRulesController import TestRulesController
 
 from services.TestIsmService import TestIsmService
+from services.TestMatchService import TestMatchService
 from services.TestPlayerService import TestPlayerService
 
 import unittest

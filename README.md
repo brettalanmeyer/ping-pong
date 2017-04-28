@@ -130,6 +130,7 @@ Report of ELO with variability of initial rank and k value
 
 manual entry of scores due to connection lost or otherwise
 
+run tests with no data
 
 Add Dave Thomas
 

@@ -24,7 +24,12 @@ class MatchService(Service):
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
 
-		return db.session.query(MatchModel).filter(MatchModel.id == id).one()
+		matches = db.session.query(MatchModel).filter(MatchModel.id == id)
+
+		if matches.count() == 1:
+			return matches.one()
+
+		return None
 
 	def selectNotById(self, id):
 		app.logger.info("Selecting matches excluding match=%d", id)
@@ -58,12 +63,22 @@ class MatchService(Service):
 	def selectActiveMatch(self):
 		app.logger.info("Selecting active match")
 
-		return db.session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).order_by(MatchModel.id.desc()).first()
+		matches = db.session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).order_by(MatchModel.id.desc())
+
+		if matches.count() == 0:
+			return None
+
+		return matches.first()
 
 	def selectLatestMatch(self):
 		app.logger.info("Selecting latest completed match")
 
-		return db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc()).first()
+		matches = db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
+
+		if matches.count() == 0:
+			return None
+
+		return matches.first()
 
 	def setAsNotReady(self, id):
 		app.logger.info("Updateing all matches except current one to not ready")
