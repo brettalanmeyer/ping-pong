@@ -27,7 +27,7 @@ def login():
 		return redirect("/")
 	else:
 		flash("Login information is incorrect.", "danger")
-		return render_template("authentication/login.html")
+		return render_template("authentication/login.html"), 401
 
 @authenticationController.route("/logout", methods = ["GET"])
 @login_required

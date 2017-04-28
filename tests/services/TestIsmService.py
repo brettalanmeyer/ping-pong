@@ -17,6 +17,11 @@ class TestIsmService(BaseTest):
 			isms = ismService.select()
 			assert isms.count() > 0
 
+	def test_selectCount(self):
+		with self.ctx:
+			isms = ismService.selectCount()
+			assert isms >= 0
+
 	def test_selectById(self):
 		with self.ctx:
 			ismOne = ismService.select().first()

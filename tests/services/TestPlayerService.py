@@ -15,6 +15,11 @@ class TestPlayerService(BaseTest):
 			players = playerService.select()
 			assert players.count() > 0
 
+	def test_selectCount(self):
+		with self.ctx:
+			players = playerService.selectCount()
+			assert players >= 0
+
 	def test_selectById(self):
 		with self.ctx:
 			playerOne = playerService.select().first()

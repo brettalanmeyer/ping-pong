@@ -52,19 +52,23 @@ def isms_edit(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
-		flash("Ism {} does not exist.".format(id), "warning")
-		return redirect("/isms")
+		abort(404)
 
 	return render_template("isms/edit.html", ism = ism)
 
 @ismController.route("/isms/<int:id>", methods = ["POST"])
 def isms_update(id):
+	ism = ismService.selectById(id)
+
+	if ism == None:
+		abort(404)
+
 	hasErrors = ismForm.validate(request.form)
 
 	if hasErrors:
-		ism = ismService.selectById(id)
 		ismForm.load(ism, request.form)
 		return render_template("isms/edit.html", ism = ism), 400
+
 	else:
 		ism = ismService.update(id, request.form)
 		flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")

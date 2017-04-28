@@ -10,6 +10,7 @@ class BaseTest(unittest.TestCase):
 	ok = "200 OK"
 	found = "302 FOUND"
 	badRequest = "400 BAD REQUEST"
+	unauthorized = "401 UNAUTHORIZED"
 	notFound = "404 NOT FOUND"
 
 	username = "admin"
