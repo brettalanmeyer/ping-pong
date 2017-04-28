@@ -12,6 +12,7 @@ class BaseTest(unittest.TestCase):
 	badRequest = "400 BAD REQUEST"
 	unauthorized = "401 UNAUTHORIZED"
 	notFound = "404 NOT FOUND"
+	internalServerError = "500 INTERNAL SERVER ERROR"
 
 	username = "admin"
 	password = "password"

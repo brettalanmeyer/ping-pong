@@ -15,5 +15,10 @@ class TestAuthenticationController(BaseTest):
 		assert rv.status == self.unauthorized
 
 	def test_logout(self):
-		rv = self.app.get("/login")
+		rv = self.app.get("/logout")
+		assert rv.status == self.unauthorized
+
+	def test_logout(self):
+		self.authenticate()
+		rv = self.app.get("/logout", follow_redirects = True)
 		assert rv.status == self.ok
