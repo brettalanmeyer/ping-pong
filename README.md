@@ -13,19 +13,25 @@ Install git
 Install mysql
 
 `sudo apt-get install mysql-server`
+
 `sudo nano /etc/mysql/my.cnf`
-	```bind-address = LOCALMACHINEIP```
+
+```bind-address = LOCALMACHINEIP```
 
 
 Virtual Box
 `sudo apt-get install virtualbox-guest-dkms`
+
 `sudo gpasswd -a <linux-username> vboxsf`
 
 Install pip
 
 `sudo apt-get install python-pip python-dev build-essential`
+
 `sudo pip install --upgrade pip`
+
 `sudo pip install --upgrade virtualenv`
+
 `sudo apt-get install libmysqlclient-dev`
 
 Install app dependencies by running `sudo pip install -r requirements.txt`
@@ -76,6 +82,7 @@ Run tests
 
 Get code coverage
 `python -m unittest discover -s tests/`
+
 `coverage run -m unittest discover -s tests/`
 
 Open coverage report
