@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import request
+import hashlib
 import random
 
 def formatTime(seconds):
@@ -53,3 +54,6 @@ def shuffle(ary):
 		return shuffle(ary)
 
 	return newAry
+
+def hash(string):
+	return hashlib.sha224(string).hexdigest()

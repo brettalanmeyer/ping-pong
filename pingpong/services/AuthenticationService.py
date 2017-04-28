@@ -1,7 +1,7 @@
 from flask import current_app as app
 from flask import request
-from flask_login import UserMixin
-import hashlib
+from pingpong.models.AdminModel import AdminModel
+from pingpong.utils import util
 
 class AuthenticationService():
 
@@ -19,7 +19,7 @@ class AuthenticationService():
 		username = form["username"]
 		password = form["password"]
 
-		passwordHash = hashlib.sha224(password).hexdigest()
+		passwordHash = util.hash(password)
 
 		if passwordHash != app.config["ADMIN_PASSWORD"]:
 			app.logger.info("Invalid Password")
@@ -32,14 +32,4 @@ class AuthenticationService():
 		return True
 
 	def admin(self):
-		return Admin()
-
-class Admin(UserMixin):
-
-	def __init__(self):
-		self.id = 0
-		self.name = "BemAdmin"
-		self.password = self.name + "_secret"
-
-	def __repr__(self):
-		return "%d/%s/%s" % (self.id, self.name, self.password)
+		return AdminModel()

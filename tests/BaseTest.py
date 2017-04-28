@@ -8,8 +8,12 @@ import unittest
 class BaseTest(unittest.TestCase):
 
 	ok = "200 OK"
+	found = "302 FOUND"
 	badRequest = "400 BAD REQUEST"
 	notFound = "404 NOT FOUND"
+
+	username = "admin"
+	password = "password"
 
 	def setUp(self):
 		app.config["TESTING"] = True
@@ -20,3 +24,9 @@ class BaseTest(unittest.TestCase):
 
 	def tearDown(self):
 		pass
+
+	def authenticate(self):
+		return self.app.post("/login", data = {
+			"username": self.username,
+			"password": self.password
+		}, follow_redirects = True)
