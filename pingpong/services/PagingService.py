@@ -15,7 +15,9 @@ class PagingService():
 		self.total = records.count()
 		self.pages = int(math.ceil(self.total / float(self.limit)))
 
-		return records.limit(self.limit).offset((self.page - 1) * self.limit).all()
+		offset = (self.page - 1) * self.limit
+
+		return records.limit(self.limit).offset(offset).all()
 
 	def data(self):
 		return {

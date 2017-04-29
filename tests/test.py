@@ -15,11 +15,12 @@ from controllers.TestMatchController import TestMatchController
 from controllers.TestPlayerController import TestPlayerController
 from controllers.TestRulesController import TestRulesController
 
+from services.TestGameService import TestGameService
 from services.TestIsmService import TestIsmService
 from services.TestMatchService import TestMatchService
+from services.TestPagingService import TestPagingService
 from services.TestPlayerService import TestPlayerService
 from services.TestTeamService import TestTeamService
-from services.TestGameService import TestGameService
 
 import unittest
 
