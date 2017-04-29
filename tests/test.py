@@ -22,6 +22,8 @@ from services.TestPagingService import TestPagingService
 from services.TestPlayerService import TestPlayerService
 from services.TestTeamService import TestTeamService
 
+from matchtypes.TestSingles import TestSingles
+
 import unittest
 
 if __name__ == "__main__":

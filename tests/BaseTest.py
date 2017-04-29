@@ -26,6 +26,7 @@ class BaseTest(unittest.TestCase):
 
 		self.ctx = app.app_context()
 		self.app = app.test_client()
+		self.request = app.test_request_context("http://localhost")
 		pass
 
 	def tearDown(self):
