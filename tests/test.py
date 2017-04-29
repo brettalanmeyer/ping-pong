@@ -18,6 +18,7 @@ from controllers.TestRulesController import TestRulesController
 from services.TestIsmService import TestIsmService
 from services.TestMatchService import TestMatchService
 from services.TestPlayerService import TestPlayerService
+from services.TestTeamService import TestTeamService
 
 import unittest
 

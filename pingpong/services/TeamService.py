@@ -5,10 +5,9 @@ from pingpong.services.Service import Service
 from pingpong.services import PlayerService
 from pingpong.utils import database as db
 
-class TeamService(Service):
+playerService = PlayerService.PlayerService()
 
-	def __init__(self):
-		self.playerService = PlayerService.PlayerService()
+class TeamService(Service):
 
 	def selectById(self, id):
 		app.logger.info("Selecting team=%d", id)
@@ -26,7 +25,7 @@ class TeamService(Service):
 
 	def createOnePlayer(self, matchId, playerId):
 		team = self.create(matchId)
-		team.players.append(self.playerService.selectById(playerId))
+		team.players.append(playerService.selectById(playerId))
 
 		app.logger.info("Creating single player team=%d match=%d player=%d", team.id, matchId, playerId)
 
@@ -34,8 +33,8 @@ class TeamService(Service):
 
 	def createTwoPlayer(self, matchId, player1Id, player2Id):
 		team = self.create(matchId)
-		team.players.append(self.playerService.selectById(player1Id))
-		team.players.append(self.playerService.selectById(player2Id))
+		team.players.append(playerService.selectById(player1Id))
+		team.players.append(playerService.selectById(player2Id))
 		db.session.commit()
 
 		app.logger.info("Creating two player team=%d match=%d player1=%d player2=%d", team.id, matchId, player1Id, player2Id)
