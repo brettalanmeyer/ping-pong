@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask import current_app as app
 from flask import request
 import hashlib
 import random
@@ -57,3 +58,9 @@ def shuffle(ary):
 
 def hash(string):
 	return hashlib.sha224(string).hexdigest()
+
+def hasConfig(param):
+	if param not in app.config:
+		return False
+	if len(app.config[param]) == 0:
+		return False

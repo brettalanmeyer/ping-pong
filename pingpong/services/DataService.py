@@ -1,10 +1,23 @@
 from flask import current_app as app
 from pingpong.utils import database as db
+from pingpong.utils import util
 from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 class DataService():
+
+	def isConfigured(self):
+		if not util.hasConfig("MYSQL_REMOTE_USERNAME"):
+			return False
+		if not util.hasConfig("MYSQL_REMOTE_PASSWORD"):
+			return False
+		if not util.hasConfig("MYSQL_REMOTE_HOST"):
+			return False
+		if not util.hasConfig("MYSQL_REMOTE_DATABASE"):
+			return False
+
+		return True
 
 	def db(self):
 		username = app.config["MYSQL_REMOTE_USERNAME"]

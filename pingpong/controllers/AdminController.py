@@ -23,7 +23,6 @@ scoreService = ScoreService()
 @adminController.route("/admin", methods = ["GET"])
 @login_required
 def index():
-
 	counts = {
 		"numOfIsms": ismService.selectCount(),
 		"numOfMatches": matchService.selectCount(),
@@ -33,7 +32,7 @@ def index():
 	}
 	counts["total"] = sum(counts.values())
 
-	return render_template("admin/index.html", counts = counts, allowed = app.config["DEBUG"])
+	return render_template("admin/index.html", counts = counts, allowed = dataService.isConfigured())
 
 @adminController.route("/admin/copy-remote-data", methods = ["POST"])
 @login_required
@@ -121,7 +120,7 @@ def deletePlayers():
 		flash("Players could not be deleted.", "warning")
 
 def access():
-	if not app.config["DEBUG"]:
+	if  not dataService.isConfigured():
 		flash("This action is only allowed in development mode.", "danger")
 		return False
 
