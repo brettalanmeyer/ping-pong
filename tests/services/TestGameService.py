@@ -38,10 +38,10 @@ class TestGameService(BaseTest):
 			game = gameService.create(match.id, 1, green.id, yellow.id, blue.id, red.id)
 
 			assert game.match.id == match.id
-			assert game.green == green.id
-			assert game.yellow == yellow.id
-			assert game.blue == blue.id
-			assert game.red == red.id
+			assert game.green.id == green.id
+			assert game.yellow.id == yellow.id
+			assert game.blue.id == blue.id
+			assert game.red.id == red.id
 			assert game.completedAt == None
 			assert game.winner == None
 			assert game.winnerScore == None

@@ -9,10 +9,10 @@ class GameModel(Base):
 	id = Column(Integer, primary_key = True)
 	matchId = Column(Integer, ForeignKey("matches.id"))
 	game = Column(Integer)
-	green = Column(Integer, ForeignKey("players.id"))
-	yellow = Column(Integer, ForeignKey("players.id"))
-	blue = Column(Integer, ForeignKey("players.id"))
-	red = Column(Integer, ForeignKey("players.id"))
+	greenId = Column(Integer, ForeignKey("players.id"))
+	yellowId = Column(Integer, ForeignKey("players.id"))
+	blueId = Column(Integer, ForeignKey("players.id"))
+	redId = Column(Integer, ForeignKey("players.id"))
 	winner = Column(Integer, ForeignKey("teams.id"))
 	winnerScore = Column(Integer)
 	loser = Column(Integer, ForeignKey("teams.id"))
@@ -22,13 +22,17 @@ class GameModel(Base):
 	modifiedAt = Column(DateTime)
 
 	match = relationship("MatchModel")
+	green = relationship("PlayerModel", foreign_keys = [greenId])
+	yellow = relationship("PlayerModel", foreign_keys = [yellowId])
+	blue = relationship("PlayerModel", foreign_keys = [blueId])
+	red = relationship("PlayerModel", foreign_keys = [redId])
 
-	def __init__(self, matchId, game, green, yellow, blue, red, createdAt, modifiedAt):
+	def __init__(self, matchId, game, greenId, yellowId, blueId, redId, createdAt, modifiedAt):
 		self.matchId = matchId
 		self.game = game
-		self.green = green
-		self.yellow = yellow
-		self.blue = blue
-		self.red = red
+		self.greenId = greenId
+		self.yellowId = yellowId
+		self.blueId = blueId
+		self.redId = redId
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt

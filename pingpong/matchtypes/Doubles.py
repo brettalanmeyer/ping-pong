@@ -37,7 +37,7 @@ class Doubles(MatchType):
 		}
 
 		for color in self.colors:
-			data["players"][color] = self.newPlayer(getattr(game, color))
+			data["players"][color] = self.newPlayer(getattr(game, color).id)
 
 		data["points"] = self.setTeamData(match, data["players"], data["teams"])
 		self.determineWinner(match, data["teams"])

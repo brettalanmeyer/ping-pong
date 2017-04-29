@@ -31,8 +31,8 @@ class Singles(MatchType):
 			"createdAt": str(match.createdAt),
 			"completedAt": str(match.completedAt),
 			"teams": {
-				"green": self.newPlayer(game.green),
-				"yellow": self.newPlayer(game.yellow)
+				"green": self.newPlayer(game.green.id),
+				"yellow": self.newPlayer(game.yellow.id)
 			},
 			"points": 0
 		}
