@@ -2,7 +2,14 @@ $(function(){
 
 	$(".table-sortable").stupidtable();
 
-	$("#leaderboard").find("th.elo").stupidsort("desc");
+	$("#leaderboard.singles").find("th.elo").stupidsort("desc");
+
+	$("#leaderboard").bind("aftertablesort", function(event, data){
+		var i = 1;
+		$(this).find("tbody").find("tr").each(function(){
+			$(this).find("td:first").html(i++);
+		});
+	});
 
 	$(".leaderboard-player-container .nav-tabs li").on("click", function(){
 		$(".leaderboard-player-container .nav-tabs li").removeClass("active");

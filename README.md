@@ -106,27 +106,16 @@ try to put skype stuff in this app if possible
 Put ELO on match score board?
 
 Finish Tests - try to revert all data entered from a certain point
-create a default admin dashboard
 
 Login redirect, for post requests, try to be able to configure it where to redirect, such as /players instead of /players/3/delete
 
 Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 
-add numbers in order to elo on leaderboard (Cole is 1, Matt is 2, Dave is 13, etc)
-
 make matchesController.matches_delete prettier
-
-generate screenshots for greg
-Put "login" in top right except for game boards
-Add admin section for deleting players, isms, and matches. Players button is disabled until matches have been deleted.
-Copy data from remote database to dev database only if config values exist this way it only works in dev
-
-Add selectApproved() to isms so we have something to select all
 
 Report of avg time people play per day
 
 Report of ELO with variability of initial rank and k value
-
 
 manual entry of scores due to connection lost or otherwise
 

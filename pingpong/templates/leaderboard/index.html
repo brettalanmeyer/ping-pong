@@ -30,6 +30,8 @@
 
 					<tr>
 
+						<th></th>
+
 						<th data-sort="string">
 							Player
 							<div class="sorting-container">
@@ -120,6 +122,8 @@
 
 						<tr data-time="{{ row.time }}">
 
+							<td class="text-center">{{ loop.index }}</td>
+
 							<td data-sort-value="{{ row.playerName }}">
 								<a href="/leaderboard/players/{{ row.playerId }}?season={{ stats.season }}" class="link">{{ row.playerName }}</a>
 							</td>
@@ -155,6 +159,7 @@
 
 					<tr>
 
+						<th></th>
 						<th>Totals:</th>
 						<th class="elo"></th>
 						<th>{{ "{:,}".format(stats.totals["matches"]) }}</th>
