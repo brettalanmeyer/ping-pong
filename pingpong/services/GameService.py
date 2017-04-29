@@ -18,7 +18,7 @@ class GameService(Service):
 		return self.select().count()
 
 	def create(self, matchId, game, green, yellow, blue, red):
-		app.logger.info("Creating game for match=%d", matchId)
+		app.logger.info("Creating game for matchId=%d", matchId)
 
 		game = GameModel(matchId, game, green, yellow, blue, red, datetime.now(), datetime.now())
 		db.session.add(game)
@@ -27,7 +27,7 @@ class GameService(Service):
 		return game
 
 	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
-		app.logger.info("Setting match=%d and game=%d as complete", matchId, game)
+		app.logger.info("Setting matchId=%d and game=%d as complete", matchId, game)
 
 		existingGame = db.session.query(GameModel).filter_by(matchId = matchId, game = game).one()
 		existingGame.winner = winner
@@ -38,7 +38,11 @@ class GameService(Service):
 		existingGame.completedAt = datetime.now()
 		db.session.commit()
 
+		return existingGame
+
 	def resetGame(self, matchId, game):
+		app.logger.info("Resetting complete game to incomplete for matchId=%d and game=%d", matchId, game)
+
 		games = db.session.query(GameModel).filter_by(matchId = matchId, game = game)
 
 		if games.count() == 1:
@@ -50,8 +54,12 @@ class GameService(Service):
 			game.completedAt = None
 			db.session.commit()
 
+			return game
+
+		return None
+
 	def getTeamWins(self, matchId, teamId):
-		app.logger.info("Getting wins for match=%d and team=%d", matchId, teamId)
+		app.logger.info("Getting wins for matchId=%d and teamId=%d", matchId, teamId)
 
 		query = "\
 			SELECT COUNT(*) as wins\

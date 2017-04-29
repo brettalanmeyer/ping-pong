@@ -19,6 +19,7 @@ from services.TestIsmService import TestIsmService
 from services.TestMatchService import TestMatchService
 from services.TestPlayerService import TestPlayerService
 from services.TestTeamService import TestTeamService
+from services.TestGameService import TestGameService
 
 import unittest
 
