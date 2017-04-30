@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import url_for
 from flask_login import current_user
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.IsmForm import IsmForm
@@ -45,7 +46,7 @@ def isms_create():
 	else:
 		ism = ismService.create(request.form)
 		flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
-		return redirect("/isms")
+		return redirect(url_for("ismController.isms_index"))
 
 @ismController.route("/isms/<int:id>/edit", methods = ["GET"])
 def isms_edit(id):
@@ -72,11 +73,11 @@ def isms_update(id):
 	else:
 		ism = ismService.update(id, request.form)
 		flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
-		return redirect("/isms")
+		return redirect(url_for("ismController.isms_index"))
 
 @ismController.route("/isms/<int:id>/approve", methods = ["POST"])
 @loginRequired("ismController.isms_index")
-def isms_enable(id):
+def isms_approve(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -86,11 +87,11 @@ def isms_enable(id):
 
 	flash("Ism '{}' has been approved.".format(ism.saying), "success")
 
-	return redirect("/isms")
+	return redirect(url_for("ismController.isms_index"))
 
 @ismController.route("/isms/<int:id>/reject", methods = ["POST"])
 @loginRequired("ismController.isms_index")
-def isms_disable(id):
+def isms_reject(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -100,7 +101,7 @@ def isms_disable(id):
 
 	flash("Ism '{}' has been rejected.".format(ism.saying), "success")
 
-	return redirect("/isms")
+	return redirect(url_for("ismController.isms_index"))
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
 @loginRequired("ismController.isms_index")
@@ -117,4 +118,4 @@ def isms_delete(id):
 	else:
 		flash("Ism '{}' could not be deleted.".format(ism.saying), "warning")
 
-	return redirect("/isms")
+	return redirect(url_for("ismController.isms_index"))

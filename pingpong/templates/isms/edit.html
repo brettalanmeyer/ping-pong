@@ -7,16 +7,16 @@
 	<div class="container">
 
 		<h1>
-			<a href="/isms">Isms</a>
+			<a href="{{ url_for('ismController.isms_index') }}">Isms</a>
 			/
-			<a href="/isms/{{ ism.id }}/edit">Update Ism</a>
+			<a href="{{ url_for('ismController.isms_edit', id = ism.id) }}">Update Ism</a>
 		</h1>
 
 		{% if error %}
 			<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>
 		{% endif %}
 
-		<form action="/isms/{{ ism.id }}" method="POST">
+		<form action="{{ url_for('ismController.isms_update', id = ism.id) }}" method="POST">
 
 			{% include 'isms/_form.html' %}
 
