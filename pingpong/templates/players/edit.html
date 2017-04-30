@@ -7,12 +7,12 @@
 	<div class="container">
 
 		<h1>
-			<a href="/players">Players</a>
+			<a href="{{ url_for('playerController.players_index') }}">Players</a>
 			/
-			<a href="/players/{{ player.id }}/edit">Update Player</a>
+			<a href="{{ url_for('playerController.players_edit', id = player.id) }}">Update Player</a>
 		</h1>
 
-		<form action="/players/{{ player.id }}" method="POST">
+		<form action="{{ url_for('playerController.players_update', id = player.id) }}" method="POST">
 
 			{% include 'players/_form.html' %}
 

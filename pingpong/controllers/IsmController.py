@@ -16,7 +16,7 @@ ismService = IsmService()
 ismForm = IsmForm()
 
 @ismController.route("/isms", methods = ["GET"])
-def isms():
+def isms_index():
 	if current_user.is_authenticated:
 		isms = ismService.select()
 	else:
@@ -75,7 +75,7 @@ def isms_update(id):
 		return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/approve", methods = ["POST"])
-@loginRequired("ismController.isms")
+@loginRequired("ismController.isms_index")
 def isms_enable(id):
 	ism = ismService.selectById(id)
 
@@ -89,7 +89,7 @@ def isms_enable(id):
 	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/reject", methods = ["POST"])
-@loginRequired("ismController.isms")
+@loginRequired("ismController.isms_index")
 def isms_disable(id):
 	ism = ismService.selectById(id)
 
@@ -103,7 +103,7 @@ def isms_disable(id):
 	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
-@loginRequired("ismController.isms")
+@loginRequired("ismController.isms_index")
 def isms_delete(id):
 	ism = ismService.selectById(id)
 

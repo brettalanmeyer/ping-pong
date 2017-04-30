@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import url_for
 from flask_login import current_user
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.PlayerForm import PlayerForm
@@ -17,7 +18,7 @@ playerService = PlayerService()
 playerForm = PlayerForm()
 
 @playerController.route("/players", methods = ["GET"])
-def players():
+def players_index():
 	if current_user.is_authenticated:
 		players = playerService.select()
 	else:
@@ -49,9 +50,9 @@ def players_create(matchId):
 		notifications.send(message)
 
 		if matchId != None:
-			return redirect("/matches/%d/players" % matchId)
+			return redirect(url_for("matchController.matches_players", id = matchId))
 		else:
-			return redirect("/players")
+			return redirect(url_for("playerController.players_index"))
 
 @playerController.route("/players/<int:id>/edit", methods = ["GET"])
 def players_edit(id):
@@ -65,7 +66,7 @@ def players_edit(id):
 
 	if player == None:
 		flash("Player {} does not exist.".format(id), "warning")
-		return redirect("/players")
+		return redirect(url_for("playerController.players_index"))
 
 	return render_template("players/edit.html", player = player)
 
@@ -97,10 +98,10 @@ def players_update(id):
 			message = "<b>{}</b> is now known as <b>{}</b>.".format(originalName, newName)
 			notifications.send(message)
 
-		return redirect("/players")
+		return redirect(url_for("playerController.players_index"))
 
 @playerController.route("/players/<int:id>/enable", methods = ["POST"])
-@loginRequired("playerController.players")
+@loginRequired("playerController.players_index")
 def players_enable(id):
 	player = playerService.selectById(id)
 
@@ -111,10 +112,10 @@ def players_enable(id):
 
 	flash("Player '{}' has been enabled.".format(player.name), "success")
 
-	return redirect("/players")
+	return redirect(url_for("playerController.players_index"))
 
 @playerController.route("/players/<int:id>/disable", methods = ["POST"])
-@loginRequired("playerController.players")
+@loginRequired("playerController.players_index")
 def players_disable(id):
 	player = playerService.selectById(id)
 
@@ -125,10 +126,10 @@ def players_disable(id):
 
 	flash("Player '{}' has been disabled.".format(player.name), "success")
 
-	return redirect("/players")
+	return redirect(url_for("playerController.players_index"))
 
 @playerController.route("/players/<int:id>/delete", methods = ["POST"])
-@loginRequired("playerController.players")
+@loginRequired("playerController.players_index")
 def players_delete(id):
 	player = playerService.selectById(id)
 
@@ -142,4 +143,4 @@ def players_delete(id):
 	else:
 		flash("Player '{}' could not be deleted because of match data.".format(player.name), "warning")
 
-	return redirect("/players")
+	return redirect(url_for("playerController.players_index"))

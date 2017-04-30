@@ -21,12 +21,12 @@
 			</div>
 
 			<div class="links">
-				<a href="/matches/new">New Match</a>
-				<a href="/matches">Previous Matches</a>
-				<a href="/players">Players</a>
-				<a href="/leaderboard">Leaderboard</a>
-				<a href="/isms">Isms</a>
-				<a href="/rules">Rules</a>
+				<a href="{{ url_for('matchController.matches_new') }}">New Match</a>
+				<a href="{{ url_for('matchController.matches_index') }}">Previous Matches</a>
+				<a href="{{ url_for('playerController.players_index') }}">Players</a>
+				<a href="{{ url_for('leaderboardController.leaderboard_index') }}">Leaderboard</a>
+				<a href="{{ url_for('ismController.isms_index') }}">Isms</a>
+				<a href="{{ url_for('ruleController.rules_index') }}">Rules</a>
 			</div>
 
 			<img src="/static/images/ping-pong.png" />
