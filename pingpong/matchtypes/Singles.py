@@ -187,7 +187,7 @@ class Singles(MatchType):
 
 	def playAgain(self, match, numOfGames, persistTeams):
 		game = match.games[0]
-		playerIds = [game.green, game.yellow]
+		playerIds = [game.green.id, game.yellow.id]
 
 		newMatch = matchService.create(self.matchType)
 		newMatch.numOfGames = numOfGames

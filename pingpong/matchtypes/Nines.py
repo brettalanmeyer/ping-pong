@@ -167,7 +167,7 @@ class Nines(MatchType):
 
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
-		playerIds = [game.green, game.yellow, game.blue, game.red]
+		playerIds = [game.green.id, game.yellow.id, game.blue.id, game.red.id]
 
 		newMatch = matchService.create(self.matchType)
 		self.createTeams(newMatch, playerIds, True)

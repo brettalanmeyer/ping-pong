@@ -4,5 +4,5 @@ from flask import render_template
 ruleController = Blueprint("ruleController", __name__)
 
 @ruleController.route("/rules", methods = ["GET"])
-def rules_index():
+def index():
 	return render_template("rules/index.html")

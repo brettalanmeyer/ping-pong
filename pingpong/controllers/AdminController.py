@@ -3,6 +3,7 @@ from flask import current_app as app
 from flask import flash
 from flask import redirect
 from flask import render_template
+from flask import url_for
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.services.DataService import DataService
 from pingpong.services.GameService import GameService
@@ -38,7 +39,7 @@ def index():
 @loginRequired("adminController.index")
 def copy_remote_data():
 	if not access():
-		return redirect("/admin")
+		return redirect(url_for("adminController.index"))
 
 	dataService.copyPlayers()
 	flash("Players have been copied.", "success")
@@ -61,45 +62,45 @@ def copy_remote_data():
 	dataService.copyScores()
 	flash("Scores have been copied.", "success")
 
-	return redirect("/admin")
+	return redirect(url_for("adminController.index"))
 
 @adminController.route("/admin/isms/delete-all", methods = ["POST"])
 @loginRequired("adminController.index")
 def delete_isms():
 	if not access():
-		return redirect("/admin")
+		return redirect(url_for("adminController.index"))
 
 	deleteIsms()
-	return redirect("/admin")
+	return redirect(url_for("adminController.index"))
 
 @adminController.route("/admin/matches/delete-all", methods = ["POST"])
 @loginRequired("adminController.index")
 def delete_matches():
 	if not access():
-		return redirect("/admin")
+		return redirect(url_for("adminController.index"))
 
 	deleteMatches()
-	return redirect("/admin")
+	return redirect(url_for("adminController.index"))
 
 @adminController.route("/admin/players/delete-all", methods = ["POST"])
 @loginRequired("adminController.index")
 def delete_players():
 	if not access():
-		return redirect("/admin")
+		return redirect(url_for("adminController.index"))
 
 	deletePlayers()
-	return redirect("/admin")
+	return redirect(url_for("adminController.index"))
 
 @adminController.route("/admin/delete-all", methods = ["POST"])
 @loginRequired("adminController.index")
 def delete_all():
 	if not access():
-		return redirect("/admin")
+		return redirect(url_for("adminController.index"))
 
 	deleteIsms()
 	deleteMatches()
 	deletePlayers()
-	return redirect("/admin")
+	return redirect(url_for("adminController.index"))
 
 def deleteIsms():
 	if ismService.deleteAll():

@@ -6,13 +6,13 @@
 
 	<div class="container container-medium">
 
-		<a class="btn btn-default btn-sm action" href="{{ url_for('playerController.players_new') }}">
+		<a class="btn btn-default btn-sm action" href="{{ url_for('playerController.new') }}">
 			<span class="glyphicon glyphicon-star"></span>
 			Create Player
 		</a>
 
 		<h1 class="with-action">
-			<a href="{{ url_for('playerController.players_index') }}">Players</a>
+			<a href="{{ url_for('playerController.index') }}">Players</a>
 		</h1>
 
 		<table class="table table-condensed">
@@ -24,11 +24,11 @@
 					<tr>
 
 						<td>
-							<a href="{{ url_for('leaderboardController.leaderboard_players', id = player.id) }}" class="link">{{ player.name }}</a>
+							<a href="{{ url_for('leaderboardController.players', id = player.id) }}" class="link">{{ player.name }}</a>
 						</td>
 
 						<td width="1">
-							<a href="{{ url_for('playerController.players_edit', id = player.id) }}" class="btn btn-default btn-sm">
+							<a href="{{ url_for('playerController.edit', id = player.id) }}" class="btn btn-default btn-sm">
 								<span class="glyphicon glyphicon-pencil"></span>
 								Edit
 							</a>
@@ -37,14 +37,14 @@
 						{% if current_user.is_authenticated %}
 							<td width="1">
 								{% if player.enabled %}
-									<form action="{{ url_for('playerController.players_disable', id = player.id) }}" method="POST">
+									<form action="{{ url_for('playerController.disable', id = player.id) }}" method="POST">
 										<button class="btn btn-success btn-sm btn-block">
 											<span class="glyphicon glyphicon glyphicon-ok"></span>
 											Enabled
 										</button>
 									</form>
 								{% else %}
-									<form action="{{ url_for('playerController.players_enable', id = player.id) }}" method="POST">
+									<form action="{{ url_for('playerController.enable', id = player.id) }}" method="POST">
 										<button class="btn btn-warning btn-sm btn-block">
 											<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
 											Disabled
@@ -54,7 +54,7 @@
 							</td>
 
 							<td width="1">
-								<form action="{{ url_for('playerController.players_delete', id = player.id) }}" method="POST" class="action-delete">
+								<form action="{{ url_for('playerController.delete', id = player.id) }}" method="POST" class="action-delete">
 									<button class="btn btn-danger btn-sm">
 										<span class="glyphicon glyphicon-trash"></span>
 										Delete

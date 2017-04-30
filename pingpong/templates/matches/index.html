@@ -26,7 +26,7 @@
 		</select>
 
 		<h1 class="with-action">
-			<a href="/matches">Previous Matches - {{ count }}</a>
+			<a href="{{ url_for('matchController.index') }}">Previous Matches - {{ count }}</a>
 		</h1>
 
 		<table class="table match-list">
@@ -91,7 +91,7 @@
 															&amp;
 														{% endif %}
 
-														<a href="/leaderboard/players/{{ player.id }}">
+														<a href="{{ url_for('leaderboardController.players', id = player.id) }}">
 															{{ player.name }}
 														</a>
 
@@ -148,10 +148,7 @@
 
 							{% if current_user.is_authenticated %}
 								<td width="1">
-									<form action="/matches/{{ match.id }}/delete" method="POST" class="action-delete">
-										<input type="hidden" name="season" value="{{ season }}">
-										<input type="hidden" name="playerId" value="{{ playerId }}">
-										<input type="hidden" name="matchType" value="{{ matchType }}">
+									<form action="{{ url_for('matchController.delete', id = match.id, season = season, playerId = playerId, matchType = matchType) }}" method="POST" class="action-delete">
 										<button class="btn btn-danger btn-sm">
 											<span class="glyphicon glyphicon-trash"></span>
 											Delete

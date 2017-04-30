@@ -9,17 +9,17 @@
 		<div class="leaderboard-container">
 
 			<h1>
-				<a href="/leaderboard?season={{ stats.season }}">Leaderboard</a>
+				<a href="{{ url_for('leaderboardController.index', season = stats.season) }}">Leaderboard</a>
 			</h1>
 
-			{% with id = "season-filter", action = "/leaderboard/{}".format(stats.matchType), season = stats.season, seasons = stats.seasons %}
+			{% with id = "season-filter", action = url_for('leaderboardController.index', matchType = stats.matchType), season = stats.season, seasons = stats.seasons %}
 				{% include 'partials/seasons.html' %}
 			{% endwith %}
 
 			<ul class="nav nav-tabs">
 				{% for item in matchTypes %}
 					<li role="presentation" class="{% if stats.matchType == item %}active{% endif %}">
-						<a href="/leaderboard/{{ item }}?season={{ stats.season }}">{{ item.title() }}</a>
+						<a href="{{ url_for('leaderboardController.index', matchType = item, season = stats.season) }}">{{ item.title() }}</a>
 					</li>
 				{% endfor %}
 			</ul>
@@ -125,7 +125,7 @@
 							<td class="text-center">{{ loop.index }}</td>
 
 							<td data-sort-value="{{ row.playerName }}">
-								<a href="/leaderboard/players/{{ row.playerId }}?season={{ stats.season }}" class="link">{{ row.playerName }}</a>
+								<a href="{{ url_for('leaderboardController.players', id = row.playerId, season = stats.season) }}" class="link">{{ row.playerName }}</a>
 							</td>
 							<td data-sort-value="{{ row.elo.current }}" class="elo">
 								{{ row.elo.current|round|int }}

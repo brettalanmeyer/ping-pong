@@ -244,7 +244,7 @@ class Doubles(MatchType):
 		game = match.games[0]
 
 		# put in this order so if teams are not randomized, they will at least swap sides
-		playerIds = [game.yellow, game.green, game.red, game.blue]
+		playerIds = [game.yellow.id, game.green.id, game.red.id, game.blue.id]
 
 		newMatch = matchService.create(self.matchType)
 		newMatch.numOfGames = numOfGames

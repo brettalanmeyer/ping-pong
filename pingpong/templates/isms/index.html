@@ -6,13 +6,13 @@
 
 	<div id="isms" class="container">
 
-		<a class="btn btn-default btn-sm action" href="{{ url_for('ismController.isms_new') }}">
+		<a class="btn btn-default btn-sm action" href="{{ url_for('ismController.new') }}">
 			<span class="glyphicon glyphicon-star"></span>
 			Create Ism
 		</a>
 
 		<h1 class="with-action">
-			<a href="{{ url_for('ismController.isms_index') }}">Isms</a>
+			<a href="{{ url_for('ismController.index') }}">Isms</a>
 		</h1>
 
 		<table class="table table-condensed">
@@ -31,7 +31,7 @@
 						<td>{{ ism.saying }}</td>
 
 						<td width="1">
-							<a href="{{ url_for('ismController.isms_edit', id = ism.id) }}" class="btn btn-default btn-sm">
+							<a href="{{ url_for('ismController.edit', id = ism.id) }}" class="btn btn-default btn-sm">
 								<span class="glyphicon glyphicon-pencil"></span>
 								Edit
 							</a>
@@ -40,14 +40,14 @@
 						{% if current_user.is_authenticated %}
 							<td width="1">
 								{% if ism.approved %}
-									<form action="{{ url_for('ismController.isms_reject', id = ism.id) }}" method="POST">
+									<form action="{{ url_for('ismController.reject', id = ism.id) }}" method="POST">
 										<button class="btn btn-success btn-sm btn-block">
 											<span class="glyphicon glyphicon glyphicon-ok"></span>
 											Approved
 										</button>
 									</form>
 								{% else %}
-									<form action="{{ url_for('ismController.isms_approve', id = ism.id) }}" method="POST">
+									<form action="{{ url_for('ismController.approve', id = ism.id) }}" method="POST">
 										<button class="btn btn-warning btn-sm btn-block">
 											<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
 											Rejected
@@ -57,7 +57,7 @@
 							</td>
 
 							<td width="1">
-								<form action="{{ url_for('ismController.isms_delete', id = ism.id) }}" method="POST" class="action-delete">
+								<form action="{{ url_for('ismController.delete', id = ism.id) }}" method="POST" class="action-delete">
 									<button class="btn btn-danger btn-sm">
 										<span class="glyphicon glyphicon-trash"></span>
 										Delete

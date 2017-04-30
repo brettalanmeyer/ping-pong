@@ -18,7 +18,7 @@ playerService = PlayerService()
 playerForm = PlayerForm()
 
 @playerController.route("/players", methods = ["GET"])
-def players_index():
+def index():
 	if current_user.is_authenticated:
 		players = playerService.select()
 	else:
@@ -28,13 +28,13 @@ def players_index():
 
 @playerController.route("/players/new", methods = ["GET"], defaults = { "matchId": None })
 @playerController.route("/players/new/matches/<int:matchId>", methods = ["GET"])
-def players_new(matchId):
+def new(matchId):
 	player = playerService.new()
 	return render_template("players/new.html", player = player, matchId = matchId)
 
 @playerController.route("/players", methods = ["POST"], defaults = { "matchId": None })
 @playerController.route("/players/matches/<int:matchId>", methods = ["POST"])
-def players_create(matchId):
+def create(matchId):
 	hasErrors = playerForm.validate(None, request.form)
 
 	if hasErrors:
@@ -52,10 +52,10 @@ def players_create(matchId):
 		if matchId != None:
 			return redirect(url_for("matchController.matches_players", id = matchId))
 		else:
-			return redirect(url_for("playerController.players_index"))
+			return redirect(url_for("playerController.index"))
 
 @playerController.route("/players/<int:id>/edit", methods = ["GET"])
-def players_edit(id):
+def edit(id):
 	player = playerService.selectById(id)
 
 	if player == None:
@@ -66,12 +66,12 @@ def players_edit(id):
 
 	if player == None:
 		flash("Player {} does not exist.".format(id), "warning")
-		return redirect(url_for("playerController.players_index"))
+		return redirect(url_for("playerController.index"))
 
 	return render_template("players/edit.html", player = player)
 
 @playerController.route("/players/<int:id>", methods = ["POST"])
-def players_update(id):
+def update(id):
 	player = playerService.selectById(id)
 
 	if player == None:
@@ -98,11 +98,11 @@ def players_update(id):
 			message = "<b>{}</b> is now known as <b>{}</b>.".format(originalName, newName)
 			notifications.send(message)
 
-		return redirect(url_for("playerController.players_index"))
+		return redirect(url_for("playerController.index"))
 
 @playerController.route("/players/<int:id>/enable", methods = ["POST"])
-@loginRequired("playerController.players_index")
-def players_enable(id):
+@loginRequired("playerController.index")
+def enable(id):
 	player = playerService.selectById(id)
 
 	if player == None:
@@ -112,11 +112,11 @@ def players_enable(id):
 
 	flash("Player '{}' has been enabled.".format(player.name), "success")
 
-	return redirect(url_for("playerController.players_index"))
+	return redirect(url_for("playerController.index"))
 
 @playerController.route("/players/<int:id>/disable", methods = ["POST"])
-@loginRequired("playerController.players_index")
-def players_disable(id):
+@loginRequired("playerController.index")
+def disable(id):
 	player = playerService.selectById(id)
 
 	if player == None:
@@ -126,11 +126,11 @@ def players_disable(id):
 
 	flash("Player '{}' has been disabled.".format(player.name), "success")
 
-	return redirect(url_for("playerController.players_index"))
+	return redirect(url_for("playerController.index"))
 
 @playerController.route("/players/<int:id>/delete", methods = ["POST"])
-@loginRequired("playerController.players_index")
-def players_delete(id):
+@loginRequired("playerController.index")
+def delete(id):
 	player = playerService.selectById(id)
 
 	if player == None:
@@ -143,4 +143,4 @@ def players_delete(id):
 	else:
 		flash("Player '{}' could not be deleted because of match data.".format(player.name), "warning")
 
-	return redirect(url_for("playerController.players_index"))
+	return redirect(url_for("playerController.index"))

@@ -9,12 +9,13 @@
 		<div class="leaderboard-player-container">
 
 			<h1>
-				<a href="/leaderboard?season={{ stats.season }}">Leaderboard</a>
+				<a href="{{ url_for('leaderboardController.index', season = stats.season) }}">Leaderboard</a>
 				-
-				<a href="/leaderboard/players/{{ player.id }}?season={{ stats.season }}">{{ player.name }}</a>
+				<a href="{{ url_for('leaderboardController.players', id = player.id, season = stats.season) }}">{{ player.name }}</a>
 			</h1>
 
-			{% with id = "season-filter", action = "/leaderboard/players/{}".format(player.id), season = stats.season, seasons = stats.seasons %}
+
+			{% with id = "season-filter", action = url_for('leaderboardController.players', id = player.id), season = stats.season, seasons = stats.seasons %}
 				{% include 'partials/seasons.html' %}
 			{% endwith %}
 
@@ -143,7 +144,7 @@
 
 							<tr class="matchup">
 								<td data-sort-value="{{ matchup.playerName }}">
-									<a href="/leaderboard/players/{{ matchup.playerId }}?season={{ stats.season }}" class="link">{{ matchup.playerName }}</a>
+									<a href="{{ url_for('leaderboardController.players', id = matchup.playerId, season = stats.season) }}" class="link">{{ matchup.playerName }}</a>
 								</td>
 								<td data-sort-value="{{ matchup.numOfMatches }}">{{ matchup.numOfMatches }}</td>
 								<td data-sort-value="{{ matchup.percentage }}">{{ "{:.3f}".format(matchup.percentage) }}</td>

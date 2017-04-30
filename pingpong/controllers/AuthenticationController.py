@@ -3,6 +3,7 @@ from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import url_for
 from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
@@ -41,7 +42,7 @@ def logout():
 		logout_user()
 		flash("You've been logged out.", "success")
 
-	return redirect("/")
+	return redirect(url_for("mainController.index"))
 
 @login_manager.user_loader
 def load_user(id):

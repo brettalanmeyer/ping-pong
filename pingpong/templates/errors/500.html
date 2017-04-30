@@ -66,13 +66,13 @@
 	<body>
 
 		<h1>
-			<a href="/">Ping Pong</a>
+			<a href="{{ url_for('mainController.index') }}">Ping Pong</a>
 		</h1>
 
 		<h2>Well shit... something broke</h2>
 		<h2>Tell Brett</h2>
 
-		<p><a href="/">Return to the ping pong app</a></p>
+		<p><a href="{{ url_for('mainController.index') }}">Return to the ping pong app</a></p>
 
 		<img src="/static/images/ping-pong.png" />
 

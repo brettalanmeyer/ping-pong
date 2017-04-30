@@ -17,7 +17,7 @@ ismService = IsmService()
 ismForm = IsmForm()
 
 @ismController.route("/isms", methods = ["GET"])
-def isms_index():
+def index():
 	if current_user.is_authenticated:
 		isms = ismService.select()
 	else:
@@ -26,17 +26,17 @@ def isms_index():
 	return render_template("isms/index.html", isms = isms)
 
 @ismController.route("/isms.json", methods = ["GET"])
-def isms_json():
+def index_json():
 	isms = ismService.select()
 	return Response(ismService.serialize(isms), status = 200, mimetype = "application/json")
 
 @ismController.route("/isms/new", methods = ["GET"])
-def isms_new():
+def new():
 	ism = ismService.new()
 	return render_template("isms/new.html", ism = ism)
 
 @ismController.route("/isms", methods = ["POST"])
-def isms_create():
+def create():
 	hasErrors = ismForm.validate(request.form)
 
 	if hasErrors:
@@ -46,10 +46,10 @@ def isms_create():
 	else:
 		ism = ismService.create(request.form)
 		flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
-		return redirect(url_for("ismController.isms_index"))
+		return redirect(url_for("ismController.index"))
 
 @ismController.route("/isms/<int:id>/edit", methods = ["GET"])
-def isms_edit(id):
+def edit(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -58,7 +58,7 @@ def isms_edit(id):
 	return render_template("isms/edit.html", ism = ism)
 
 @ismController.route("/isms/<int:id>", methods = ["POST"])
-def isms_update(id):
+def update(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -73,11 +73,11 @@ def isms_update(id):
 	else:
 		ism = ismService.update(id, request.form)
 		flash("Ism '{}' has been successfully updated.".format(ism.saying), "success")
-		return redirect(url_for("ismController.isms_index"))
+		return redirect(url_for("ismController.index"))
 
 @ismController.route("/isms/<int:id>/approve", methods = ["POST"])
-@loginRequired("ismController.isms_index")
-def isms_approve(id):
+@loginRequired("ismController.index")
+def approve(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -87,11 +87,11 @@ def isms_approve(id):
 
 	flash("Ism '{}' has been approved.".format(ism.saying), "success")
 
-	return redirect(url_for("ismController.isms_index"))
+	return redirect(url_for("ismController.index"))
 
 @ismController.route("/isms/<int:id>/reject", methods = ["POST"])
-@loginRequired("ismController.isms_index")
-def isms_reject(id):
+@loginRequired("ismController.index")
+def reject(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -101,11 +101,11 @@ def isms_reject(id):
 
 	flash("Ism '{}' has been rejected.".format(ism.saying), "success")
 
-	return redirect(url_for("ismController.isms_index"))
+	return redirect(url_for("ismController.index"))
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
-@loginRequired("ismController.isms_index")
-def isms_delete(id):
+@loginRequired("ismController.index")
+def delete(id):
 	ism = ismService.selectById(id)
 
 	if ism == None:
@@ -118,4 +118,4 @@ def isms_delete(id):
 	else:
 		flash("Ism '{}' could not be deleted.".format(ism.saying), "warning")
 
-	return redirect(url_for("ismController.isms_index"))
+	return redirect(url_for("ismController.index"))

@@ -1,9 +1,11 @@
+from flask import abort
 from flask import Blueprint
 from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import url_for
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.matchtypes.Doubles import Doubles
 from pingpong.matchtypes.Nines import Nines
@@ -27,7 +29,7 @@ doubles = Doubles()
 nines = Nines()
 
 @matchController.route("/matches", methods = ["GET"])
-def matches_index():
+def index():
 	page = util.param("page", 1, "int")
 	playerId = util.param("playerId", None, "int")
 	matchType = util.param("matchType")
@@ -54,62 +56,78 @@ def matches_index():
 	)
 
 @matchController.route("/matches/new", methods = ["GET"])
-def matches_new():
+def new():
 	return render_template("matches/new.html")
 
 @matchController.route("/matches", methods = ["POST"])
-def matches_create():
+def create():
 	match = matchService.create(request.form["matchType"])
 	matchType = getMatchType(match)
 
 	if matchType.matchType == "nines":
-		return redirect("/matches/%d/players" % match.id)
+		return redirect(url_for("matchController.players", id = match.id))
 
-	return redirect("/matches/%d/num-of-games" % match.id)
+	return redirect(url_for("matchController.games", id = match.id))
 
 @matchController.route("/matches/<int:id>/num-of-games", methods = ["GET"])
-def matches_games(id):
+def games(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
 	return render_template("matches/num-of-games.html", match = match)
 
 @matchController.route("/matches/<int:id>/num-of-games", methods = ["POST"])
-def matches_games_update(id):
+def games_update(id):
 	matchService.updateGames(id, request.form["numOfGames"])
-	return redirect("/matches/%d/players" % id)
+	return redirect(url_for("matchController.players", id = id))
 
 @matchController.route("/matches/<int:id>/players", methods = ["GET"])
-def matches_players(id):
+def players(id):
 	match = matchService.selectById(id)
 	matchType = getMatchType(match)
 	players = playerService.selectActive()
 	return render_template("matches/players.html", title = matchType.label, matchType = matchType, match = match, players = players)
 
 @matchController.route("/matches/<int:id>/players", methods = ["POST"])
-def matches_players_create(id):
+def players_create(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchType = getMatchType(match)
 	matchType.createTeams(match, request.form.getlist("playerId"), True)
 	matchType.play(match)
-	return redirect("/matches/%d" % id)
+	return redirect(url_for("matchController.show", id = id))
 
 @matchController.route("/matches/<int:id>", methods = ["GET"])
-def matches(id):
+def show(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchType = getMatchType(match)
 	data = matchType.matchData(match)
 	return render_template(data["template"], data = data)
 
 @matchController.route("/matches/<int:id>.json", methods = ["GET"])
-def matches_json(id):
+def show_json(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchType = getMatchType(match)
 	data = matchType.matchData(match)
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
 
 @matchController.route("/matches/<int:id>/play-again", methods = ["POST"])
-def matches_again(id):
+def again(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchType = getMatchType(match)
 
 	numOfGames = None
@@ -120,20 +138,24 @@ def matches_again(id):
 		randomize = request.form["randomize"] == "true"
 
 	newMatch = matchType.playAgain(match, numOfGames, randomize)
-	return redirect("/matches/%d" % newMatch.id)
+	return redirect(url_for("matchController.show", id = newMatch.id))
 
 @matchController.route("/matches/<int:id>/undo", methods = ["POST"])
-def matches_undo(id):
+def undo(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	if match.ready:
 		matchType = getMatchType(match)
 		matchType.undo(match, None)
 
-	return redirect("/matches/%d" % match.id)
+	return redirect(url_for("matchController.show", id = match.id))
 
 @matchController.route("/matches/<int:id>/delete", methods = ["POST"])
 @loginRequired()
-def matches_delete(id):
+def delete(id):
 	match = matchService.selectById(id)
 
 	if match == None:
@@ -146,25 +168,11 @@ def matches_delete(id):
 	else:
 		flash("Match could not be deleted .", "warning")
 
-	season = util.paramForm("season")
-	playerId = util.paramForm("playerId")
-	matchType = util.paramForm("matchType")
+	season = util.param("season", None)
+	playerId = util.param("playerId", None)
+	matchType = util.param("matchType", None)
 
-	params = []
-
-	if season != None:
-		params.append("season={}".format(season))
-
-	if playerId != None:
-		params.append("playerId={}".format(playerId))
-
-	if matchType != None:
-		params.append("matchType={}".format(matchType))
-
-	if len(params) > 0:
-		return redirect("/matches?{}".format("&".join(params)))
-	else:
-		return redirect("/matches")
+	return redirect(url_for("matchController.index", season = season, playerId = playerId, matchType = matchType))
 
 def getMatchType(match):
 	if singles.isMatchType(match.matchType):

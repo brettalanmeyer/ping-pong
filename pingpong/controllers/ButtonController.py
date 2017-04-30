@@ -18,11 +18,11 @@ doubles = Doubles()
 nines = Nines()
 
 @buttonController.route("/buttons", methods = ["GET"])
-def buttons():
+def index():
 	return render_template("buttons.html")
 
 @buttonController.route("/buttons/<path:button>/score", methods = ["POST"])
-def buttons_score(button):
+def score(button):
 	validateButton(button)
 
 	data = None
@@ -46,7 +46,7 @@ def buttons_score(button):
 	return button
 
 @buttonController.route("/buttons/<path:button>/undo", methods = ["POST"])
-def buttons_undo(button):
+def undo(button):
 	validateButton(button)
 
 	data = None
@@ -58,7 +58,7 @@ def buttons_undo(button):
 	return button
 
 @buttonController.route("/buttons/<path:button>/delete-scores", methods = ["POST"])
-def buttons_delete_scores(button):
+def delete_scores(button):
 	validateButton(button)
 
 	data = None
