@@ -2,6 +2,7 @@ from BaseTest import BaseTest
 from pingpong.matchtypes.Singles import Singles
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PlayerService import PlayerService
+import random
 
 singles = Singles()
 matchService = MatchService()
@@ -9,13 +10,13 @@ playerService = PlayerService()
 
 class TestSingles(BaseTest):
 
-	def createMatch(self):
+	def createMatch(self, numOfGames):
 		with self.request:
 			player1 = playerService.create({ "name": "Han" })
 			player2 = playerService.create({ "name": "Chewie " })
 
 			match = matchService.create("singles")
-			matchService.updateGames(match.id, 5)
+			matchService.updateGames(match.id, numOfGames)
 
 			singles.createTeams(match, [player1.id, player2.id], True)
 			singles.play(match)
@@ -24,7 +25,7 @@ class TestSingles(BaseTest):
 
 	def test_createMatch(self):
 		with self.ctx:
-			match = self.createMatch()
+			match = self.createMatch(5)
 
 			assert match.matchType == "singles"
 			assert match.playTo == 21
@@ -47,7 +48,7 @@ class TestSingles(BaseTest):
 
 	def test_oneSet(self):
 		with self.ctx:
-			match = self.createMatch()
+			match = self.createMatch(5)
 
 			for i in range(0, 21):
 				singles.score(match, "green")
@@ -60,7 +61,7 @@ class TestSingles(BaseTest):
 
 	def test_twoSets(self):
 		with self.ctx:
-			match = self.createMatch()
+			match = self.createMatch(5)
 
 			for i in range(0, 42):
 				singles.score(match, "green")
@@ -73,7 +74,7 @@ class TestSingles(BaseTest):
 
 	def test_winnerShutout(self):
 		with self.ctx:
-			match = self.createMatch()
+			match = self.createMatch(5)
 
 			for i in range(0, 21):
 				singles.score(match, "green" if i % 2 == 0 else "red")
@@ -93,7 +94,7 @@ class TestSingles(BaseTest):
 
 	def test_everyOtherWinner(self):
 		with self.ctx:
-			match = self.createMatch()
+			match = self.createMatch(5)
 
 			for i in range(0, 105):
 				singles.score(match, "green" if i % 3 == 0 else "red")
@@ -106,7 +107,34 @@ class TestSingles(BaseTest):
 			assert data["game"] == 5
 
 	def test_winByTwoPoints(self):
-		pass
+		with self.ctx:
+			match = self.createMatch(1)
+
+			data = singles.matchData(match)
+
+			while not data["complete"]:
+				if random.randrange(0,1) == 0:
+					singles.score(match, "green")
+				else:
+					singles.score(match, "yellow")
+
+				data = singles.matchData(match)
+
+			green = data["teams"]["green"]
+			yellow = data["teams"]["yellow"]
+
+			assert data["game"] == 1
+			assert len(green["games"]) == 1
+			assert len(yellow["games"]) == 1
+
+			if green["winner"]:
+				assert green["games"][0]["win"]
+				assert green["games"][0]["score"] >= yellow["games"][0]["score"] + 2
+			elif yellow["winner"]:
+				assert yellow["games"][0]["win"]
+				assert yellow["games"][0]["score"] >= green["games"][0]["score"] + 2
+
+			assert data["points"] == green["points"] + yellow["points"]
 
 	def test_undoScore(self):
 		pass

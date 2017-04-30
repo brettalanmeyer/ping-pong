@@ -13,6 +13,7 @@ from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
 from pingpong.utils import util
+import json
 
 matchController = Blueprint("matchController", __name__)
 
