@@ -168,11 +168,11 @@ def delete(id):
 	else:
 		flash("Match could not be deleted .", "warning")
 
-	season = util.param("season", None)
-	playerId = util.param("playerId", None)
-	matchType = util.param("matchType", None)
-
-	return redirect(url_for("matchController.index", season = season, playerId = playerId, matchType = matchType))
+	return redirect(url_for("matchController.index",
+		season = util.param("season", None),
+		playerId = util.param("playerId", None),
+		matchType = util.param("matchType", None)
+	))
 
 def getMatchType(match):
 	if singles.isMatchType(match.matchType):

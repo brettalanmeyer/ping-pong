@@ -100,18 +100,16 @@ browse and open `html_cov/index.html`
 TODO
 
 Fix doubles opponent stats
-move generate data to another file and route only in debug mode
+
 put getMatchType() somewhere shared
+
 try to put skype stuff in this app if possible
+
 Put ELO on match score board?
 
 Finish Tests - try to revert all data entered from a certain point
 
-Login redirect, for post requests, try to be able to configure it where to redirect, such as /players instead of /players/3/delete
-
 Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
-
-make matchesController.matches_delete prettier
 
 Report of avg time people play per day
 
@@ -120,8 +118,6 @@ Report of ELO with variability of initial rank and k value
 manual entry of scores due to connection lost or otherwise
 
 run tests with no data
-
-url url_for() everwhere
 
 Add Dave Thomas
 
