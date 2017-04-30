@@ -121,6 +121,8 @@ manual entry of scores due to connection lost or otherwise
 
 run tests with no data
 
+url url_for() everwhere
+
 Add Dave Thomas
 
 

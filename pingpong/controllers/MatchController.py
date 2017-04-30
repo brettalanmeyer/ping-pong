@@ -4,7 +4,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
-from flask_login import login_required
+from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.matchtypes.Doubles import Doubles
 from pingpong.matchtypes.Nines import Nines
 from pingpong.matchtypes.Singles import Singles
@@ -132,7 +132,7 @@ def matches_undo(id):
 	return redirect("/matches/%d" % match.id)
 
 @matchController.route("/matches/<int:id>/delete", methods = ["POST"])
-@login_required
+@loginRequired()
 def matches_delete(id):
 	match = matchService.selectById(id)
 

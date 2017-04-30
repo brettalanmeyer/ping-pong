@@ -10,6 +10,8 @@
 
 		<form action="/login" method="POST">
 
+			<input type="hidden" name="next" value="{{ next }}" />
+
 			<div class="form-group">
 				<label for="field-username">Username:</label>
 				<input id="field-username" type="text" name="username" class="form-control" placeholder="Username" autocomplete="off" autofocus>

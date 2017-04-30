@@ -6,7 +6,7 @@ from flask import render_template
 from flask import request
 from flask import Response
 from flask_login import current_user
-from flask_login import login_required
+from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.PlayerForm import PlayerForm
 from pingpong.services.PlayerService import PlayerService
 from pingpong.utils import notifications
@@ -100,7 +100,7 @@ def players_update(id):
 		return redirect("/players")
 
 @playerController.route("/players/<int:id>/enable", methods = ["POST"])
-@login_required
+@loginRequired("playerController.players")
 def players_enable(id):
 	player = playerService.selectById(id)
 
@@ -114,7 +114,7 @@ def players_enable(id):
 	return redirect("/players")
 
 @playerController.route("/players/<int:id>/disable", methods = ["POST"])
-@login_required
+@loginRequired("playerController.players")
 def players_disable(id):
 	player = playerService.selectById(id)
 
@@ -128,7 +128,7 @@ def players_disable(id):
 	return redirect("/players")
 
 @playerController.route("/players/<int:id>/delete", methods = ["POST"])
-@login_required
+@loginRequired("playerController.players")
 def players_delete(id):
 	player = playerService.selectById(id)
 

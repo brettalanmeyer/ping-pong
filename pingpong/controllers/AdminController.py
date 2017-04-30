@@ -3,7 +3,7 @@ from flask import current_app as app
 from flask import flash
 from flask import redirect
 from flask import render_template
-from flask_login import login_required
+from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.services.DataService import DataService
 from pingpong.services.GameService import GameService
 from pingpong.services.IsmService import IsmService
@@ -21,7 +21,7 @@ playerService = PlayerService()
 scoreService = ScoreService()
 
 @adminController.route("/admin", methods = ["GET"])
-@login_required
+@loginRequired()
 def index():
 	counts = {
 		"numOfIsms": ismService.selectCount(),
@@ -35,7 +35,7 @@ def index():
 	return render_template("admin/index.html", counts = counts, allowed = dataService.isConfigured())
 
 @adminController.route("/admin/copy-remote-data", methods = ["POST"])
-@login_required
+@loginRequired("adminController.index")
 def copy_remote_data():
 	if not access():
 		return redirect("/admin")
@@ -64,7 +64,7 @@ def copy_remote_data():
 	return redirect("/admin")
 
 @adminController.route("/admin/isms/delete-all", methods = ["POST"])
-@login_required
+@loginRequired("adminController.index")
 def delete_isms():
 	if not access():
 		return redirect("/admin")
@@ -73,7 +73,7 @@ def delete_isms():
 	return redirect("/admin")
 
 @adminController.route("/admin/matches/delete-all", methods = ["POST"])
-@login_required
+@loginRequired("adminController.index")
 def delete_matches():
 	if not access():
 		return redirect("/admin")
@@ -82,7 +82,7 @@ def delete_matches():
 	return redirect("/admin")
 
 @adminController.route("/admin/players/delete-all", methods = ["POST"])
-@login_required
+@loginRequired("adminController.index")
 def delete_players():
 	if not access():
 		return redirect("/admin")
@@ -91,7 +91,7 @@ def delete_players():
 	return redirect("/admin")
 
 @adminController.route("/admin/delete-all", methods = ["POST"])
-@login_required
+@loginRequired("adminController.index")
 def delete_all():
 	if not access():
 		return redirect("/admin")

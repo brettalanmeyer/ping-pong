@@ -136,6 +136,12 @@ class TestSingles(BaseTest):
 
 			assert data["points"] == green["points"] + yellow["points"]
 
+	def test_matchJson(self):
+		with self.ctx:
+			match = self.createMatch(1)
+			rv = self.app.get("/matches/{}.json".format(match.id))
+			assert rv.status == self.ok
+
 	def test_undoScore(self):
 		pass
 

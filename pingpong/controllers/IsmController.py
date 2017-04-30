@@ -6,7 +6,7 @@ from flask import render_template
 from flask import request
 from flask import Response
 from flask_login import current_user
-from flask_login import login_required
+from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.IsmForm import IsmForm
 from pingpong.services.IsmService import IsmService
 
@@ -75,7 +75,7 @@ def isms_update(id):
 		return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/approve", methods = ["POST"])
-@login_required
+@loginRequired("ismController.isms")
 def isms_enable(id):
 	ism = ismService.selectById(id)
 
@@ -89,7 +89,7 @@ def isms_enable(id):
 	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/reject", methods = ["POST"])
-@login_required
+@loginRequired("ismController.isms")
 def isms_disable(id):
 	ism = ismService.selectById(id)
 
@@ -103,7 +103,7 @@ def isms_disable(id):
 	return redirect("/isms")
 
 @ismController.route("/isms/<int:id>/delete", methods = ["POST"])
-@login_required
+@loginRequired("ismController.isms")
 def isms_delete(id):
 	ism = ismService.selectById(id)
 
