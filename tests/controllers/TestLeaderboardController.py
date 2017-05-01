@@ -5,6 +5,9 @@ playerService = PlayerService()
 
 class TestLeaderboardController(BaseTest):
 
+	def create_player(self):
+		return playerService.create({ "name": "Orange Joe" })
+
 	def test_leaderboard(self):
 		rv = self.app.get("/leaderboard", follow_redirects = True)
 		assert rv.status == self.ok
@@ -203,37 +206,42 @@ class TestLeaderboardController(BaseTest):
 
 	def test_leaderboard_player(self):
 		with self.ctx:
-			players = playerService.select().first()
-			rv = self.app.get("/leaderboard/players/{}".format(players.id))
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}".format(player.id))
+			assert rv.status == self.ok
+
+	def test_leaderboard_player_json(self):
+		with self.ctx:
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}.json".format(player.id))
 			assert rv.status == self.ok
 
 	def test_leaderboard_player_season_0(self):
 		with self.ctx:
-			players = playerService.select().first()
-			rv = self.app.get("/leaderboard/players/{}?season=0".format(players.id))
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}?season=0".format(player.id))
 			assert rv.status == self.ok
 
 	def test_leaderboard_player_season_1(self):
 		with self.ctx:
-			players = playerService.select().first()
-			rv = self.app.get("/leaderboard/players/{}?season=1".format(players.id))
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}?season=1".format(player.id))
 			assert rv.status == self.ok
 
 	def test_leaderboard_player_season_2(self):
 		with self.ctx:
-			players = playerService.select().first()
-			rv = self.app.get("/leaderboard/players/{}?season=2".format(players.id))
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}?season=2".format(player.id))
 			assert rv.status == self.ok
 
 	def test_leaderboard_player_season__invalid(self):
 		with self.ctx:
-			players = playerService.select().first()
-			rv = self.app.get("/leaderboard/players/{}?season=-1".format(players.id))
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}?season=-1".format(player.id))
 			assert rv.status == self.notFound
 
 	def test_leaderboard_player_season__invalid_again(self):
 		with self.ctx:
-			players = playerService.select().first()
-			rv = self.app.get("/leaderboard/players/{}?season=10000".format(players.id))
+			player = self.create_player()
+			rv = self.app.get("/leaderboard/players/{}?season=10000".format(player.id))
 			assert rv.status == self.notFound
-

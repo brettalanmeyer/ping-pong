@@ -81,13 +81,17 @@ Run tests
 `python tests/test.py`
 
 Run coverage
-coverage run --source=pingpong tests/test.py
+`coverage run --source=pingpong tests/test.py`
 
 Generate coverage report
 `coverage report -m`
 
 Generate html coverage report
 `coverage html`
+
+Run single class
+`python -m unittest matchtypes.TestSingles`
+
 
 ## Raspberry pi
 
