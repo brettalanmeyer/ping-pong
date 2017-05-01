@@ -11,7 +11,7 @@ playerService = PlayerService()
 
 class TestSingles(BaseTest):
 
-	def createMatch(self, numOfGames):
+	def createMatch(self, numOfGames, randomize = True):
 		with self.request:
 			player1 = playerService.create({ "name": "Han" })
 			player2 = playerService.create({ "name": "Chewie " })
@@ -19,7 +19,7 @@ class TestSingles(BaseTest):
 			match = matchService.create("singles")
 			matchService.updateGames(match.id, numOfGames)
 
-			singles.createTeams(match, [player1.id, player2.id], True)
+			singles.createTeams(match, [player1.id, player2.id], randomize)
 			singles.play(match)
 
 			return match
@@ -52,7 +52,7 @@ class TestSingles(BaseTest):
 
 	def test_oneSet(self):
 		with self.ctx:
-			match = self.createMatch(5)
+			match = self.createMatch(5, False)
 
 			for i in range(0, 21):
 				singles.score(match, "green")
@@ -216,3 +216,123 @@ class TestSingles(BaseTest):
 			assert not newData["complete"]
 			assert newData["game"] == 1
 			assert newData["points"] == 0
+
+	def test_serving(self):
+		with self.ctx:
+			match = self.createMatch(1)
+
+			# 0 - 5
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "green")
+
+			# 5 - 5
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "yellow")
+
+			# 10 - 5
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "blue")
+
+			# 10 - 10
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "red")
+
+			# 10 - 15
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "green")
+
+			# 15 - 15
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "yellow")
+
+			# 20 - 15
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "blue")
+
+			# 20 - 20
+			for i in range(0, 5):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "red")
+
+			# 21 - 20
+			singles.score(match, "yellow")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 21 - 21
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 21 - 22
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 22 - 22
+			singles.score(match, "yellow")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 23 - 22
+			singles.score(match, "yellow")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 23 - 23
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 23 - 24
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 24 - 24
+			singles.score(match, "yellow")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 25 - 24
+			singles.score(match, "yellow")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 25 - 25
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 25 - 26
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 25 - 27 - Winner
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["complete"]
