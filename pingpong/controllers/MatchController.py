@@ -119,7 +119,7 @@ def show_json(id):
 
 	matchType = getMatchType(match)
 	data = matchType.matchData(match)
-	return Response(json.dumps(data), status = 200, mimetype = "application/json")
+	return Response(json.dumps(data, default = util.jsonSerial), status = 200, mimetype = "application/json")
 
 @matchController.route("/matches/<int:id>/play-again", methods = ["POST"])
 def again(id):

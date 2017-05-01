@@ -28,8 +28,9 @@ class Singles(MatchType):
 			"game": match.game,
 			"template": self.matchTemplate,
 			"complete": match.complete == 1,
-			"createdAt": str(match.createdAt),
-			"completedAt": str(match.completedAt),
+			"ready": match.ready == 1,
+			"createdAt": match.createdAt,
+			"completedAt": match.completedAt,
 			"teams": {
 				"green": self.newPlayer(game.green.id),
 				"yellow": self.newPlayer(game.yellow.id)
