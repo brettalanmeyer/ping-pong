@@ -64,10 +64,6 @@ def edit(id):
 	if not player.enabled and not current_user.is_authenticated:
 		abort(404)
 
-	if player == None:
-		flash("Player {} does not exist.".format(id), "warning")
-		return redirect(url_for("playerController.index"))
-
 	return render_template("players/edit.html", player = player)
 
 @playerController.route("/players/<int:id>", methods = ["POST"])

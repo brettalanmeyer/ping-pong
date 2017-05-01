@@ -16,6 +16,10 @@ class TestIsmController(BaseTest):
 		rv = self.app.get("/isms")
 		assert rv.status == self.ok
 
+	def test_isms_json(self):
+		rv = self.app.get("/isms.json")
+		assert rv.status == self.ok
+
 	def test_isms_new(self):
 		rv = self.app.get("/isms/new")
 		assert rv.status == self.ok
@@ -72,6 +76,11 @@ class TestIsmController(BaseTest):
 			assert newLeft == updatedIsm.left
 			assert newRight == updatedIsm.right
 
+	def test_isms_update_not_found(self):
+		with self.ctx:
+			rv = self.app.post("/isms/{}".format(0), data = {})
+			assert rv.status == self.notFound
+
 	def test_isms_update_empty(self):
 		with self.ctx:
 			ism = ismService.select().first()
@@ -112,6 +121,12 @@ class TestIsmController(BaseTest):
 			assert rv.status == self.ok
 			assert ism.approved
 
+	def test_isms_approve_not_found(self):
+		with self.ctx:
+			self.authenticate()
+			rv = self.app.post("/isms/{}/approve".format(0))
+			assert rv.status == self.notFound
+
 	def test_isms_reject(self):
 		with self.ctx:
 			self.authenticate()
@@ -122,6 +137,12 @@ class TestIsmController(BaseTest):
 			rv = self.app.post("/isms/{}/reject".format(ism.id), follow_redirects = True)
 			assert rv.status == self.ok
 			assert not ism.approved
+
+	def test_isms_reject_not_found(self):
+		with self.ctx:
+			self.authenticate()
+			rv = self.app.post("/isms/{}/reject".format(0))
+			assert rv.status == self.notFound
 
 	def test_isms_delete(self):
 		with self.ctx:
@@ -139,3 +160,9 @@ class TestIsmController(BaseTest):
 
 			deletedCount = ismService.select().count()
 			assert originalCount == deletedCount
+
+	def test_isms_delete_not_found(self):
+		with self.ctx:
+			self.authenticate()
+			rv = self.app.post("/isms/{}/delete".format(0))
+			assert rv.status == self.notFound

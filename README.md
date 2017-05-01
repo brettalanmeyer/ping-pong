@@ -80,18 +80,14 @@ autoflush = False
 Run tests
 `python tests/test.py`
 
-Get code coverage
-`python -m unittest discover -s tests/`
+Run coverage
+coverage run --source=pingpong tests/test.py
 
-`coverage run -m unittest discover -s tests/`
-
-Open coverage report
+Generate coverage report
 `coverage report -m`
 
-Open coverage report
+Generate html coverage report
 `coverage html`
-browse and open `html_cov/index.html`
-
 
 ## Raspberry pi
 
@@ -118,6 +114,8 @@ Report of ELO with variability of initial rank and k value
 manual entry of scores due to connection lost or otherwise
 
 run tests with no data
+
+smack talk AI
 
 Add Dave Thomas
 

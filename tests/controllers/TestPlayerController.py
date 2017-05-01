@@ -8,7 +8,7 @@ class TestPlayerController(BaseTest):
 
 	playerName = str(uuid.uuid4())
 
-	def create_player(self):
+	def createPlayer(self):
 		return playerService.create({
 			"name": self.playerName
 		})
@@ -41,10 +41,18 @@ class TestPlayerController(BaseTest):
 
 	def test_players_edit(self):
 		with self.ctx:
-			player = playerService.select().first()
+			player = self.createPlayer()
 
 			rv = self.app.get("/players/{}/edit".format(player.id))
 			assert rv.status == self.ok
+
+	def test_players_edit_disabled(self):
+		with self.ctx:
+			player = self.createPlayer()
+			playerService.disable(player)
+
+			rv = self.app.get("/players/{}/edit".format(player.id))
+			assert rv.status == self.notFound
 
 	def test_players_edit_not_found(self):
 		with self.ctx:
@@ -54,7 +62,7 @@ class TestPlayerController(BaseTest):
 	def test_players_update(self):
 		with self.ctx:
 			newName = str(uuid.uuid4())
-			player = self.create_player()
+			player = self.createPlayer()
 
 			rv = self.app.post("/players/{}".format(player.id), data = {
 				"name": newName
@@ -64,9 +72,14 @@ class TestPlayerController(BaseTest):
 			assert rv.status == self.ok
 			assert newName == updatedPlayer.name
 
+	def test_players_update_not_found(self):
+		with self.ctx:
+			rv = self.app.post("/players/{}".format(0), data = {})
+			assert rv.status == self.notFound
+
 	def test_players_update_empty(self):
 		with self.ctx:
-			player = playerService.select().first()
+			player = self.createPlayer()
 			rv = self.app.post("/players/{}".format(player.id), data = {
 				"name": ""
 			}, follow_redirects = True)
@@ -88,7 +101,7 @@ class TestPlayerController(BaseTest):
 		with self.ctx:
 			self.authenticate()
 
-			player = self.create_player()
+			player = self.createPlayer()
 			playerService.disable(player)
 			assert not player.enabled
 
@@ -96,16 +109,28 @@ class TestPlayerController(BaseTest):
 			assert rv.status == self.ok
 			assert player.enabled
 
+	def test_players_enable_not_found(self):
+		with self.ctx:
+			self.authenticate()
+			rv = self.app.post("/players/{}/enable".format(0))
+			assert rv.status == self.notFound
+
 	def test_players_disabled(self):
 		with self.ctx:
 			self.authenticate()
 
-			player = self.create_player()
+			player = self.createPlayer()
 			assert player.enabled
 
 			rv = self.app.post("/players/{}/disable".format(player.id), follow_redirects = True)
 			assert rv.status == self.ok
 			assert not player.enabled
+
+	def test_players_disable_not_found(self):
+		with self.ctx:
+			self.authenticate()
+			rv = self.app.post("/players/{}/disable".format(0))
+			assert rv.status == self.notFound
 
 	def test_players_delete(self):
 		with self.ctx:
@@ -113,7 +138,7 @@ class TestPlayerController(BaseTest):
 
 			originalCount = playerService.select().count()
 
-			player = self.create_player()
+			player = self.createPlayer()
 
 			createdCount = playerService.select().count()
 			assert createdCount == originalCount + 1
@@ -123,3 +148,9 @@ class TestPlayerController(BaseTest):
 
 			deletedCount = playerService.select().count()
 			assert originalCount == deletedCount
+
+	def test_players_delete_not_found(self):
+		with self.ctx:
+			self.authenticate()
+			rv = self.app.post("/players/{}/delete".format(0))
+			assert rv.status == self.notFound
