@@ -90,6 +90,7 @@ Generate html coverage report
 `coverage html`
 
 Run single class
+`cd test/
 `python -m unittest matchtypes.TestSingles`
 
 

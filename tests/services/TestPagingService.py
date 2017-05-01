@@ -1,6 +1,9 @@
 from BaseTest import BaseTest
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
+import uuid
+
+playerService = PlayerService()
 
 class TestPagingService(BaseTest):
 
@@ -16,13 +19,11 @@ class TestPagingService(BaseTest):
 		with self.ctx:
 			pagingService = PagingService(2)
 
-			playerService = PlayerService()
-			playerService.deleteAll()
-
+			name = "Player {}".format(str(uuid.uuid4()))
 			for i in range(0, 10):
-				playerService.create({ "name": "Player {}".format(i + 1) })
+				playerService.create({ "name": name })
 
-			players = playerService.select()
+			players = playerService.selectByName(name)
 
 			pagePlayers = pagingService.pager(players, 1)
 
@@ -36,13 +37,11 @@ class TestPagingService(BaseTest):
 		with self.ctx:
 			pagingService = PagingService(12)
 
-			playerService = PlayerService()
-			playerService.deleteAll()
-
+			name = "Player {}".format(str(uuid.uuid4()))
 			for i in range(0, 77):
-				playerService.create({ "name": "Player {}".format(i + 1) })
+				playerService.create({ "name": name })
 
-			players = playerService.select()
+			players = playerService.selectByName(name)
 
 			pagePlayers = pagingService.pager(players, 2)
 
@@ -59,5 +58,3 @@ class TestPagingService(BaseTest):
 		assert data["page"] == pagingService.page
 		assert data["limit"] == pagingService.limit
 		assert data["pages"] == pagingService.pages
-
-
