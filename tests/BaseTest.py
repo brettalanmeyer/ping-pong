@@ -22,7 +22,7 @@ class BaseTest(unittest.TestCase):
 		app.config["DEBUG"] = False
 
 		app.config["ADMIN_USERNAME"] = "admin"
-		app.config["ADMIN_PASSWORD"] = "d63dc919e201d7bc4c825630d2cf25fdc93d4b2f0d46706d29038d01" # password
+		app.config["ADMIN_PASSWORD"] = "d63dc919e201d7bc4c825630d2cf25fdc93d4b2f0d46706d29038d01"
 
 		self.ctx = app.app_context()
 		self.app = app.test_client()
