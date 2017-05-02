@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pingpong.app import app
 from pingpong.utils.database import database as db
 import unittest
+import re
 
 class BaseTest(unittest.TestCase):
 
@@ -36,3 +37,13 @@ class BaseTest(unittest.TestCase):
 			"username": self.username,
 			"password": self.password
 		}, follow_redirects = True)
+
+	def redirects(self, rv, url):
+		path = rv.location.replace("http://localhost", "")
+		match = re.search(url, path)
+
+		group = None
+		if len(match.groups()) >= 1:
+			group = match.group(1)
+
+		return bool(match), group

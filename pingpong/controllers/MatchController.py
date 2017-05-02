@@ -72,17 +72,30 @@ def create():
 @matchController.route("/matches/<int:id>/num-of-games", methods = ["GET"])
 def games(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchType = getMatchType(match)
 	return render_template("matches/num-of-games.html", match = match)
 
 @matchController.route("/matches/<int:id>/num-of-games", methods = ["POST"])
 def games_update(id):
+	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchService.updateGames(id, request.form["numOfGames"])
 	return redirect(url_for("matchController.players", id = id))
 
 @matchController.route("/matches/<int:id>/players", methods = ["GET"])
 def players(id):
 	match = matchService.selectById(id)
+
+	if match == None:
+		abort(404)
+
 	matchType = getMatchType(match)
 	players = playerService.selectActive()
 	return render_template("matches/players.html", title = matchType.label, matchType = matchType, match = match, players = players)
@@ -154,7 +167,7 @@ def undo(id):
 	return redirect(url_for("matchController.show", id = match.id))
 
 @matchController.route("/matches/<int:id>/delete", methods = ["POST"])
-@loginRequired()
+@loginRequired("matchController.index")
 def delete(id):
 	match = matchService.selectById(id)
 

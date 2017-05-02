@@ -14,9 +14,9 @@ class TestNines(BaseTest):
 	def createMatch(self):
 		with self.request:
 			player1 = playerService.create({ "name": "Han" })
-			player2 = playerService.create({ "name": "Chewie " })
-			player3 = playerService.create({ "name": "Luke " })
-			player4 = playerService.create({ "name": "Leia " })
+			player2 = playerService.create({ "name": "Chewie" })
+			player3 = playerService.create({ "name": "Luke" })
+			player4 = playerService.create({ "name": "Leia" })
 
 			match = matchService.create("nines")
 			nines.createTeams(match, [player1.id, player2.id, player3.id, player4.id], True)

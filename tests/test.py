@@ -33,3 +33,12 @@ if __name__ == "__main__":
 	sys.setdefaultencoding("UTF8")
 
 	unittest.main()
+
+# rv.response
+# rv.headers
+# rv.status_code
+# rv.direct_passthrough
+# rv.charset
+# rv.data
+# rv.default_mimetype
+# rv.location

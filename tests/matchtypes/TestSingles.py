@@ -14,7 +14,7 @@ class TestSingles(BaseTest):
 	def createMatch(self, numOfGames, randomize = True):
 		with self.request:
 			player1 = playerService.create({ "name": "Han" })
-			player2 = playerService.create({ "name": "Chewie " })
+			player2 = playerService.create({ "name": "Chewie" })
 
 			match = matchService.create("singles")
 			matchService.updateGames(match.id, numOfGames)

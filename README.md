@@ -122,6 +122,8 @@ run tests with no data
 
 smack talk AI
 
+AVATARS
+
 Add Dave Thomas
 
 

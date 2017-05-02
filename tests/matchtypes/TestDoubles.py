@@ -14,9 +14,9 @@ class TestDoubles(BaseTest):
 	def createMatch(self, numOfGames, randomize = True):
 		with self.request:
 			player1 = playerService.create({ "name": "Han" })
-			player2 = playerService.create({ "name": "Chewie " })
-			player3 = playerService.create({ "name": "Luke " })
-			player4 = playerService.create({ "name": "Leia " })
+			player2 = playerService.create({ "name": "Chewie" })
+			player3 = playerService.create({ "name": "Luke" })
+			player4 = playerService.create({ "name": "Leia" })
 
 			match = matchService.create("doubles")
 			matchService.updateGames(match.id, numOfGames)
