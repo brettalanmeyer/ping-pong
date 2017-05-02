@@ -29,8 +29,8 @@ class Doubles(MatchType):
 			"template": self.matchTemplate,
 			"complete": match.complete == 1,
 			"ready": match.ready == 1,
-			"createdAt": match.createdAt,
-			"completedAt": match.completedAt,
+			"createdAt": util.date(match.createdAt),
+			"completedAt": util.date(match.completedAt),
 			"teams": {
 				"north": self.newTeam(),
 				"south": self.newTeam()
