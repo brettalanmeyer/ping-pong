@@ -11,6 +11,7 @@ from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.PlayerForm import PlayerForm
 from pingpong.services.PlayerService import PlayerService
 from pingpong.utils import notifications
+from pingpong.utils import util
 
 playerController = Blueprint("playerController", __name__)
 
@@ -43,6 +44,10 @@ def create(matchId):
 		return render_template("players/new.html", player = player, matchId = matchId), 400
 	else:
 		player = playerService.create(request.form)
+
+		uploaded, avatar, extension = util.uploadAvatar(player)
+		if uploaded:
+			playerService.avatar(player, avatar, extension)
 
 		flash("Player '{}' has been successfully created.".format(player.name), "success")
 
@@ -88,6 +93,10 @@ def update(id):
 		updatedPlayer = playerService.update(id, request.form)
 		newName = updatedPlayer.name
 
+		uploaded, avatar, extension = util.uploadAvatar(updatedPlayer)
+		if uploaded:
+			playerService.avatar(player, avatar, extension)
+
 		flash("Player '{}' has been successfully updated.".format(updatedPlayer.name), "success")
 
 		if originalName != newName:
@@ -95,6 +104,15 @@ def update(id):
 			notifications.send(message)
 
 		return redirect(url_for("playerController.index"))
+
+@playerController.route("/players/<int:id>/avatar/<path:avatar>", methods = ["GET"])
+def avatar(id, avatar):
+	player = playerService.selectById(id)
+
+	if player == None or player.avatar == None:
+		abort(404)
+
+	return util.avatar(player)
 
 @playerController.route("/players/<int:id>/enable", methods = ["POST"])
 @loginRequired("playerController.index")

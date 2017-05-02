@@ -12,7 +12,7 @@
 			<a href="{{ url_for('playerController.new') }}">Create Player</a>
 		</h1>
 
-		<form action="{{ url_for('playerController.create', matchId = matchId) }}" method="POST">
+		<form action="{{ url_for('playerController.create', matchId = matchId) }}" method="POST" enctype="multipart/form-data">
 
 			{% include 'players/_form.html' %}
 

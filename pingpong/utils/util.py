@@ -1,8 +1,12 @@
 from datetime import datetime
 from flask import current_app as app
 from flask import request
+from flask import request
+from flask import send_from_directory
 import hashlib
+import os
 import random
+import uuid
 
 def formatTime(seconds):
 	m, s = divmod(seconds, 60)
@@ -70,3 +74,26 @@ def date(value):
 		return None
 
 	return str(value)
+
+def generateUUID():
+	return str(uuid.uuid4())
+
+def uploadAvatar(player):
+	if "avatar" in request.files:
+		avatar = request.files["avatar"]
+
+		if len(avatar.filename) != 0:
+			extension = avatar.filename.split(".")[-1]
+			name = "{}.{}".format(generateUUID(), extension)
+			avatar.save("{}/avatars/{}".format(app.root_path, name))
+
+			avatarToDelete = "{}/avatars/{}".format(app.root_path, player.avatar)
+			if os.path.isfile(avatarToDelete):
+				os.remove(avatarToDelete)
+
+			return True, name, extension
+
+	return False, None, None
+
+def avatar(player):
+	return send_from_directory("{}/avatars/".format(app.root_path), player.avatar, mimetype = "image/{}".format(player.extension))

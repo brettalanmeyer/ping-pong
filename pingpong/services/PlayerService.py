@@ -84,6 +84,16 @@ class PlayerService(Service):
 
 		return player
 
+	def avatar(self, player, name, extension):
+		app.logger.info("Setting avatar for player=%d", player.id)
+
+		player.avatar = name
+		player.extension = extension
+		player.modifiedAt = datetime.now()
+		db.session.commit()
+
+		return player
+
 	def deleteById(self, id):
 		app.logger.info("Deleting player by id=%d", id)
 		player = self.selectById(id)

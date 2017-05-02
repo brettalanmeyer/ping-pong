@@ -8,6 +8,8 @@ class PlayerModel(Base):
 
 	id = Column(Integer, primary_key = True)
 	name = Column(String)
+	avatar = Column(String)
+	extension = Column(String)
 	enabled = Column(Integer)
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)

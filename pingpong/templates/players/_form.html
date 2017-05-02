@@ -1,6 +1,20 @@
 <div class="form-group">
 
 	<label for="name-field">Name</label>
-	<input id="name-field" name="name" value="{{ player.name }}" class="form-control" autofocus />
+	<input id="name-field" type="text" name="name" value="{{ player.name }}" class="form-control" autofocus />
+
+</div>
+
+<div class="form-group">
+
+	<label for="name-field">Avatar</label>
+
+	{% if player.avatar != None %}
+		<br />
+		<img src="{{ url_for('playerController.avatar', id = player.id, avatar = player.avatar) }}" style="max-width: 200px; max-height: 200px;" />
+		<br /><br />
+	{% endif %}
+
+	<input id="avatar-field" type="file" name="avatar" value="" class="" />
 
 </div>
