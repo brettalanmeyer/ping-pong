@@ -10,6 +10,22 @@ singles = Singles()
 
 class TestMatchController(BaseTest):
 
+	def createMatch(self):
+		with self.request:
+			player1 = playerService.create({ "name": "Fry" })
+			player2 = playerService.create({ "name": "Bender" })
+
+			match = matchService.create("singles")
+			matchService.updateGames(match.id, 1)
+
+			singles.createTeams(match, [player1.id, player2.id], True)
+			singles.play(match)
+
+			for i in range(0, 21):
+				singles.score(match, "green")
+
+			return match
+
 	def test_matches(self):
 		rv = self.app.get("/matches")
 		assert rv.status == self.ok
@@ -200,27 +216,46 @@ class TestMatchController(BaseTest):
 		rv = self.app.post("/matches/{}/delete".format(0), data = {})
 		assert rv.status == self.notFound
 
-	def createMatch(self):
-		with self.request:
-			player1 = playerService.create({ "name": "Fry" })
-			player2 = playerService.create({ "name": "Bender" })
-
-			match = matchService.create("singles")
-			matchService.updateGames(match.id, 1)
-
-			singles.createTeams(match, [player1.id, player2.id], True)
-			singles.play(match)
-
-			for i in range(0, 21):
-				singles.score(match, "green")
-
-			return match
-
 	def test_playAgain(self):
-		match = self.createMatch()
+		with self.request:
+			matchId = self.createMatch().id
+
+		rv = self.app.post("/matches/{}/play-again".format(matchId), data = { "numOfGames": 5, "randomize": "false" })
+		isMatch, newMatchId = self.redirects(rv, "\/matches\/(\d+)")
+
+		assert isMatch
+		assert matchId != int(newMatchId)
+
+		with self.ctx:
+			newMatch = matchService.selectById(int(newMatchId))
+			assert not newMatch.complete
+			assert newMatch.numOfGames == 5
 
 	def test_undo(self):
-		match = self.createMatch()
+		with self.request:
+			match = self.createMatch()
+			matchId = match.id
+			assert match.complete
+
+		rv = self.app.post("/matches/{}/undo".format(matchId))
+		isMatch, sameMatchId = self.redirects(rv, "\/matches\/(\d+)")
+
+		assert isMatch
+		assert matchId == int(sameMatchId)
+
+		with self.ctx:
+			sameMatch = matchService.selectById(matchId)
+			assert not sameMatch.complete
 
 	def test_delete(self):
-		match = self.createMatch()
+		self.authenticate()
+
+		with self.request:
+			matchId = self.createMatch().id
+
+		rv = self.app.post("/matches/{}/delete".format(matchId))
+		isMatch, none = self.redirects(rv, "\/matches")
+
+		with self.ctx:
+			match = matchService.selectById(matchId)
+			assert match == None
