@@ -9,22 +9,50 @@
 
 		<div class="nines-container">
 
+			<!-- Yellow -->
 			<div class="score-board {% if data.players.yellow.out %}out{% endif %}" data-var="board" data-color="yellow">
+				<div class="nines-avatar-container">
+					{% with id = data.players.yellow.playerId, avatar = data.players.yellow.playerAvatar, class = "avatar-nines" %}
+						{% include 'partials/avatar.html' %}
+					{% endwith %}
+				</div>
+
 				<span class="name truncate" data-var="name" data-color="yellow">{{ data.players.yellow.playerName }}</span>
 				<span class="score" data-var="score" data-color="yellow">{{ data.players.yellow.points }}</span>
 			</div>
 
+			<!-- Green -->
 			<div class="score-board {% if data.players.green.out %}out{% endif %}" data-var="board" data-color="green">
+				<div class="nines-avatar-container">
+					{% with id = data.players.green.playerId, avatar = data.players.green.playerAvatar, class = "avatar-nines" %}
+						{% include 'partials/avatar.html' %}
+					{% endwith %}
+				</div>
+
 				<span class="score" data-var="score" data-color="green">{{ data.players.green.points }}</span>
 				<span class="name truncate" data-var="name" data-color="green">{{ data.players.green.playerName }}</span>
 			</div>
 
+			<!-- Blue -->
 			<div class="score-board {% if data.players.blue.out %}out{% endif %}" data-var="board" data-color="blue">
+				<div class="nines-avatar-container">
+					{% with id = data.players.blue.playerId, avatar = data.players.blue.playerAvatar, class = "avatar-nines" %}
+						{% include 'partials/avatar.html' %}
+					{% endwith %}
+				</div>
+
 				<span class="name truncate" data-var="name" data-color="blue">{{ data.players.blue.playerName }}</span>
 				<span class="score" data-var="score" data-color="blue">{{ data.players.blue.points }}</span>
 			</div>
 
+			<!-- Red -->
 			<div class="score-board {% if data.players.red.out %}out{% endif %}" data-var="board" data-color="red">
+				<div class="nines-avatar-container">
+					{% with id = data.players.red.playerId, avatar = data.players.red.playerAvatar, class = "avatar-nines" %}
+						{% include 'partials/avatar.html' %}
+					{% endwith %}
+				</div>
+
 				<span class="score" data-var="score" data-color="red">{{ data.players.red.points }}</span>
 				<span class="name truncate" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
 			</div>

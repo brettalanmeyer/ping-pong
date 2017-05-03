@@ -46,6 +46,7 @@ class Nines(MatchType):
 			"playerId": playerId,
 			"teamId": None,
 			"playerName": None,
+			"playerAvatar": None,
 			"points": 0,
 			"winner": False,
 			"out": False
@@ -61,6 +62,7 @@ class Nines(MatchType):
 					if players[color]["playerId"] == player.id:
 						players[color]["teamId"] = team.id
 						players[color]["playerName"] = player.name
+						players[color]["playerAvatar"] = player.avatar
 						players[color]["points"] = match.playTo - points
 						players[color]["out"] = players[color]["points"] == 0
 

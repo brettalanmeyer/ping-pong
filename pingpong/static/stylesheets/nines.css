@@ -9,6 +9,7 @@
 	border: solid 1px #ccc;
 	width: 50%;
 	float: left;
+	position: relative;
 }
 
 .nines-container .score-board.out {
@@ -28,7 +29,7 @@
 	float: left;
 	font-size: 60px;
 	padding: 48px 12px;
-	width: 75%
+	width: 75%;
 }
 
 @keyframes ninesScoreAnimation {
@@ -88,4 +89,34 @@
 .nines-container .play-again .btn,
 .nines-container .undo .btn {
 	font-size: 20px;
+}
+
+.nines-container .nines-avatar-container {
+	position: absolute;
+	width: 110px;
+	height: 182px;
+}
+
+.nines-container .score-board[data-color="yellow"] .nines-avatar-container,
+.nines-container .score-board[data-color="blue"] .nines-avatar-container {
+	left: 8px;
+}
+
+.nines-container .score-board[data-color="green"] .nines-avatar-container,
+.nines-container .score-board[data-color="red"] .nines-avatar-container {
+	right: 8px;
+}
+
+.nines-container .avatar-nines {
+	max-height: 100%;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	z-index: -100;
 }
