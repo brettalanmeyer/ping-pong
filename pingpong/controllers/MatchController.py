@@ -108,8 +108,13 @@ def players_create(id):
 		abort(404)
 
 	matchType = getMatchType(match)
-	matchType.createTeams(match, request.form.getlist("playerId"), True)
-	matchType.play(match)
+
+	if not match.hasTeams():
+		matchType.createTeams(match, request.form.getlist("playerId"), True)
+
+	if not match.isReady():
+		matchType.play(match)
+
 	return redirect(url_for("matchController.show", id = id))
 
 @matchController.route("/matches/<int:id>", methods = ["GET"])

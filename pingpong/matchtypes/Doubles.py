@@ -27,8 +27,8 @@ class Doubles(MatchType):
 			"numOfGames": match.numOfGames,
 			"game": match.game,
 			"template": self.matchTemplate,
-			"complete": match.complete == 1,
-			"ready": match.ready == 1,
+			"complete": match.isComplete(),
+			"ready": match.isReady(),
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
 			"teams": {
@@ -75,14 +75,14 @@ class Doubles(MatchType):
 					teams["north"]["teamId"] = team.id
 					teams["north"]["points"] = points
 					teams["north"]["players"].append(player.name)
-					teams["north"]["winner"] = (team.win == 1)
+					teams["north"]["winner"] = team.hasWon()
 
 				elif players["yellow"]["playerId"] == player.id:
 					color = "yellow"
 					teams["south"]["teamId"] = team.id
 					teams["south"]["points"] = points
 					teams["south"]["players"].append(player.name)
-					teams["south"]["winner"] = (team.win == 1)
+					teams["south"]["winner"] = team.hasWon()
 
 				elif players["blue"]["playerId"] == player.id:
 					color = "blue"

@@ -69,6 +69,8 @@ def hasConfig(param):
 	if len(app.config[param]) == 0:
 		return False
 
+	return True
+
 def date(value):
 	if value == None:
 		return None

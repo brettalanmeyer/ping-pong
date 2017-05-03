@@ -27,8 +27,8 @@ class Singles(MatchType):
 			"numOfGames": match.numOfGames,
 			"game": match.game,
 			"template": self.matchTemplate,
-			"complete": match.complete == 1,
-			"ready": match.ready == 1,
+			"complete": match.isComplete(),
+			"ready": match.isReady(),
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
 			"teams": {

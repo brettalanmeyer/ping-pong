@@ -25,8 +25,8 @@ class Nines(MatchType):
 			"matchType": self.matchType,
 			"playTo": match.playTo,
 			"template": self.matchTemplate,
-			"complete": match.complete == 1,
-			"ready": match.ready == 1,
+			"complete": match.isComplete(),
+			"ready": match.isReady(),
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
 			"players": {}

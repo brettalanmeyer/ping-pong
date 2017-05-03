@@ -28,3 +28,15 @@ class MatchModel(Base):
 		self.complete = complete
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
+
+	def isReady(self):
+		return self.ready == 1
+
+	def isComplete(self):
+		return self.complete == 1
+
+	def hasTeams(self):
+		return len(self.teams) > 0
+
+	def hasGames(self):
+		return len(self.games) > 0

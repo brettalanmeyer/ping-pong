@@ -24,3 +24,9 @@ class TeamModel(Base):
 		self.matchId = matchId
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
+
+	def hasWon(self):
+		return self.win == 1
+
+	def hasLost(self):
+		return self.win == 0

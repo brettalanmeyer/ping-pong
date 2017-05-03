@@ -120,7 +120,7 @@ manual entry of scores due to connection lost or otherwise
 
 smack talk AI
 
-AVATARS
+avatars on score boards
 
 add link to leaderboard for each matchtype to notifications when a matches end
 link to leaderboard of the correct matchtype when reporting match results

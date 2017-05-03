@@ -61,7 +61,7 @@
 
 										{% for player in team.players %}
 											<a href="/leaderboard/players/{{ player.id }}">
-												{% if team.win %}
+												{% if team.hasWon() %}
 													<strong>{{ player.name }}</strong>
 												{% else %}
 													{{ player.name }}
@@ -83,7 +83,7 @@
 
 											<tr>
 
-												<td class="name {% if team.win %}winner{% endif %}">
+												<td class="name {% if team.hasWon() %}winner{% endif %}">
 
 													{% for player in team.players %}
 
