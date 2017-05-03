@@ -107,3 +107,29 @@
 .opponent-table td {
 	height: 42px;
 }
+
+.avatar-leaderboard {
+	max-width: 50px;
+	max-height: 37px;
+}
+
+.avatar-leaderboard-player-container {
+	position: absolute;
+	top: -10px;
+	width: 110px;
+	height: 80px;
+	text-align: center;
+}
+
+.avatar-leaderboard-player {
+	max-height: 100%;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}

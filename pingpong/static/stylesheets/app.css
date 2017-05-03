@@ -118,11 +118,6 @@ a.link {
 	max-height: 50px;
 }
 
-.avatar-leaderboard {
-	max-width: 50px;
-	max-height: 37px;
-}
-
 .truncate {
 	white-space: nowrap;
 	overflow: hidden;

@@ -8,6 +8,12 @@
 
 		<div class="leaderboard-player-container">
 
+			<div class="avatar-leaderboard-player-container">
+				{% with id = player.id, avatar = player.avatar, class = "avatar-leaderboard-player" %}
+					{% include 'partials/avatar.html' %}
+				{% endwith %}
+			</div>
+
 			<h1>
 				<a href="{{ url_for('leaderboardController.index', season = stats.season) }}">Leaderboard</a>
 				-
