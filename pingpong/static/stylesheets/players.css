@@ -37,7 +37,18 @@
 .player-selector-container .player-list-columns .player {
 	break-inside: avoid-column;
 	margin-top: 4px;
-	padding: 8px 0 8px 23px;
+	padding: 4px 0 4px 23px;
+	position: relative;
+}
+
+.player-selector-container .player-list-columns .player:focus {
+	outline: none;
+}
+
+.player-selector-container .player-list-columns .player .avatar {
+	max-width: 60px;
+	max-height: 34px;
+	margin-right: 8px;
 }
 
 .player-selector-container .player-list-columns .player:first-child {

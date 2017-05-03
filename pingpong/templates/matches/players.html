@@ -22,11 +22,19 @@
 			<div class="player-list-columns">
 
 				{% for player in players %}
+
 					<button class="btn btn-default btn-lg btn-block player">
+
+						{% with id = player.id, avatar = player.avatar, class = "avatar" %}
+							{% include 'partials/avatar.html' %}
+						{% endwith %}
+
 						{{ player.name }}
 						<span class="glyphicon glyphicon-ok"></span>
 						<input type="checkbox" name="playerId" value="{{ player.id }}" />
+
 					</button>
+
 				{% endfor %}
 
 			</div>
