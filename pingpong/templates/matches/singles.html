@@ -10,7 +10,9 @@
 		<div class="singles-container">
 
 			<div class="score-board">
-				<span class="name truncate" data-var="name" data-color="yellow">{{ data.teams.yellow.playerName }}</span>
+				<span class="name truncate" data-var="name" data-color="yellow">
+					{{ data.teams.yellow.playerName }}
+				</span>
 				<span class="score" data-var="score" data-color="yellow">{{ '%02d' % data.teams.yellow.points }}</span>
 			</div>
 
@@ -56,6 +58,18 @@
 
 		</div>
 
+		<div class="singles-avatar-container yellow">
+			{% with id = data.teams.yellow.playerId, avatar = data.teams.yellow.playerAvatar, class = "avatar-singles" %}
+				{% include 'partials/avatar.html' %}
+			{% endwith %}
+		</div>
+
+		<div class="singles-avatar-container green">
+			{% with id = data.teams.green.playerId, avatar = data.teams.green.playerAvatar, class = "avatar-singles" %}
+				{% include 'partials/avatar.html' %}
+			{% endwith %}
+		</div>
+
 		<table class="table table-bordered set-scores">
 
 			<tr>
@@ -94,6 +108,7 @@
 			{% endfor %}
 
 		</table>
+
 
 	</div>
 

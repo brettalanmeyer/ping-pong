@@ -50,6 +50,7 @@ class Singles(MatchType):
 			"teamId": None,
 			"playerId": playerId,
 			"playerName": None,
+			"playerAvatar": None,
 			"points": None,
 			"serving": False,
 			"winner": False,
@@ -67,6 +68,7 @@ class Singles(MatchType):
 					color = "yellow"
 
 				teams[color]["playerName"] = player.name
+				teams[color]["playerAvatar"] = player.avatar
 				teams[color]["points"] = points
 				teams[color]["teamId"] = team.id
 				teams[color]["winner"] = (team.win == 1)

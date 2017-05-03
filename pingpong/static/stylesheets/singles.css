@@ -9,6 +9,7 @@
 	border: solid 1px #ccc;
 	width: 35%;
 	float: left;
+	position: relative;
 }
 
 .singles-container .score-board .name {
@@ -141,4 +142,35 @@
 	font-size: 12px;
 	padding: 6px 0;
 	background: #f0f0f0;
+}
+
+.singles-avatar-container {
+	width: 246px;
+	height: 128px;
+	position: absolute;
+	text-align: center;
+	margin-top: 14px;
+	padding: 0 4px;
+}
+
+.singles-avatar-container.yellow {
+	left: 0;
+}
+
+.singles-avatar-container.green {
+	right: 0;
+}
+
+.singles-avatar-container .avatar-singles {
+	max-height: 100%;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	z-index: -100;
 }

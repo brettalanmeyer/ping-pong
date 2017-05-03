@@ -61,6 +61,7 @@ class Doubles(MatchType):
 		return {
 			"playerId": playerId,
 			"playerName": None,
+			"playerAvatar": None,
 			"serving": False
 		}
 
@@ -93,6 +94,7 @@ class Doubles(MatchType):
 					teams["north"]["players"].append(player.name)
 
 				players[color]["playerName"] = player.name
+				players[color]["playerAvatar"] = player.avatar
 				players[color]["teamId"] = team.id
 
 		return teams["north"]["points"] + teams["south"]["points"]
