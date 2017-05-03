@@ -45,6 +45,7 @@ class LeaderboardService(Service):
 			stats["rows"].append({
 				"playerId": player.id,
 				"playerName": player.name,
+				"playerAvatar": player.avatar,
 				"matches": matches[player.id]["matches"] if player.id in matches else 0,
 				"percentage": float(matches[player.id]["wins"]) / float(matches[player.id]["matches"]) * 100 if player.id in matches else 0,
 				"pointsFor": pointsFor[player.id] if player.id in pointsFor else 0,
@@ -79,6 +80,7 @@ class LeaderboardService(Service):
 		stats = {
 			"playerId": player.id,
 			"playerName": player.name,
+			"playerAvatar": player.avatar,
 			"season": season,
 			"seasons": seasons,
 			"start": start,
@@ -121,6 +123,7 @@ class LeaderboardService(Service):
 			stats[result.matchType]["matchups"].append({
 				"playerId": result.playerId,
 				"playerName": result.playerName,
+				"playerAvatar": result.playerAvatar,
 				"numOfMatches": int(result.numOfMatches),
 				"pointsFor": pointsAgainst[result.matchType],
 				"pointsAgainst": pointsFor[result.matchType],
@@ -547,6 +550,7 @@ class LeaderboardService(Service):
 			SELECT\
 				players.id as playerId,\
 				players.name as playerName,\
+				players.avatar as playerAvatar,\
 				matches.matchType,\
 				COUNT(players.id) AS numOfMatches,\
 				SUM(teams.win = 1) AS wins,\

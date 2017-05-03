@@ -118,11 +118,11 @@ Report of ELO with variability of initial rank and k value
 
 manual entry of scores due to connection lost or otherwise
 
-run tests with no data
-
 smack talk AI
 
 AVATARS
+
+add link to leaderboard for each matchtype to notifications when a matches end
 
 Add Dave Thomas
 

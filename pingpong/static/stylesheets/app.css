@@ -100,6 +100,12 @@ a.link {
 	vertical-align: middle;
 }
 
+.table > tbody > tr > td.avatar {
+	width: 1px;
+	text-align: center;
+	padding: 2px 0;
+}
+
 .truncate {
 	white-space: nowrap;
 	overflow: hidden;

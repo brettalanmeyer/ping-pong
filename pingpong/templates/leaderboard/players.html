@@ -77,6 +77,9 @@
 					<thead>
 
 						<tr>
+
+							<th></th>
+
 							<th data-sort="string">
 								Opponent
 								<div class="sorting-container">
@@ -84,6 +87,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+
 							<th data-sort="int">
 								Matches
 								<div class="sorting-container">
@@ -91,6 +95,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+
 							<th data-sort="float">
 								Win %
 								<div class="sorting-container">
@@ -98,6 +103,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</td>
+
 							<th data-sort="int">
 								Points
 								<div class="sorting-container">
@@ -105,6 +111,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+
 							<th data-sort="int">
 								Opp Points
 								<div class="sorting-container">
@@ -112,6 +119,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+
 							<th data-sort="int">
 								Wins
 								<div class="sorting-container">
@@ -119,6 +127,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+
 							<th data-sort="int">
 								Opp Wins
 								<div class="sorting-container">
@@ -126,6 +135,7 @@
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</div>
 							</th>
+
 							<th data-sort="int">
 								Current Wins
 								<div class="sorting-container">
@@ -143,18 +153,45 @@
 						{% for matchup in stats[matchType].matchups %}
 
 							<tr class="matchup">
+
+								<td class="avatar">
+									{% with id = matchup.playerId, avatar = matchup.playerAvatar, max = 40 %}
+										{% include 'partials/avatar.html' %}
+									{% endwith %}
+								</td>
+
 								<td data-sort-value="{{ matchup.playerName }}">
 									<a href="{{ url_for('leaderboardController.players', id = matchup.playerId, season = stats.season) }}" class="link">{{ matchup.playerName }}</a>
 								</td>
-								<td data-sort-value="{{ matchup.numOfMatches }}">{{ matchup.numOfMatches }}</td>
-								<td data-sort-value="{{ matchup.percentage }}">{{ "{:.3f}".format(matchup.percentage) }}</td>
-								<td data-sort-value="{{ matchup.pointsFor }}">{{ matchup.pointsFor }}</td>
-								<td data-sort-value="{{ matchup.pointsAgainst }}">{{ matchup.pointsAgainst }}</td>
-								<td data-sort-value="{{ matchup.wins }}">{{ matchup.wins }}</td>
-								<td data-sort-value="{{ matchup.losses }}">{{ matchup.losses }}</td>
+
+								<td data-sort-value="{{ matchup.numOfMatches }}">
+									{{ matchup.numOfMatches }}
+								</td>
+
+								<td data-sort-value="{{ matchup.percentage }}">
+									{{ "{:.3f}".format(matchup.percentage) }}
+								</td>
+
+								<td data-sort-value="{{ matchup.pointsFor }}">
+									{{ matchup.pointsFor }}
+								</td>
+
+								<td data-sort-value="{{ matchup.pointsAgainst }}">
+									{{ matchup.pointsAgainst }}
+								</td>
+
+								<td data-sort-value="{{ matchup.wins }}">
+									{{ matchup.wins }}
+								</td>
+
+								<td data-sort-value="{{ matchup.losses }}">
+									{{ matchup.losses }}
+								</td>
+
 								{% with value = matchup.winStreak %}
 									{% include 'leaderboard/win-streak.html' %}
 								{% endwith %}
+
 							</tr>
 
 						{% endfor %}

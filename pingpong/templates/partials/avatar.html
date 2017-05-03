@@ -1,0 +1,6 @@
+
+{% if avatar != None %}
+	<img src="{{ url_for('playerController.avatar', id = id, avatar = avatar) }}" style="max-width: {{ max }}px; max-height: {{ max }}px;" />
+{% else %}
+	<img src="{{ url_for('static', filename = 'images/silhouette-{}.png'.format(range(1, 8)|random)) }}" style="max-width: {{ max }}px; max-height: {{ max }}px;" />
+{% endif %}

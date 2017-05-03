@@ -23,12 +23,10 @@
 
 					<tr>
 
-						<td width="1" class="text-center" style="padding: 4px 0;">
-							{% if player.avatar != None %}
-								<img src="{{ url_for('playerController.avatar', id = player.id, avatar = player.avatar) }}" style="max-width: 80px; max-height: 80px;" />
-							{% else %}
-								<img src="{{ url_for('static', filename = 'images/silhouette-{}.png'.format(range(1, 8)|random)) }}" />
-							{% endif %}
+						<td class="avatar">
+							{% with id = player.id, avatar = player.avatar, max = 80 %}
+								{% include 'partials/avatar.html' %}
+							{% endwith %}
 						</td>
 
 						<td>

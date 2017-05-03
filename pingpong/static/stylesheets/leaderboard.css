@@ -102,3 +102,8 @@
 	top: 0;
 	width: 260px;
 }
+
+.leaderboard-table td,
+.opponent-table td {
+	height: 42px;
+}
