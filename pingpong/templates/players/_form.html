@@ -10,9 +10,7 @@
 	<label for="name-field">Avatar</label>
 
 	{% if player.avatar != None %}
-		<br />
-		<img src="{{ url_for('playerController.avatar', id = player.id, avatar = player.avatar) }}" style="max-width: 200px; max-height: 200px;" />
-		<br /><br />
+		<img src="{{ url_for('playerController.avatar', id = player.id, avatar = player.avatar) }}" class="avatar-player-form" />
 	{% endif %}
 
 	<input id="avatar-field" type="file" name="avatar" value="" class="" />

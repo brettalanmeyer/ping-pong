@@ -126,7 +126,7 @@
 							<td class="text-center">{{ loop.index }}</td>
 
 							<td class="avatar">
-								{% with id = row.playerId, avatar = row.playerAvatar, max = 40 %}
+								{% with id = row.playerId, avatar = row.playerAvatar, class = "avatar-leaderboard" %}
 									{% include 'partials/avatar.html' %}
 								{% endwith %}
 							</td>
@@ -189,8 +189,8 @@
 
 					<tr>
 
+						<th colspan="2">Totals:</th>
 						<th></th>
-						<th>Totals:</th>
 						<th class="elo"></th>
 						<th>{{ "{:,}".format(stats.totals["matches"]) }}</th>
 						<th></th>
@@ -198,6 +198,7 @@
 						<th>{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
+						<td></td>
 						<td></td>
 
 					</tr>

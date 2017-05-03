@@ -24,7 +24,7 @@
 					<tr>
 
 						<td class="avatar">
-							{% with id = player.id, avatar = player.avatar, max = 80 %}
+							{% with id = player.id, avatar = player.avatar, class = "avatar-players" %}
 								{% include 'partials/avatar.html' %}
 							{% endwith %}
 						</td>
@@ -75,7 +75,7 @@
 
 					<tr>
 
-						<td colspan="10">No players found.</td>
+						<td colspan="10" class="text-center">No players found.</td>
 
 					</tr>
 

@@ -155,7 +155,7 @@
 							<tr class="matchup">
 
 								<td class="avatar">
-									{% with id = matchup.playerId, avatar = matchup.playerAvatar, max = 40 %}
+									{% with id = matchup.playerId, avatar = matchup.playerAvatar, class = "avatar-leaderboard" %}
 										{% include 'partials/avatar.html' %}
 									{% endwith %}
 								</td>
@@ -192,6 +192,12 @@
 									{% include 'leaderboard/win-streak.html' %}
 								{% endwith %}
 
+							</tr>
+
+						{% else %}
+
+							<tr>
+								<td colspan="10" class="text-center">No opponents found.</td>
 							</tr>
 
 						{% endfor %}

@@ -123,6 +123,7 @@ smack talk AI
 AVATARS
 
 add link to leaderboard for each matchtype to notifications when a matches end
+link to leaderboard of the correct matchtype when reporting match results
 
 Add Dave Thomas
 
