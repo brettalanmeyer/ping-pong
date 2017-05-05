@@ -75,6 +75,10 @@ $(function(){
 						}
 					}
 				}
+
+				if(team.playerAvatar){
+					$(".avatar-singles." + color).attr("src", "/players/" + team.playerId + "/avatar/" + team.playerAvatar);
+				}
 			}
 
 			sayings(data.teams.yellow.points, data.teams.green.points);
