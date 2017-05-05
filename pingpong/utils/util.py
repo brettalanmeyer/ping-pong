@@ -66,6 +66,10 @@ def hash(string):
 def hasConfig(param):
 	if param not in app.config:
 		return False
+
+	if isinstance(app.config[param], bool):
+		return True
+
 	if len(app.config[param]) == 0:
 		return False
 
@@ -88,14 +92,20 @@ def uploadAvatar(player):
 			extension = avatar.filename.split(".")[-1]
 			name = "{}.{}".format(generateUUID(), extension)
 			avatar.save("{}/avatars/{}".format(app.root_path, name))
-
-			avatarToDelete = "{}/avatars/{}".format(app.root_path, player.avatar)
-			if os.path.isfile(avatarToDelete):
-				os.remove(avatarToDelete)
+			deleteAvatar(player.avatar)
 
 			return True, name, extension
 
 	return False, None, None
+
+def deleteAvatar(avatar):
+	if avatar == None:
+		return
+
+	avatarPath = "{}/avatars/{}".format(app.root_path, avatar)
+
+	if os.path.isfile(avatarPath):
+		os.remove(avatarPath)
 
 def avatar(player):
 	return send_from_directory("{}/avatars/".format(app.root_path), player.avatar, mimetype = "image/{}".format(player.extension))

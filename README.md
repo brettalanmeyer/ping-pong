@@ -98,41 +98,27 @@ Run single class
 
 * run script `/home/pi/ping-pong/ping-pong-controls.py`
 
-TODO
+## TODO
 
-Fix doubles opponent stats
+* Switch avatars when switching sides for singles
+* add link to leaderboard for each matchtype to notifications when a matches end
+* avatars on doubles score board
+* put getMatchType() somewhere shared
+* Finish Tests - try to create sqlite engine for testing db
+* Fix doubles opponent stats
+* Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
+* manual entry of scores due to connection lost or otherwise
+* Put ELO on match score board?
+* Report of avg time people play per day
+* Report of ELO with variability of initial rank and k value
+* smack talk AI
+* Dave Thomas
+* try to put skype stuff in this app if possible
+* win streak
+* loss streak
+* remove points on nines
+* possibly remove 0 stat players from main leaderboard, or at least put them in rows below footer
 
-put getMatchType() somewhere shared
-
-try to put skype stuff in this app if possible
-
-Put ELO on match score board?
-
-Finish Tests - try to revert all data entered from a certain point
-
-Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
-
-Report of avg time people play per day
-
-Report of ELO with variability of initial rank and k value
-
-manual entry of scores due to connection lost or otherwise
-
-smack talk AI
-
-avatars on score boards
-
-add link to leaderboard for each matchtype to notifications when a matches end
-link to leaderboard of the correct matchtype when reporting match results
-
-Add Dave Thomas
-
-
-Leaderboard:
-	current win/loss streak
-	current point streak
-	highest win/lost streak
-	highest point streak
 
 Delegate Python Process
 	screen python run.py

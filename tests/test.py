@@ -26,6 +26,8 @@ from matchtypes.TestDoubles import TestDoubles
 from matchtypes.TestNines import TestNines
 from matchtypes.TestSingles import TestSingles
 
+from utils.TestUtil import TestUtil
+
 import unittest
 
 if __name__ == "__main__":
