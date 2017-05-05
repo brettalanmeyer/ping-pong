@@ -195,4 +195,6 @@ class Nines(MatchType):
 
 		message = "<b>{}</b> defeated {}, {}, and {} in nines".format(player1.name, player2.name, player3.name, player4.name)
 
+		message += '\n<a href="{}leaderboard/nines">Leaderboard Standings</a>'.format(request.url_root)
+
 		notifications.send(message)

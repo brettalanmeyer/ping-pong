@@ -284,4 +284,6 @@ class Doubles(MatchType):
 		message += winnerScores
 		message += loserScores
 
+		message += '\n<a href="{}leaderboard/doubles">Leaderboard Standings</a>'.format(request.url_root)
+
 		notifications.send(message)

@@ -223,4 +223,6 @@ class Singles(MatchType):
 		message += winnerScores
 		message += loserScores
 
+		message += '\n<a href="{}leaderboard/singles">Leaderboard Standings</a>'.format(request.url_root)
+
 		notifications.send(message)
