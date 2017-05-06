@@ -81,7 +81,7 @@ class TestDoubles(BaseTest):
 			assert data["game"] == 3
 
 	def test_winnerShutout(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch(5)
 
 			for i in range(0, 21):
@@ -102,7 +102,7 @@ class TestDoubles(BaseTest):
 			assert data["game"] == 3
 
 	def test_everyOtherWinner(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch(5)
 
 			for i in range(0, 105):
@@ -117,7 +117,7 @@ class TestDoubles(BaseTest):
 			assert data["game"] == 5
 
 	def test_winByTwoPoints(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch(1)
 
 			data = doubles.matchData(match)
@@ -172,7 +172,7 @@ class TestDoubles(BaseTest):
 			assert data["points"] == 0
 
 	def test_undoMatch(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch(1)
 			for i in range(0, 21):
 				doubles.score(match, "green")
@@ -192,7 +192,7 @@ class TestDoubles(BaseTest):
 			assert data["points"] == 20
 
 	def test_playAgain(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch(1)
 			for i in range(0, 21):
 				doubles.score(match, "green")

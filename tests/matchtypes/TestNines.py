@@ -48,7 +48,7 @@ class TestNines(BaseTest):
 			assert data["completedAt"] == None
 
 	def test_winner(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch()
 
 			for i in range(0, 9):
@@ -125,7 +125,7 @@ class TestNines(BaseTest):
 			assert data["players"]["red"]["points"] == 9
 
 	def test_undoMatch(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch()
 
 			for i in range(0, 21):
@@ -143,7 +143,7 @@ class TestNines(BaseTest):
 			assert data["completedAt"] == None
 
 	def test_playAgain(self):
-		with self.ctx:
+		with self.request:
 			match = self.createMatch()
 
 			for i in range(0, 21):
@@ -172,8 +172,8 @@ class TestNines(BaseTest):
 			assert not newData["complete"]
 			assert newData["completedAt"] == None
 
-	def test_swap_players(self):
-		with self.ctx:
+	def test_swapPlayers(self):
+		with self.request:
 			match = self.createMatch()
 
 			# both players are out on one side
@@ -200,8 +200,8 @@ class TestNines(BaseTest):
 			assert yellow["winner"]
 			assert not red["winner"]
 
-	def test_swap_players_again(self):
-		with self.ctx:
+	def test_swapPlayersAgain(self):
+		with self.request:
 			match = self.createMatch()
 
 			# both players are out on one side

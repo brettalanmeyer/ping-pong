@@ -1,12 +1,29 @@
 from BaseTest import BaseTest
+from pingpong.matchtypes.Singles import Singles
+from pingpong.services.MatchService import MatchService
 from pingpong.services.PlayerService import PlayerService
 import uuid
 
+matchService = MatchService()
 playerService = PlayerService()
+singles = Singles()
 
 class TestPlayerController(BaseTest):
 
 	playerName = str(uuid.uuid4())
+
+	def createMatch(self):
+		with self.request:
+			player1 = playerService.create({ "name": "Fry" })
+			player2 = playerService.create({ "name": "Bender" })
+
+			match = matchService.create("singles")
+			matchService.updateGames(match.id, 1)
+
+			singles.createTeams(match, [player1.id, player2.id], True)
+			singles.play(match)
+
+			return match
 
 	def createPlayer(self):
 		return playerService.create({
@@ -17,36 +34,44 @@ class TestPlayerController(BaseTest):
 		rv = self.app.get("/players")
 		assert rv.status == self.ok
 
-	def test_players_new(self):
+	def test_playersNew(self):
 		rv = self.app.get("/players/new")
 		assert rv.status == self.ok
 
-	def test_players_create(self):
+	def test_playersCreate(self):
 		rv = self.app.post("/players", data = {
 			"name": self.playerName
 		}, follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_players_create_duplicate(self):
+	def test_playersCreateMatch(self):
+		match = self.createMatch()
+
+		rv = self.app.post("/players/matches/{}".format(match.id), data = {
+			"name": str(uuid.uuid4())
+		}, follow_redirects = True)
+		assert rv.status == self.ok
+
+	def test_playersCreateDuplicate(self):
 		rv = self.app.post("/players", data = {
 			"name": self.playerName
 		}, follow_redirects = True)
 		assert rv.status == self.badRequest
 
-	def test_players_create_empty(self):
+	def test_playersCreateEmpty(self):
 		rv = self.app.post("/players", data = {
 			"name": ""
 		})
 		assert rv.status == self.badRequest
 
-	def test_players_edit(self):
+	def test_playersEdit(self):
 		with self.ctx:
 			player = self.createPlayer()
 
 			rv = self.app.get("/players/{}/edit".format(player.id))
 			assert rv.status == self.ok
 
-	def test_players_edit_disabled(self):
+	def test_playersEditDisabled(self):
 		with self.ctx:
 			player = self.createPlayer()
 			playerService.disable(player)
@@ -54,12 +79,12 @@ class TestPlayerController(BaseTest):
 			rv = self.app.get("/players/{}/edit".format(player.id))
 			assert rv.status == self.notFound
 
-	def test_players_edit_not_found(self):
+	def test_playersEditNotFound(self):
 		with self.ctx:
 			rv = self.app.get("/players/{}/edit".format(0))
 			assert rv.status == self.notFound
 
-	def test_players_update(self):
+	def test_playersUpdate(self):
 		with self.ctx:
 			newName = str(uuid.uuid4())
 			player = self.createPlayer()
@@ -72,12 +97,12 @@ class TestPlayerController(BaseTest):
 			assert rv.status == self.ok
 			assert newName == updatedPlayer.name
 
-	def test_players_update_not_found(self):
+	def test_playersUpdateNotFound(self):
 		with self.ctx:
 			rv = self.app.post("/players/{}".format(0), data = {})
 			assert rv.status == self.notFound
 
-	def test_players_update_empty(self):
+	def test_playersUpdateEmpty(self):
 		with self.ctx:
 			player = self.createPlayer()
 			rv = self.app.post("/players/{}".format(player.id), data = {
@@ -85,19 +110,19 @@ class TestPlayerController(BaseTest):
 			}, follow_redirects = True)
 			assert rv.status == self.badRequest
 
-	def test_players_enable_unauthenticated(self):
+	def test_playersEnableUnauthenticated(self):
 		rv = self.app.post("/players/{}/enable".format(0), follow_redirects = False)
 		assert rv.status == self.found
 
-	def test_players_disable_unauthenticated(self):
+	def test_playersDisableUnauthenticated(self):
 		rv = self.app.post("/players/{}/disable".format(0), follow_redirects = False)
 		assert rv.status == self.found
 
-	def test_players_delete_unauthenticated(self):
+	def test_playersDeleteUnauthenticated(self):
 		rv = self.app.post("/players/{}/delete".format(0), follow_redirects = False)
 		assert rv.status == self.found
 
-	def test_players_enable(self):
+	def test_playersEnable(self):
 		with self.ctx:
 			self.authenticate()
 
@@ -109,13 +134,13 @@ class TestPlayerController(BaseTest):
 			assert rv.status == self.ok
 			assert player.enabled
 
-	def test_players_enable_not_found(self):
+	def test_playersEnableNotFound(self):
 		with self.ctx:
 			self.authenticate()
 			rv = self.app.post("/players/{}/enable".format(0))
 			assert rv.status == self.notFound
 
-	def test_players_disabled(self):
+	def test_playersDisabled(self):
 		with self.ctx:
 			self.authenticate()
 
@@ -126,13 +151,13 @@ class TestPlayerController(BaseTest):
 			assert rv.status == self.ok
 			assert not player.enabled
 
-	def test_players_disable_not_found(self):
+	def test_playersDisableNotFound(self):
 		with self.ctx:
 			self.authenticate()
 			rv = self.app.post("/players/{}/disable".format(0))
 			assert rv.status == self.notFound
 
-	def test_players_delete(self):
+	def test_playersDelete(self):
 		with self.ctx:
 			self.authenticate()
 
@@ -149,7 +174,7 @@ class TestPlayerController(BaseTest):
 			deletedCount = playerService.select().count()
 			assert originalCount == deletedCount
 
-	def test_players_delete_not_found(self):
+	def test_playersDeleteNotFound(self):
 		with self.ctx:
 			self.authenticate()
 			rv = self.app.post("/players/{}/delete".format(0))

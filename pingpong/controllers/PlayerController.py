@@ -55,7 +55,7 @@ def create(matchId):
 		notifications.send(message)
 
 		if matchId != None:
-			return redirect(url_for("matchController.matches_players", id = matchId))
+			return redirect(url_for("matchController.players", id = matchId))
 		else:
 			return redirect(url_for("playerController.index"))
 
