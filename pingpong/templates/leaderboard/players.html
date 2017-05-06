@@ -4,7 +4,7 @@
 
 {% block body %}
 
-	<div class="container">
+	<div class="container-fluid">
 
 		<div class="leaderboard-player-container">
 
@@ -38,7 +38,9 @@
 						<th>Points Against</th>
 						<th>Wins</th>
 						<th>Losses</th>
-						<th>Current Wins</th>
+						<th>Current Streak</th>
+						<th>Win Streak</th>
+						<th>Loss Streak</th>
 
 					</tr>
 
@@ -57,9 +59,11 @@
 							<td>{{ "{:,}".format(stats[matchType].pointsAgainst) }}</td>
 							<td>{{ stats[matchType].wins }}</td>
 							<td>{{ stats[matchType].losses }}</td>
-							{% with value = stats[matchType].winStreak %}
+							{% with value = stats[matchType].streaks.current %}
 								{% include 'leaderboard/win-streak.html' %}
 							{% endwith %}
+							<td>{{ stats[matchType].streaks.wins }}</td>
+							<td>{{ stats[matchType].streaks.losses }}</td>
 						</tr>
 
 					{% endfor %}
@@ -150,6 +154,22 @@
 								</div>
 							</th>
 
+							<th data-sort="int">
+								Win Streak
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+
+							<th data-sort="int">
+								Loss Streak
+								<div class="sorting-container">
+									<span class="glyphicon glyphicon-chevron-up"></span>
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</th>
+
 						</tr>
 
 					</thead>
@@ -194,9 +214,17 @@
 									{{ matchup.losses }}
 								</td>
 
-								{% with value = matchup.winStreak %}
+								{% with value = matchup.streaks.current %}
 									{% include 'leaderboard/win-streak.html' %}
 								{% endwith %}
+
+								<td data-sort-value="{{ matchup.streaks.wins }}">
+									{{ matchup.streaks.wins }}
+								</td>
+
+								<td data-sort-value="{{ matchup.streaks.losses }}">
+									{{ matchup.streaks.losses }}
+								</td>
 
 							</tr>
 

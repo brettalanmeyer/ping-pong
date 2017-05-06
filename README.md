@@ -100,11 +100,8 @@ Run single class
 
 ## TODO
 
-* Switch avatars when switching sides for singles
-* add link to leaderboard for each matchtype to notifications when a matches end
 * avatars on doubles score board
 * put getMatchType() somewhere shared
-* Finish Tests - try to create sqlite engine for testing db
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise

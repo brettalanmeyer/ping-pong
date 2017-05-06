@@ -106,7 +106,23 @@
 						</th>
 
 						<th data-sort="int">
-							Current Wins
+							Current Streak
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+						<th data-sort="int">
+							Win Streak
+							<div class="sorting-container">
+								<span class="glyphicon glyphicon-chevron-up"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</th>
+
+						<th data-sort="int">
+							Loss Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
 								<span class="glyphicon glyphicon-chevron-down"></span>
@@ -119,65 +135,68 @@
 
 				<tbody>
 
-					{% for row in stats.rows %}
+					{% for player in stats.players %}
 
-						<tr data-time="{{ row.time }}">
+						<tr data-time="{{ player.time }}">
 
 							<td class="text-center">{{ loop.index }}</td>
 
 							<td class="avatar">
-								{% with id = row.playerId, avatar = row.playerAvatar, class = "avatar-leaderboard" %}
+								{% with id = player.playerId, avatar = player.playerAvatar, class = "avatar-leaderboard" %}
 									{% include 'partials/avatar.html' %}
 								{% endwith %}
 							</td>
 
-							<td data-sort-value="{{ row.playerName }}">
-								<a href="{{ url_for('leaderboardController.players', id = row.playerId, season = stats.season) }}" class="link">{{ row.playerName }}</a>
+							<td data-sort-value="{{ player.playerName }}">
+								<a href="{{ url_for('leaderboardController.players', id = player.playerId, season = stats.season) }}" class="link">{{ player.playerName }}</a>
 							</td>
 
-							<td data-sort-value="{{ row.elo.current }}" class="elo">
-								{{ row.elo.current|round|int }}
+							<td data-sort-value="{{ player.elo.current }}" class="elo">
+								{{ player.elo.current|round|int }}
 
-								{% if row.elo.change > 0 %}
-									<span class="elo-change positive">(+{{ row.elo.change|round|int }})</span>
-								{% elif row.elo.change < 0 %}
-									<span class="elo-change negative">({{ row.elo.change|round|int }})</span>
+								{% if player.elo.change > 0 %}
+									<span class="elo-change positive">(+{{ player.elo.change|round|int }})</span>
+								{% elif player.elo.change < 0 %}
+									<span class="elo-change negative">({{ player.elo.change|round|int }})</span>
 								{% else %}
-									<span class="elo-change">({{ row.elo.change|round|int }})</span>
+									<span class="elo-change">({{ player.elo.change|round|int }})</span>
 								{% endif %}
 							</td>
 
-							<td data-sort-value="{{ row.matches }}">
-								{{ row.matches }}
+							<td data-sort-value="{{ player.matches }}">
+								{{ player.matches }}
 							</td>
 
-							<td data-sort-value="{{ row.percentage }}">
-								{{ "{:.3f}".format(row.percentage) }}
+							<td data-sort-value="{{ player.percentage }}">
+								{{ "{:.3f}".format(player.percentage) }}
 							</td>
 
-							<td data-sort-value="{{ row.pointsFor }}">
-								{{ "{:,}".format(row.pointsFor) }}
+							<td data-sort-value="{{ player.pointsFor }}">
+								{{ "{:,}".format(player.pointsFor) }}
 							</td>
 
-							<td data-sort-value="{{ row.pointsAgainst }}">
-								{{ "{:,}".format(row.pointsAgainst) }}
+							<td data-sort-value="{{ player.pointsAgainst }}">
+								{{ "{:,}".format(player.pointsAgainst) }}
 							</td>
 
-							<td data-sort-value="{{ row.wins }}">
-								{{ row.wins }}
+							<td data-sort-value="{{ player.wins }}">
+								{{ player.wins }}
 							</td>
 
-							<td data-sort-value="{{ row.losses }}">
-								{{ row.losses }}
+							<td data-sort-value="{{ player.losses }}">
+								{{ player.losses }}
 							</td>
 
-							<td data-sort-value="{{ row.pointStreak }}">
-								{{ row.pointStreak }}
+							<td data-sort-value="{{ player.pointStreak }}">
+								{{ player.pointStreak }}
 							</td>
 
-							{% with value = row.winStreak %}
+							{% with value = player.streaks.current %}
 								{% include 'leaderboard/win-streak.html' %}
 							{% endwith %}
+
+							<td data-sort-value="{{ player.winStreak }}">{{ player.streaks.wins }}</td>
+							<td data-sort-value="{{ player.lossStreak }}">{{ player.streaks.losses }}</td>
 
 						</tr>
 
@@ -198,6 +217,8 @@
 						<th>{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
+						<td></td>
+						<td></td>
 						<td></td>
 						<td></td>
 
