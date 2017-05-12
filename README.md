@@ -100,6 +100,9 @@ Run single class
 
 ## TODO
 
+* Make players list into more of a photo gallery with edit/toggle/delete buttons to the side or something
+* Have a player show page where the image can be large and have additional information about the player
+* Add title to all links
 * Make nines so that the same players aren't on the same side for each new game
 * Filter previous matches by opponent player as well
 * Link to previous games filtered by playerId and matchType from player-leaderboard pages
