@@ -18,6 +18,13 @@
 			{% endfor %}
 		</select>
 
+		<select id="matches-opponent-filter" name="opponentId" class="opponent-filter form-control input-sm" title="Filter By Opponent">
+			<option value="">Opponent...</option>
+			{% for player in players %}
+				<option value="{{ player.id }}" {% if opponentId == player.id %}selected{% endif %}>{{ player.name }}</option>
+			{% endfor %}
+		</select>
+
 		<select id="matches-match-type-filter" name="matchType" class="match-type-filter form-control input-sm" title="Filter By Match Type">
 			<option value="">Match Type...</option>
 			{% for item in matchTypes %}
@@ -25,11 +32,13 @@
 			{% endfor %}
 		</select>
 
+		<a href="{{ url_for('matchController.index') }}" class="match-clear-filter btn btn-default">Clear</a>
+
 		<h1 class="with-action">
-			<a href="{{ url_for('matchController.index') }}">Previous Matches - {{ count }}</a>
+			<a href="{{ url_for('matchController.index') }}">{{ count }} Matches</a>
 		</h1>
 
-		<table class="table match-list">
+		<table class="table match-list {{ matchType }}">
 
 			<thead>
 
@@ -60,7 +69,7 @@
 									{% for team in match.teams %}
 
 										{% for player in team.players %}
-											<a href="/leaderboard/players/{{ player.id }}">
+											<a href="/leaderboard/players/{{ player.id }}" title="View {{ player.name }}'s Statistics">
 												{% if team.hasWon() %}
 													<strong>{{ player.name }}</strong>
 												{% else %}
@@ -91,7 +100,7 @@
 															&amp;
 														{% endif %}
 
-														<a href="{{ url_for('leaderboardController.players', id = player.id) }}">
+														<a href="{{ url_for('leaderboardController.players', id = player.id) }}" title="View {{ player.name }}'s Statistics">
 															{{ player.name }}
 														</a>
 

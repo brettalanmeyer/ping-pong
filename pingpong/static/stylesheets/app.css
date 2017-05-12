@@ -194,23 +194,37 @@ a.link {
 
 .matches-container .player-filter {
 	position: absolute;
-	right: 123px;
-	top: 20px;
-	width: 130px;
+	right: 270px;
+	top: 46px;
+	width: 184px;
+}
+
+.matches-container .opponent-filter {
+	position: absolute;
+	right: 81px;
+	top: 46px;
+	width: 184px;
 }
 
 .matches-container .match-type-filter {
 	position: absolute;
-	right: 0px;
-	top: 20px;
+	right: 81px;
+	top: 10px;
 	width: 115px;
 }
 
 .matches-container .season-filter {
 	position: absolute;
-	right: 261px;
-	top: 20px;
-	width: 256px;
+	right: 202px;
+	top: 10px;
+	width: 252px;
+}
+
+.matches-container .match-clear-filter {
+	position: absolute;
+	right: 15px;
+	top: 10px;
+	padding: 22px 12px;
 }
 
 .matches-container .nav-tabs {
@@ -222,8 +236,6 @@ a.link {
 }
 
 .matches-container .match-list {
-	width: initial;
-	margin: auto;
 }
 
 .matches-container .match-list > thead > tr > th:nth-child(1),
@@ -266,6 +278,10 @@ a.link {
 
 .matches-container .score-table td.name.winner {
 	font-weight: bold;
+}
+
+.matches-container .doubles .score-table td.name .elo-change {
+	display: none;
 }
 
 .matches-container .score-table td.name .elo-change {

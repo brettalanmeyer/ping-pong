@@ -32,13 +32,14 @@ nines = Nines()
 def index():
 	page = util.param("page", 1, "int")
 	playerId = util.param("playerId", None, "int")
+	opponentId = util.param("opponentId", None, "int")
 	matchType = util.param("matchType")
 
 	season = util.param("season", None, "int")
 	seasons, season, start, end = leaderboardService.seasons(season)
 
 	players = playerService.select()
-	matches = matchService.selectCompleteOrReady(playerId, matchType, start, end)
+	matches = matchService.selectCompleteOrReady(playerId, opponentId, matchType, start, end)
 	pagedMatches = pagingService.pager(matches, page)
 	elo = leaderboardService.elo(start, end)
 
@@ -47,6 +48,7 @@ def index():
 		count = matches.count(),
 		paging = pagingService.data(),
 		playerId = playerId,
+		opponentId = opponentId,
 		matchType = matchType,
 		matchTypes = singles.matchTypes,
 		players = players,

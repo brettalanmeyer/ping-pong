@@ -6,7 +6,6 @@ from pingpong.models.PlayerModel import PlayerModel
 from pingpong.models.TeamModel import TeamModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
-from sqlalchemy import exc
 from sqlalchemy import or_
 
 class MatchService(Service):
@@ -41,10 +40,21 @@ class MatchService(Service):
 
 		return db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
 
-	def selectCompleteOrReady(self, playerId = None, matchType = None, start = None, end = None):
+	def selectCompleteOrReady(self, playerId = None, opponentId = None, matchType = None, start = None, end = None):
 		app.logger.info("Selecting complete or ready for play matches")
 
 		matches = db.session.query(MatchModel).filter(or_(MatchModel.complete == True, MatchModel.ready == True)).order_by(MatchModel.id.desc())
+
+		if playerId != None:
+			matches = matches.join(MatchModel.teams).join(TeamModel.players).filter(PlayerModel.id == playerId)
+
+			if opponentId != None:
+				ids = []
+				for match in matches:
+					if self.hasOpponent(match, opponentId):
+						ids.append(match.id)
+
+				matches = db.session.query(MatchModel).filter(MatchModel.id.in_(ids))
 
 		if matchType != None:
 			matches = matches.filter(MatchModel.matchType == matchType)
@@ -55,10 +65,15 @@ class MatchService(Service):
 		if end != None:
 			matches = matches.filter(MatchModel.createdAt < end)
 
-		if playerId != None:
-			matches = matches.join(MatchModel.teams).join(TeamModel.players).filter(PlayerModel.id == playerId)
-
 		return matches
+
+	def hasOpponent(self, match, opponentId):
+		for team in match.teams:
+			for player in team.players:
+				if player.id == opponentId:
+					return True
+
+		return False
 
 	def selectActiveMatch(self):
 		app.logger.info("Selecting active match")

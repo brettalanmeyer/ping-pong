@@ -30,17 +30,23 @@ $(function(){
 	});
 
 	var playerFilter = $("#matches-player-filter").on("change", matchesfilters);
+	var opponentFilter = $("#matches-opponent-filter").on("change", matchesfilters);
 	var matchTypeFilter = $("#matches-match-type-filter").on("change", matchesfilters);
 	var seasonFilter = $("#matches-season-filter").on("change", matchesfilters);
 	function matchesfilters(){
 		params = [];
 
 		var playerId = playerFilter.val();
+		var opponentId = opponentFilter.val();
 		var matchType = matchTypeFilter.val();
 		var season = seasonFilter.val();
 
 		if(playerId.length){
 			params.push("playerId=" + playerId);
+		}
+
+		if(opponentId.length){
+			params.push("opponentId=" + opponentId);
 		}
 
 		if(matchType.length){

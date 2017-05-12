@@ -1,26 +1,15 @@
 {% set params = "" %}
 {% set playerId = request.args.get("playerId") %}
+{% set opponentId = request.args.get("opponentId") %}
 {% set matchType = request.args.get("matchType") %}
 {% set season = request.args.get("season") %}
-
-{% if playerId != None %}
-	{% set params = params + "&playerId=" + playerId %}
-{% endif %}
-
-{% if matchType != None %}
-	{% set params = params + "&matchType=" + matchType %}
-{% endif %}
-
-{% if season != None %}
-	{% set params = params + "&season=" + season %}
-{% endif %}
 
 <div class="text-center">
 
 	<ul class="pagination">
 		{% if paging.page > 1 %}
 			<li>
-				<a href="/matches{{ url }}?page={{ paging.page - 1 }}{{ params }}" aria-label="Previous">
+				<a href="{{ url_for('matchController.index', page = paging.page - 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
@@ -28,13 +17,13 @@
 
 		{% for i in range(1, paging.pages + 1): %}
 			<li {% if paging.page == i %}class="active"{% endif %}>
-				<a href="/matches{{ url }}?page={{ i }}{{ params }}">{{ i }}</a>
+				<a href="{{ url_for('matchController.index', page = i, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}">{{ i }}</a>
 			</li>
 		{% endfor %}
 
 		{% if paging.page < paging.pages %}
 			<li>
-				<a href="/matches{{ url }}?page={{ paging.page + 1 }}{{ params }}" aria-label="Next">
+				<a href="{{ url_for('matchController.index', page = paging.page + 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>

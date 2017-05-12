@@ -15,9 +15,9 @@
 			</div>
 
 			<h1>
-				<a href="{{ url_for('leaderboardController.index', season = stats.season) }}">Leaderboard</a>
+				<a href="{{ url_for('leaderboardController.index', season = stats.season) }}" title="View Leaderboard">Leaderboard</a>
 				-
-				<a href="{{ url_for('leaderboardController.players', id = player.id, season = stats.season) }}">{{ player.name }}</a>
+				<a href="{{ url_for('leaderboardController.players', id = player.id, season = stats.season) }}" title="View {{ player.name }}'s Statistics">{{ player.name }}</a>
 			</h1>
 
 			{% with id = "season-filter", action = url_for('leaderboardController.players', id = player.id), season = stats.season, seasons = stats.seasons %}
