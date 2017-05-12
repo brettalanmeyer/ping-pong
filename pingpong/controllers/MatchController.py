@@ -182,7 +182,7 @@ def delete(id):
 	match, success = matchService.delete(match)
 
 	if success:
-		flash("Match has been successfully.", "success")
+		flash("Match has been successfully deleted.", "success")
 	else:
 		flash("Match could not be deleted .", "warning")
 

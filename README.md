@@ -100,6 +100,12 @@ Run single class
 
 ## TODO
 
+* Make nines so that the same players aren't on the same side for each new game
+* Filter previous matches by opponent player as well
+* Link to previous games filtered by playerId and matchType from player-leaderboard pages
+* Buttons for next game and undo on nines still show up after undo with button
+* Add avatars to skype messages as base 64 encoded
+* Move avatars on nines when moving players when down to 2
 * avatars on doubles score board
 * put getMatchType() somewhere shared
 * Fix doubles opponent stats
@@ -115,7 +121,7 @@ Run single class
 * loss streak
 * remove points on nines
 * possibly remove 0 stat players from main leaderboard, or at least put them in rows below footer
-
+* report ELO change in post match notification
 
 Delegate Python Process
 	screen python run.py
