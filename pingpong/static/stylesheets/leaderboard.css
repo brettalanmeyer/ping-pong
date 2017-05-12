@@ -37,7 +37,7 @@
 	left: 4px;
 }
 
-.table.table-sortable .glyphicon {
+.table.table-sortable th .glyphicon {
 	color: #aaa;
 	display: block;
 }

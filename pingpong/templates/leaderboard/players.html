@@ -20,7 +20,6 @@
 				<a href="{{ url_for('leaderboardController.players', id = player.id, season = stats.season) }}">{{ player.name }}</a>
 			</h1>
 
-
 			{% with id = "season-filter", action = url_for('leaderboardController.players', id = player.id), season = stats.season, seasons = stats.seasons %}
 				{% include 'partials/seasons.html' %}
 			{% endwith %}
@@ -51,8 +50,9 @@
 					{% for matchType in matchTypes %}
 
 						<tr>
-
-							<th>{{ matchType.title() }}</th>
+							<th>
+								<a href="{{ url_for('matchController.index', matchType = matchType) }}" class="link" title="View {{ matchType.title() }} Matches">{{ matchType.title() }}</a>
+							</th>
 							<td>{{ stats[matchType].matches }}</td>
 							<td>{{ "{:.3f}".format(stats[matchType].percentage) }}</td>
 							<td>{{ "{:,}".format(stats[matchType].pointsFor) }}</td>
@@ -187,7 +187,15 @@
 								</td>
 
 								<td data-sort-value="{{ matchup.playerName }}">
-									<a href="{{ url_for('leaderboardController.players', id = matchup.playerId, season = stats.season) }}" class="link">{{ matchup.playerName }}</a>
+									<a href="{{ url_for('leaderboardController.players', id = matchup.playerId, season = stats.season) }}"
+										class="link" title="View {{ matchup.playerName }}'s Statistics">{{ matchup.playerName }}</a>
+
+									{% if matchType == 'singles' %}
+										<a href="{{ url_for('matchController.index', playerId = player.id, opponentId = matchup.playerId, matchType = matchType) }}"
+										title="View Matches for {{ player.name }} vs {{ matchup.playerName }}" class="link opponent-matches">
+											<span class="glyphicon glyphicon-king"></span>
+										</a>
+									{% endif %}
 								</td>
 
 								<td data-sort-value="{{ matchup.numOfMatches }}">
@@ -231,7 +239,7 @@
 						{% else %}
 
 							<tr>
-								<td colspan="10" class="text-center">No opponents found.</td>
+								<td colspan="20" class="text-center">No opponents found.</td>
 							</tr>
 
 						{% endfor %}
