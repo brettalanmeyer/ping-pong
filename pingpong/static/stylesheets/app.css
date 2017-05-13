@@ -113,11 +113,6 @@ a.link {
 	max-height: 500px;
 }
 
-.avatar-players {
-	max-width: 70px;
-	max-height: 70px;
-}
-
 .truncate {
 	white-space: nowrap;
 	overflow: hidden;

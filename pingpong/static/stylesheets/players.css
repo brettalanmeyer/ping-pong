@@ -54,3 +54,25 @@
 .player-selector-container .player-list-columns .player:first-child {
 	margin-top: 0;
 }
+
+.players-container .player-portrait {
+	float: left;
+	width: 25%;
+	padding: 12px;
+	margin-bottom: 16px;
+	/*background: rgba(0,0,0,0.1);*/
+}
+
+.players-container .player-portrait:nth-child(4n - 1) {
+	clear: both;
+}
+
+.players-container .player-portrait .link {
+}
+
+.players-container .avatar-players {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+	margin: 8px auto 0;
+}

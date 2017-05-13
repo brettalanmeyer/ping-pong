@@ -103,10 +103,7 @@ Run single class
 * Make players list into more of a photo gallery with edit/toggle/delete buttons to the side or something
 * Have a player show page where the image can be large and have additional information about the player
 * Add title to all links
-* Make nines so that the same players aren't on the same side for each new game
-* Buttons for next game and undo on nines still show up after undo with button
 * Add avatars to skype messages as base 64 encoded
-* Move avatars on nines when moving players when down to 2
 * avatars on doubles score board
 * put getMatchType() somewhere shared
 * Fix doubles opponent stats
@@ -114,12 +111,9 @@ Run single class
 * manual entry of scores due to connection lost or otherwise
 * Put ELO on match score board?
 * Report of avg time people play per day
-* Report of ELO with variability of initial rank and k value
 * smack talk AI
 * Dave Thomas
 * try to put skype stuff in this app if possible
-* win streak
-* loss streak
 * remove points on nines
 * possibly remove 0 stat players from main leaderboard, or at least put them in rows below footer
 * report ELO change in post match notification
@@ -134,3 +128,13 @@ Kill Screen Process
 
 Raspberry pi resolution
 1184x624
+
+
+SELECT players.name, DATE(matches.createdAt) as date, SEC_TO_TIME(SUM(TIME_TO_SEC(matches.completedAt) - TIME_TO_SEC(matches.createdAt))) AS timediff, group_concat(matches.id) as matches
+FROM matches
+LEFT JOIN teams ON matches.id = teams.matchId
+LEFT JOIN teams_players ON teams.id = teams_players.teamId
+LEFT JOIN players ON teams_players.playerId = players.id
+WHERE matches.complete = 1 and matches.matchType = 'nines'
+GROUP BY YEAR(matches.createdAt), MONTH(matches.createdAt), Day(matches.createdAt), players.id
+ORDER BY date, players.name
