@@ -27,6 +27,11 @@ $(function(){
 			yellow: $("[data-color=yellow][data-var=score")
 		};
 
+		var avatars = {
+			green: $(".avatar-singles.green"),
+			yellow: $(".avatar-singles.yellow")
+		}
+
 		function update(data){
 			if(data == null) return;
 			if(data.matchId != matchId) return;
@@ -77,7 +82,13 @@ $(function(){
 				}
 
 				if(team.playerAvatar){
-					$(".avatar-singles." + color).attr("src", "/players/" + team.playerId + "/avatar/" + team.playerAvatar);
+					src = "/players/" + team.playerId + "/avatar/" + team.playerAvatar;
+
+					if(avatars[color].attr("src") != src){
+						avatars[color].attr("src", src);
+					}
+				} else {
+					avatars[color].attr("src", "/static/images/silhouette-" + randRange(1, 7) + ".png");
 				}
 			}
 

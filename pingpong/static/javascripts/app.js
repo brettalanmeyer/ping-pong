@@ -98,3 +98,7 @@ function shuffle(a) {
 function pad(num){
 	return ("00" + num).substr(-2,2);
 }
+
+function randRange(min, max){
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}

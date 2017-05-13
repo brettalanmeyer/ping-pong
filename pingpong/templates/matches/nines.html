@@ -12,7 +12,7 @@
 			<!-- Yellow -->
 			<div class="score-board {% if data.players.yellow.out %}out{% endif %}" data-var="board" data-color="yellow">
 				<div class="nines-avatar-container">
-					{% with id = data.players.yellow.playerId, avatar = data.players.yellow.playerAvatar, class = "avatar-nines" %}
+					{% with id = data.players.yellow.playerId, avatar = data.players.yellow.playerAvatar, class = "avatar-nines yellow" %}
 						{% include 'partials/avatar.html' %}
 					{% endwith %}
 				</div>
@@ -23,8 +23,8 @@
 
 			<!-- Green -->
 			<div class="score-board {% if data.players.green.out %}out{% endif %}" data-var="board" data-color="green">
-				<div class="nines-avatar-container">
-					{% with id = data.players.green.playerId, avatar = data.players.green.playerAvatar, class = "avatar-nines" %}
+				<div class="nines-avatar-container green">
+					{% with id = data.players.green.playerId, avatar = data.players.green.playerAvatar, class = "avatar-nines green" %}
 						{% include 'partials/avatar.html' %}
 					{% endwith %}
 				</div>
@@ -36,7 +36,7 @@
 			<!-- Blue -->
 			<div class="score-board {% if data.players.blue.out %}out{% endif %}" data-var="board" data-color="blue">
 				<div class="nines-avatar-container">
-					{% with id = data.players.blue.playerId, avatar = data.players.blue.playerAvatar, class = "avatar-nines" %}
+					{% with id = data.players.blue.playerId, avatar = data.players.blue.playerAvatar, class = "avatar-nines blue" %}
 						{% include 'partials/avatar.html' %}
 					{% endwith %}
 				</div>
@@ -48,7 +48,7 @@
 			<!-- Red -->
 			<div class="score-board {% if data.players.red.out %}out{% endif %}" data-var="board" data-color="red">
 				<div class="nines-avatar-container">
-					{% with id = data.players.red.playerId, avatar = data.players.red.playerAvatar, class = "avatar-nines" %}
+					{% with id = data.players.red.playerId, avatar = data.players.red.playerAvatar, class = "avatar-nines red" %}
 						{% include 'partials/avatar.html' %}
 					{% endwith %}
 				</div>

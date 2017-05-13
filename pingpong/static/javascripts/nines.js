@@ -13,6 +13,7 @@ $(function(){
 		var playerNames = {};
 		var scores = {};
 		var boards = {};
+		var avatars = {};
 
 		for(var i = 0; i < colors.length; i++){
 			var color = colors[i];
@@ -20,6 +21,7 @@ $(function(){
 			playerNames[color] = $("[data-color=" + color + "][data-var=name");
 			scores[color] = $("[data-color=" + color + "][data-var=score");
 			boards[color] = $("[data-color=" + color + "][data-var=board");
+			avatars[color] = $(".avatar-nines." + color);
 		}
 
 		function update(data){
@@ -48,6 +50,16 @@ $(function(){
 
 				if(previousScore != nextScore){
 					playerNames[color].addClass("scored");
+				}
+
+				if(data.players[color].playerAvatar){
+					src = "/players/" + data.players[color].playerId + "/avatar/" + data.players[color].playerAvatar;
+
+					if(avatars[color].attr("src") != src){
+						avatars[color].attr("src", src);
+					}
+				} else {
+					avatars[color].attr("src", "/static/images/silhouette-" + randRange(1, 7) + ".png");
 				}
 			}
 
