@@ -6,6 +6,7 @@ from pingpong.services.ScoreService import ScoreService
 from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
 from pingpong.utils import util
+import random
 
 gameService = GameService()
 matchService = MatchService()
@@ -95,7 +96,10 @@ class Nines(MatchType):
 		players["red"]["winner"] = players["green"]["out"] and players["yellow"]["out"] and players["blue"]["out"]
 
 	def createTeams(self, match, data, randomize):
-		ids = util.shuffle(map(int, data))
+		if randomize:
+			ids = util.shuffle(map(int, data))
+		else:
+			ids = map(int, data)
 
 		team1 = teamService.createOnePlayer(match.id, ids[0])
 		team2 = teamService.createOnePlayer(match.id, ids[1])
@@ -170,10 +174,26 @@ class Nines(MatchType):
 
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
-		playerIds = [game.green.id, game.yellow.id, game.blue.id, game.red.id]
+
+		# green, yellow, blue, red
+
+		if random.randrange(0, 2) == 0:
+			# swap yellow and green
+			playerIds = [game.yellow.id, game.green.id, game.blue.id, game.red.id]
+		else:
+			print("swap 2")
+			# swap blue and red
+			playerIds = [game.green.id, game.yellow.id, game.red.id, game.blue.id]
+
+		if random.randrange(0, 2) == 0:
+			# swap yellow and blue
+			playerIds = [playerIds[0], playerIds[2], playerIds[1], playerIds[3]]
+		else:
+			# swap green and red
+			playerIds = [playerIds[3], playerIds[1], playerIds[2], playerIds[0]]
 
 		newMatch = matchService.create(self.matchType)
-		self.createTeams(newMatch, playerIds, True)
+		self.createTeams(newMatch, playerIds, False)
 		matchService.play(newMatch)
 
 		return newMatch
