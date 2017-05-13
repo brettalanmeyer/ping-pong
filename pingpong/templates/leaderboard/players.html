@@ -190,12 +190,10 @@
 									<a href="{{ url_for('leaderboardController.players', id = matchup.playerId, season = stats.season) }}"
 										class="link" title="View {{ matchup.playerName }}'s Statistics">{{ matchup.playerName }}</a>
 
-									{% if matchType == 'singles' %}
-										<a href="{{ url_for('matchController.index', playerId = player.id, opponentId = matchup.playerId, matchType = matchType) }}"
-										title="View Matches for {{ player.name }} vs {{ matchup.playerName }}" class="link opponent-matches">
-											<span class="glyphicon glyphicon-king"></span>
-										</a>
-									{% endif %}
+									<a href="{{ url_for('matchController.index', playerId = player.id, opponentId = matchup.playerId, matchType = matchType) }}"
+									title="View Matches for {{ player.name }} vs {{ matchup.playerName }}" class="link opponent-matches">
+										<span class="glyphicon glyphicon-king"></span>
+									</a>
 								</td>
 
 								<td data-sort-value="{{ matchup.numOfMatches }}">
