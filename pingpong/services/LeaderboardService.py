@@ -912,13 +912,15 @@ class LeaderboardService(Service):
 	def eloResult(self, matchId, playerId):
 		elo = self.elo(None, None)
 
-		if matchId not in elo["matches"]:
-			return None
+		# return specific elo for that match
+		if matchId in elo["matches"] and playerId in elo["matches"][matchId]:
+			return elo["matches"][matchId][playerId]
 
-		if playerId not in elo["matches"][matchId]:
-			return None
+		# if match is not complete, return last elo
+		if playerId in elo["players"]:
+			return elo["players"][playerId]
 
-		return elo["matches"][matchId][playerId]
+		return None
 
 	def seasons(self, season):
 		app.logger.debug("Generating seasons with default season=%s", season)

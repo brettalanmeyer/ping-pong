@@ -34,8 +34,8 @@ class Singles(MatchType):
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
 			"teams": {
-				"green": self.newPlayer(game.green.id),
-				"yellow": self.newPlayer(game.yellow.id)
+				"green": self.newPlayer(match.id, game.green.id),
+				"yellow": self.newPlayer(match.id, game.yellow.id)
 			},
 			"points": 0
 		}
@@ -47,7 +47,7 @@ class Singles(MatchType):
 
 		return data
 
-	def newPlayer(self, playerId):
+	def newPlayer(self, matchId, playerId):
 		return {
 			"teamId": None,
 			"playerId": playerId,
@@ -56,7 +56,8 @@ class Singles(MatchType):
 			"points": None,
 			"serving": False,
 			"winner": False,
-			"games": []
+			"games": [],
+			"elo": leaderboardService.eloResult(matchId, playerId)
 		}
 
 	def setPlayerData(self, match, teams):

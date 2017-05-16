@@ -13,24 +13,29 @@ $(function(){
 		var colors = ["green", "yellow"];
 
 		var names = {
-			green: $("[data-color=green][data-var=name"),
-			yellow: $("[data-color=yellow][data-var=name")
+			green: $("[data-color=green][data-var=nam]e"),
+			yellow: $("[data-color=yellow][data-var=name]")
 		};
 
 		var serving = {
-			green: $("[data-color=green][data-var=serving"),
-			yellow: $("[data-color=yellow][data-var=serving")
+			green: $("[data-color=green][data-var=serving]"),
+			yellow: $("[data-color=yellow][data-var=serving]")
 		};
 
 		var scores = {
-			green: $("[data-color=green][data-var=score"),
-			yellow: $("[data-color=yellow][data-var=score")
+			green: $("[data-color=green][data-var=score]"),
+			yellow: $("[data-color=yellow][data-var=score]")
 		};
 
 		var avatars = {
 			green: $(".avatar-singles.green"),
 			yellow: $(".avatar-singles.yellow")
-		}
+		};
+
+		var elo = {
+			green: $("[data-color=green][data-var=elo]"),
+			yellow: $("[data-color=yellow][data-var=elo]")
+		};
 
 		function update(data){
 			if(data == null) return;
@@ -67,7 +72,7 @@ $(function(){
 				var team = data.teams[color];
 
 				var cells = $("tr[data-teamid=" + team.teamId + "]").find("td");
-				cells.eq(0).html(team.playerName);
+				cells.eq(0).html('<a href="/leaderboard/players/' + data.teams[color].playerId + '">' + data.teams[color].playerName + '</a>');
 
 				for(var i = 0; i < team.games.length; i++){
 					var game = team.games[i];
@@ -89,6 +94,10 @@ $(function(){
 					}
 				} else {
 					avatars[color].attr("src", "/static/images/silhouette-" + randRange(1, 7) + ".png");
+				}
+
+				if(team.elo != null){
+					elo[color].html(parseInt(Math.round(team.elo.current)));
 				}
 			}
 

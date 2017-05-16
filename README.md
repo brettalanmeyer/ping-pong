@@ -113,7 +113,6 @@ Run single class
 * smack talk AI
 * Dave Thomas
 * try to put skype stuff in this app if possible
-* report ELO change in post match notification
 * caching everything until a new match is played
 
 Delegate Python Process

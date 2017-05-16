@@ -13,7 +13,12 @@
 				<span class="name truncate" data-var="name" data-color="yellow">
 					{{ data.teams.yellow.playerName }}
 				</span>
-				<span class="score" data-var="score" data-color="yellow">{{ '%02d' % data.teams.yellow.points }}</span>
+				<span class="elo truncate" data-var="elo" data-color="yellow">
+					{{ data.teams.yellow.elo.current|round|int }}
+				</span>
+				<span class="score" data-var="score" data-color="yellow">
+					{{ '%02d' % data.teams.yellow.points }}
+				</span>
 			</div>
 
 			<div class="sets complete-hide {% if data.complete %}hidden{% endif %}">
@@ -52,8 +57,15 @@
 			</div>
 
 			<div class="score-board">
-				<span class="name truncate" data-var="name" data-color="green">{{ data.teams.green.playerName }}</span>
-				<span class="score" data-var="score" data-color="green">{{ '%02d' % data.teams.green.points }}</span>
+				<span class="name truncate" data-var="name" data-color="green">
+					{{ data.teams.green.playerName }}
+				</span>
+				<span class="elo truncate" data-var="elo" data-color="green">
+					{{ data.teams.green.elo.current|round|int }}
+				</span>
+				<span class="score" data-var="score" data-color="green">
+					{{ '%02d' % data.teams.green.points }}
+				</span>
 			</div>
 
 		</div>
@@ -87,7 +99,7 @@
 				<tr data-teamid="{{ data.teams[side].teamId }}">
 
 					<td>
-						{{ data.teams[side].playerName }}
+						<a href="{{ url_for('leaderboardController.players', id = data.teams[side].playerId) }}">{{ data.teams[side].playerName }}</a>
 						{% if data.teams[side].winner %}
 							- <strong>Winner!</strong>
 						{% endif %}

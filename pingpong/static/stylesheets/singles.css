@@ -15,7 +15,13 @@
 .singles-container .score-board .name {
 	display: block;
 	font-size: 60px;
-	padding: 20px 8px;
+	padding: 20px 8px 0 8px;
+}
+
+.singles-container .score-board .elo {
+	display: block;
+	position: relative;
+	bottom: 12px;
 }
 
 .singles-container .score-board .score {
