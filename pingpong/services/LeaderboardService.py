@@ -909,6 +909,17 @@ class LeaderboardService(Service):
 
 		return data
 
+	def eloResult(self, matchId, playerId):
+		elo = self.elo(None, None)
+
+		if matchId not in elo["matches"]:
+			return None
+
+		if playerId not in elo["matches"][matchId]:
+			return None
+
+		return elo["matches"][matchId][playerId]
+
 	def seasons(self, season):
 		app.logger.debug("Generating seasons with default season=%s", season)
 

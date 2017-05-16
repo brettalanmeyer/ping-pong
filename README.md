@@ -102,7 +102,6 @@ Run single class
 
 * Make players list into more of a photo gallery with edit/toggle/delete buttons to the side or something
 * Have a player show page where the image can be large and have additional information about the player
-* Add title to all links
 * Add avatars to skype messages as base 64 encoded
 * avatars on doubles score board
 * put getMatchType() somewhere shared
@@ -114,8 +113,6 @@ Run single class
 * smack talk AI
 * Dave Thomas
 * try to put skype stuff in this app if possible
-* remove points on nines
-* possibly remove 0 stat players from main leaderboard, or at least put them in rows below footer
 * report ELO change in post match notification
 * caching everything until a new match is played
 

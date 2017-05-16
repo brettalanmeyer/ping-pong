@@ -1,6 +1,7 @@
 from flask import request
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.GameService import GameService
+from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.services.TeamService import TeamService
@@ -8,6 +9,7 @@ from pingpong.utils import notifications
 from pingpong.utils import util
 
 gameService = GameService()
+leaderboardService = LeaderboardService()
 matchService = MatchService()
 scoreService = ScoreService()
 teamService = TeamService()
@@ -220,8 +222,19 @@ class Singles(MatchType):
 				winnerScores += "{}\t\t\t".format(game.loserScore)
 				loserScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
 
+		elo = "({}, {}{})"
+		winnerElo = leaderboardService.eloResult(match.id, winnerPlayer.id)
+		loserElo = leaderboardService.eloResult(match.id, losingPlayer.id)
+
 		message += winnerScores
+
+		if winnerElo != None:
+			message += elo.format(int(round(winnerElo["current"])), "+" if winnerElo["change"] > 0 else "", int(round(winnerElo["change"])))
+
 		message += loserScores
+
+		if loserElo != None:
+			message += elo.format(int(round(loserElo["current"])), "+" if loserElo["change"] > 0 else "", int(round(loserElo["change"])))
 
 		message += '\n<a href="{}leaderboard/singles">Leaderboard Standings</a>'.format(request.url_root)
 
