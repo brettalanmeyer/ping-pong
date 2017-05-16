@@ -910,13 +910,14 @@ class LeaderboardService(Service):
 		return data
 
 	def eloResult(self, matchId, playerId):
-		elo = self.elo(None, None)
+		seasons, season, start, end = self.seasons(None)
+		elo = self.elo(start, end)
 
 		# return specific elo for that match
 		if matchId in elo["matches"] and playerId in elo["matches"][matchId]:
 			return elo["matches"][matchId][playerId]
 
-		# if match is not complete, return last elo
+		# if match is not found, return current player elo
 		if playerId in elo["players"]:
 			return elo["players"][playerId]
 
