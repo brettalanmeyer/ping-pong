@@ -3,6 +3,8 @@ $(function(){
 	$(".table-sortable").stupidtable();
 
 	$("#leaderboard.singles").find("th.elo").stupidsort("desc");
+	$("#leaderboard.doubles").find("th.win-percentage").stupidsort("desc");
+	$("#leaderboard.nines").find("th.win-percentage").stupidsort("desc");
 
 	$("#leaderboard").bind("aftertablesort", function(event, data){
 		var i = 1;

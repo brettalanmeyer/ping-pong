@@ -75,8 +75,16 @@
 	padding-left: 8px;
 }
 
-.leaderboard-container .table.doubles .elo,
-.leaderboard-container .table.nines .elo {
+.leaderboard-container .table .elo {
+	display: none;
+}
+
+.leaderboard-container .table.singles .elo {
+	display: table-cell;
+}
+
+.leaderboard-container .table.nines .points-against,
+.leaderboard-container .table.nines .points-for {
 	display: none;
 }
 
@@ -106,6 +114,14 @@
 .leaderboard-table td,
 .opponent-table td {
 	height: 42px;
+}
+
+.leaderboard-table > tfoot > tr > th {
+	padding-bottom: 30px;
+}
+
+.leaderboard-table tfoot tr:first-child th {
+	border-top: solid 2px #bbb;
 }
 
 .avatar-leaderboard {

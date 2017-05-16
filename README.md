@@ -117,6 +117,7 @@ Run single class
 * remove points on nines
 * possibly remove 0 stat players from main leaderboard, or at least put them in rows below footer
 * report ELO change in post match notification
+* caching everything until a new match is played
 
 Delegate Python Process
 	screen python run.py

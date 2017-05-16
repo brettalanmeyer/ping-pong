@@ -41,7 +41,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="elo">
+						<th data-sort="int" class="elo" title="ELO rating index">
 							ELO
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -49,7 +49,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" title="Number of matches played">
 							Matches
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -57,7 +57,7 @@
 							</div>
 						</th>
 
-						<th data-sort="float">
+						<th data-sort="float" class="win-percentage" title="Win percentage">
 							Win %
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -65,7 +65,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" class="points-for" title="Total points scored by player">
 							Points For
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -73,7 +73,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" class="points-against" title="Total points scored by opponent">
 							Points Against
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -81,7 +81,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" title="Number of match wins">
 							Wins
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -89,7 +89,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" title="Number of match losses">
 							Losses
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -97,7 +97,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" title="Consecutive points scored">
 							Point Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -105,7 +105,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
+						<th data-sort="int" title="Most recent number of wins or losses">
 							Current Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -113,16 +113,16 @@
 							</div>
 						</th>
 
-						<th data-sort="int">
-							Win Streak
+						<th data-sort="int" title="Most Wins in a Row">
+							Most Wins
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
 								<span class="glyphicon glyphicon-chevron-down"></span>
 							</div>
 						</th>
 
-						<th data-sort="int">
-							Loss Streak
+						<th data-sort="int" title="Most Losses in a Row">
+							Most Losses
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
 								<span class="glyphicon glyphicon-chevron-down"></span>
@@ -135,83 +135,23 @@
 
 				<tbody>
 
-					{% for player in stats.players %}
+					{% set numPlayers = [] %}
 
-						<tr data-time="{{ player.time }}">
-
-							<td class="text-center">{{ loop.index }}</td>
-
-							<td class="avatar">
-								{% with id = player.playerId, avatar = player.playerAvatar, class = "avatar-leaderboard" %}
-									{% include 'partials/avatar.html' %}
-								{% endwith %}
-							</td>
-
-							<td data-sort-value="{{ player.playerName }}">
-								<a href="{{ url_for('leaderboardController.players', id = player.playerId, season = stats.season) }}" class="link" title="View {{ player.playerName }}'s Statistics">
-									{{ player.playerName }}
-								</a>
-							</td>
-
-							<td data-sort-value="{{ player.elo.current }}" class="elo">
-								{{ player.elo.current|round|int }}
-
-								{% if player.elo.change > 0 %}
-									<span class="elo-change positive">(+{{ player.elo.change|round|int }})</span>
-								{% elif player.elo.change < 0 %}
-									<span class="elo-change negative">({{ player.elo.change|round|int }})</span>
-								{% else %}
-									<span class="elo-change">({{ player.elo.change|round|int }})</span>
-								{% endif %}
-							</td>
-
-							<td data-sort-value="{{ player.matches }}">
-								{{ player.matches }}
-							</td>
-
-							<td data-sort-value="{{ player.percentage }}">
-								{{ "{:.3f}".format(player.percentage) }}
-							</td>
-
-							<td data-sort-value="{{ player.pointsFor }}">
-								{{ "{:,}".format(player.pointsFor) }}
-							</td>
-
-							<td data-sort-value="{{ player.pointsAgainst }}">
-								{{ "{:,}".format(player.pointsAgainst) }}
-							</td>
-
-							<td data-sort-value="{{ player.wins }}">
-								{{ player.wins }}
-							</td>
-
-							<td data-sort-value="{{ player.losses }}">
-								{{ player.losses }}
-							</td>
-
-							<td data-sort-value="{{ player.pointStreak }}">
-								{{ player.pointStreak }}
-							</td>
-
-							{% with value = player.streaks.current %}
-								{% include 'leaderboard/win-streak.html' %}
-							{% endwith %}
-
-							<td data-sort-value="{{ player.streaks.wins }}">{{ player.streaks.wins }}</td>
-							<td data-sort-value="{{ player.streaks.losses }}">{{ player.streaks.losses }}</td>
-
-						</tr>
-
+					{% for player in stats.players if not player.matches == 0 %}
+						{% with num = loop.index, player = player %}
+							{% include 'leaderboard/index-player.html' %}
+							{% if numPlayers.append('') %}{% endif %}
+						{% endwith %}
 					{% endfor %}
 
 				</tbody>
 
 				<tfoot>
-
 					<tr>
 
-						<th colspan="2">Totals:</th>
 						<th></th>
+						<th></th>
+						<th>Totals:</th>
 						<th class="elo"></th>
 						<th>{{ "{:,}".format(stats.totals["matches"]) }}</th>
 						<th></th>
@@ -219,12 +159,18 @@
 						<th>{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
 
 					</tr>
+
+					{% for player in stats.players if player.matches == 0 %}
+						{% with num = numPlayers|count + loop.index, player = player %}
+							{% include 'leaderboard/index-player.html' %}
+						{% endwith %}
+					{% endfor %}
 
 				</tfoot>
 

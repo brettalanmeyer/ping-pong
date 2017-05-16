@@ -96,11 +96,13 @@ a.link {
 	display: none;
 }
 
-.table > tbody > tr > td {
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
 	vertical-align: middle;
 }
 
-.table > tbody > tr > td.avatar {
+.table > tbody > tr > td.avatar,
+.table > tfoot > tr > td.avatar {
 	width: 1px;
 	text-align: center;
 	padding: 2px 0;
