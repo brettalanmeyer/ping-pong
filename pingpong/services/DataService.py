@@ -4,6 +4,7 @@ from pingpong.utils import util
 from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.orm import scoped_session, sessionmaker
+import urllib
 
 class DataService():
 
@@ -45,6 +46,8 @@ class DataService():
 			SET\
 				`id` = :id,\
 				`name` = :name,\
+				`avatar` = :avatar,\
+				`extension` = :extension,\
 				`enabled` = :enabled,\
 				`createdAt` = :createdAt,\
 				`modifiedAt` = :modifiedAt;\
@@ -57,10 +60,15 @@ class DataService():
 				text(insertPlayer),
 				id = player.id,
 				name = player.name,
+				avatar = player.avatar,
+				extension = player.extension,
 				enabled = player.enabled,
 				createdAt = player.createdAt,
 				modifiedAt = player.modifiedAt
 			)
+
+			if player.avatar != None:
+				urllib.urlretrieve ("http://10.9.0.230:5010/players/{}/avatar/{}".format(player.id, player.avatar), "{}/avatars/{}".format(app.root_path, player.avatar))
 
 		db.session.commit()
 

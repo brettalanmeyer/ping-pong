@@ -64,61 +64,22 @@ def copy_remote_data():
 
 	return redirect(url_for("adminController.index"))
 
-@adminController.route("/admin/isms/delete-all", methods = ["POST"])
-@loginRequired("adminController.index")
-def delete_isms():
-	if not access():
-		return redirect(url_for("adminController.index"))
-
-	deleteIsms()
-	return redirect(url_for("adminController.index"))
-
-@adminController.route("/admin/matches/delete-all", methods = ["POST"])
-@loginRequired("adminController.index")
-def delete_matches():
-	if not access():
-		return redirect(url_for("adminController.index"))
-
-	deleteMatches()
-	return redirect(url_for("adminController.index"))
-
-@adminController.route("/admin/players/delete-all", methods = ["POST"])
-@loginRequired("adminController.index")
-def delete_players():
-	if not access():
-		return redirect(url_for("adminController.index"))
-
-	deletePlayers()
-	return redirect(url_for("adminController.index"))
-
 @adminController.route("/admin/delete-all", methods = ["POST"])
 @loginRequired("adminController.index")
 def delete_all():
 	if not access():
 		return redirect(url_for("adminController.index"))
 
-	deleteIsms()
-	deleteMatches()
-	deletePlayers()
+	ismService.deleteAll()
+	flash("All isms have been successfully deleted.", "success")
+
+	matchService.deleteAll()
+	flash("All matches have been successfully deleted.", "success")
+
+	playerService.deleteAll()
+	flash("All players have been successfully deleted.", "success")
+
 	return redirect(url_for("adminController.index"))
-
-def deleteIsms():
-	if ismService.deleteAll():
-		flash("All isms have been successfully deleted.", "success")
-	else:
-		flash("Isms could not be deleted.", "warning")
-
-def deleteMatches():
-	if matchService.deleteAll():
-		flash("All matches have been successfully deleted.", "success")
-	else:
-		flash("Matches could not be deleted.", "warning")
-
-def deletePlayers():
-	if playerService.deleteAll():
-		flash("All players have been successfully deleted.", "success")
-	else:
-		flash("Players could not be deleted.", "warning")
 
 def access():
 	if  not dataService.isConfigured():

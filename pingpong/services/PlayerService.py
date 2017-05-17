@@ -3,6 +3,7 @@ from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from pingpong.utils import util
 from sqlalchemy import exc
 
 class PlayerService(Service):
@@ -115,6 +116,10 @@ class PlayerService(Service):
 		app.logger.info("Deleting all players")
 
 		try:
+			players = self.select()
+			for player in players:
+				util.deleteAvatar(player.avatar)
+
 			db.session.query(PlayerModel).delete()
 			db.session.commit()
 			return True
