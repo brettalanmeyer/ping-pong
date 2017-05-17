@@ -42,7 +42,8 @@ def logout():
 		logout_user()
 		flash("You've been logged out.", "success")
 
-	return redirect(url_for("mainController.index"))
+	next = util.param("next", url_for("mainController.index"))
+	return redirect(next)
 
 @login_manager.user_loader
 def load_user(id):
