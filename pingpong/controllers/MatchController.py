@@ -1,5 +1,6 @@
 from flask import abort
 from flask import Blueprint
+from flask import current_app as app
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -201,6 +202,8 @@ def smack_talk(id):
 	if message != None:
 		data = { "message": message }
 		socketio.emit("smack-talk", data, broadcast = True)
+		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
+
 	return message
 
 def getMatchType(match):
