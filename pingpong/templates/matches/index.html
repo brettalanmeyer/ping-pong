@@ -7,32 +7,32 @@
 
 	<div class="container matches-container">
 
-		{% with id = "matches-season-filter", action = "/matches", season = season, seasons = seasons %}
+		{% with id = "matches-season-filter", action = "/matches", season = season, seasons = seasons, tabindex = 1 %}
 			{% include 'partials/seasons.html' %}
 		{% endwith %}
 
-		<select id="matches-player-filter" name="playerId" class="player-filter form-control input-sm" title="Filter By Player">
+		<select id="matches-player-filter" name="playerId" class="player-filter form-control input-sm" title="Filter By Player" tabindex="3">
 			<option value="">Player...</option>
 			{% for player in players %}
 				<option value="{{ player.id }}" {% if playerId == player.id %}selected{% endif %}>{{ player.name }}</option>
 			{% endfor %}
 		</select>
 
-		<select id="matches-opponent-filter" name="opponentId" class="opponent-filter form-control input-sm" title="Filter By Opponent">
+		<select id="matches-opponent-filter" name="opponentId" class="opponent-filter form-control input-sm" title="Filter By Opponent" tabindex="4">
 			<option value="">Opponent...</option>
 			{% for player in players %}
 				<option value="{{ player.id }}" {% if opponentId == player.id %}selected{% endif %}>{{ player.name }}</option>
 			{% endfor %}
 		</select>
 
-		<select id="matches-match-type-filter" name="matchType" class="match-type-filter form-control input-sm" title="Filter By Match Type">
+		<select id="matches-match-type-filter" name="matchType" class="match-type-filter form-control input-sm" title="Filter By Match Type" tabindex="2">
 			<option value="">Match Type...</option>
 			{% for item in matchTypes %}
 				<option value="{{ item }}" {% if matchType == item %}selected{% endif %}>{{ item.title() }}</option>
 			{% endfor %}
 		</select>
 
-		<a href="{{ url_for('matchController.index') }}" class="match-clear-filter btn btn-default">Clear</a>
+		<a href="{{ url_for('matchController.index') }}" class="match-clear-filter btn btn-default" tabindex="5">Clear</a>
 
 		<h1 class="with-action">
 			<a href="{{ url_for('matchController.index') }}">{{ count }} Matches</a>
