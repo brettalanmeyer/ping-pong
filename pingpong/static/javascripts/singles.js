@@ -8,6 +8,7 @@ $(function(){
 
 		var socket = io.connect();
 		socket.on("response", update);
+		socket.on("smack-talk", smackTalk);
 
 		var set = $("[data-var=set");
 		var colors = ["green", "yellow"];

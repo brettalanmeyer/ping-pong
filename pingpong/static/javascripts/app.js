@@ -84,9 +84,15 @@ $(function(){
 
 });
 
+function disableUndo(){
+	$(document).unbind("keypress");
+}
+
 function enableUndo(){
 	$(document).on("keypress", function(e){
-		$.post("/buttons/green/undo");
+		if(e.which == 117){
+			$.post("/buttons/green/undo");
+		}
 	});
 }
 

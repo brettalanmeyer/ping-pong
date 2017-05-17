@@ -108,7 +108,6 @@ Run single class
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise
-* Put ELO on match score board?
 * Report of avg time people play per day
 * smack talk AI
 * Dave Thomas

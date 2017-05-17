@@ -17,6 +17,7 @@ def bundleJavascripts():
 		"javascripts/doubles.js",
 		"javascripts/nines.js",
 		"javascripts/players.js",
+		"javascripts/smack-talk.js",
 		filters = "jsmin",
 		output = ".webassets-cache/ping-pong.min.js"
 	)

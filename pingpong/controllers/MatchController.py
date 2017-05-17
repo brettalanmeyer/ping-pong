@@ -6,6 +6,7 @@ from flask import render_template
 from flask import request
 from flask import Response
 from flask import url_for
+from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.matchtypes.Doubles import Doubles
 from pingpong.matchtypes.Nines import Nines
@@ -193,6 +194,14 @@ def delete(id):
 		playerId = util.param("playerId", None),
 		matchType = util.param("matchType", None)
 	))
+
+@matchController.route("/matches/<int:id>/smack-talk", methods = ["POST"])
+def smack_talk(id):
+	message = util.paramForm("message", None)
+	if message != None:
+		data = { "message": message }
+		socketio.emit("smack-talk", data, broadcast = True)
+	return message
 
 def getMatchType(match):
 	if singles.isMatchType(match.matchType):

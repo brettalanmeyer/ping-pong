@@ -8,22 +8,26 @@ function sayings(left, right){
 		ism = isms[i];
 
 		if(ism.left == left && ism.right == right){
-			if(ism.saying.length > 25){
-				ismContainer.addClass("long");
-			}
-
-			ismContainer.html(ism.saying);
-			ismContainer.stop(true, true).fadeIn("slow").delay(2000).fadeOut("slow").removeClass("long");
+			displaySaying(ism.saying);
 			break;
 		}
 	}
 }
 
+function displaySaying(message){
+	if(message.length > 25){
+		ismContainer.addClass("long");
+	}
+
+	ismContainer.html(message);
+	ismContainer.stop(true, true).fadeIn("slow").delay(2000).fadeOut("slow").removeClass("long");
+}
+
 $(function(){
 
-	if($("#singles").exists() || $("#doubles").exists()){
+	if($("#singles").exists() || $("#doubles").exists() || $("#nines").exists()){
 
-		ismContainer = $("<div />").addClass("ism-container").html("Jet Fuel Can't Melt Steel Beamz");
+		ismContainer = $("<div />").addClass("ism-container");
 		$("body").append(ismContainer);
 
 		if(isms.length == 0){

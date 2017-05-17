@@ -1,0 +1,12 @@
+<div id="smack-talk" class="smack-talk">
+
+	<button id="smack-talk-button" class="smack-talk-button btn btn-default">Talk Smack</button>
+
+	<form id="smack-talk-form" class="smack-talk-form form-inline" action="{{ url_for('matchController.smack_talk', id = data.matchId) }}" method="POST">
+
+		<input id="smack-talk-input" type="text" class="form-control" autocomplete="off" maxlength="100" />
+		<button class="btn btn-default">Send</button>
+
+	</form>
+
+</div>

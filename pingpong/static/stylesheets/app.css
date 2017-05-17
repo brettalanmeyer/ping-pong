@@ -352,3 +352,14 @@ a.link {
 	}
 }
 
+.smack-talk {
+	position: absolute;
+	left: 16px;
+	top: 16px;
+}
+
+.smack-talk-button {}
+
+.smack-talk-form {
+	display: none;
+}
