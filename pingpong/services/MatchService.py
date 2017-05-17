@@ -54,7 +54,7 @@ class MatchService(Service):
 					if self.hasOpponent(match, opponentId):
 						ids.append(match.id)
 
-				matches = db.session.query(MatchModel).filter(MatchModel.id.in_(ids))
+				matches = db.session.query(MatchModel).filter(MatchModel.id.in_(ids)).order_by(MatchModel.id.desc())
 
 		if matchType != None:
 			matches = matches.filter(MatchModel.matchType == matchType)

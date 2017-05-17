@@ -13,7 +13,7 @@ $(function(){
 		var colors = ["green", "yellow"];
 
 		var names = {
-			green: $("[data-color=green][data-var=nam]e"),
+			green: $("[data-color=green][data-var=name]"),
 			yellow: $("[data-color=yellow][data-var=name]")
 		};
 
