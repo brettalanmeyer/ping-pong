@@ -60,14 +60,37 @@
 	width: 25%;
 	padding: 12px;
 	margin-bottom: 16px;
-	/*background: rgba(0,0,0,0.1);*/
 }
 
 .players-container .player-portrait:nth-child(4n - 1) {
 	clear: both;
+	padding-left: 0;
+}
+
+.players-container .player-portrait:nth-child(4n + 2) {
+	padding-right: 0;
 }
 
 .players-container .player-portrait .link {
+	float: left;
+	width: 50%;
+}
+
+.players-container .player-portrait .link:last-of-type {
+	text-align: right;
+}
+
+.players-container .player-portrait form {
+	float: left;
+	width: 49%;
+	margin: 4px 0;
+}
+
+.players-container .player-portrait form:first-of-type {
+	margin-right: 1%;
+}
+.players-container .player-portrait form:last-of-type {
+	margin-left: 1%;
 }
 
 .players-container .avatar-players {

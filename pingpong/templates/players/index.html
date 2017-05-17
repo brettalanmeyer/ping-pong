@@ -19,120 +19,45 @@
 
 			<div class="player-portrait">
 
-				<a href="{{ url_for('playerController.edit', id = player.id) }}" class="link pull-right">
+				<a href="{{ url_for('leaderboardController.players', id = player.id) }}" class="link" title="View {{ player.name }}'s Statistics">{{ player.name }}</a>
+
+				<a href="{{ url_for('playerController.edit', id = player.id) }}" class="link">
 					<span class="glyphicon glyphicon-pencil"></span>
 					Edit
 				</a>
-				<a href="{{ url_for('leaderboardController.players', id = player.id) }}" class="link" title="View {{ player.name }}'s Statistics">{{ player.name }}</a>
-
-				{% with id = player.id, avatar = player.avatar, class = "avatar-players" %}
-					{% include 'partials/avatar.html' %}
-				{% endwith %}
 
 				{% if current_user.is_authenticated %}
 					{% if player.enabled %}
-						<form action="{{ url_for('playerController.disable', id = player.id) }}" method="POST" style="width: 50%; float: left;">
-							<button class="btn btn-success btn-sm btn-block">
+						<form action="{{ url_for('playerController.disable', id = player.id) }}" method="POST">
+							<button class="btn btn-success btn-xs btn-block">
 								<span class="glyphicon glyphicon glyphicon-ok"></span>
 								Enabled
 							</button>
 						</form>
 					{% else %}
-						<form action="{{ url_for('playerController.enable', id = player.id) }}" method="POST" style="width: 50%; float: left;">
-							<button class="btn btn-warning btn-sm btn-block">
+						<form action="{{ url_for('playerController.enable', id = player.id) }}" method="POST">
+							<button class="btn btn-warning btn-xs btn-block">
 								<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
 								Disabled
 							</button>
 						</form>
 					{% endif %}
 
-					<form action="{{ url_for('playerController.delete', id = player.id) }}" method="POST" class="action-delete" style="width: 50%; float: left;">
-						<button class="btn btn-danger btn-sm btn-block">
+					<form action="{{ url_for('playerController.delete', id = player.id) }}" method="POST" class="action-delete">
+						<button class="btn btn-danger btn-xs btn-block">
 							<span class="glyphicon glyphicon-trash"></span>
 							Delete
 						</button>
 					</form>
 				{% endif %}
 
+				{% with id = player.id, avatar = player.avatar, class = "avatar-players" %}
+					{% include 'partials/avatar.html' %}
+				{% endwith %}
 
 			</div>
 
 		{% endfor %}
-
-
-		<!--
-
-		<table class="table">
-
-			<tbody>
-
-				{% for player in players %}
-
-					<tr>
-
-						<td class="avatar">
-							{% with id = player.id, avatar = player.avatar, class = "avatar-players" %}
-								{% include 'partials/avatar.html' %}
-							{% endwith %}
-						</td>
-
-						<td>
-							<a href="{{ url_for('leaderboardController.players', id = player.id) }}" class="link">{{ player.name }}</a>
-						</td>
-
-						<td width="1">
-							<a href="{{ url_for('playerController.edit', id = player.id) }}" class="btn btn-default btn-sm">
-								<span class="glyphicon glyphicon-pencil"></span>
-								Edit
-							</a>
-						</td>
-
-						{% if current_user.is_authenticated %}
-							<td width="1">
-								{% if player.enabled %}
-									<form action="{{ url_for('playerController.disable', id = player.id) }}" method="POST">
-										<button class="btn btn-success btn-sm btn-block">
-											<span class="glyphicon glyphicon glyphicon-ok"></span>
-											Enabled
-										</button>
-									</form>
-								{% else %}
-									<form action="{{ url_for('playerController.enable', id = player.id) }}" method="POST">
-										<button class="btn btn-warning btn-sm btn-block">
-											<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
-											Disabled
-										</button>
-									</form>
-								{% endif %}
-							</td>
-
-							<td width="1">
-								<form action="{{ url_for('playerController.delete', id = player.id) }}" method="POST" class="action-delete">
-									<button class="btn btn-danger btn-sm">
-										<span class="glyphicon glyphicon-trash"></span>
-										Delete
-									</button>
-								</form>
-							</td>
-						{% endif %}
-
-					</tr>
-
-				{% else %}
-
-					<tr>
-
-						<td colspan="10" class="text-center">No players found.</td>
-
-					</tr>
-
-				{% endfor %}
-
-			</tbody>
-
-		</table>
-
-		-->
 
 	</div>
 
