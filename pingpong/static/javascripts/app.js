@@ -89,11 +89,17 @@ function disableUndo(){
 }
 
 function enableUndo(){
-	$(document).on("keypress", function(e){
-		if(e.which == 117){
-			$.post("/buttons/green/undo");
-		}
-	});
+	var debug = $("meta[name=debug]");
+	var currentIP = $("meta[name=address]");
+	var allowedIP = $("meta[name=allowed_address]");
+
+	if(debug.exists() || currentIP == allowedIP){
+		$(document).on("keypress", function(e){
+			if(e.which == 117){
+				$.post("/buttons/green/undo");
+			}
+		});
+	}
 }
 
 function shuffle(a) {
