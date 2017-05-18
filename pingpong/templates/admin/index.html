@@ -11,14 +11,16 @@
 		<div class="row">
 
 			<div class="col-xs-2">
-				<strong>Players:</strong> {{ counts.numOfPlayers }}<br />
-				<strong>Matches:</strong> {{ counts.numOfMatches }}<br />
-				<strong>Games:</strong> {{ counts.numOfGames }}<br />
-				<strong>Scores:</strong> {{ counts.numOfScores }}<br />
-				<strong>Isms:</strong> {{ counts.numOfIsms }}<br />
+				<p><strong>App Info</strong></p>
+				Players: {{ counts.numOfPlayers }}<br />
+				Matches: {{ counts.numOfMatches }}<br />
+				Games: {{ counts.numOfGames }}<br />
+				Scores: {{ counts.numOfScores }}<br />
+				Isms: {{ counts.numOfIsms }}<br />
 			</div>
 
 			<div class="col-xs-3">
+				<p><strong>Manage Data</strong></p>
 
 				<form action="/admin/delete-all" method="POST" class="action-delete">
 					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or not counts.total %}disabled{% endif %}>
