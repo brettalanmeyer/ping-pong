@@ -21,3 +21,7 @@ class IsmModel(Base):
 		self.approved = approved
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
+
+	def isApproved(self):
+		return self.approved == 1
+

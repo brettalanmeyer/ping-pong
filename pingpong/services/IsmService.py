@@ -118,7 +118,8 @@ class IsmService(Service):
 				"id": int(ism.id),
 				"left": int(ism.left),
 				"right": int(ism.right),
-				"saying": ism.saying
+				"saying": ism.saying,
+				"approved": ism.isApproved()
 			})
 
 		return json.dumps(data)
