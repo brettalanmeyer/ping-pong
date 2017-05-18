@@ -199,7 +199,7 @@ def delete(id):
 @matchController.route("/matches/<int:id>/smack-talk", methods = ["POST"])
 def smack_talk(id):
 	message = util.paramForm("message", None)
-	if message != None:
+	if message != None and len(message) > 0:
 		data = { "message": message }
 		socketio.emit("smack-talk", data, broadcast = True)
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
