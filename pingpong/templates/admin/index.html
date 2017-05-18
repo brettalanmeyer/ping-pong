@@ -8,42 +8,54 @@
 
 		<h1>Admin</h1>
 
-		<dl class="dl-horizontal">
-			<dt>Players:</dt>
-			<dd>{{ counts.numOfPlayers }}</dd>
+		<div class="row">
 
-			<dt>Matches:</dt>
-			<dd>{{ counts.numOfMatches }}</dd>
+			<div class="col-xs-2">
+				<strong>Players:</strong> {{ counts.numOfPlayers }}<br />
+				<strong>Matches:</strong> {{ counts.numOfMatches }}<br />
+				<strong>Games:</strong> {{ counts.numOfGames }}<br />
+				<strong>Scores:</strong> {{ counts.numOfScores }}<br />
+				<strong>Isms:</strong> {{ counts.numOfIsms }}<br />
+			</div>
 
-			<dt>Games:</dt>
-			<dd>{{ counts.numOfGames }}</dd>
+			<div class="col-xs-3">
 
-			<dt>Scores:</dt>
-			<dd>{{ counts.numOfScores }}</dd>
+				<form action="/admin/delete-all" method="POST" class="action-delete">
+					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or not counts.total %}disabled{% endif %}>
+						<span class="glyphicon glyphicon-trash"></span>
+						Destroy All Data
+					</button>
+				</form>
 
-			<dt>Isms:</dt>
-			<dd>{{ counts.numOfIsms }}</dd>
-		</dl>
+				<br />
 
-		{% if allowed %}
+				<form action="/admin/copy-remote-data" method="POST">
+					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or counts.total %}disabled{% endif %}>
+						<span class="glyphicon glyphicon-trash"></span>
+						Copy Remote Data
+					</button>
+				</form>
 
-			<form action="/admin/delete-all" method="POST" class="action-delete">
-				<button class="btn btn-danger btn-sm">
-					<span class="glyphicon glyphicon-trash"></span>
-					Destroy All Data
-				</button>
-			</form>
+			</div>
 
-			<br />
+			<div class="col-xs-7">
 
-			<form action="/admin/copy-remote-data" method="POST">
-				<button class="btn btn-danger btn-sm" {% if counts.total %}disabled{% endif %}>
-					<span class="glyphicon glyphicon-trash"></span>
-					Copy Remote Data
-				</button>
-			</form>
+				<form action="{{ url_for('adminController.send_message') }}" method="POST">
 
-		{% endif %}
+					<div class="form-group">
+
+						<label for="field-message">Chat Group Message</label>
+						<textarea id="field-message" name="message" class="form-control" rows="3"></textarea>
+
+					</div>
+
+					<button class="btn btn-default">Send</button>
+
+				</form>
+
+			</div>
+
+		</div>
 
 	</div>
 

@@ -22,6 +22,14 @@ def index():
 def favicon():
 	return send_from_directory("{}/static/images".format(app.root_path), "ping-pong-icon.png", mimetype = "image/vnd.microsoft.icon")
 
+@mainController.route("/rules", methods = ["GET"])
+def rules():
+	return render_template("main/rules.html")
+
+@mainController.route("/changes", methods = ["GET"])
+def changes():
+	return render_template("main/changes.html")
+
 @mainController.before_app_request
 def beforeRequest():
 	app.logger.access("%s \"%s %s\"", request.remote_addr, request.environ["REQUEST_METHOD"], request.url)

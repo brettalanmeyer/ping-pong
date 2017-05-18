@@ -11,6 +11,8 @@ from pingpong.services.IsmService import IsmService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PlayerService import PlayerService
 from pingpong.services.ScoreService import ScoreService
+from pingpong.utils import notifications
+from pingpong.utils import util
 
 adminController = Blueprint("adminController", __name__)
 
@@ -34,6 +36,25 @@ def index():
 	counts["total"] = sum(counts.values())
 
 	return render_template("admin/index.html", counts = counts, allowed = dataService.isConfigured())
+
+@adminController.route("/admin/send-message", methods = ["POST"])
+@loginRequired("adminController.index")
+def send_message():
+
+	print("hi")
+	print("hi")
+	print("hi")
+	print("hi")
+
+	message = util.paramForm("message")
+
+	if message != None and len(message) > 0:
+		notifications.send(message)
+		flash("Message has been sent.", "success")
+	else:
+		flash("Message was malformed and was not be sent.", "danger")
+
+	return redirect(url_for("adminController.index"))
 
 @adminController.route("/admin/copy-remote-data", methods = ["POST"])
 @loginRequired("adminController.index")
