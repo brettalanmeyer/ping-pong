@@ -109,7 +109,7 @@ class TestIsmService(BaseTest):
 			assert deletedIsm == None
 
 	def test_serialize(self):
-		string = '[{"saying": "No, I am your father.", "right": 11, "id": 5, "left": 38}]'
+		string = '[{"saying": "No, I am your father.", "approved": true, "right": 11, "id": 5, "left": 38}]'
 
 		with self.ctx:
 
@@ -118,5 +118,6 @@ class TestIsmService(BaseTest):
 			ism.right = 11
 			ism.left = 38
 			ism.saying = "No, I am your father."
+			ism.approved = True
 
 			assert ismService.serialize([ism]) == string

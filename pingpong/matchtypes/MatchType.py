@@ -1,69 +1,53 @@
-from pingpong.services.MatchService import MatchService
-from pingpong.services.GameService import GameService
-from pingpong.services.TeamService import TeamService
-from pingpong.services.ScoreService import ScoreService
-import math
+from pingpong.matchtypes.Doubles import Doubles
+from pingpong.matchtypes.Nines import Nines
+from pingpong.matchtypes.Singles import Singles
 
-gameService = GameService()
-matchService = MatchService()
-scoreService = ScoreService()
-teamService = TeamService()
+singles = Singles()
+doubles = Doubles()
+nines = Nines()
 
 class MatchType():
 
-	def __init__(self, label, matchType, matchTemplate, defaultPoints, numOfPlayers, numOfTeams):
-		self.label = label
-		self.matchType = matchType
-		self.matchTemplate = matchTemplate
-		self.defaultPoints = defaultPoints
-		self.numOfPlayers = numOfPlayers
-		self.numOfTeams = numOfTeams
+	def __init__(self, match):
+		self.match = match
+		self.setMatchType()
 
-		self.matchTypes = ["singles", "doubles", "nines"]
-		self.colors = ["green", "yellow", "blue", "red"]
+	def isSingles(self):
+		return singles.isMatchType(self.match.matchType)
 
-	def isMatchType(self, matchType):
-		return self.matchType == matchType
+	def isDoubles(self):
+		return doubles.isMatchType(self.match.matchType)
 
-	def undo(self, match, button):
-		score = scoreService.selectLastScoreByMatchId(match.id)
+	def isNines(self):
+		return nines.isMatchType(self.match.matchType)
 
-		if score != None:
+	def createTeams(self, *args, **kwargs):
+		return self.matchType.createTeams(*args, **kwargs)
 
-			completed = match.complete
+	def play(self, *args, **kwargs):
+		return self.matchType.play(*args, **kwargs)
 
-			if completed:
-				matchService.incomplete(match)
-				for team in match.teams:
-					teamService.status(team, None)
+	def matchData(self, *args, **kwargs):
+		return self.matchType.matchData(*args, **kwargs)
 
-			if completed or score.game != match.game:
-				gameService.resetGame(match.id, score.game)
-				matchService.updateGame(match.id, score.game)
+	def playAgain(self, *args, **kwargs):
+		return self.matchType.playAgain(*args, **kwargs)
 
-			scoreService.delete(score)
+	def undo(self, *args, **kwargs):
+		return self.matchType.undo(*args, **kwargs)
 
-		return self.matchData(match)
+	def score(self, *args, **kwargs):
+		return self.matchType.score(*args, **kwargs)
 
-	def determineMatchWinner(self, match):
-		team1 = match.teams[0]
-		team2 = match.teams[1]
+	def setMatchType(self):
+		if singles.isMatchType(self.match.matchType):
+			self.matchType = singles
 
-		team1Wins = self.getTeamWins(match.id, team1.id)
-		team2Wins = self.getTeamWins(match.id, team2.id)
+		elif doubles.isMatchType(self.match.matchType):
+			self.matchType = doubles
 
-		gamesNeededToWinMatch = int(math.ceil(float(match.numOfGames) / 2.0))
+		elif nines.isMatchType(self.match.matchType):
+			self.matchType = nines
 
-		if team1Wins == gamesNeededToWinMatch:
-			teamService.win(team1)
-			teamService.lose(team2)
-			matchService.complete(match)
-			self.sendWinningMessage(match, team1, team1Wins, team2, team2Wins)
-		elif team2Wins == gamesNeededToWinMatch:
-			teamService.win(team2)
-			teamService.lose(team1)
-			matchService.complete(match)
-			self.sendWinningMessage(match, team2, team2Wins, team1, team1Wins)
-
-	def getTeamWins(self, matchId, teamId):
-		return gameService.getTeamWins(matchId, teamId)
+	def getMatchType(self):
+		return self.matchType

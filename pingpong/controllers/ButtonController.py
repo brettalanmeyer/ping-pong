@@ -4,18 +4,12 @@ from flask import current_app as app
 from flask import render_template
 from flask import Response
 from pingpong.app import socketio
-from pingpong.matchtypes.Doubles import Doubles
-from pingpong.matchtypes.Nines import Nines
-from pingpong.matchtypes.Singles import Singles
+from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.MatchService import MatchService
 
 buttonController = Blueprint("buttonController", __name__)
 
 matchService = MatchService()
-
-singles = Singles()
-doubles = Doubles()
-nines = Nines()
 
 @buttonController.route("/buttons", methods = ["GET"])
 def index():
@@ -29,15 +23,16 @@ def score(button):
 	match = matchService.selectActiveMatch()
 
 	if match != None:
-		matchType = getMatchType(match)
+		matchType = MatchType(match)
 		data = matchType.score(match, button)
 	else:
 		latestMatch = matchService.selectLatestMatch()
-		if latestMatch.matchType == "nines":
-			matchType = getMatchType(latestMatch)
+		matchType = MatchType(latestMatch)
+
+		if matchType.isNines():
 			newMatch = matchType.playAgain(latestMatch, None, True)
 			data = {
-				"matchType": matchType.matchType,
+				"matchType": "nines",
 				"redirect": True,
 				"matchId": newMatch.id
 			}
@@ -52,7 +47,7 @@ def undo(button):
 	data = None
 	match = matchService.selectActiveMatch()
 	if match != None:
-		matchType = getMatchType(match)
+		matchType = MatchType(match)
 		data = matchType.undo(match, button)
 	socketio.emit("response", data, broadcast = True)
 	return button
@@ -65,20 +60,10 @@ def delete_scores(button):
 	match = matchService.selectActiveMatch()
 	if match != None:
 		scoreService.deleteByMatch(match.id)
-		data = getMatchType(match).matchData(match)
+		data = MatchType(match).matchData(match)
 	socketio.emit("response", data, broadcast = True)
 	return button
 
 def validateButton(button):
-	if button not in singles.colors:
+	if button not in matchService.colors:
 		abort(400)
-
-def getMatchType(match):
-	if singles.isMatchType(match.matchType):
-		return singles
-
-	elif doubles.isMatchType(match.matchType):
-		return doubles
-
-	elif nines.isMatchType(match.matchType):
-		return nines

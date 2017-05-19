@@ -1,5 +1,5 @@
 from flask import request
-from pingpong.matchtypes.MatchType import MatchType
+from pingpong.matchtypes.BaseMatch import BaseMatch
 from pingpong.services.GameService import GameService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
@@ -13,10 +13,10 @@ matchService = MatchService()
 scoreService = ScoreService()
 teamService = TeamService()
 
-class Nines(MatchType):
+class Nines(BaseMatch):
 
 	def __init__(self):
-		MatchType.__init__(self, "Nines", "nines", "matches/nines.html", 9, 4, 4)
+		BaseMatch.__init__(self, "Nines", "nines", "matches/nines.html", 9, 4, 4)
 
 	def matchData(self, match):
 		game = match.games[0]
@@ -181,7 +181,6 @@ class Nines(MatchType):
 			# swap yellow and green
 			playerIds = [game.yellow.id, game.green.id, game.blue.id, game.red.id]
 		else:
-			print("swap 2")
 			# swap blue and red
 			playerIds = [game.green.id, game.yellow.id, game.red.id, game.blue.id]
 

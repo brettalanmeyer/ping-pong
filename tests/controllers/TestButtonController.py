@@ -14,8 +14,6 @@ playerService = PlayerService()
 
 class TestButtonController(BaseTest):
 
-	colors = ["green", "red", "yellow", "blue"]
-
 	def createSingles(self):
 		with self.request:
 			player1 = playerService.create({ "name": "Han" })
@@ -64,7 +62,7 @@ class TestButtonController(BaseTest):
 	def test_buttons_score(self):
 		match = self.createSingles()
 
-		for color in self.colors:
+		for color in matchService.colors:
 			rv = self.app.post("/buttons/{}/score".format(color))
 			assert rv.status == self.ok
 			assert rv.data == color
@@ -72,7 +70,7 @@ class TestButtonController(BaseTest):
 	def test_buttons_undo(self):
 		match = self.createSingles()
 
-		for color in self.colors:
+		for color in matchService.colors:
 			rv = self.app.post("/buttons/{}/undo".format(color))
 			assert rv.status == self.ok
 			assert rv.data == color

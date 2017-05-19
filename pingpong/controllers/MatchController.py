@@ -9,13 +9,11 @@ from flask import Response
 from flask import url_for
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
-from pingpong.matchtypes.Doubles import Doubles
-from pingpong.matchtypes.Nines import Nines
-from pingpong.matchtypes.Singles import Singles
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
+from pingpong.matchtypes.MatchType import MatchType
 from pingpong.utils import util
 import json
 
@@ -25,10 +23,6 @@ playerService = PlayerService()
 matchService = MatchService()
 pagingService = PagingService()
 leaderboardService = LeaderboardService()
-
-singles = Singles()
-doubles = Doubles()
-nines = Nines()
 
 @matchController.route("/matches", methods = ["GET"])
 def index():
@@ -52,7 +46,7 @@ def index():
 		playerId = playerId,
 		opponentId = opponentId,
 		matchType = matchType,
-		matchTypes = singles.matchTypes,
+		matchTypes = matchService.matchTypes,
 		players = players,
 		elo = elo,
 		seasons = seasons,
@@ -66,9 +60,9 @@ def new():
 @matchController.route("/matches", methods = ["POST"])
 def create():
 	match = matchService.create(request.form["matchType"])
-	matchType = getMatchType(match)
+	matchType = MatchType(match)
 
-	if matchType.matchType == "nines":
+	if matchType.isNines():
 		return redirect(url_for("matchController.players", id = match.id))
 
 	return redirect(url_for("matchController.games", id = match.id))
@@ -80,7 +74,6 @@ def games(id):
 	if match == None:
 		abort(404)
 
-	matchType = getMatchType(match)
 	return render_template("matches/num-of-games.html", match = match)
 
 @matchController.route("/matches/<int:id>/num-of-games", methods = ["POST"])
@@ -100,9 +93,10 @@ def players(id):
 	if match == None:
 		abort(404)
 
-	matchType = getMatchType(match)
+	matchType = MatchType(match)
+	instance = matchType.getMatchType()
 	players = playerService.selectActive()
-	return render_template("matches/players.html", title = matchType.label, matchType = matchType, match = match, players = players)
+	return render_template("matches/players.html", title = instance.label, matchType = instance, match = match, players = players)
 
 @matchController.route("/matches/<int:id>/players", methods = ["POST"])
 def players_create(id):
@@ -111,7 +105,7 @@ def players_create(id):
 	if match == None:
 		abort(404)
 
-	matchType = getMatchType(match)
+	matchType = MatchType(match)
 
 	if not match.hasTeams():
 		matchType.createTeams(match, request.form.getlist("playerId"), True)
@@ -128,7 +122,7 @@ def show(id):
 	if match == None:
 		abort(404)
 
-	matchType = getMatchType(match)
+	matchType = MatchType(match)
 	data = matchType.matchData(match)
 	return render_template(data["template"], data = data)
 
@@ -139,7 +133,7 @@ def show_json(id):
 	if match == None:
 		abort(404)
 
-	matchType = getMatchType(match)
+	matchType = MatchType(match)
 	data = matchType.matchData(match)
 	return Response(json.dumps(data, default = util.jsonSerial), status = 200, mimetype = "application/json")
 
@@ -150,7 +144,7 @@ def again(id):
 	if match == None:
 		abort(404)
 
-	matchType = getMatchType(match)
+	matchType = MatchType(match)
 
 	numOfGames = None
 	randomize = True
@@ -170,7 +164,7 @@ def undo(id):
 		abort(404)
 
 	if match.ready:
-		matchType = getMatchType(match)
+		matchType = MatchType(match)
 		matchType.undo(match, None)
 
 	return redirect(url_for("matchController.show", id = match.id))
@@ -205,13 +199,3 @@ def smack_talk(id):
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
 
 	return message
-
-def getMatchType(match):
-	if singles.isMatchType(match.matchType):
-		return singles
-
-	elif doubles.isMatchType(match.matchType):
-		return doubles
-
-	elif nines.isMatchType(match.matchType):
-		return nines

@@ -25,11 +25,3 @@ class TestAdminController(BaseTest):
 	def test_admin_delete_all(self):
 		rv = self.app.post("/admin/delete-all")
 		assert rv.status == self.found
-
-	def test_admin_matches_delete_all(self):
-		rv = self.app.post("/admin/matches/delete-all")
-		assert rv.status == self.found
-
-	def test_admin_players_delete_all(self):
-		rv = self.app.post("/admin/players/delete-all")
-		assert rv.status == self.found

@@ -1,5 +1,5 @@
 from flask import request
-from pingpong.matchtypes.MatchType import MatchType
+from pingpong.matchtypes.BaseMatch import BaseMatch
 from pingpong.services.GameService import GameService
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
@@ -14,10 +14,10 @@ matchService = MatchService()
 scoreService = ScoreService()
 teamService = TeamService()
 
-class Singles(MatchType):
+class Singles(BaseMatch):
 
 	def __init__(self):
-		MatchType.__init__(self, "Singles", "singles", "matches/singles.html", 21, 2, 2)
+		BaseMatch.__init__(self, "Singles", "singles", "matches/singles.html", 21, 2, 2)
 
 	def matchData(self, match):
 		game = match.games[match.game - 1]
