@@ -105,11 +105,8 @@ Run single class
 
 ## TODO
 
-* Increase matches per page or truncate number of pages shown in pagination bar
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
-* Make players list into more of a photo gallery with edit/toggle/delete buttons to the side or something
-* Have a player show page where the image can be large and have additional information about the player
 * Add avatars to skype messages as base 64 encoded
 * avatars on doubles score board
 * Fix doubles opponent stats
