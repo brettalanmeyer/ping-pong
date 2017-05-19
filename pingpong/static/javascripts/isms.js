@@ -20,7 +20,7 @@ function displaySaying(message){
 	}
 
 	ismContainer.html(message);
-	ismContainer.stop(true, true).fadeIn("slow").delay(2000).fadeOut("slow").removeClass("long");
+	ismContainer.stop(true, true).fadeIn("slow").delay(4000).fadeOut("slow").removeClass("long");
 }
 
 $(function(){

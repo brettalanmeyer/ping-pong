@@ -109,7 +109,6 @@ Run single class
 * Increase matches per page or truncate number of pages shown in pagination bar
 * Add score/undo buttons to admin page
 * Changelog page - add link to main page
-* Increase time 'ism' is displayed
 * Maybe say how many points winner of nines had left
 * Make players list into more of a photo gallery with edit/toggle/delete buttons to the side or something
 * Have a player show page where the image can be large and have additional information about the player
