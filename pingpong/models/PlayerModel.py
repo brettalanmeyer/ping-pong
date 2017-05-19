@@ -19,3 +19,6 @@ class PlayerModel(Base):
 		self.enabled = enabled
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
+
+	def isEnabled(self):
+		return self.enabled == 1

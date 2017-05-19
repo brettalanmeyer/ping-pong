@@ -28,6 +28,7 @@ from pingpong.controllers.LeaderboardController import leaderboardController
 from pingpong.controllers.MainController import mainController
 from pingpong.controllers.MatchController import matchController
 from pingpong.controllers.PlayerController import playerController
+from pingpong.controllers.ApiController import apiController
 
 app.register_blueprint(adminController)
 app.register_blueprint(authenticationController)
@@ -38,3 +39,4 @@ app.register_blueprint(leaderboardController)
 app.register_blueprint(mainController)
 app.register_blueprint(matchController)
 app.register_blueprint(playerController)
+app.register_blueprint(apiController)

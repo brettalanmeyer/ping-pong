@@ -1,10 +1,12 @@
 from datetime import datetime
 from flask import current_app as app
+from flask import url_for
 from pingpong.models.PlayerModel import PlayerModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
 from pingpong.utils import util
 from sqlalchemy import exc
+import json
 
 class PlayerService(Service):
 
@@ -127,3 +129,27 @@ class PlayerService(Service):
 		except exc.SQLAlchemyError, error:
 			db.session.rollback()
 			return False
+
+	def serialize(self, players):
+		app.logger.info("Serializing isms")
+
+		data = []
+
+		for player in players:
+			playerData = {
+				"id": int(player.id),
+				"name": player.name,
+				"avatar": player.avatar,
+				"extension": player.extension,
+				"avatarUrl": None,
+				"enabled": player.isEnabled(),
+				"createdAt": player.createdAt,
+				"modifiedAt": player.modifiedAt
+			}
+
+			if player.avatar != None:
+				playerData["avatarUrl"] = url_for('playerController.avatar', id = player.id, avatar = player.avatar)
+
+			data.append(playerData)
+
+		return json.dumps(data, default = util.jsonSerial)

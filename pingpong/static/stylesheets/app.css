@@ -191,16 +191,16 @@ a.link {
 
 .matches-container .player-filter {
 	position: absolute;
-	right: 270px;
+	right: 274px;
 	top: 46px;
-	width: 184px;
+	width: 186px;
 }
 
 .matches-container .opponent-filter {
 	position: absolute;
-	right: 81px;
+	right: 83px;
 	top: 46px;
-	width: 184px;
+	width: 186px;
 }
 
 .matches-container .match-type-filter {
@@ -214,7 +214,7 @@ a.link {
 	position: absolute;
 	right: 202px;
 	top: 10px;
-	width: 252px;
+	width: 258px;
 }
 
 .matches-container .match-clear-filter {
@@ -362,4 +362,16 @@ a.link {
 
 .smack-talk-form {
 	display: none;
+}
+
+.api-container a {
+	text-decoration: none;
+}
+
+.api-container p {
+	margin: 8px 0;
+}
+
+.api-container pre {
+	margin-bottom: 20px;
 }

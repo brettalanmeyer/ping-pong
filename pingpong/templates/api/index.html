@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}API{% endblock %}
+
+{% block body %}
+
+<div id="api" class="container api-container">
+
+	<h1>
+		<a href="{{ url_for('apiController.index') }}">Ping Pong API</a>
+	</h1>
+
+
+	<a href="{{ url_for('apiController.players') }}" target="_blank">
+		<code>GET</code>
+		<kbd>{{ url_for('apiController.players') }}</kbd>
+	</a>
+
+	<p class="text-muted">Array of player data.<p>
+
+<pre>[{
+	id: 1,
+	name: "Brett",
+	avatar: "d159f9f9-e19d-43bb-8d11-a167208bf5cf.gif",
+	extension: "gif",
+	avatarUrl: "/players/6153/avatar/d159f9f9-e19d-43bb-8d11-a167208bf5cf.gif",
+	enabled: true,
+	createdAt: '2016-01-01 12:01:01',
+	modifiedAt: '2016-01-01 13:01:01'
+}]</pre>
+
+	<a href="{{ url_for('apiController.isms') }}" target="_blank">
+		<code>GET</code>
+		<kbd>{{ url_for('apiController.isms') }}</kbd>
+	</a>
+
+	<p class="text-muted">Array of ism data.<p>
+
+<pre>[{
+	"id": 1,
+	"approved": true,
+	"saying": "Kwik-E-Mart",
+	"left": 7
+	"right": 11,
+	"createdAt": "2017-03-02 10:52:00",
+	"modifiedAt": "2017-03-24 14:20:00"
+},]</pre>
+
+	</div>
+
+{% endblock %}

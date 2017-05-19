@@ -9,7 +9,7 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 			<meta name="address" content="{{ request.remote_addr }}">
 			<meta name="allowed_address" content="{{ config.UNDO_ALLOWED_ADDRESS }}">
-			{% if config.DEBUG_TOOLS %}<meta name="debug">{% endif %}
+			{% if config.DEBUG_TOOLS %}<meta name="debug" content="true">{% endif %}
 
 			<title>Ping Pong{% if request.endpoint != "mainController.index" %} | {% endif %}{% block title %}{% endblock %}</title>
 			<link rel="shortcut icon" href="{{ url_for('static', filename = 'images/ping-pong-icon.png') }}" type="image/x-icon" />

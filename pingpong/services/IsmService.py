@@ -3,6 +3,7 @@ from flask import current_app as app
 from pingpong.models.IsmModel import IsmModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from pingpong.utils import util
 from sqlalchemy import exc
 import json
 
@@ -119,7 +120,9 @@ class IsmService(Service):
 				"left": int(ism.left),
 				"right": int(ism.right),
 				"saying": ism.saying,
-				"approved": ism.isApproved()
+				"approved": ism.isApproved(),
+				"createdAt": ism.createdAt,
+				"modifiedAt": ism.modifiedAt
 			})
 
-		return json.dumps(data)
+		return json.dumps(data, default = util.jsonSerial)
