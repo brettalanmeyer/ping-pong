@@ -90,8 +90,8 @@ function disableUndo(){
 
 function enableUndo(){
 	var debug = $("meta[name=debug]");
-	var currentIP = $("meta[name=address]");
-	var allowedIP = $("meta[name=allowed_address]");
+	var currentIP = $("meta[name=address]").attr("content");
+	var allowedIP = $("meta[name=allowed_address]").attr("content");
 
 	if(debug.exists() || currentIP == allowedIP){
 		$(document).on("keypress", function(e){
