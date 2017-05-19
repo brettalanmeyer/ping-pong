@@ -16,8 +16,6 @@
 		<kbd>{{ url_for('apiController.players') }}</kbd>
 	</a>
 
-	<p class="text-muted">Array of player data.<p>
-
 <pre>[{
 	id: 1,
 	name: "Brett",
@@ -29,12 +27,151 @@
 	modifiedAt: '2016-01-01 13:01:01'
 }]</pre>
 
+
+	<a href="{{ url_for('apiController.matches') }}" target="_blank">
+		<code>GET</code>
+		<kbd>{{ url_for('apiController.matches') }}</kbd>
+	</a>
+
+<pre>[{
+	"id": 2770,
+	"matchType": "singles",
+	"playTo": 21,
+	"numOfGames": 3,
+	"game": 3,
+	"ready": 1,
+	"complete": 1,
+	"completedAt": "2017-05-19 16:06:57",
+	"modifiedAt": "2017-05-19 16:06:57",
+	"createdAt": "2017-05-19 16:02:59"
+}]</pre>
+
+
+	<code>GET</code>
+	<kbd>/api/matches/&lt;int:matchId&gt;.json</kbd>
+
+<pre>{
+	"id": 2765,
+	"matchType": "singles",
+	"playTo": 21
+	"numOfGames": 1,
+	"game": 1,
+	"complete": 1,
+	"ready": 0,
+	"createdAt": "2017-05-19 14:44:07",
+	"modifiedAt": "2017-05-19 15:06:31",
+	"completedAt": "2017-05-19 15:06:31",
+	"teams": [{
+		"id": 5801,
+		"win": false,
+		"modifiedAt": "2017-05-19 15:06:31",
+		"createdAt": "2017-05-19 14:44:11",
+		"players": [{
+			"id": 42,
+			"name": "Thomas"
+		}]
+	}, {
+		"win": true,
+		"modifiedAt": "2017-05-19 15:06:31",
+		"id": 5802,
+		"createdAt": "2017-05-19 14:44:11",
+		"players": [{
+			"id": 40,
+			"name": "Brett"
+		}]
+	}],
+	"games": [{
+		"id": 6108,
+		"game": 1,
+		"green": {
+			"id": 42,
+			"name": "Thomas"
+		},
+		"yellow": {
+			"id": 40,
+			"name": "Brett"
+		},
+		"red": null,
+		"blue": null,
+		"scores": [{
+			"id": 183229,
+			"createdAt": "2017-05-19 14:46:29"
+		}, {
+			"id": 183230,
+			"createdAt": "2017-05-19 14:46:46"
+		}, {
+			"id": 183231,
+			"createdAt": "2017-05-19 14:46:57"
+		}],
+		"winnerScore": 21,
+		"winner": 5802,
+		"loserScore": 19,
+		"loser": 5802,
+		"createdAt": "2017-05-19 14:44:11",
+		"completedAt": "2017-05-19 14:53:04",
+		"modifiedAt": "2017-05-19 14:53:04"
+	}]
+}</pre>
+
+
+	<a href="{{ url_for('apiController.games') }}" target="_blank">
+		<code>GET</code>
+		<kbd>{{ url_for('apiController.games') }}</kbd>
+	</a>
+
+<pre>[{
+	"id": 4930,
+	"matchId": 1998,
+	"game": 1,
+	"greenId": 39,
+	"yellowId": 38,
+	"blueId": 40,
+	"redId": 41,
+	"winner": null,
+	"winnerScore": null,
+	"loser": null,
+	"loserScore": null,
+	"createdAt": "2017-03-24 09:23:55",
+	"modifiedAt": "2017-03-24 09:23:55"
+	"completedAt": null
+}]</pre>
+
+
+	<code>GET</code>
+	<kbd>/api/match/&lt;int:matchId&gt;/teams.json</kbd>
+
+<pre>[{
+	"id": 3437,
+	"matchId": 1998,
+	"win": false,
+	"players": [
+		39,
+		41
+	]
+}]</pre>
+
+	<code>GET</code>
+	<kbd>/api/match/&lt;int:matchId&gt;/scores.json</kbd>
+
+<pre>[{
+	"id": 153,
+	"matchId": 13,
+	"teamId": 12,
+	"game": 1,
+	"createdAt": "2017-03-24 09:26:49"
+}, {
+	"id": 161,
+	"matchId": 13,
+	"teamId": 12,
+	"game": 2,
+	"createdAt": "2017-03-24 09:27:25"
+}]</pre>
+
+
 	<a href="{{ url_for('apiController.isms') }}" target="_blank">
 		<code>GET</code>
 		<kbd>{{ url_for('apiController.isms') }}</kbd>
 	</a>
-
-	<p class="text-muted">Array of ism data.<p>
 
 <pre>[{
 	"id": 1,

@@ -368,10 +368,8 @@ a.link {
 	text-decoration: none;
 }
 
-.api-container p {
-	margin: 8px 0;
-}
-
 .api-container pre {
-	margin-bottom: 20px;
+	tab-size: 4;
+	margin: 8px 0 20px;
+	padding: 7px 8px;
 }

@@ -131,7 +131,7 @@ class PlayerService(Service):
 			return False
 
 	def serialize(self, players):
-		app.logger.info("Serializing isms")
+		app.logger.info("Serializing players")
 
 		data = []
 
