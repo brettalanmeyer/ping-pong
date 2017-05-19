@@ -22,7 +22,7 @@
 			<div class="col-xs-3">
 				<p><strong>Manage Data</strong></p>
 
-				<form action="/admin/delete-all" method="POST" class="action-delete">
+				<form action="{{ url_for('adminController.delete_all') }}" method="POST" class="action-delete">
 					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or not counts.total %}disabled{% endif %}>
 						<span class="glyphicon glyphicon-trash"></span>
 						Destroy All Data
@@ -31,7 +31,7 @@
 
 				<br />
 
-				<form action="/admin/copy-remote-data" method="POST">
+				<form action="{{ url_for('adminController.copy_remote_data') }}" method="POST">
 					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or counts.total %}disabled{% endif %}>
 						<span class="glyphicon glyphicon-trash"></span>
 						Copy Remote Data
