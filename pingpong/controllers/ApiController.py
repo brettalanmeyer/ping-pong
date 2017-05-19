@@ -50,7 +50,7 @@ def teams(matchId):
 	return Response(teamService.serialize(teams), status = 200, mimetype = "application/json")
 
 
-@apiController.route("/api/match/<int:matchId>/scores.json", methods = ["GET"])
+@apiController.route("/api/matches/<int:matchId>/scores.json", methods = ["GET"])
 def scores(matchId):
 	scores = scoreService.selectByMatchId(matchId)
 	return Response(scoreService.serialize(scores), status = 200, mimetype = "application/json")
