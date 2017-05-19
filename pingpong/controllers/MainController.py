@@ -1,14 +1,21 @@
 from flask import Blueprint
 from flask import current_app as app
+from flask import flash
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+from flask import url_for
+from pingpong.forms.FeedbackForm import FeedbackForm
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
+from pingpong.services.FeedbackService import FeedbackService
 from pingpong.utils import database as db
 
 mainController = Blueprint("mainController", __name__)
 
+feedbackForm = FeedbackForm()
+feedbackService = FeedbackService()
 matchService = MatchService()
 scoreService = ScoreService()
 
@@ -29,6 +36,22 @@ def rules():
 @mainController.route("/changes", methods = ["GET"])
 def changes():
 	return render_template("main/changes.html")
+
+@mainController.route("/feedback", methods = ["GET"])
+def feedback():
+	return render_template("main/feedback.html")
+
+@mainController.route("/feedback", methods = ["POST"])
+def send_feedback():
+	hasErrors = feedbackForm.validate(request.form)
+
+	if hasErrors:
+		return render_template("main/feedback.html"), 400
+
+	else:
+		feedbackService.send(request.form["name"], request.form["message"])
+		flash("Thank you for your feedback!", "success")
+		return redirect(url_for("mainController.index"))
 
 @mainController.before_app_request
 def beforeRequest():

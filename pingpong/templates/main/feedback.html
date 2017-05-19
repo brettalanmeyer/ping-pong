@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>
+			<a href="{{ url_for('mainController.feedback') }}">Feedback</a>
+		</h1>
+
+		<p>Comments, suggestions, bug reports, and anything else are welcome.</p>
+
+		<form action="{{ url_for('mainController.send_feedback') }}" method="POST">
+
+			<div class="form-group">
+
+				<label for="field-name">Name:</label>
+				<input id="field-name" type="text" name="name" value="{{ request.form['name'] }}" class="form-control" autocomplete="off" autofocus />
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="field-message">Message:</label>
+				<textarea id="field-message" name="message" class="form-control" rows="6" autocomplete="off">{{ request.form['message'] }}</textarea>
+
+			</div>
+
+			<button class="btn btn-default">Send Feedback</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}
