@@ -59,6 +59,52 @@
 
 		</div>
 
+		{% if matchData != None %}
+
+			<div class="row">
+
+				<div class="col-xs-3">
+
+					<h4>{{ matchData.matchType.title() }}</h4>
+
+					<p><a href="{{ url_for('matchController.show', id = matchData.matchId) }}" class="link" target="_blank">View Match</a></p>
+
+					{% if matchData.matchType == "singles" %}
+						<p>
+							{% for color in matchData.teams %}
+								{{ matchData.teams[color].playerName }}{% if loop.index != 2 %},{% endif %}
+							{% endfor %}
+						</p>
+
+					{% elif matchData.matchType == "doubles" %}
+						<p>
+							{% for side in matchData.teams %}
+								{{ matchData.teams[side].players|join(', ') }}{% if loop.index != 2 %},{% endif %}
+							{% endfor %}
+						</p>
+
+					{% elif matchData.matchType == "nines" %}
+						<p>
+							{% for color in matchData.players %}
+								{{ matchData.players[color].playerName }}{% if loop.index != 4 %},{% endif %}
+							{% endfor %}
+						</p>
+					{% endif %}
+
+				</div>
+
+				<div class="col-xs-3">
+					{% include 'partials/scoring-tools.html' %}
+				</div>
+
+				<div class="col-xs-6"></div>
+
+			</div>
+
+		{% else %}
+			<p>No active match.</p>
+		{% endif %}
+
 	</div>
 
 {% endblock %}

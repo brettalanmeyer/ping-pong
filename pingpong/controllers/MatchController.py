@@ -122,8 +122,7 @@ def show(id):
 	if match == None:
 		abort(404)
 
-	matchType = MatchType(match)
-	data = matchType.matchData(match)
+	data = MatchType(match).matchData()
 	return render_template(data["template"], data = data)
 
 @matchController.route("/matches/<int:id>.json", methods = ["GET"])
@@ -133,8 +132,7 @@ def show_json(id):
 	if match == None:
 		abort(404)
 
-	matchType = MatchType(match)
-	data = matchType.matchData(match)
+	data = MatchType(match).matchData()
 	return Response(json.dumps(data, default = util.jsonSerial), status = 200, mimetype = "application/json")
 
 @matchController.route("/matches/<int:id>/play-again", methods = ["POST"])

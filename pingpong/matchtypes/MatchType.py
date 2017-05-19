@@ -27,8 +27,8 @@ class MatchType():
 	def play(self, *args, **kwargs):
 		return self.matchType.play(*args, **kwargs)
 
-	def matchData(self, *args, **kwargs):
-		return self.matchType.matchData(*args, **kwargs)
+	def matchData(self):
+		return self.matchType.matchData(self.match)
 
 	def playAgain(self, *args, **kwargs):
 		return self.matchType.playAgain(*args, **kwargs)

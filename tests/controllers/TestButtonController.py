@@ -55,10 +55,6 @@ class TestButtonController(BaseTest):
 
 			return match
 
-	def test_buttons(self):
-		rv = self.app.get("/buttons")
-		assert rv.status == self.ok
-
 	def test_buttons_score(self):
 		match = self.createSingles()
 

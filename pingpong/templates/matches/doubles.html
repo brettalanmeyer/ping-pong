@@ -123,10 +123,11 @@
 
 		</table>
 
+		{% if config.DEBUG_TOOLS %}
+			{% include 'partials/scoring-tools.html' %}
+		{% endif %}
+
 	</div>
 
-	{% if config.DEBUG_TOOLS %}
-		<iframe src="/buttons" class="debug-button-panel"></iframe>
-	{% endif %}
 
 {% endblock %}

@@ -1,0 +1,81 @@
+#singles .scoring-tools,
+#doubles .scoring-tools,
+#nines .scoring-tools {
+	position: absolute;
+	top: 78px;
+	right: 8px;
+	width: 120px;
+	border: solid 1px #ccc;
+	border-radius: 3px;
+	background: rgba(255, 255, 255, 0.5);
+	padding: 4px;
+}
+
+.scoring-tools {
+	padding-top: 12px;
+}
+
+.scoring-tools .team {
+	float: left;
+	width: 49%;
+}
+
+.scoring-tools .team:nth-child(2n + 1) {
+	margin-right: 1%;
+}
+
+.scoring-tools .team:nth-child(2n) {
+	margin-left: 1%;
+}
+
+.scoring-tools button {
+	display: block;
+	cursor: pointer;
+	border: solid 1px #ccc;
+	border-radius: 4px;
+	padding: 2px 0;
+	color: white;
+	margin: auto;
+}
+
+.scoring-tools button:nth-child(2n){
+	margin-bottom: 4px;
+}
+
+.scoring-tools button.red {
+	background: red;
+}
+
+.scoring-tools button.green {
+	background: green;
+}
+
+.scoring-tools button.blue {
+	background: blue;
+}
+
+.scoring-tools button.yellow {
+	background: yellow;
+	color: black;
+}
+
+.scoring-tools button.wide-action {
+	width: 100%;
+	margin-bottom: 4px;
+}
+
+.scoring-tools button.delete-all {
+	background: orange;
+}
+
+.scoring-tools button.random-score {
+	background: mediumseagreen;
+}
+
+.scoring-tools button.random-undo {
+	background: steelblue;
+}
+
+.scoring-tools button.auto-score {
+	background: maroon;
+}

@@ -11,10 +11,6 @@ buttonController = Blueprint("buttonController", __name__)
 
 matchService = MatchService()
 
-@buttonController.route("/buttons", methods = ["GET"])
-def index():
-	return render_template("buttons.html")
-
 @buttonController.route("/buttons/<path:button>/score", methods = ["POST"])
 def score(button):
 	validateButton(button)
@@ -60,7 +56,7 @@ def delete_scores(button):
 	match = matchService.selectActiveMatch()
 	if match != None:
 		scoreService.deleteByMatch(match.id)
-		data = MatchType(match).matchData(match)
+		data = MatchType(match).matchData()
 	socketio.emit("response", data, broadcast = True)
 	return button
 

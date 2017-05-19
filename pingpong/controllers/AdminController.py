@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import url_for
 from pingpong.decorators.LoginRequired import loginRequired
+from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.DataService import DataService
 from pingpong.services.GameService import GameService
 from pingpong.services.IsmService import IsmService
@@ -35,17 +36,16 @@ def index():
 	}
 	counts["total"] = sum(counts.values())
 
-	return render_template("admin/index.html", counts = counts, allowed = dataService.isConfigured())
+	matchData = None
+	match = matchService.selectActiveMatch()
+	if match != None:
+		matchData = MatchType(match).matchData()
+
+	return render_template("admin/index.html", counts = counts, allowed = dataService.isConfigured(), matchData = matchData)
 
 @adminController.route("/admin/send-message", methods = ["POST"])
 @loginRequired("adminController.index")
 def send_message():
-
-	print("hi")
-	print("hi")
-	print("hi")
-	print("hi")
-
 	message = util.paramForm("message")
 
 	if message != None and len(message) > 0:

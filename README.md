@@ -105,6 +105,7 @@ Run single class
 
 ## TODO
 
+* Investigate UNDO not working
 * Login redirect doesn't use actual url, puts in <int:id> placeholders
 * Increase matches per page or truncate number of pages shown in pagination bar
 * Add score/undo buttons to admin page

@@ -18,6 +18,7 @@ def bundleJavascripts():
 		"javascripts/nines.js",
 		"javascripts/players.js",
 		"javascripts/smack-talk.js",
+		"javascripts/scoring-tools.js",
 		filters = "jsmin",
 		output = ".webassets-cache/ping-pong.min.js"
 	)
@@ -31,6 +32,7 @@ def bundleStylesheets():
 		"stylesheets/leaderboard.css",
 		"stylesheets/debug.css",
 		"stylesheets/players.css",
+		"stylesheets/scoring-tools.css",
 		filters = "cssmin",
 		output = ".webassets-cache/ping-pong.min.css"
 	)
