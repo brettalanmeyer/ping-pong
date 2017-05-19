@@ -105,10 +105,7 @@ Run single class
 
 ## TODO
 
-* Investigate UNDO not working
-* Login redirect doesn't use actual url, puts in <int:id> placeholders
 * Increase matches per page or truncate number of pages shown in pagination bar
-* Add score/undo buttons to admin page
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
 * Make players list into more of a photo gallery with edit/toggle/delete buttons to the side or something
@@ -119,7 +116,6 @@ Run single class
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise
 * Report of avg time people play per day
-* smack talk AI
 * Dave Thomas
 * try to put skype stuff in this app if possible
 * caching everything until a new match is played

@@ -26,11 +26,11 @@
 		{% if current_user.is_authenticated %}
 			<div class="authentication authenticated">
 				<a href="{{ url_for('adminController.index') }}">Administrator</a>
-				<a href="{{ url_for('authenticationController.logout', next = request.url_rule) }}" class="link">Logout</a>
+				<a href="{{ url_for('authenticationController.logout', next = request.path) }}" class="link">Logout</a>
 			</div>
 		{% else %}
 			<div class="authentication unauthenticated">
-				<a href="{{ url_for('authenticationController.login', next = request.url_rule) }}" class="link">Login</a>
+				<a href="{{ url_for('authenticationController.login', next = request.path) }}" class="link">Login</a>
 			</div>
 		{% endif %}
 
