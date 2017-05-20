@@ -9,13 +9,13 @@ from flask import url_for
 from pingpong.forms.FeedbackForm import FeedbackForm
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
-from pingpong.services.FeedbackService import FeedbackService
+from pingpong.services.MailService import MailService
 from pingpong.utils import database as db
 
 mainController = Blueprint("mainController", __name__)
 
 feedbackForm = FeedbackForm()
-feedbackService = FeedbackService()
+mailService = MailService()
 matchService = MatchService()
 scoreService = ScoreService()
 
@@ -49,7 +49,7 @@ def send_feedback():
 		return render_template("main/feedback.html"), 400
 
 	else:
-		feedbackService.send(request.form["name"], request.form["message"])
+		mailService.sendFeedback(request.form["name"], request.form["message"])
 		flash("Thank you for your feedback!", "success")
 		return redirect(url_for("mainController.index"))
 

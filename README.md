@@ -65,6 +65,9 @@ MYSQL_REMOTE_PASSWORD = ''
 MYSQL_REMOTE_HOST = ''
 MYSQL_REMOTE_DATABASE = ''
 UNDO_ALLOWED_ADDRESS = ''
+MAILER_FROM_NAME = ''
+MAILER_FROM_EMAIL = ''
+MAILER_RECIPIENT_EMAILS = ['']
 ```
 
 create dbconfig.cfg
@@ -105,8 +108,7 @@ Run single class
 
 ## TODO
 
-* Feedback form - email to brett
-* API
+* Feedback form email
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
 * Add avatars to skype messages as base 64 encoded
