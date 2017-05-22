@@ -1,0 +1,18 @@
+<div class="office-select">
+
+	<form id="set-office-form" class="set-office-form" action="{{ url_for('mainController.setOffice') }}" method="POST">
+		<input type="hidden" name="next" value="{{ request.path }}" />
+
+		<select id="set-office-field"  name="office" class="set-office-field form-control input-sm">
+			{% if current_user.is_authenticated %}
+				<option value="0">All Offices</option>
+			{% endif %}
+
+			{% for office in session.offices %}
+				<option value="{{ office.id }}" {% if session.office == office.id %}selected="selected"{% endif %}>{{ office.city }}, {{ office.state }}</option>
+			{% endfor %}
+		</select>
+
+	</form>
+
+</div>

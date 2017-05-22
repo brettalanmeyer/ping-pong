@@ -82,6 +82,12 @@ $(function(){
 		}
 	});
 
+	var setOfficeForm = $("#set-office-form");
+	var setOfficeField = $("#set-office-field");
+	setOfficeField.on("change", function(){
+		setOfficeForm.submit();
+	});
+
 });
 
 function disableUndo(){

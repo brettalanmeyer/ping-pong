@@ -398,3 +398,14 @@ a.link {
 	margin: 8px 0 20px;
 	padding: 7px 8px;
 }
+
+.office-select {
+	width: 180px;
+	bottom: 4px;
+	left: 4px;
+	position: fixed;
+}
+
+.office-select .set-office-field {
+	cursor: pointer;
+}

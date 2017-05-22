@@ -68,6 +68,7 @@ UNDO_ALLOWED_ADDRESS = ''
 MAILER_FROM_NAME = ''
 MAILER_FROM_EMAIL = ''
 MAILER_RECIPIENT_EMAILS = ['']
+SESSION_TYPE = 'filesystem'
 ```
 
 create dbconfig.cfg

@@ -12,3 +12,4 @@ flask-login
 Flask-Testing
 Flask-Mail
 coverage
+Flask-Session

@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_socketio import SocketIO
+from flask_session import Session
 
 from pingpong.utils import assets
 from pingpong.utils import logger
@@ -18,6 +19,9 @@ app.url_map.strict_slashes = False
 
 socketio = SocketIO()
 socketio.init_app(app)
+
+sess = Session()
+sess.init_app(app)
 
 from pingpong.controllers.AdminController import adminController
 from pingpong.controllers.AuthenticationController import authenticationController
