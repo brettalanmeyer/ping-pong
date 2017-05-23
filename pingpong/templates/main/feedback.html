@@ -17,14 +17,21 @@
 			<div class="form-group">
 
 				<label for="field-name">Name:</label>
-				<input id="field-name" type="text" name="name" value="{{ request.form['name'] }}" class="form-control" autocomplete="off" autofocus />
+				<input id="field-name" type="text" name="name" value="{{ request.form['name'] }}" placeholder="Required..." class="form-control" autocomplete="off" autofocus />
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="field-email">Email:</label>
+				<input id="field-email" type="text" name="email" value="{{ request.form['email'] }}" placeholder="Optional..." class="form-control" autocomplete="off" autofocus />
 
 			</div>
 
 			<div class="form-group">
 
 				<label for="field-message">Message:</label>
-				<textarea id="field-message" name="message" class="form-control" rows="6" autocomplete="off">{{ request.form['message'] }}</textarea>
+				<textarea id="field-message" name="message" class="form-control" placeholder="Required..." rows="6" autocomplete="off">{{ request.form['message'] }}</textarea>
 
 			</div>
 

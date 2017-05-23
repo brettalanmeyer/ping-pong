@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_mail import Mail
 from flask_socketio import SocketIO
 
 from pingpong.utils import assets
@@ -18,6 +19,9 @@ app.url_map.strict_slashes = False
 
 socketio = SocketIO()
 socketio.init_app(app)
+
+mail = Mail()
+mail.init_app(app)
 
 from pingpong.controllers.AdminController import adminController
 from pingpong.controllers.AuthenticationController import authenticationController

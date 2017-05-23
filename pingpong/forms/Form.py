@@ -42,7 +42,7 @@ class Form():
 				self.errors.append(self.error(field, message))
 				return False
 
-			elif len(form[field["name"]]) == 0:
+			elif len(form[field["name"]].strip()) == 0:
 				message = "'{}' is a required field.".format(field["label"])
 				self.hasErrors = True
 				self.errors.append(self.error(field, message))

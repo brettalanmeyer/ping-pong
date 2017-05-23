@@ -65,9 +65,14 @@ MYSQL_REMOTE_PASSWORD = ''
 MYSQL_REMOTE_HOST = ''
 MYSQL_REMOTE_DATABASE = ''
 UNDO_ALLOWED_ADDRESS = ''
-MAILER_FROM_NAME = ''
-MAILER_FROM_EMAIL = ''
-MAILER_RECIPIENT_EMAILS = ['']
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 465
+MAIL_USE_SSL = True
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+MAIL_FROM_NAME = ''
+MAIL_FROM_EMAIL = ''
+MAIL_RECIPIENTS = ['']
 ```
 
 create dbconfig.cfg
@@ -108,6 +113,7 @@ Run single class
 
 ## TODO
 
+* Add title attributes to skype messages
 * API
 * API - trim down existing apis, only what's needed.
 ** put POST button actions in list, get active match

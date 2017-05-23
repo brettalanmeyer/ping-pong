@@ -4,15 +4,15 @@ from flask import current_app as app
 
 class MailService():
 
-	def sendFeedback(self, name, message):
+	def sendFeedback(self, name, email, message):
 		subject = "Ping Pong App Feedback"
-		body = "body"
-		html = "html"
+		body = "Ping Pong App Feedback\nName: {}\nEmail: {}\n\n{}".format(name, email, message)
+		html = "<h2>Ping Pong App Feedback</h2><p>Name: {}<br />Email: {}<p><p>{}</p>".format(name, email, message)
 		self.send(subject, body, html)
 
 	def send(self, subject, body, html):
-		sender = (app.config["MAILER_FROM_NAME"], app.config["MAILER_FROM_EMAIL"])
-		recipients = app.config["MAILER_RECIPIENT_EMAILS"]
+		sender = (app.config["MAIL_FROM_NAME"], app.config["MAIL_FROM_EMAIL"])
+		recipients = app.config["MAIL_RECIPIENTS"]
 
 		mail = Mail(app)
 		messages = Message(subject, sender = sender, recipients = recipients)

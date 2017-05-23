@@ -49,7 +49,7 @@ def send_feedback():
 		return render_template("main/feedback.html"), 400
 
 	else:
-		mailService.sendFeedback(request.form["name"], request.form["message"])
+		mailService.sendFeedback(request.form["name"], request.form["email"], request.form["message"])
 		flash("Thank you for your feedback!", "success")
 		return redirect(url_for("mainController.index"))
 
