@@ -136,25 +136,50 @@ a.link {
 
 .main-container {
 	width: 650px;
-	height: 350px;
 	margin: auto;
 }
 
 .main-container img {
 	display: block;
 	width: 250px;
-	margin: 10px auto;
+	margin: 16px auto 0;
+	position: relative;
+	left: 32px;
 }
 
 .main-container .links a {
 	display: block;
 	border: solid 1px #ccc;
-	text-align: center;
-	padding: 10px 0;
 	border-bottom-width: 0px;
+	text-align: center;
+	padding: 12px 0;
 	text-decoration: none;
 	background: #fff;
 	font-size: 22px;
+}
+
+.main-container .links .links-horizontal {
+	overflow: hidden;
+	display: table;
+	width: 100%;
+}
+
+.main-container .links .links-horizontal a {
+	display: table-cell;
+	width: 25%;
+	border: solid 1px #ccc;
+	border-right: none;
+}
+
+.main-container .links .links-horizontal a:first-child {
+	border-radius: 0;
+	border-bottom-left-radius: 6px;
+}
+
+.main-container .links .links-horizontal a:last-child {
+	border-radius: 0;
+	border-right: solid 1px #ccc;
+	border-bottom-right-radius: 6px;
 }
 
 .main-container .links a:first-child {
@@ -368,10 +393,8 @@ a.link {
 	text-decoration: none;
 }
 
-.api-container p {
-	margin: 8px 0;
-}
-
 .api-container pre {
-	margin-bottom: 20px;
+	tab-size: 4;
+	margin: 8px 0 20px;
+	padding: 7px 8px;
 }

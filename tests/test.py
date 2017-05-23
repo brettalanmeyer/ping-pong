@@ -5,6 +5,7 @@ from pingpong.app import app
 from pingpong.utils import database as db
 
 from controllers.TestAdminController import TestAdminController
+from controllers.TestApiController import TestApiController
 from controllers.TestAuthenticationController import TestAuthenticationController
 from controllers.TestButtonController import TestButtonController
 from controllers.TestErrorController import TestErrorController
@@ -13,7 +14,6 @@ from controllers.TestLeaderboardController import TestLeaderboardController
 from controllers.TestMainController import TestMainController
 from controllers.TestMatchController import TestMatchController
 from controllers.TestPlayerController import TestPlayerController
-from controllers.TestRulesController import TestRulesController
 
 from services.TestGameService import TestGameService
 from services.TestIsmService import TestIsmService

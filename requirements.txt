@@ -10,4 +10,5 @@ gevent-websocket
 python-dateutil
 flask-login
 Flask-Testing
+Flask-Mail
 coverage

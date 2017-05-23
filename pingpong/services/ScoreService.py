@@ -4,7 +4,9 @@ from pingpong.models.MatchModel import MatchModel
 from pingpong.models.ScoreModel import ScoreModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from pingpong.utils import util
 from sqlalchemy import text
+import json
 
 class ScoreService(Service):
 
@@ -22,6 +24,14 @@ class ScoreService(Service):
 		app.logger.info("Selecting match=%d", id)
 
 		return db.session.query(ScoreModel).filter(ScoreModel.id == id).one()
+
+	def selectByMatch(self, match):
+		return self.selectByMatchId(match.id)
+
+	def selectByMatchId(self, matchId):
+		app.logger.info("Selecting matchId=%d", matchId)
+
+		return db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId)
 
 	def score(self, matchId, teamId, game):
 		score = ScoreModel(matchId, teamId, game, datetime.now())
@@ -65,3 +75,19 @@ class ScoreService(Service):
 
 		db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).delete()
 		db.session.commit()
+
+	def serialize(self, scores):
+		app.logger.info("Serializing scores")
+
+		data = []
+
+		for score in scores:
+			data.append({
+				"id": score.id,
+				"matchId": score.matchId,
+				"teamId": score.teamId,
+				"game": score.game,
+				"createdAt": score.createdAt
+			})
+
+		return json.dumps(data, default = util.jsonSerial)

@@ -6,7 +6,9 @@ from pingpong.models.PlayerModel import PlayerModel
 from pingpong.models.TeamModel import TeamModel
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
+from pingpong.utils import util
 from sqlalchemy import or_
+import json
 
 class MatchService(Service):
 
@@ -190,3 +192,111 @@ class MatchService(Service):
 		except exc.SQLAlchemyError, error:
 			db.session.rollback()
 			return False
+
+	def serializeMatch(self, match):
+		app.logger.info("Serializing matchId=%d", match.id)
+
+		data = {
+			"id": match.id,
+			"matchType": match.matchType,
+			"playTo": match.playTo,
+			"numOfGames": match.numOfGames,
+			"game": match.game,
+			"ready": match.ready,
+			"complete": match.complete,
+			"createdAt": match.createdAt,
+			"modifiedAt": match.modifiedAt,
+			"completedAt": match.completedAt,
+			"teams": [],
+			"games": []
+		}
+
+		for team in match.teams:
+			teamData = {
+				"id": team.id,
+				"win": team.hasWon(),
+				"createdAt": team.createdAt,
+				"modifiedAt": team.modifiedAt,
+				"players": []
+			}
+
+			for player in team.players:
+				teamData["players"].append({
+					"id": player.id,
+					"name": player.name
+				})
+
+			data["teams"].append(teamData)
+
+		for game in match.games:
+			gameData = {
+				"id": game.id,
+				"game": game.game,
+				"green": None,
+				"yellow": None,
+				"blue": None,
+				"red": None,
+				"winner": game.winner,
+				"winnerScore": game.winnerScore,
+				"loser": game.loser,
+				"loserScore": game.loserScore,
+				"createdAt": game.createdAt,
+				"modifiedAt": game.modifiedAt,
+				"completedAt": game.completedAt,
+				"scores": []
+			}
+
+			if game.green != None:
+				gameData["green"] = {
+					"id": game.green.id,
+					"name": game.green.name
+				}
+
+			if game.yellow != None:
+				gameData["yellow"] = {
+					"id": game.yellow.id,
+					"name": game.yellow.name
+				}
+
+			if game.blue != None:
+				gameData["blue"] = {
+					"id": game.blue.id,
+					"name": game.blue.name
+				}
+
+			if game.red != None:
+				gameData["red"] = {
+					"id": game.red.id,
+					"name": game.red.name
+				}
+
+			data["games"].append(gameData)
+
+		for score in match.scores:
+			data["games"][score.game - 1]["scores"].append({
+				"id": score.id,
+				"createdAt": score.createdAt
+			})
+
+		return json.dumps(data, default = util.jsonSerial)
+
+	def serializeMatches(self, matches):
+		app.logger.info("Serializing matches")
+
+		data = []
+
+		for match in matches:
+			data.append({
+				"id": match.id,
+				"matchType": match.matchType,
+				"playTo": match.playTo,
+				"numOfGames": match.numOfGames,
+				"game": match.game,
+				"ready": match.ready,
+				"complete": match.complete,
+				"createdAt": match.createdAt,
+				"modifiedAt": match.modifiedAt,
+				"completedAt": match.completedAt,
+			})
+
+		return json.dumps(data, default = util.jsonSerial)

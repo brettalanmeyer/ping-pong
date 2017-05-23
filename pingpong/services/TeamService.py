@@ -4,15 +4,30 @@ from pingpong.models.TeamModel import TeamModel
 from pingpong.services.Service import Service
 from pingpong.services import PlayerService
 from pingpong.utils import database as db
+from pingpong.utils import util
+import json
 
 playerService = PlayerService.PlayerService()
 
 class TeamService(Service):
 
+	def select(self):
+		app.logger.info("Selecting teams")
+
+		return db.session.query(TeamModel)
+
 	def selectById(self, id):
 		app.logger.info("Selecting team=%d", id)
 
 		return db.session.query(TeamModel).filter(TeamModel.id == id).one()
+
+	def selectByMatch(self, match):
+		return self.selectByMatchId(match.id)
+
+	def selectByMatchId(self, id):
+		app.logger.info("Selecting teams by matchId=%d", id)
+
+		return db.session.query(TeamModel).filter(TeamModel.matchId == id)
 
 	def create(self, matchId):
 		team = TeamModel(matchId, datetime.now(), datetime.now())
@@ -53,3 +68,23 @@ class TeamService(Service):
 		db.session.commit()
 
 		app.logger.info("Team win=%s team=%d", win, team.id)
+
+	def serialize(self, teams):
+		app.logger.info("Serializing teams")
+
+		data = []
+
+		for team in teams:
+			teamData = {
+				"id": team.id,
+				"matchId": team.matchId,
+				"win": team.hasWon(),
+				"players": []
+			}
+
+			for player in team.players:
+				teamData["players"].append(player.id)
+
+			data.append(teamData)
+
+		return json.dumps(data, default = util.jsonSerial)

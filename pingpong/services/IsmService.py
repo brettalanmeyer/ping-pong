@@ -116,9 +116,9 @@ class IsmService(Service):
 
 		for ism in isms:
 			data.append({
-				"id": int(ism.id),
-				"left": int(ism.left),
-				"right": int(ism.right),
+				"id": ism.id,
+				"left": ism.left,
+				"right": ism.right,
 				"saying": ism.saying,
 				"approved": ism.isApproved(),
 				"createdAt": ism.createdAt,
