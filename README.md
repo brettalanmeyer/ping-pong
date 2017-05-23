@@ -108,6 +108,9 @@ Run single class
 
 ## TODO
 
+* API
+* API - trim down existing apis, only what's needed.
+** put POST button actions in list, get active match
 * Feedback form email
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
