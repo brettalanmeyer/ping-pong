@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import requests
 
-url = 'http://10.9.1.215:5010/{}/{}'
+url = 'http://10.9.0.230:5010/buttons/{}/{}'
 
 buttons = [{
   'color': 'green',
@@ -52,15 +52,17 @@ def input():
         pass
 
       seconds = time.time() - seconds
-     
-      if seconds < 1:
+
+      if seconds < 0.5:
         score(button['color'])
       else:
         undo(button['color'])
+      time.sleep(.375)
 
 def loop():
   while True:
-    input()  
+    input()
+    time.sleep(.1)
 
-if __name__ == '__main__':
+if _name_ == '__main__':
   main()

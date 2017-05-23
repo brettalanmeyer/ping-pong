@@ -105,7 +105,8 @@ Run single class
 
 ## TODO
 
-* API
+* API - trim down existing apis, only what's needed.
+** put POST button actions in list, get active match
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
 * Add avatars to skype messages as base 64 encoded
