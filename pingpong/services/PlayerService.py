@@ -10,15 +10,20 @@ import json
 
 class PlayerService(Service):
 
-	def select(self):
+	def select(self, officeId = None):
 		app.logger.info("Selecting players")
 
-		return db.session.query(PlayerModel).order_by(PlayerModel.name)
+		players = db.session.query(PlayerModel).order_by(PlayerModel.name)
 
-	def selectCount(self):
+		if officeId != None:
+			players = players.filter(PlayerModel.officeId == officeId)
+
+		return players
+
+	def selectCount(self, officeId = None):
 		app.logger.info("Selecting number of players")
 
-		return self.select().count()
+		return self.select(officeId).count()
 
 	def selectById(self, id):
 		app.logger.info("Selecting player=%d", id)
@@ -30,28 +35,33 @@ class PlayerService(Service):
 
 		return players.one()
 
-	def	selectActive(self):
+	def	selectActive(self, officeId = None):
 		app.logger.info("Selecting active players")
 
-		return db.session.query(PlayerModel).filter(PlayerModel.enabled == 1).order_by(PlayerModel.name)
+		players = db.session.query(PlayerModel).filter(PlayerModel.enabled == 1).order_by(PlayerModel.name)
 
-	def selectByName(self, name):
+		if officeId != None:
+			players = players.filter(PlayerModel.officeId == officeId)
+
+		return players
+
+	def selectByName(self, officeId, name):
 		app.logger.info("Selecting player by name=%s", name)
 
-		return db.session.query(PlayerModel).filter_by(name = name)
+		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId).filter_by(name = name)
 
-	def selectByNameExcludingPlayer(self, id, name):
+	def selectByNameExcludingPlayer(self, id, officeId, name):
 		app.logger.info("Selecting player=%d not by name=%s", id, name)
 
-		return db.session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
+		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId, PlayerModel.id != id, PlayerModel.name == name)
 
 	def new(self):
 		app.logger.info("New player")
 
-		return PlayerModel("", True, None, None)
+		return PlayerModel(None, "", True, None, None)
 
-	def create(self, form):
-		player = PlayerModel(form["name"], True, datetime.now(), datetime.now())
+	def create(self, officeId, form):
+		player = PlayerModel(officeId, form["name"], True, datetime.now(), datetime.now())
 		db.session.add(player)
 		db.session.commit()
 

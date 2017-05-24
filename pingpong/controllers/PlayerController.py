@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import session
 from flask import url_for
 from flask_login import current_user
 from pingpong.decorators.LoginRequired import loginRequired
@@ -21,11 +22,23 @@ playerForm = PlayerForm()
 @playerController.route("/players", methods = ["GET"])
 def index():
 	if current_user.is_authenticated:
-		players = playerService.select()
+		players = playerService.select(session["office"])
 	else:
-		players = playerService.selectActive()
+		players = playerService.selectActive(session["office"])
 
 	return render_template("players/index.html", players = players)
+
+@playerController.route("/players/<int:id>", methods = ["GET"])
+def show(id):
+	player = playerService.selectById(id)
+
+	if player == None:
+		abort(404)
+
+	if not player.enabled and not current_user.is_authenticated:
+		abort(404)
+
+	return render_template("players/show.html", player = player)
 
 @playerController.route("/players/new", methods = ["GET"], defaults = { "matchId": None })
 @playerController.route("/players/new/matches/<int:matchId>", methods = ["GET"])
@@ -36,14 +49,14 @@ def new(matchId):
 @playerController.route("/players", methods = ["POST"], defaults = { "matchId": None })
 @playerController.route("/players/matches/<int:matchId>", methods = ["POST"])
 def create(matchId):
-	hasErrors = playerForm.validate(None, request.form)
+	hasErrors = playerForm.validate(None, session["office"], request.form)
 
 	if hasErrors:
 		player = playerService.new()
 		playerForm.load(player, request.form)
 		return render_template("players/new.html", player = player, matchId = matchId), 400
 	else:
-		player = playerService.create(request.form)
+		player = playerService.create(session["office"], request.form)
 
 		uploaded, avatar, extension = util.uploadAvatar(player)
 		if uploaded:
@@ -81,7 +94,7 @@ def update(id):
 	if not player.enabled and not current_user.is_authenticated:
 		abort(404)
 
-	hasErrors = playerForm.validate(id, request.form)
+	hasErrors = playerForm.validate(id, session["office"], request.form)
 
 	originalName = player.name
 

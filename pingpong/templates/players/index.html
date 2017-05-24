@@ -15,49 +15,84 @@
 			<a href="{{ url_for('playerController.index') }}">Players</a>
 		</h1>
 
-		{% for player in players %}
+		<table class="table table-condensed">
 
-			<div class="player-portrait">
+			<tbody>
 
-				<a href="{{ url_for('leaderboardController.players', id = player.id) }}" class="link" title="View {{ player.name }}'s Statistics">{{ player.name }}</a>
+				{% for player in players %}
 
-				<a href="{{ url_for('playerController.edit', id = player.id) }}" class="link">
-					<span class="glyphicon glyphicon-pencil"></span>
-					Edit
-				</a>
+					<tr>
 
-				{% if current_user.is_authenticated %}
-					{% if player.enabled %}
-						<form action="{{ url_for('playerController.disable', id = player.id) }}" method="POST">
-							<button class="btn btn-success btn-xs btn-block">
-								<span class="glyphicon glyphicon glyphicon-ok"></span>
-								Enabled
-							</button>
-						</form>
-					{% else %}
-						<form action="{{ url_for('playerController.enable', id = player.id) }}" method="POST">
-							<button class="btn btn-warning btn-xs btn-block">
-								<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
-								Disabled
-							</button>
-						</form>
-					{% endif %}
+						<td class="avatar-players">
+							<a href="{{ url_for('playerController.show', id = player.id) }}" class="link" title="View {{ player.name }}">
+								{% with id = player.id, avatar = player.avatar %}
+									{% include 'partials/avatar.html' %}
+								{% endwith %}
+							</a>
+						</td>
 
-					<form action="{{ url_for('playerController.delete', id = player.id) }}" method="POST" class="action-delete">
-						<button class="btn btn-danger btn-xs btn-block">
-							<span class="glyphicon glyphicon-trash"></span>
-							Delete
-						</button>
-					</form>
-				{% endif %}
+						<td class="player-name">
+							<a href="{{ url_for('playerController.show', id = player.id) }}" class="link" title="View {{ player.name }}">
+								{{ player.name }}
+							</a>
+						</td>
 
-				{% with id = player.id, avatar = player.avatar, class = "avatar-players" %}
-					{% include 'partials/avatar.html' %}
-				{% endwith %}
+						<td class="player-stats">
+							<a href="{{ url_for('leaderboardController.players', id = player.id) }}" class="link" title="View {{ player.name }}'s Statistics">Stats</a>
+						</td>
 
-			</div>
+						<td width="1">
+							<a href="{{ url_for('playerController.edit', id = player.id) }}" class="btn btn-default btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span>
+								Edit
+							</a>
 
-		{% endfor %}
+						</td>
+
+						{% if current_user.is_authenticated %}
+							<td width="1">
+								{% if player.enabled %}
+									<form action="{{ url_for('playerController.disable', id = player.id) }}" method="POST">
+										<button class="btn btn-success btn-sm btn-block">
+											<span class="glyphicon glyphicon glyphicon-ok"></span>
+											Enabled
+										</button>
+									</form>
+								{% else %}
+									<form action="{{ url_for('playerController.enable', id = player.id) }}" method="POST">
+										<button class="btn btn-warning btn-sm btn-block">
+											<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
+											Disabled
+										</button>
+									</form>
+								{% endif %}
+							</td>
+
+							<td width="1">
+								<form action="{{ url_for('playerController.delete', id = player.id) }}" method="POST" class="action-delete">
+									<button class="btn btn-danger btn-sm btn-block">
+										<span class="glyphicon glyphicon-trash"></span>
+										Delete
+									</button>
+								</form>
+							</td>
+						{% endif %}
+
+					</tr>
+
+				{% else %}
+
+					<tr>
+
+						<td colspan="10" class="text-center">No players found.</td>
+
+					</tr>
+
+				{% endfor %}
+
+			</tbody>
+
+		</table>
 
 	</div>
 

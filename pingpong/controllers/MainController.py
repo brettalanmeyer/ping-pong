@@ -61,6 +61,10 @@ def send_feedback():
 @mainController.route("/set-office", methods = ["POST"])
 def setOffice():
 	office = util.paramForm("office", None, "int")
+
+	if office == 0:
+		office = None
+
 	session["office"] = office
 	next = util.paramForm("next", "/")
 	return redirect(next)

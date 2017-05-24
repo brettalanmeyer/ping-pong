@@ -55,47 +55,26 @@
 	margin-top: 0;
 }
 
-.players-container .player-portrait {
-	float: left;
-	width: 25%;
-	padding: 12px;
-	margin-bottom: 16px;
+.players-container .player-name {
+	width: 200px;
+	text-align: center;
 }
 
-.players-container .player-portrait:nth-child(4n - 1) {
-	clear: both;
-	padding-left: 0;
-}
-
-.players-container .player-portrait:nth-child(4n + 2) {
-	padding-right: 0;
-}
-
-.players-container .player-portrait .link {
-	float: left;
-	width: 50%;
-}
-
-.players-container .player-portrait .link:last-of-type {
-	text-align: right;
-}
-
-.players-container .player-portrait form {
-	float: left;
-	width: 49%;
-	margin: 4px 0;
-}
-
-.players-container .player-portrait form:first-of-type {
-	margin-right: 1%;
-}
-.players-container .player-portrait form:last-of-type {
-	margin-left: 1%;
+.players-container .player-stats {
 }
 
 .players-container .avatar-players {
+	width: 120px;
+}
+
+.players-container .avatar-players img {
 	display: block;
 	max-width: 100%;
-	max-height: 100%;
-	margin: 8px auto 0;
+	margin: auto;
+}
+
+.player-show img {
+	display: block;
+	margin: 20px auto;
+	max-width: 100%;
 }
