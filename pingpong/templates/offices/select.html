@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Select Your Office{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>Select Your Office</h1>
+
+		<form action="{{ url_for('officeController.set') }}" method="POST">
+
+			{% for office in session.offices %}
+
+				<button type="submit" name="office" value="{{ office.id }}" class="btn btn-default btn-lg btn-block">{{ office.city }}, {{ office.state }}</button>
+
+			{% endfor %}
+
+		</form>
+
+	</div>
+
+{% endblock %}

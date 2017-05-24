@@ -3,15 +3,27 @@ from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import session
 from flask import url_for
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.OfficeForm import OfficeForm
 from pingpong.services.OfficeService import OfficeService
+from pingpong.utils import util
 
 officeController = Blueprint("officeController", __name__)
 
 officeService = OfficeService()
 officeForm = OfficeForm()
+
+@officeController.route("/offices/select", methods = ["GET"])
+def select():
+	session["offices"] = officeService.load()
+	return render_template("offices/select.html")
+
+@officeController.route("/offices/set", methods = ["POST"])
+def set():
+	session["office"] = util.paramForm("office", None, "int")
+	return redirect(util.paramForm("next", "/"))
 
 @officeController.route("/offices", methods = ["GET"])
 @loginRequired("officeController.index")

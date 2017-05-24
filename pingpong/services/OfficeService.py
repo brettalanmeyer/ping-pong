@@ -89,7 +89,7 @@ class OfficeService(Service):
 			return office, False
 
 	def load(self):
-		offices = self.selectActive();
+		offices = self.selectActive()
 
 		data = []
 

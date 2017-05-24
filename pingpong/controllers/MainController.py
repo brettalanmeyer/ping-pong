@@ -14,7 +14,6 @@ from pingpong.services.MatchService import MatchService
 from pingpong.services.OfficeService import OfficeService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.utils import database as db
-from pingpong.utils import util
 
 mainController = Blueprint("mainController", __name__)
 
@@ -58,29 +57,19 @@ def send_feedback():
 		flash("Thank you for your feedback!", "success")
 		return redirect(url_for("mainController.index"))
 
-@mainController.route("/set-office", methods = ["POST"])
-def setOffice():
-	office = util.paramForm("office", None, "int")
-
-	if office == 0:
-		office = None
-
-	session["office"] = office
-	next = util.paramForm("next", "/")
-	return redirect(next)
-
 @mainController.before_app_request
 def beforeRequest():
-	offices = loadOffices()
 	app.logger.access("%s \"%s %s\"", request.remote_addr, request.environ["REQUEST_METHOD"], request.url)
+
+	if "offices" not in session:
+		session["offices"] = officeService.load()
+
+	if request.endpoint != "static":
+		if "office" not in session:
+			if not (request.endpoint == 'officeController.select' or request.endpoint == 'officeController.set'):
+				return redirect(url_for("officeController.select"))
 
 @mainController.after_app_request
 def afterRequest(response):
 	db.session.close()
 	return response
-
-def loadOffices():
-	if "offices" not in session:
-		session["offices"] = officeService.load()
-
-	return session.get("offices")
