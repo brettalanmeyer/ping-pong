@@ -1,9 +1,0 @@
-STATS
-
-total wins
-total losses
-total points for
-total points against
-win %
-time played
-
