@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Create Office{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>
+			<a href="{{ url_for('officeController.index') }}">Offices</a>
+			/
+			<a href="{{ url_for('officeController.new') }}">Create Office</a>
+		</h1>
+
+		<form action="{{ url_for('officeController.create') }}" method="POST">
+
+			{% include 'offices/_form.html' %}
+
+			<button class="btn btn-default">Create Office</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}

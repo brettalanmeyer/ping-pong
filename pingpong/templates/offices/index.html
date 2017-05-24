@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block title %}Offices{% endblock %}
+
+{% block body %}
+
+	<div class="container offices-container">
+
+		<a class="btn btn-default btn-sm action" href="{{ url_for('officeController.new') }}">
+			<span class="glyphicon glyphicon-star"></span>
+			Create Office
+		</a>
+
+		<h1 class="with-action">
+			<a href="{{ url_for('officeController.index') }}">Offices</a>
+		</h1>
+
+		<table class="table table-condensed">
+
+			<thead>
+				<tr>
+					<th>City</th>
+					<th>State</th>
+					<th>Skype Chat Key</th>
+					<th>Hash</th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				{% for office in offices %}
+
+					<tr>
+
+						<td>{{ office.city }}</td>
+						<td>{{ office.state }}</td>
+						<td>{{ office.skypeChatId }}</td>
+						<td>{{ office.hash }}</td>
+
+						<td width="1">
+							<a href="{{ url_for('officeController.edit', id = office.id) }}" class="btn btn-default btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span>
+								Edit
+							</a>
+						</td>
+
+						<td width="1">
+							{% if office.isEnabled() %}
+								<form action="{{ url_for('officeController.disable', id = office.id) }}" method="POST">
+									<button class="btn btn-success btn-sm btn-block">
+										<span class="glyphicon glyphicon glyphicon-ok"></span>
+										Enabled
+									</button>
+								</form>
+							{% else %}
+								<form action="{{ url_for('officeController.enable', id = office.id) }}" method="POST">
+									<button class="btn btn-warning btn-sm btn-block">
+										<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
+										Disabled
+									</button>
+								</form>
+							{% endif %}
+						</td>
+
+						<td width="1">
+							<form action="{{ url_for('officeController.delete', id = office.id) }}" method="POST" class="action-delete">
+								<button class="btn btn-danger btn-sm">
+									<span class="glyphicon glyphicon-trash"></span>
+									Delete
+								</button>
+							</form>
+						</td>
+
+					</tr>
+
+				{% else %}
+
+					<tr>
+
+						<td colspan="10" class="text-center">No offices found.</td>
+
+					</tr>
+
+				{% endfor %}
+
+			</tbody>
+
+		</table>
+
+	</div>
+
+{% endblock %}

@@ -79,7 +79,7 @@ class PlayerService(Service):
 		return player
 
 	def disable(self, player):
-		app.logger.info("Enabling player=%d", player.id)
+		app.logger.info("Disabling player=%d", player.id)
 
 		player.enabled = False
 		player.modifiedAt = datetime.now()

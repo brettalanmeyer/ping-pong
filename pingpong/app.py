@@ -28,6 +28,7 @@ sess = Session()
 sess.init_app(app)
 
 from pingpong.controllers.AdminController import adminController
+from pingpong.controllers.ApiController import apiController
 from pingpong.controllers.AuthenticationController import authenticationController
 from pingpong.controllers.ButtonController import buttonController
 from pingpong.controllers.ErrorController import errorController
@@ -35,10 +36,11 @@ from pingpong.controllers.IsmController import ismController
 from pingpong.controllers.LeaderboardController import leaderboardController
 from pingpong.controllers.MainController import mainController
 from pingpong.controllers.MatchController import matchController
+from pingpong.controllers.OfficeController import officeController
 from pingpong.controllers.PlayerController import playerController
-from pingpong.controllers.ApiController import apiController
 
 app.register_blueprint(adminController)
+app.register_blueprint(apiController)
 app.register_blueprint(authenticationController)
 app.register_blueprint(buttonController)
 app.register_blueprint(errorController)
@@ -46,5 +48,5 @@ app.register_blueprint(ismController)
 app.register_blueprint(leaderboardController)
 app.register_blueprint(mainController)
 app.register_blueprint(matchController)
+app.register_blueprint(officeController)
 app.register_blueprint(playerController)
-app.register_blueprint(apiController)

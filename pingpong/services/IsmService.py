@@ -49,7 +49,6 @@ class IsmService(Service):
 		return ism
 
 	def update(self, id, form):
-
 		ism = self.selectById(id)
 		ism.left = form["left"]
 		ism.right = form["right"]
