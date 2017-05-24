@@ -46,8 +46,8 @@ ASSETS_DEBUG = False
 HOST = '0.0.0.0'
 PORT = 5010
 SECRET_KEY = ''
-LOG_FILE_APPLICATION = 'logs/app.log'
-LOG_FILE_ACCESS = 'logs/access.log'
+LOG_FILE_APPLICATION = 'storage/logs/app.log'
+LOG_FILE_ACCESS = 'storage/logs/access.log'
 LOG_ACCESS_FORMAT = '%(asctime)s %(process)d %(message)s'
 LOG_APP_FORMAT = '%(asctime)s %(levelname)s %(process)d %(message)s %(pathname)s:%(lineno)d:%(funcName)s()'
 LOG_WHEN = 'midnight'
@@ -74,10 +74,10 @@ MAIL_FROM_NAME = ''
 MAIL_FROM_EMAIL = ''
 MAIL_RECIPIENTS = ['']
 SESSION_TYPE = 'filesystem'
+SESSION_FILE_DIR = 'pingpong/storage/sessions'
 ```
 
 create dbconfig.cfg
-
 ```
 [db]
 mysql_username =

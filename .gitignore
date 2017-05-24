@@ -4,4 +4,4 @@
 /dbconfig.cfg
 /pingpong/static/.webassets-cache/
 /htmlcov
-/flask_session
+/storage

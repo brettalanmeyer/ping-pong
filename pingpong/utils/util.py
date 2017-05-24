@@ -91,7 +91,7 @@ def uploadAvatar(player):
 		if len(avatar.filename) != 0:
 			extension = avatar.filename.split(".")[-1]
 			name = "{}.{}".format(generateUUID(), extension)
-			avatar.save("{}/avatars/{}".format(app.root_path, name))
+			avatar.save("{}/storage/avatars/{}".format(app.root_path, name))
 			deleteAvatar(player.avatar)
 
 			return True, name, extension
@@ -102,10 +102,10 @@ def deleteAvatar(avatar):
 	if avatar == None:
 		return
 
-	avatarPath = "{}/avatars/{}".format(app.root_path, avatar)
+	avatarPath = "{}/storage/avatars/{}".format(app.root_path, avatar)
 
 	if os.path.isfile(avatarPath):
 		os.remove(avatarPath)
 
 def avatar(player):
-	return send_from_directory("{}/avatars/".format(app.root_path), player.avatar, mimetype = "image/{}".format(player.extension))
+	return send_from_directory("{}/storage/avatars/".format(app.root_path), player.avatar, mimetype = "image/{}".format(player.extension))
