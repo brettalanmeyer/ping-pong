@@ -114,11 +114,7 @@ Run single class
 ## TODO
 
 * Add title attributes to skype messages
-* API
-* API - trim down existing apis, only what's needed.
-** put POST button actions in list, get active match
 * Multiple offices - generate an unexposed api key for each office that can only be given out by admin
-* Feedback form email
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
 * Add avatars to skype messages as base 64 encoded
@@ -126,10 +122,6 @@ Run single class
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise
-* Report of avg time people play per day
-* Dave Thomas
-* try to put skype stuff in this app if possible
-* caching everything until a new match is played
 
 Delegate Python Process
 	screen python run.py

@@ -159,12 +159,6 @@
 	"teamId": 12,
 	"game": 1,
 	"createdAt": "2017-03-24 09:26:49"
-}, {
-	"id": 161,
-	"matchId": 13,
-	"teamId": 12,
-	"game": 2,
-	"createdAt": "2017-03-24 09:27:25"
 }]</pre>
 
 
@@ -182,6 +176,28 @@
 	"createdAt": "2017-03-02 10:52:00",
 	"modifiedAt": "2017-03-24 14:20:00"
 },]</pre>
+
+
+	<code>POST</code>
+	<kbd>{{ url_for('buttonController.score', button = 'green') }}</kbd>
+
+<pre>{
+	"matchId": 123,
+	"action": "score",
+	"button": "green"
+}
+</pre>
+
+
+	<code>POST</code>
+	<kbd>{{ url_for('buttonController.undo', button = 'green') }}</kbd>
+
+<pre>{
+	"matchId": 234,
+	"action": "undo",
+	"button": "green"
+}
+</pre>
 
 	</div>
 
