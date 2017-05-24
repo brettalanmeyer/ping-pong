@@ -13,3 +13,33 @@ CREATE TABLE `offices` (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
+
+
+ALTER TABLE `players`
+	ADD COLUMN `officeId` INT(11) NULL DEFAULT NULL AFTER `id`;
+ALTER TABLE `players`
+	ADD CONSTRAINT `fk_players_offices` FOREIGN KEY (`officeId`) REFERENCES `offices` (`id`);
+
+ALTER TABLE `isms`
+	ADD COLUMN `officeId` INT(11) NULL DEFAULT NULL AFTER `id`;
+ALTER TABLE `isms`
+	ADD CONSTRAINT `fk_isms_offices` FOREIGN KEY (`officeId`) REFERENCES `offices` (`id`);
+
+
+ALTER TABLE `matches`
+	ADD COLUMN `officeId` INT(11) NULL DEFAULT NULL AFTER `id`;
+ALTER TABLE `matches`
+	ADD CONSTRAINT `fk_matches_offices` FOREIGN KEY (`officeId`) REFERENCES `offices` (`id`);
+
+
+INSERT INTO `offices` (`id`, `city`, `state`, `hash`, `skypeChatId`, `enabled`, `createdAt`, `modifiedAt`)
+VALUES (1, 'Ames', 'Iowa', '6ca60c6a-c103-4884-8d84-6444cec51939', '8:brettmeyerxpx', '1', NOW(), NOW());
+
+UPDATE `players`
+SET `officeId` = 1;
+
+UPDATE `matches`
+SET `officeId` = 1;
+
+UPDATE `isms`
+SET `officeId` = 1;

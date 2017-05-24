@@ -7,6 +7,7 @@ class MatchModel(Base):
 	__tablename__ = "matches"
 
 	id = Column(Integer, primary_key = True)
+	officeId = Column(Integer, ForeignKey("offices.id"))
 	matchType = Column(String)
 	playTo = Column(Integer)
 	numOfGames = Column(Integer)
@@ -16,6 +17,8 @@ class MatchModel(Base):
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 	completedAt = Column(DateTime)
+
+	office = relationship("OfficeModel")
 
 	teams = relationship("TeamModel", cascade = "all, delete-orphan")
 	games = relationship("GameModel", cascade = "all, delete-orphan")

@@ -7,6 +7,7 @@ class PlayerModel(Base):
 	__tablename__ = "players"
 
 	id = Column(Integer, primary_key = True)
+	officeId = Column(Integer, ForeignKey("offices.id"))
 	name = Column(String)
 	avatar = Column(String)
 	extension = Column(String)
@@ -14,7 +15,10 @@ class PlayerModel(Base):
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 
-	def __init__(self, name, enabled, createdAt, modifiedAt):
+	office = relationship("OfficeModel")
+
+	def __init__(self, officeId, name, enabled, createdAt, modifiedAt):
+		self.officeId = officeId
 		self.name = name
 		self.enabled = enabled
 		self.createdAt = createdAt
