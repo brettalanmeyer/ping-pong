@@ -19,28 +19,7 @@
 				Isms: {{ counts.numOfIsms }}<br />
 			</div>
 
-			<div class="col-xs-3">
-				<p><strong>Manage Data</strong></p>
-
-				<form action="{{ url_for('adminController.delete_all') }}" method="POST" class="action-delete">
-					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or not counts.total %}disabled{% endif %}>
-						<span class="glyphicon glyphicon-trash"></span>
-						Destroy All Data
-					</button>
-				</form>
-
-				<br />
-
-				<form action="{{ url_for('adminController.copy_remote_data') }}" method="POST">
-					<button class="btn btn-danger btn-sm btn-block" {% if not allowed or counts.total %}disabled{% endif %}>
-						<span class="glyphicon glyphicon-trash"></span>
-						Copy Remote Data
-					</button>
-				</form>
-
-			</div>
-
-			<div class="col-xs-7">
+			<div class="col-xs-5">
 
 				<form action="{{ url_for('adminController.send_message') }}" method="POST">
 
@@ -57,13 +36,9 @@
 
 			</div>
 
-		</div>
+			<div class="col-xs-2">
 
-		{% if matchData != None %}
-
-			<div class="row">
-
-				<div class="col-xs-3">
+				{% if matchData != None %}
 
 					<h4>{{ matchData.matchType.title() }}</h4>
 
@@ -91,19 +66,21 @@
 						</p>
 					{% endif %}
 
-				</div>
+				{% else %}
 
-				<div class="col-xs-3">
-					{% include 'partials/scoring-tools.html' %}
-				</div>
+					<p>No active match.</p>
 
-				<div class="col-xs-6"></div>
+				{% endif %}
 
 			</div>
 
-		{% else %}
-			<p>No active match.</p>
-		{% endif %}
+			<div class="col-xs-2">
+				{% if matchData != None %}
+					{% include 'partials/scoring-tools.html' %}
+				{% endif %}
+			</div>
+
+		</div>
 
 	</div>
 

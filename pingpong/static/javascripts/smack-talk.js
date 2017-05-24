@@ -31,7 +31,6 @@ $(function(){
 			smackTalkButton.show();
 			smackTalkForm.hide();
 			smackTalkInput.val("");
-			enableUndo();
 		}
 
 	}
