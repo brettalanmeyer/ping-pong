@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_mail import Mail
 from flask_socketio import SocketIO
 from flask_session import Session
 
@@ -19,6 +20,9 @@ app.url_map.strict_slashes = False
 
 socketio = SocketIO()
 socketio.init_app(app)
+
+mail = Mail()
+mail.init_app(app)
 
 sess = Session()
 sess.init_app(app)

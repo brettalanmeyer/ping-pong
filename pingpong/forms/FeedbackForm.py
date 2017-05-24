@@ -9,6 +9,11 @@ class FeedbackForm(Form):
 			"required": True,
 			"type": "string"
 		}, {
+			"name": "email",
+			"label": "Email",
+			"required": False,
+			"type": "string"
+		}, {
 			"name": "message",
 			"label": "Feedback",
 			"required": True,

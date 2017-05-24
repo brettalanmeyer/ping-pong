@@ -65,9 +65,14 @@ MYSQL_REMOTE_PASSWORD = ''
 MYSQL_REMOTE_HOST = ''
 MYSQL_REMOTE_DATABASE = ''
 UNDO_ALLOWED_ADDRESS = ''
-MAILER_FROM_NAME = ''
-MAILER_FROM_EMAIL = ''
-MAILER_RECIPIENT_EMAILS = ['']
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 465
+MAIL_USE_SSL = True
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+MAIL_FROM_NAME = ''
+MAIL_FROM_EMAIL = ''
+MAIL_RECIPIENTS = ['']
 SESSION_TYPE = 'filesystem'
 ```
 
@@ -109,7 +114,8 @@ Run single class
 
 ## TODO
 
-* Feedback form email
+* Add title attributes to skype messages
+* Multiple offices - generate an unexposed api key for each office that can only be given out by admin
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
 * Add avatars to skype messages as base 64 encoded
@@ -117,10 +123,6 @@ Run single class
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise
-* Report of avg time people play per day
-* Dave Thomas
-* try to put skype stuff in this app if possible
-* caching everything until a new match is played
 
 Delegate Python Process
 	screen python run.py

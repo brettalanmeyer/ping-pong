@@ -1,20 +1,19 @@
 <div id="scoring-tools" class="scoring-tools">
 
-	<button class="team yellow" data-color="yellow" data-action="score">score</button>
-	<button class="team green" data-color="green" data-action="score">score</button>
+	<button class="team yellow score" data-color="yellow" data-action="{{ url_for('buttonController.score', button = 'yellow') }}">score</button>
+	<button class="team green score" data-color="green" data-action="{{ url_for('buttonController.score', button = 'green') }}">score</button>
 
-	<button class="team yellow" data-color="yellow" data-action="undo">undo</button>
-	<button class="team green" data-color="green" data-action="undo">undo</button>
+	<button class="team yellow undo" data-color="yellow" data-action="{{ url_for('buttonController.undo', button = 'yellow') }}">undo</button>
+	<button class="team green undo" data-color="green" data-action="{{ url_for('buttonController.undo', button = 'green') }}">undo</button>
 
-	<button class="team blue" data-color="blue" data-action="score">score</button>
-	<button class="team red" data-color="red" data-action="score">score</button>
+	<button class="team blue score" data-color="blue" data-action="{{ url_for('buttonController.score', button = 'blue') }}">score</button>
+	<button class="team red score" data-color="red" data-action="{{ url_for('buttonController.score', button = 'red') }}">score</button>
 
-	<button class="team blue" data-color="blue" data-action="undo">undo</button>
-	<button class="team red" data-color="red" data-action="undo">undo</button>
+	<button class="team blue undo" data-color="blue" data-action="{{ url_for('buttonController.undo', button = 'blue') }}">undo</button>
+	<button class="team red undo" data-color="red" data-action="{{ url_for('buttonController.undo', button = 'red') }}">undo</button>
 
 	<button class="random-score wide-action">random score</button>
 	<button class="random-undo wide-action">random undo</button>
 	<button class="auto-score wide-action">auto score</button>
-	<button class="delete-all wide-action" data-color="none" data-action="delete-scores">delete scores</button>
 
 </div>

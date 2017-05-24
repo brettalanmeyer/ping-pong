@@ -6,6 +6,7 @@ from flask import Response
 from pingpong.app import socketio
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.MatchService import MatchService
+import json
 
 buttonController = Blueprint("buttonController", __name__)
 
@@ -16,17 +17,24 @@ def score(button):
 	validateButton(button)
 
 	data = None
+	response = {
+		"matchId": None,
+		"action": "score",
+		"button": button
+	}
 	match = matchService.selectActiveMatch()
 
 	if match != None:
 		matchType = MatchType(match)
 		data = matchType.score(match, button)
+		response["matchId"] = match.id
 	else:
 		latestMatch = matchService.selectLatestMatch()
 		matchType = MatchType(latestMatch)
 
 		if matchType.isNines():
 			newMatch = matchType.playAgain(latestMatch, None, True)
+			response["matchId"] = newMatch.id
 			data = {
 				"matchType": "nines",
 				"redirect": True,
@@ -34,31 +42,25 @@ def score(button):
 			}
 
 	socketio.emit("response", data, broadcast = True)
-	return button
+	return Response(json.dumps(response), status = 200, mimetype = "application/json")
 
 @buttonController.route("/buttons/<path:button>/undo", methods = ["POST"])
 def undo(button):
 	validateButton(button)
 
 	data = None
+	response = {
+		"matchId": None,
+		"action": "undo",
+		"button": button
+	}
 	match = matchService.selectActiveMatch()
 	if match != None:
+		response["matchId"] = match.id
 		matchType = MatchType(match)
 		data = matchType.undo(match, button)
 	socketio.emit("response", data, broadcast = True)
-	return button
-
-@buttonController.route("/buttons/<path:button>/delete-scores", methods = ["POST"])
-def delete_scores(button):
-	validateButton(button)
-
-	data = None
-	match = matchService.selectActiveMatch()
-	if match != None:
-		scoreService.deleteByMatch(match.id)
-		data = MatchType(match).matchData()
-	socketio.emit("response", data, broadcast = True)
-	return button
+	return Response(json.dumps(response), status = 200, mimetype = "application/json")
 
 def validateButton(button):
 	if button not in matchService.colors:
