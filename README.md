@@ -109,7 +109,6 @@ Run single class
 
 ## TODO
 
-* change css for 'active' match on matches list
 * Add title attributes to skype messages
 * Multiple offices - generate an unexposed api key for each office that can only be given out by admin
 ** how to clear session once an change has been made
