@@ -14,7 +14,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-		<meta name="office" content="{{ session.office }}">
+		{% if "office" in session %}<meta name="office" content="{{ session.office.id }}">{% endif %}
 		{% if config.DEBUG_TOOLS %}<meta name="debug" content="true">{% endif %}
 
 		<title>Ping Pong{% if request.endpoint != "mainController.index" %} | {% endif %}{% block title %}{% endblock %}</title>

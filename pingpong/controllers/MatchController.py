@@ -72,8 +72,7 @@ def create():
 def games(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	return render_template("matches/num-of-games.html", match = match)
 
@@ -81,8 +80,7 @@ def games(id):
 def games_update(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchService.updateGames(id, request.form["numOfGames"])
 	return redirect(url_for("matchController.players", id = id))
@@ -91,8 +89,7 @@ def games_update(id):
 def players(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchType = MatchType(match)
 	instance = matchType.getMatchType()
@@ -103,8 +100,7 @@ def players(id):
 def players_create(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchType = MatchType(match)
 
@@ -120,8 +116,7 @@ def players_create(id):
 def show(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	data = MatchType(match).matchData()
 	return render_template(data["template"], data = data)
@@ -130,8 +125,7 @@ def show(id):
 def show_json(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	data = MatchType(match).matchData()
 	return Response(json.dumps(data, default = util.jsonSerial), status = 200, mimetype = "application/json")
@@ -140,8 +134,7 @@ def show_json(id):
 def again(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchType = MatchType(match)
 
@@ -159,8 +152,7 @@ def again(id):
 def undo(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	if match.ready:
 		matchType = MatchType(match)
@@ -173,8 +165,7 @@ def undo(id):
 def delete(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	match, success = matchService.delete(match)
 
@@ -194,7 +185,14 @@ def smack_talk(id):
 	message = util.paramForm("message", None)
 	if message != None and len(message) > 0:
 		data = { "message": message }
-		socketio.emit("smack-talk", data, broadcast = True)
+		socketio.emit("smack-talk-{}".format(session["office"]["id"]), data, broadcast = True)
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
 
 	return message
+
+def exists(match):
+	if match == None:
+		abort(404)
+
+	if match.office.id != session["office"]["id"]:
+		abort(404)

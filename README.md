@@ -109,6 +109,7 @@ Run single class
 
 ## TODO
 
+* change css for 'active' match on matches list
 * Add title attributes to skype messages
 * Multiple offices - generate an unexposed api key for each office that can only be given out by admin
 ** how to clear session once an change has been made
@@ -120,23 +121,4 @@ Run single class
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise
 
-Delegate Python Process
-	screen python run.py
-	Ctrl-a then d
-List Screen Processes
-	screen -ls
-Kill Screen Process
-	screen -X -S PID quit
-
-Raspberry pi resolution
-1184x624
-
-
-SELECT players.name, DATE(matches.createdAt) as date, SEC_TO_TIME(SUM(TIME_TO_SEC(matches.completedAt) - TIME_TO_SEC(matches.createdAt))) AS timediff, group_concat(matches.id) as matches
-FROM matches
-LEFT JOIN teams ON matches.id = teams.matchId
-LEFT JOIN teams_players ON teams.id = teams_players.teamId
-LEFT JOIN players ON teams_players.playerId = players.id
-WHERE matches.complete = 1 and matches.matchType = 'nines'
-GROUP BY YEAR(matches.createdAt), MONTH(matches.createdAt), Day(matches.createdAt), players.id
-ORDER BY date, players.name
+Raspberry pi resolution: 1184x624

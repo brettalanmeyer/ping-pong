@@ -34,8 +34,8 @@ class Singles(BaseMatch):
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
 			"teams": {
-				"green": self.newPlayer(match.officeId, match.id, game.green.id),
-				"yellow": self.newPlayer(match.officeId, match.id, game.yellow.id)
+				"green": self.newPlayer(match.officeId, match.id, game.greenId),
+				"yellow": self.newPlayer(match.officeId, match.id, game.yellowId)
 			},
 			"points": 0
 		}
@@ -193,9 +193,9 @@ class Singles(BaseMatch):
 
 	def playAgain(self, match, numOfGames, persistTeams):
 		game = match.games[0]
-		playerIds = [game.green.id, game.yellow.id]
+		playerIds = [game.greenId, game.yellowId]
 
-		newMatch = matchService.create(self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType)
 		newMatch.numOfGames = numOfGames
 		newMatch.game = 1
 		self.createTeams(newMatch, playerIds, True)
@@ -224,8 +224,8 @@ class Singles(BaseMatch):
 				loserScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
 
 		elo = "({}, {}{})"
-		winnerElo = leaderboardService.eloResult(match.id, winnerPlayer.id)
-		loserElo = leaderboardService.eloResult(match.id, losingPlayer.id)
+		winnerElo = leaderboardService.eloResult(match.officeId, match.id, winnerPlayer.id)
+		loserElo = leaderboardService.eloResult(match.officeId, match.id, losingPlayer.id)
 
 		message += winnerScores
 

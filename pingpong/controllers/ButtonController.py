@@ -25,6 +25,7 @@ def score(button):
 		"matchId": None,
 		"action": "score",
 		"button": button,
+		"officeId": office.id,
 		"officeName": "{}, {}".format(office.city, office.state)
 	}
 	match = matchService.selectActiveMatch(office.id)
@@ -46,7 +47,7 @@ def score(button):
 				"matchId": newMatch.id
 			}
 
-	socketio.emit("response", data, broadcast = True)
+	socketio.emit("response-{}".format(office.id), data, broadcast = True)
 	return Response(json.dumps(response), status = 200, mimetype = "application/json")
 
 @buttonController.route("/api/buttons/<path:button>/undo", methods = ["POST"])
@@ -59,6 +60,7 @@ def undo(button):
 		"matchId": None,
 		"action": "undo",
 		"button": button,
+		"officeId": office.id,
 		"officeName": "{}, {}".format(office.city, office.state)
 	}
 	match = matchService.selectActiveMatch(office.id)
@@ -66,7 +68,7 @@ def undo(button):
 		response["matchId"] = match.id
 		matchType = MatchType(match)
 		data = matchType.undo(match, button)
-	socketio.emit("response", data, broadcast = True)
+	socketio.emit("response-{}".format(office.id), data, broadcast = True)
 	return Response(json.dumps(response), status = 200, mimetype = "application/json")
 
 def validateButton(button):

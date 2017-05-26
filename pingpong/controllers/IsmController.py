@@ -29,9 +29,9 @@ def index():
 @ismController.route("/isms.json", methods = ["GET"])
 def index_json():
 	if current_user.is_authenticated:
-		isms = ismService.select()
+		isms = ismService.select(session["office"]["id"])
 	else:
-		isms = ismService.selectApproved()
+		isms = ismService.selectApproved(session["office"]["id"])
 
 	return Response(ismService.serialize(isms), status = 200, mimetype = "application/json")
 

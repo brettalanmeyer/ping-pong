@@ -32,10 +32,10 @@ class MatchService(Service):
 
 		return None
 
-	def selectNotById(self, id):
+	def selectNotById(self, id, officeId):
 		app.logger.info("Selecting matches excluding match=%d", id)
 
-		return db.session.query(MatchModel).filter(MatchModel.id != id)
+		return db.session.query(MatchModel).filter(MatchModel.id != id, MatchModel.officeId == officeId)
 
 	def selectComplete(self, officeId = None):
 		app.logger.info("Selecting completed matches")
@@ -143,7 +143,7 @@ class MatchService(Service):
 		return match
 
 	def play(self, match):
-		matches = self.selectNotById(match.id)
+		matches = self.selectNotById(match.id, match.officeId)
 		for item in matches:
 			item.ready = False
 

@@ -1,4 +1,4 @@
-<div id="scoring-tools" class="scoring-tools">
+<div id="scoring-tools" class="scoring-tools" data-key="{{ session.office.hash }}">
 
 	<button class="team yellow score" data-color="yellow" data-action="{{ url_for('buttonController.score', button = 'yellow') }}">score</button>
 	<button class="team green score" data-color="green" data-action="{{ url_for('buttonController.score', button = 'green') }}">score</button>

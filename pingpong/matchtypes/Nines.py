@@ -191,7 +191,7 @@ class Nines(BaseMatch):
 			# swap green and red
 			playerIds = [playerIds[3], playerIds[1], playerIds[2], playerIds[0]]
 
-		newMatch = matchService.create(self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType)
 		self.createTeams(newMatch, playerIds, False)
 		matchService.play(newMatch)
 
