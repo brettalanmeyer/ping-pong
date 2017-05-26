@@ -17,11 +17,15 @@
 			{% endwith %}
 
 			<ul class="nav nav-tabs">
+
 				{% for item in matchTypes %}
+
 					<li role="presentation" class="{% if stats.matchType == item %}active{% endif %}">
 						<a href="{{ url_for('leaderboardController.index', matchType = item, season = stats.season) }}">{{ item.title() }}</a>
 					</li>
+
 				{% endfor %}
+
 			</ul>
 
 			<table id="leaderboard" class="leaderboard-table table table-sortable {{ stats.matchType }}">
@@ -30,8 +34,7 @@
 
 					<tr>
 
-						<th></th>
-						<th></th>
+						<th colspan="2"></th>
 
 						<th data-sort="string">
 							Player
@@ -138,19 +141,27 @@
 					{% set numPlayers = [] %}
 
 					{% for player in stats.players if not player.matches == 0 %}
+
 						{% with num = loop.index, player = player %}
 							{% include 'leaderboard/index-player.html' %}
 							{% if numPlayers.append('') %}{% endif %}
 						{% endwith %}
+
+					{% else %}
+
+						<tr>
+							<th colspan="13" class="text-center">No {{ stats.matchType }} matches found.</th>
+						</tr>
+
 					{% endfor %}
 
 				</tbody>
 
 				<tfoot>
+
 					<tr>
 
-						<th></th>
-						<th></th>
+						<th colspan="2"></td>
 						<th>Totals:</th>
 						<th class="elo"></th>
 						<th>{{ "{:,}".format(stats.totals["matches"]) }}</th>
@@ -159,17 +170,16 @@
 						<th class="points-against">{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
+						<th colspan="4"></td>
 
 					</tr>
 
 					{% for player in stats.players if player.matches == 0 %}
+
 						{% with num = numPlayers|count + loop.index, player = player %}
 							{% include 'leaderboard/index-player.html' %}
 						{% endwith %}
+
 					{% endfor %}
 
 				</tfoot>
