@@ -1,5 +1,12 @@
 $(function(){
 
+	/*$.post("http://localhost:5000/api/buttons/green/score", { "key": "6ca60c6a-c103-4884-8d84-6444cec51939" }).done(function(response){
+		console.log(response);
+	});
+	$.post("http://localhost:5000/api/buttons/green/undo", { "key": "6ca60c6a-c103-4884-8d84-6444cec51939" }).done(function(response){
+		console.log(response);
+	});*/
+
 	$(".table-sortable").stupidtable();
 
 	$("#leaderboard.singles").find("th.elo").stupidsort("desc");

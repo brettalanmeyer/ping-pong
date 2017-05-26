@@ -10,15 +10,6 @@
 
 		<div class="row">
 
-			<div class="col-xs-2">
-				<p><strong>App Info</strong></p>
-				Players: {{ counts.numOfPlayers }}<br />
-				Matches: {{ counts.numOfMatches }}<br />
-				Games: {{ counts.numOfGames }}<br />
-				Scores: {{ counts.numOfScores }}<br />
-				Isms: {{ counts.numOfIsms }}<br />
-			</div>
-
 			<div class="col-xs-5">
 
 				<form action="{{ url_for('adminController.send_message') }}" method="POST">
@@ -34,6 +25,12 @@
 
 				</form>
 
+			</div>
+
+			<div class="col-xs-2">
+				{% for office in offices %}
+					{{ office.city }}, {{ office.state }}
+				{% endfor %}
 			</div>
 
 			<div class="col-xs-2">

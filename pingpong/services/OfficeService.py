@@ -27,6 +27,14 @@ class OfficeService(Service):
 
 		return offices.one()
 
+	def selectByHash(self, hash):
+		offices = db.session.query(OfficeModel).filter(OfficeModel.hash == hash)
+
+		if offices.count() == 0:
+			return None
+
+		return offices.one()
+
 	def new(self):
 		app.logger.info("New office")
 

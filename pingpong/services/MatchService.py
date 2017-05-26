@@ -12,15 +12,15 @@ import json
 
 class MatchService(Service):
 
-	def select(self):
+	def select(self, officeId):
 		app.logger.info("Selecting matches")
 
-		return db.session.query(MatchModel)
+		return db.session.query(MatchModel).filter(MatchModel.officeId == officeId)
 
-	def selectCount(self):
+	def selectCount(self, officeId):
 		app.logger.info("Selecting number of matches")
 
-		return self.select().count()
+		return self.select(officeId).count()
 
 	def selectById(self, id):
 		app.logger.info("Selecting match=%d", id)
@@ -37,15 +37,20 @@ class MatchService(Service):
 
 		return db.session.query(MatchModel).filter(MatchModel.id != id)
 
-	def selectComplete(self):
+	def selectComplete(self, officeId = None):
 		app.logger.info("Selecting completed matches")
 
-		return db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
+		matches = db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
 
-	def selectCompleteOrReady(self, playerId = None, opponentId = None, matchType = None, start = None, end = None):
+		if officeId != None:
+			matches = matches.filter(MatchModel.officeId == officeId)
+
+		return matches
+
+	def selectCompleteOrReady(self, officeId, playerId = None, opponentId = None, matchType = None, start = None, end = None):
 		app.logger.info("Selecting complete or ready for play matches")
 
-		matches = db.session.query(MatchModel).filter(or_(MatchModel.complete == True, MatchModel.ready == True)).order_by(MatchModel.id.desc())
+		matches = db.session.query(MatchModel).filter(MatchModel.officeId == officeId, or_(MatchModel.complete == True, MatchModel.ready == True)).order_by(MatchModel.id.desc())
 
 		if playerId != None:
 			matches = matches.join(MatchModel.teams).join(TeamModel.players).filter(PlayerModel.id == playerId)
@@ -77,20 +82,20 @@ class MatchService(Service):
 
 		return False
 
-	def selectActiveMatch(self):
+	def selectActiveMatch(self, officeId):
 		app.logger.info("Selecting active match")
 
-		matches = db.session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False).order_by(MatchModel.id.desc())
+		matches = db.session.query(MatchModel).filter(MatchModel.ready == True, MatchModel.complete == False, MatchModel.officeId == officeId).order_by(MatchModel.id.desc())
 
 		if matches.count() == 0:
 			return None
 
 		return matches.first()
 
-	def selectLatestMatch(self):
+	def selectLatestMatch(self, officeId):
 		app.logger.info("Selecting latest completed match")
 
-		matches = db.session.query(MatchModel).filter(MatchModel.complete == True).order_by(MatchModel.id.desc())
+		matches = db.session.query(MatchModel).filter(MatchModel.complete == True, MatchModel.officeId == officeId).order_by(MatchModel.id.desc())
 
 		if matches.count() == 0:
 			return None
@@ -103,12 +108,12 @@ class MatchService(Service):
 		update(MatchModel).where(MatchModel.id != id).values(ready = False)
 		db.session.commit()
 
-	def create(self, matchType):
+	def create(self, officeId, matchType):
 		playTo = 21
 		if matchType == "nines":
 			playTo = 9
 
-		match = MatchModel(matchType, playTo, 0, False, False, datetime.now(), datetime.now())
+		match = MatchModel(officeId, matchType, playTo, 0, False, False, datetime.now(), datetime.now())
 		db.session.add(match)
 		db.session.commit()
 

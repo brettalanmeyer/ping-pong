@@ -10,17 +10,12 @@ import json
 
 class PlayerService(Service):
 
-	def select(self, officeId = None):
+	def select(self, officeId):
 		app.logger.info("Selecting players")
 
-		players = db.session.query(PlayerModel).order_by(PlayerModel.name)
+		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId).order_by(PlayerModel.name)
 
-		if officeId != None:
-			players = players.filter(PlayerModel.officeId == officeId)
-
-		return players
-
-	def selectCount(self, officeId = None):
+	def selectCount(self, officeId):
 		app.logger.info("Selecting number of players")
 
 		return self.select(officeId).count()
@@ -35,13 +30,10 @@ class PlayerService(Service):
 
 		return players.one()
 
-	def	selectActive(self, officeId = None):
+	def	selectActive(self, officeId):
 		app.logger.info("Selecting active players")
 
-		players = db.session.query(PlayerModel).filter(PlayerModel.enabled == 1).order_by(PlayerModel.name)
-
-		if officeId != None:
-			players = players.filter(PlayerModel.officeId == officeId)
+		players = db.session.query(PlayerModel).filter(PlayerModel.enabled == 1, PlayerModel.officeId == officeId).order_by(PlayerModel.name)
 
 		return players
 

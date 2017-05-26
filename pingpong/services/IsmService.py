@@ -9,20 +9,20 @@ import json
 
 class IsmService(Service):
 
-	def select(self):
+	def select(self, officeId):
 		app.logger.info("Selecting isms")
 
-		return db.session.query(IsmModel)
+		return db.session.query(IsmModel).filter(IsmModel.officeId == officeId)
 
-	def selectApproved(self):
+	def selectApproved(self, officeId):
 		app.logger.info("Selecting approved isms")
 
-		return db.session.query(IsmModel).filter(IsmModel.approved == True)
+		return db.session.query(IsmModel).filter(IsmModel.officeId == officeId, IsmModel.approved == True)
 
-	def selectCount(self):
+	def selectCount(self, officeId):
 		app.logger.info("Selecting number of isms")
 
-		return self.select().count()
+		return self.select(officeId).count()
 
 	def selectById(self, id):
 		app.logger.info("Selecting ism=%d", id)
@@ -37,10 +37,10 @@ class IsmService(Service):
 	def new(self):
 		app.logger.info("New ism")
 
-		return IsmModel(0, 0, "", False, None, None)
+		return IsmModel(None, 0, 0, "", False, None, None)
 
-	def create(self, form):
-		ism = IsmModel(form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
+	def create(self, officeId, form):
+		ism = IsmModel(officeId, form["left"], form["right"], form["saying"], True, datetime.now(), datetime.now())
 		db.session.add(ism)
 		db.session.commit()
 

@@ -22,9 +22,9 @@ playerForm = PlayerForm()
 @playerController.route("/players", methods = ["GET"])
 def index():
 	if current_user.is_authenticated:
-		players = playerService.select(session["office"])
+		players = playerService.select(session["office"]["id"])
 	else:
-		players = playerService.selectActive(session["office"])
+		players = playerService.selectActive(session["office"]["id"])
 
 	return render_template("players/index.html", players = players)
 
@@ -49,14 +49,14 @@ def new(matchId):
 @playerController.route("/players", methods = ["POST"], defaults = { "matchId": None })
 @playerController.route("/players/matches/<int:matchId>", methods = ["POST"])
 def create(matchId):
-	hasErrors = playerForm.validate(None, session["office"], request.form)
+	hasErrors = playerForm.validate(None, session["office"]["id"], request.form)
 
 	if hasErrors:
 		player = playerService.new()
 		playerForm.load(player, request.form)
 		return render_template("players/new.html", player = player, matchId = matchId), 400
 	else:
-		player = playerService.create(session["office"], request.form)
+		player = playerService.create(session["office"]["id"], request.form)
 
 		uploaded, avatar, extension = util.uploadAvatar(player)
 		if uploaded:
@@ -94,7 +94,7 @@ def update(id):
 	if not player.enabled and not current_user.is_authenticated:
 		abort(404)
 
-	hasErrors = playerForm.validate(id, session["office"], request.form)
+	hasErrors = playerForm.validate(id, session["office"]["id"], request.form)
 
 	originalName = player.name
 

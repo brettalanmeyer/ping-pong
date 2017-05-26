@@ -6,14 +6,15 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import session
 from flask import url_for
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
+from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
-from pingpong.matchtypes.MatchType import MatchType
 from pingpong.utils import util
 import json
 
@@ -34,10 +35,10 @@ def index():
 	season = util.param("season", None, "int")
 	seasons, season, start, end = leaderboardService.seasons(season)
 
-	players = playerService.select()
-	matches = matchService.selectCompleteOrReady(playerId, opponentId, matchType, start, end)
+	players = playerService.select(session["office"]["id"])
+	matches = matchService.selectCompleteOrReady(session["office"]["id"], playerId, opponentId, matchType, start, end)
 	pagedMatches = pagingService.pager(matches, page)
-	elo = leaderboardService.elo(start, end)
+	elo = leaderboardService.elo(session["office"]["id"], start, end)
 
 	return render_template("matches/index.html",
 		matches = pagedMatches,
@@ -59,7 +60,7 @@ def new():
 
 @matchController.route("/matches", methods = ["POST"])
 def create():
-	match = matchService.create(request.form["matchType"])
+	match = matchService.create(session["office"]["id"], request.form["matchType"])
 	matchType = MatchType(match)
 
 	if matchType.isNines():
@@ -95,7 +96,7 @@ def players(id):
 
 	matchType = MatchType(match)
 	instance = matchType.getMatchType()
-	players = playerService.selectActive()
+	players = playerService.selectActive(session["office"]["id"])
 	return render_template("matches/players.html", title = instance.label, matchType = instance, match = match, players = players)
 
 @matchController.route("/matches/<int:id>/players", methods = ["POST"])

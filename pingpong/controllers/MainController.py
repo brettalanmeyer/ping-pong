@@ -66,7 +66,8 @@ def beforeRequest():
 
 	if request.endpoint != "static":
 		if "office" not in session:
-			if not (request.endpoint == 'officeController.select' or request.endpoint == 'officeController.set'):
+			isApi = request.path.startswith("/api/") and request.method == "POST"
+			if not (isApi or request.endpoint == 'officeController.select' or request.endpoint == 'officeController.set'):
 				return redirect(url_for("officeController.select"))
 
 @mainController.after_app_request

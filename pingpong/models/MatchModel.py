@@ -24,7 +24,8 @@ class MatchModel(Base):
 	games = relationship("GameModel", cascade = "all, delete-orphan")
 	scores = relationship("ScoreModel", cascade = "all, delete-orphan")
 
-	def __init__(self, matchType, playTo, game, ready, complete, createdAt, modifiedAt):
+	def __init__(self, officeId, matchType, playTo, game, ready, complete, createdAt, modifiedAt):
+		self.officeId = officeId
 		self.matchType = matchType
 		self.playTo = playTo
 		self.game = game

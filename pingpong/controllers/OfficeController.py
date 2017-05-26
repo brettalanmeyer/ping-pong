@@ -22,8 +22,21 @@ def select():
 
 @officeController.route("/offices/set", methods = ["POST"])
 def set():
-	session["office"] = util.paramForm("office", None, "int")
+	officeId = util.paramForm("officeId", None, "int")
+	office = officeService.selectById(officeId)
+
+	if office == None:
+		flash("Please select a valid office", "danger")
+		return render_template("offices/select.html"), 400
+
+	session["office"] = {
+		"id": int(office.id),
+		"city": office.city,
+		"state": office.state,
+		"hash": office.hash
+	}
 	return redirect(util.paramForm("next", "/"))
+
 
 @officeController.route("/offices", methods = ["GET"])
 @loginRequired("officeController.index")

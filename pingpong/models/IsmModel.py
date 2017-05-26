@@ -17,7 +17,8 @@ class IsmModel(Base):
 
 	office = relationship("OfficeModel")
 
-	def __init__(self, left, right, saying, approved, createdAt, modifiedAt):
+	def __init__(self, officeId, left, right, saying, approved, createdAt, modifiedAt):
+		self.officeId = officeId
 		self.left = left
 		self.right = right
 		self.saying = saying
