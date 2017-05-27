@@ -45,7 +45,7 @@ class OfficeService(Service):
 		db.session.add(office)
 		db.session.commit()
 
-		app.logger.info("Creating office=%d city=%d state=%d skypeChatId=%s", office.id, office.city, office.state, office.skypeChatId)
+		app.logger.info("Creating office=%s city=%s state=%s skypeChatId=%s", office.id, office.city, office.state, office.skypeChatId)
 
 		return office
 
@@ -57,7 +57,7 @@ class OfficeService(Service):
 		office.modifiedAt = datetime.now()
 		db.session.commit()
 
-		app.logger.info("Updating office=%d city=%d state=%d skypeChatId=%s", office.id, office.city, office.state, office.skypeChatId)
+		app.logger.info("Updating office=%s city=%s state=%s skypeChatId=%s", office.id, office.city, office.state, office.skypeChatId)
 
 		return office
 
