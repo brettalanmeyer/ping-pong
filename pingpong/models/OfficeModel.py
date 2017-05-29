@@ -24,5 +24,8 @@ class OfficeModel(Base):
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
 
+	def hasSkypeChatId(self):
+		return self.skypeChatId != None and len(self.skypeChatId.strip()) > 0
+
 	def isEnabled(self):
 		return self.enabled == 1

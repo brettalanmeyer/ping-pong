@@ -3,6 +3,7 @@ from flask import current_app as app
 from flask import flash
 from flask import redirect
 from flask import render_template
+from flask import request
 from flask import session
 from flask import url_for
 from pingpong.decorators.LoginRequired import loginRequired
@@ -33,9 +34,10 @@ def index():
 @loginRequired("adminController.index")
 def send_message():
 	message = util.paramForm("message")
+	officeIds = request.form.getlist("officeId")
 
 	if message != None and len(message) > 0:
-		notifications.send(message)
+		notifications.send(message, officeIds)
 		flash("Message has been sent.", "success")
 	else:
 		flash("Message was malformed and was not be sent.", "danger")

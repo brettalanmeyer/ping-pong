@@ -27,6 +27,11 @@ class OfficeService(Service):
 
 		return offices.one()
 
+	def selectByIds(self, ids):
+		app.logger.info("Selecting officeIds=%s", ",".join(ids))
+
+		return db.session.query(OfficeModel).filter(OfficeModel.id.in_(ids))
+
 	def selectByHash(self, hash):
 		offices = db.session.query(OfficeModel).filter(OfficeModel.hash == hash)
 

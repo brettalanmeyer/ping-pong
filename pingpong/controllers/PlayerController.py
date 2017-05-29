@@ -65,7 +65,7 @@ def create(matchId):
 		flash("Player '{}' has been successfully created.".format(player.name), "success")
 
 		message = "<b>{}</b> has joined ping pong. Please consider adding them to the ping pong chat group.".format(player.name)
-		notifications.send(message)
+		notifications.send(message, session["office"]["id"])
 
 		if matchId != None:
 			return redirect(url_for("matchController.players", id = matchId))
@@ -114,7 +114,7 @@ def update(id):
 
 		if originalName != newName:
 			message = "<b>{}</b> is now known as <b>{}</b>.".format(originalName, newName)
-			notifications.send(message)
+			notifications.send(message, session["office"]["id"])
 
 		return redirect(url_for("playerController.index"))
 
