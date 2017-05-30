@@ -1,5 +1,4 @@
 from flask import request
-from flask import session
 from pingpong.matchtypes.BaseMatch import BaseMatch
 from pingpong.services.GameService import GameService
 from pingpong.services.MatchService import MatchService
@@ -244,7 +243,7 @@ class Doubles(BaseMatch):
 
 		message = '<a href="{}matches/{}">{} and {} are playing {} and {} in a best of {}</a>'.format(request.url_root, match.id, t1p1.name, t1p2.name, t2p1.name, t2p2.name, match.numOfGames)
 
-		notifications.send(message, session["office"]["id"])
+		notifications.send(message, match.officeId)
 
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
@@ -252,7 +251,7 @@ class Doubles(BaseMatch):
 		# put in this order so if teams are not randomized, they will at least swap sides
 		playerIds = [game.yellow.id, game.green.id, game.red.id, game.blue.id]
 
-		newMatch = matchService.create(self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType)
 		newMatch.numOfGames = numOfGames
 		newMatch.game = 1
 		self.createTeams(newMatch, playerIds, randomize)
@@ -287,4 +286,4 @@ class Doubles(BaseMatch):
 
 		message += '\n<a href="{}leaderboard/doubles">Leaderboard Standings</a>'.format(request.url_root)
 
-		notifications.send(message, session["office"]["id"])
+		notifications.send(message, match.officeId)

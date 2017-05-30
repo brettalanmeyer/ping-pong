@@ -33,10 +33,15 @@ def set():
 		"id": int(office.id),
 		"city": office.city,
 		"state": office.state,
-		"hash": office.hash
+		"key": office.key
 	}
+
 	return redirect(util.paramForm("next", "/"))
 
+@officeController.route("/offices/clear", methods = ["GET"])
+def clear():
+	session.clear()
+	return redirect(url_for('officeController.select'))
 
 @officeController.route("/offices", methods = ["GET"])
 @loginRequired("officeController.index")

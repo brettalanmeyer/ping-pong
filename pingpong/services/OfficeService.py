@@ -13,7 +13,7 @@ class OfficeService(Service):
 		return db.session.query(OfficeModel)
 
 	def selectActive(self):
-		app.logger.info("Selecting offices")
+		app.logger.info("Selecting active offices")
 
 		return db.session.query(OfficeModel).filter(OfficeModel.enabled == 1)
 
@@ -32,13 +32,19 @@ class OfficeService(Service):
 
 		return db.session.query(OfficeModel).filter(OfficeModel.id.in_(ids))
 
-	def selectByHash(self, hash):
-		offices = db.session.query(OfficeModel).filter(OfficeModel.hash == hash)
+	def selectByKey(self, key):
+		app.logger.info("Selecting office by key=%s", key)
+
+		offices = db.session.query(OfficeModel).filter(OfficeModel.key == key)
 
 		if offices.count() == 0:
 			return None
 
 		return offices.one()
+
+	def selectWithSkypeChatId(self):
+		app.logger.info("Selecting office with skype chat id")
+		return db.session.query(OfficeModel).filter(OfficeModel.skypeChatId != None, OfficeModel.skypeChatId != "")
 
 	def new(self):
 		app.logger.info("New office")

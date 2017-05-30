@@ -21,7 +21,7 @@ officeService = OfficeService()
 @adminController.route("/admin", methods = ["GET"])
 @loginRequired()
 def index():
-	offices = officeService.select()
+	offices = officeService.selectWithSkypeChatId()
 
 	matchData = None
 	match = matchService.selectActiveMatch(session["office"]["id"])

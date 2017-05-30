@@ -84,24 +84,6 @@ autocommit = False
 autoflush = False
 ```
 
-## Testing
-
-Run tests
-`python tests/test.py`
-
-Run coverage
-`coverage run --source=pingpong tests/test.py`
-
-Generate coverage report
-`coverage report -m`
-
-Generate html coverage report
-`coverage html`
-
-Run single class
-`cd test/
-`python -m unittest matchtypes.TestSingles`
-
 
 ## Raspberry pi
 
@@ -109,7 +91,7 @@ Run single class
 
 ## TODO
 
-* Add title attributes to skype messages
+* Move button controller to api controller
 * Multiple offices - generate an unexposed api key for each office that can only be given out by admin
 ** how to clear session once an change has been made
 * Changelog page - add link to main page

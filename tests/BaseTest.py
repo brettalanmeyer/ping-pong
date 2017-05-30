@@ -2,9 +2,13 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pingpong.app import app
+from pingpong.services.OfficeService import OfficeService
 from pingpong.utils.database import database as db
-import unittest
+import flask
 import re
+import unittest
+
+officeService = OfficeService()
 
 class BaseTest(unittest.TestCase):
 
@@ -31,6 +35,30 @@ class BaseTest(unittest.TestCase):
 
 	def tearDown(self):
 		pass
+
+	def office(self):
+		office = None
+
+		with self.app:
+			with self.app.session_transaction() as sess:
+				offices = officeService.select()
+				if offices.count() > 0:
+					office = offices.first()
+				else:
+					office = officeService.create({
+						"city": "Ames",
+						"state": "Iowa",
+						"skypeChatId": "123abc"
+					})
+
+				data = {
+					"id": office.id,
+					"city": office.city,
+					"state": office.state,
+					"key": office.key
+				}
+				sess["office"] = data
+				return data
 
 	def authenticate(self):
 		return self.app.post("/login", data = {

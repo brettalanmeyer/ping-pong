@@ -32,7 +32,7 @@ class TestOfficeService(BaseTest):
 			assert office.id == None
 			assert office.city == ""
 			assert office.state == ""
-			assert office.hash != None
+			assert office.key != None
 			assert office.skypeChatId == ""
 			assert office.enabled == True
 			assert office.createdAt == None
@@ -72,7 +72,7 @@ class TestOfficeService(BaseTest):
 			oldCity = office.city
 			oldState = office.state
 			oldSkypeChatId = office.skypeChatId
-			oldHash = office.hash
+			oldKey = office.key
 
 			updatedOffice = officeService.update(office.id, {
 				"city": city,
@@ -87,7 +87,7 @@ class TestOfficeService(BaseTest):
 			assert updatedOffice.city != oldCity
 			assert updatedOffice.state != oldState
 			assert updatedOffice.skypeChatId != oldSkypeChatId
-			assert updatedOffice.hash == oldHash
+			assert updatedOffice.key == oldKey
 
 	def test_delete(self):
 		with self.ctx:
@@ -106,19 +106,16 @@ class TestOfficeService(BaseTest):
 			assert deletedOffice == None
 
 	def test_load(self):
-		string = '[{}]'
-
 		with self.ctx:
-			offices = officeService.select()
-			for office in offices:
-				officeService.delete(office)
-
 			office = self.createOffice()
-			offices = officeService.load()
+			offices = officeService.select()
+			loadedOffices = officeService.load()
 
-			assert office.id == offices[0]["id"]
-			assert office.city == offices[0]["city"]
-			assert office.state == offices[0]["state"]
-			assert office.enabled == offices[0]["enabled"]
-			assert office.createdAt == offices[0]["createdAt"]
-			assert office.modifiedAt == offices[0]["modifiedAt"]
+			assert offices.count() == len(loadedOffices)
+
+			assert offices[0].id == loadedOffices[0]["id"]
+			assert offices[0].city == loadedOffices[0]["city"]
+			assert offices[0].state == loadedOffices[0]["state"]
+			assert offices[0].enabled == loadedOffices[0]["enabled"]
+			assert offices[0].createdAt == loadedOffices[0]["createdAt"]
+			assert offices[0].modifiedAt == loadedOffices[0]["modifiedAt"]

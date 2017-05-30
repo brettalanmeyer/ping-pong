@@ -10,16 +10,16 @@ class OfficeModel(Base):
 	city = Column(String)
 	state = Column(String)
 	skypeChatId = Column(String)
-	hash = Column(String)
+	key = Column(String)
 	enabled = Column(Integer)
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 
-	def __init__(self, city, state, skypeChatId, hash, enabled, createdAt, modifiedAt):
+	def __init__(self, city, state, skypeChatId, key, enabled, createdAt, modifiedAt):
 		self.city = city
 		self.state = state
 		self.skypeChatId = skypeChatId
-		self.hash = hash
+		self.key = key
 		self.enabled = enabled
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt

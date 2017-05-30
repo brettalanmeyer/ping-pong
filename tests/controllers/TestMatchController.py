@@ -10,12 +10,12 @@ singles = Singles()
 
 class TestMatchController(BaseTest):
 
-	def createMatch(self):
+	def createMatch(self, matchId):
 		with self.request:
-			player1 = playerService.create({ "name": "Fry" })
-			player2 = playerService.create({ "name": "Bender" })
+			player1 = playerService.create(matchId, { "name": "Fry" })
+			player2 = playerService.create(matchId, { "name": "Bender" })
 
-			match = matchService.create("singles")
+			match = matchService.create(matchId, "singles")
 			matchService.updateGames(match.id, 1)
 
 			singles.createTeams(match, [player1.id, player2.id], True)
@@ -27,37 +27,45 @@ class TestMatchController(BaseTest):
 			return match
 
 	def test_matches(self):
+		self.office()
 		rv = self.app.get("/matches")
 		assert rv.status == self.ok
 
 	def test_matchesNew(self):
+		self.office()
 		rv = self.app.get("/matches/new")
 		assert rv.status == self.ok
 
 	def test_matchesPage1(self):
+		self.office()
 		rv = self.app.get("/matches?page=1")
 		assert rv.status == self.ok
 
 	def test_matchesSeason0(self):
+		self.office()
 		rv = self.app.get("/matches?season=0")
 		assert rv.status == self.ok
 
 	def test_matchesSeason1(self):
+		self.office()
 		rv = self.app.get("/matches?season=1")
 		assert rv.status == self.ok
 
 	def test_matchesSeasonBad(self):
+		self.office()
 		rv = self.app.get("/matches?season=-1")
 		assert rv.status == self.notFound
 
 	def test_matchesSeasonBadAgain(self):
+		self.office()
 		rv = self.app.get("/matches?season=1000000")
 		assert rv.status == self.notFound
 
 	def test_singles(self):
+		office = self.office()
 		with self.ctx:
-			player1Id = playerService.create({ "name": "Starsky" }).id
-			player2Id = playerService.create({ "name": "Hutch" }).id
+			player1Id = playerService.create(office["id"], { "name": "Starsky" }).id
+			player2Id = playerService.create(office["id"], { "name": "Hutch" }).id
 
 		rv = self.app.post("/matches", data = { "matchType": "singles" })
 		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/num-of-games")
@@ -101,11 +109,12 @@ class TestMatchController(BaseTest):
 		assert data["playTo"] == 21
 
 	def test_doubles(self):
+		office = self.office()
 		with self.ctx:
-			player1Id = playerService.create({ "name": "Fry" }).id
-			player2Id = playerService.create({ "name": "Leela" }).id
-			player3Id = playerService.create({ "name": "The Professor" }).id
-			player4Id = playerService.create({ "name": "Bender" }).id
+			player1Id = playerService.create(office["id"], { "name": "Fry" }).id
+			player2Id = playerService.create(office["id"], { "name": "Leela" }).id
+			player3Id = playerService.create(office["id"], { "name": "The Professor" }).id
+			player4Id = playerService.create(office["id"], { "name": "Bender" }).id
 
 		rv = self.app.post("/matches", data = { "matchType": "doubles" })
 		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/num-of-games")
@@ -148,12 +157,13 @@ class TestMatchController(BaseTest):
 		assert data["matchType"] == "doubles"
 		assert data["playTo"] == 21
 
-	def test_doubles(self):
+	def test_nines(self):
+		office = self.office()
 		with self.ctx:
-			player1Id = playerService.create({ "name": "Fry" }).id
-			player2Id = playerService.create({ "name": "Leela" }).id
-			player3Id = playerService.create({ "name": "The Professor" }).id
-			player4Id = playerService.create({ "name": "Bender" }).id
+			player1Id = playerService.create(office["id"], { "name": "Fry" }).id
+			player2Id = playerService.create(office["id"], { "name": "Leela" }).id
+			player3Id = playerService.create(office["id"], { "name": "The Professor" }).id
+			player4Id = playerService.create(office["id"], { "name": "Bender" }).id
 
 		rv = self.app.post("/matches", data = { "matchType": "nines" })
 		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/players")
@@ -185,6 +195,7 @@ class TestMatchController(BaseTest):
 		assert data["playTo"] == 9
 
 	def test_notFound(self):
+		self.office()
 		rv = self.app.get("/matches/{}/num-of-games".format(0))
 		assert rv.status == self.notFound
 
@@ -217,8 +228,9 @@ class TestMatchController(BaseTest):
 		assert rv.status == self.notFound
 
 	def test_playAgain(self):
+		office = self.office()
 		with self.request:
-			matchId = self.createMatch().id
+			matchId = self.createMatch(office["id"]).id
 
 		rv = self.app.post("/matches/{}/play-again".format(matchId), data = { "numOfGames": 5, "randomize": "false" })
 		isMatch, newMatchId = self.redirects(rv, "\/matches\/(\d+)")
@@ -232,8 +244,9 @@ class TestMatchController(BaseTest):
 			assert newMatch.numOfGames == 5
 
 	def test_undo(self):
+		office = self.office()
 		with self.request:
-			match = self.createMatch()
+			match = self.createMatch(office["id"])
 			matchId = match.id
 			assert match.complete
 
@@ -248,10 +261,11 @@ class TestMatchController(BaseTest):
 			assert not sameMatch.complete
 
 	def test_delete(self):
+		office = self.office()
 		self.authenticate()
 
 		with self.request:
-			matchId = self.createMatch().id
+			matchId = self.createMatch(office["id"]).id
 
 		rv = self.app.post("/matches/{}/delete".format(matchId))
 		isMatch, none = self.redirects(rv, "\/matches")

@@ -7,24 +7,30 @@ ismService = IsmService()
 class TestIsmService(BaseTest):
 
 	def test_select(self):
+		office = self.office()
+
 		with self.ctx:
-			ismService.create({
+			ismService.create(office["id"], {
 				"saying": "saying",
 				"left": 1,
 				"right": 1
 			})
 
-			isms = ismService.select()
+			isms = ismService.select(office["id"])
 			assert isms.count() > 0
 
 	def test_selectCount(self):
+		office = self.office()
+
 		with self.ctx:
-			isms = ismService.selectCount()
+			isms = ismService.selectCount(office["id"])
 			assert isms >= 0
 
 	def test_selectById(self):
+		office = self.office()
+
 		with self.ctx:
-			ismOne = ismService.select().first()
+			ismOne = ismService.select(office["id"]).first()
 			ismTwo = ismService.selectById(ismOne.id)
 			assert ismOne == ismTwo
 
@@ -32,6 +38,7 @@ class TestIsmService(BaseTest):
 		with self.ctx:
 			ism = ismService.new()
 			assert ism.id == None
+			assert ism.officeId == None
 			assert ism.left == 0
 			assert ism.right == 0
 			assert ism.saying == ""
@@ -40,12 +47,14 @@ class TestIsmService(BaseTest):
 			assert ism.modifiedAt == None
 
 	def test_create(self):
+		office = self.office()
+
 		saying = "This is a saying"
 		left = 231
 		right = 631
 
 		with self.ctx:
-			ism = ismService.create({
+			ism = ismService.create(office["id"], {
 				"saying": saying,
 				"left": left,
 				"right": right
@@ -64,12 +73,14 @@ class TestIsmService(BaseTest):
 			assert anotherIsm.right == right
 
 	def test_update(self):
+		office = self.office()
+
 		saying = str(uuid.uuid4())
 		left = 71
 		right = 32
 
 		with self.ctx:
-			ism = ismService.select().first()
+			ism = ismService.select(office["id"]).first()
 			oldSaying = ism.saying
 
 			updatedIsm = ismService.update(ism.id, {
@@ -85,8 +96,10 @@ class TestIsmService(BaseTest):
 			assert updatedIsm.saying != oldSaying
 
 	def test_delete(self):
+		office = self.office()
+
 		with self.ctx:
-			ism = ismService.create({
+			ism = ismService.create(office["id"], {
 				"saying": "saying",
 				"left": 1,
 				"right": 1
@@ -97,8 +110,10 @@ class TestIsmService(BaseTest):
 			assert deletedIsm == None
 
 	def test_deleteById(self):
+		office = self.office()
+
 		with self.ctx:
-			ism = ismService.create({
+			ism = ismService.create(office["id"], {
 				"saying": "saying",
 				"left": 1,
 				"right": 1
@@ -109,12 +124,12 @@ class TestIsmService(BaseTest):
 			assert deletedIsm == None
 
 	def test_serialize(self):
-		string = '[{"saying": "No, I am your father.", "approved": true, "right": 11, "id": 5, "left": 38}]'
+		string = '[{"saying": "No, I am your father.", "right": 11, "id": 5, "modifiedAt": null, "approved": true, "createdAt": null, "left": 38}]'
 
 		with self.ctx:
-
 			ism = ismService.new()
 			ism.id = 5
+			ism.officeId = 27
 			ism.right = 11
 			ism.left = 38
 			ism.saying = "No, I am your father."

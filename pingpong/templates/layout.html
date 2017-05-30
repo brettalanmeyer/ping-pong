@@ -48,7 +48,7 @@
 
 		{% block body %}{% endblock %}
 
-		{% if request.endpoint != 'officeController.select' %}
+		{% if request.endpoint != 'officeController.select' and request.endpoint != 'apiController.index' %}
 			{% include 'offices/selector.html' %}
 		{% endif %}
 

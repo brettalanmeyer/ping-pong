@@ -24,7 +24,7 @@ class PlayerForm(Form):
 			players = playerService.selectByName(officeId, form["name"])
 			self.foundNameError(players, form)
 		elif "name" in form:
-			players = playerService.selectByNameExcludingPlayer(id, officeId, form["name"])
+			players = playerService.selectByNameExcludingPlayer(officeId, id, form["name"])
 			self.foundNameError(players, form)
 
 		self.flash()

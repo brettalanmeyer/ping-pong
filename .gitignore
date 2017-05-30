@@ -4,4 +4,5 @@
 /dbconfig.cfg
 /pingpong/static/.webassets-cache/
 /htmlcov
+/tests/pingpong/storage
 /storage

@@ -42,7 +42,7 @@ class PlayerService(Service):
 
 		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId).filter_by(name = name)
 
-	def selectByNameExcludingPlayer(self, id, officeId, name):
+	def selectByNameExcludingPlayer(self, officeId, id, name):
 		app.logger.info("Selecting player=%d not by name=%s", id, name)
 
 		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId, PlayerModel.id != id, PlayerModel.name == name)

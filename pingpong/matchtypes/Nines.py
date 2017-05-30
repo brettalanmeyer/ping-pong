@@ -1,5 +1,4 @@
 from flask import request
-from flask import session
 from pingpong.matchtypes.BaseMatch import BaseMatch
 from pingpong.services.GameService import GameService
 from pingpong.services.MatchService import MatchService
@@ -171,7 +170,7 @@ class Nines(BaseMatch):
 		player4 = match.teams[3].players[0]
 
 		message = '<a href="{}matches/{}">{}, {}, {} and {} are playing nines</a>'.format(request.url_root, match.id, player1.name, player2.name, player3.name, player4.name)
-		notifications.send(message, session["office"]["id"])
+		notifications.send(message, match.officeId)
 
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
@@ -217,4 +216,4 @@ class Nines(BaseMatch):
 
 		message += '\n<a href="{}leaderboard/nines">Leaderboard Standings</a>'.format(request.url_root)
 
-		notifications.send(message, session["office"]["id"])
+		notifications.send(message, match.officeId)

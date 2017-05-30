@@ -30,7 +30,6 @@ sess.init_app(app)
 from pingpong.controllers.AdminController import adminController
 from pingpong.controllers.ApiController import apiController
 from pingpong.controllers.AuthenticationController import authenticationController
-from pingpong.controllers.ButtonController import buttonController
 from pingpong.controllers.ErrorController import errorController
 from pingpong.controllers.IsmController import ismController
 from pingpong.controllers.LeaderboardController import leaderboardController
@@ -42,7 +41,6 @@ from pingpong.controllers.PlayerController import playerController
 app.register_blueprint(adminController)
 app.register_blueprint(apiController)
 app.register_blueprint(authenticationController)
-app.register_blueprint(buttonController)
 app.register_blueprint(errorController)
 app.register_blueprint(ismController)
 app.register_blueprint(leaderboardController)

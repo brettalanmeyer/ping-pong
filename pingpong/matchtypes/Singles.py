@@ -1,5 +1,4 @@
 from flask import request
-from flask import session
 from pingpong.matchtypes.BaseMatch import BaseMatch
 from pingpong.services.GameService import GameService
 from pingpong.services.LeaderboardService import LeaderboardService
@@ -190,7 +189,7 @@ class Singles(BaseMatch):
 
 		message = '<a href="{}matches/{}">{} is playing {} in a best of {}</a>'.format(request.url_root, match.id, player1.name, player2.name, match.numOfGames)
 
-		notifications.send(message, session["office"]["id"])
+		notifications.send(message, match.officeId)
 
 	def playAgain(self, match, numOfGames, persistTeams):
 		game = match.games[0]
@@ -240,4 +239,4 @@ class Singles(BaseMatch):
 
 		message += '\n<a href="{}leaderboard/singles">Leaderboard Standings</a>'.format(request.url_root)
 
-		notifications.send(message, session["office"]["id"])
+		notifications.send(message, match.officeId)
