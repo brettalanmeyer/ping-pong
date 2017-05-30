@@ -36,7 +36,7 @@ def send_message():
 	message = util.paramForm("message")
 	officeIds = request.form.getlist("officeId")
 
-	if message != None and len(message) > 0:
+	if message != None and len(message) > 0 and len(officeIds) > 0:
 		notifications.send(message, officeIds)
 		flash("Message has been sent.", "success")
 	else:

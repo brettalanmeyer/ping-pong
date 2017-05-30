@@ -18,6 +18,7 @@ from controllers.TestPlayerController import TestPlayerController
 
 from services.TestGameService import TestGameService
 from services.TestIsmService import TestIsmService
+from services.TestMailService import TestMailService
 from services.TestMatchService import TestMatchService
 from services.TestOfficeService import TestOfficeService
 from services.TestPagingService import TestPagingService

@@ -15,7 +15,7 @@ class FeedbackForm(Form):
 			"type": "string"
 		}, {
 			"name": "message",
-			"label": "Feedback",
+			"label": "Message",
 			"required": True,
 			"type": "string"
 		}]
