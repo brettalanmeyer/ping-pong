@@ -20,8 +20,12 @@ class TestOfficeController(BaseTest):
 
 	def test_officesSet(self):
 		office = self.createOffice()
-		rv = self.app.post("/offices", data = { "officeId": office.id }, follow_redirects = True)
+		rv = self.app.post("/offices/set", data = { "officeId": office.id }, follow_redirects = True)
 		assert rv.status == self.ok
+
+	def test_officesSetInvalid(self):
+		rv = self.app.post("/offices/set", data = {})
+		assert rv.status == self.badRequest
 
 	def test_officesClear(self):
 		rv = self.app.get("/offices/clear", follow_redirects = True)

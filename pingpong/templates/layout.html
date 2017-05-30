@@ -48,7 +48,7 @@
 
 		{% block body %}{% endblock %}
 
-		{% if request.endpoint != 'officeController.select' and request.endpoint != 'apiController.index' %}
+		{% if not (request.endpoint.startswith('officeController') or request.endpoint.startswith('apiController')) %}
 			{% include 'offices/selector.html' %}
 		{% endif %}
 
