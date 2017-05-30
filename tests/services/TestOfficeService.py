@@ -108,7 +108,7 @@ class TestOfficeService(BaseTest):
 	def test_load(self):
 		with self.ctx:
 			office = self.createOffice()
-			offices = officeService.select()
+			offices = officeService.selectActive()
 			loadedOffices = officeService.load()
 
 			assert offices.count() == len(loadedOffices)

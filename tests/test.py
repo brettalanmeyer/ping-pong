@@ -13,11 +13,13 @@ from controllers.TestIsmController import TestIsmController
 from controllers.TestLeaderboardController import TestLeaderboardController
 from controllers.TestMainController import TestMainController
 from controllers.TestMatchController import TestMatchController
+from controllers.TestOfficeController import TestOfficeController
 from controllers.TestPlayerController import TestPlayerController
 
 from services.TestGameService import TestGameService
 from services.TestIsmService import TestIsmService
 from services.TestMatchService import TestMatchService
+from services.TestOfficeService import TestOfficeService
 from services.TestPagingService import TestPagingService
 from services.TestPlayerService import TestPlayerService
 from services.TestTeamService import TestTeamService

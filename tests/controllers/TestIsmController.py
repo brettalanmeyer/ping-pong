@@ -131,11 +131,11 @@ class TestIsmController(BaseTest):
 
 			ism = self.create_ism(office["id"])
 			ismService.reject(ism)
-			assert not ism.approved
+			assert not ism.isApproved()
 
 			rv = self.app.post("/isms/{}/approve".format(ism.id), follow_redirects = True)
 			assert rv.status == self.ok
-			assert ism.approved
+			assert ism.isApproved()
 
 	def test_isms_approve_not_found(self):
 		self.office()
@@ -150,11 +150,11 @@ class TestIsmController(BaseTest):
 			self.authenticate()
 
 			ism = self.create_ism(office["id"])
-			assert ism.approved
+			assert ism.isApproved()
 
 			rv = self.app.post("/isms/{}/reject".format(ism.id), follow_redirects = True)
 			assert rv.status == self.ok
-			assert not ism.approved
+			assert not ism.isApproved()
 
 	def test_isms_reject_not_found(self):
 		self.office()
