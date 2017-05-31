@@ -49,10 +49,10 @@ class OfficeService(Service):
 	def new(self):
 		app.logger.info("New office")
 
-		return OfficeModel("", "", "", "", 1, None, None)
+		return OfficeModel("", "", "", "", "", "", 1, None, None)
 
 	def create(self, form):
-		office = OfficeModel(form["city"], form["state"], form["skypeChatId"], util.generateUUID(), True, datetime.now(), datetime.now())
+		office = OfficeModel(form["city"], form["state"], form["seasonYear"], form["seasonMonth"], form["skypeChatId"], util.generateUUID(), True, datetime.now(), datetime.now())
 		db.session.add(office)
 		db.session.commit()
 
@@ -116,10 +116,7 @@ class OfficeService(Service):
 			data.append({
 				"id": office.id,
 				"city": office.city,
-				"state": office.state,
-				"enabled": office.enabled,
-				"createdAt": office.createdAt,
-				"modifiedAt": office.modifiedAt
+				"state": office.state
 			})
 
 		return data

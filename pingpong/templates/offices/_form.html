@@ -1,20 +1,56 @@
-<div class="form-group">
+<div class="row">
+	<div class="col-xs-6">
 
-	<label for="city-field">City</label>
-	<input id="city-field" type="text" name="city" value="{{ office.city }}" class="form-control" autocomplete="off" autofocus />
+		<div class="form-group">
 
+			<label for="city-field">City</label>
+			<input id="city-field" type="text" name="city" value="{{ office.city }}" class="form-control" autocomplete="off" autofocus />
+
+		</div>
+
+	</div>
+	<div class="col-xs-6">
+
+		<div class="form-group">
+
+			<label for="state-field">State</label>
+			<input id="state-field" type="text" name="state" value="{{ office.state }}" class="form-control" autocomplete="off" />
+
+		</div>
+
+	</div>
 </div>
 
-<div class="form-group">
 
-	<label for="state-field">State</label>
-	<input id="state-field" type="text" name="state" value="{{ office.state }}" class="form-control" autocomplete="off" />
+<div class="row">
+	<div class="col-xs-4">
 
-</div>
+		<div class="form-group">
 
-<div class="form-group">
+			<label for="skypeChatId-field">Skype Chat ID</label>
+			<input id="skypeChatId-field" type="text" name="skypeChatId" value="{{ office.skypeChatId }}" class="form-control" autocomplete="off" />
 
-	<label for="skypeChatId-field">Skype Chat ID</label>
-	<input id="skypeChatId-field" type="text" name="skypeChatId" value="{{ office.skypeChatId }}" class="form-control" autocomplete="off" />
+		</div>
 
+	</div>
+	<div class="col-xs-4">
+
+		<div class="form-group">
+
+			<label for="seasonYear-field">Season Starting Year</label>
+			<input id="seasonYear-field" type="text" name="seasonYear" value="{{ office.seasonYear }}" class="form-control" autocomplete="off" />
+
+		</div>
+
+	</div>
+	<div class="col-xs-4">
+
+		<div class="form-group">
+
+			<label for="seasonMonth-field">Season Season Month</label>
+			<input id="seasonMonth-field" type="text" name="seasonMonth" value="{{ office.seasonMonth }}" class="form-control" autocomplete="off" />
+
+		</div>
+
+	</div>
 </div>

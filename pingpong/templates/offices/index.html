@@ -19,11 +19,10 @@
 
 			<thead>
 				<tr>
-					<th>City</th>
-					<th>State</th>
+					<th>Office</th>
+					<th>Season Start</th>
 					<th>Skype Chat Key</th>
 					<th>Hash</th>
-					<th></th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -35,10 +34,10 @@
 
 					<tr>
 
-						<td>{{ office.city }}</td>
-						<td>{{ office.state }}</td>
-						<td>{{ office.skypeChatId }}</td>
-						<td>{{ office.key }}</td>
+						<td>{{ office.city }}, {{ office.state }}</td>
+						<td>{{ office.formatSeason() }}</td>
+						<td><code>{{ office.skypeChatId }}</code></td>
+						<td><kbd>{{ office.key }}</kbd></td>
 
 						<td width="1">
 							<a href="{{ url_for('officeController.edit', id = office.id) }}" class="btn btn-default btn-sm">

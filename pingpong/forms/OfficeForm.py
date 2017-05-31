@@ -18,6 +18,16 @@ class OfficeForm(Form):
 			"label": "Skype Chat ID",
 			"required": False,
 			"type": "string"
+		}, {
+			"name": "seasonYear",
+			"label": "Season Starting Year",
+			"required": True,
+			"type": "int"
+		}, {
+			"name": "seasonMonth",
+			"label": "Season Starting Month",
+			"required": True,
+			"type": "int"
 		}]
 
 	def load(self, office, form):
@@ -25,5 +35,9 @@ class OfficeForm(Form):
 			office.city = form["city"]
 		if "state" in form:
 			office.state = form["state"]
+		if "seasonYear" in form:
+			office.seasonYear = form["seasonYear"]
+		if "seasonMonth" in form:
+			office.seasonMonth = form["seasonMonth"]
 		if "skypeChatId" in form:
 			office.skypeChatId = form["skypeChatId"]
