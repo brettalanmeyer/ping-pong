@@ -33,7 +33,7 @@ def index():
 	matchType = util.param("matchType")
 
 	season = util.param("season", None, "int")
-	seasons, season, start, end = leaderboardService.seasons(season)
+	seasons, season, start, end = leaderboardService.seasons(season, session["office"]["id"])
 
 	players = playerService.select(session["office"]["id"])
 	matches = matchService.selectCompleteOrReady(session["office"]["id"], playerId, opponentId, matchType, start, end)

@@ -40,7 +40,9 @@ class BaseTest(unittest.TestCase):
 		return officeService.create({
 			"city": "Ames",
 			"state": "Iowa",
-			"skypeChatId": "123abc"
+			"skypeChatId": "123abc",
+			"seasonYear": "2017",
+			"seasonMonth": "1"
 		})
 
 	def office(self):
@@ -49,6 +51,7 @@ class BaseTest(unittest.TestCase):
 		with self.app:
 			with self.app.session_transaction() as sess:
 				offices = officeService.select()
+
 				if offices.count() > 0:
 					office = offices.first()
 				else:
@@ -60,6 +63,7 @@ class BaseTest(unittest.TestCase):
 					"state": office.state,
 					"key": office.key
 				}
+
 				sess["office"] = data
 				return data
 

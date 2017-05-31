@@ -64,6 +64,8 @@ class OfficeService(Service):
 		office = self.selectById(id)
 		office.city = form["city"]
 		office.state = form["state"]
+		office.seasonYear = form["seasonYear"]
+		office.seasonMonth = form["seasonMonth"]
 		office.skypeChatId = form["skypeChatId"]
 		office.modifiedAt = datetime.now()
 		db.session.commit()
@@ -116,7 +118,8 @@ class OfficeService(Service):
 			data.append({
 				"id": office.id,
 				"city": office.city,
-				"state": office.state
+				"state": office.state,
+				"key": office.key
 			})
 
 		return data

@@ -11,7 +11,9 @@ class TestOfficeController(BaseTest):
 			return officeService.create({
 				"city": str(uuid.uuid4()),
 				"state": str(uuid.uuid4()),
-				"skypeChatId": str(uuid.uuid4())
+				"skypeChatId": str(uuid.uuid4()),
+				"seasonYear": 2018,
+				"seasonMonth": 4
 			})
 
 	def test_officesSelect(self):
@@ -85,7 +87,9 @@ class TestOfficeController(BaseTest):
 		rv = self.app.post("/offices", data = {
 			"city": str(uuid.uuid4()),
 			"state": str(uuid.uuid4()),
-			"skypeChatId": str(uuid.uuid4())
+			"skypeChatId": str(uuid.uuid4()),
+			"seasonYear": 2021,
+			"seasonMonth": 9
 		}, follow_redirects = True)
 		assert rv.status == self.ok
 
@@ -126,12 +130,16 @@ class TestOfficeController(BaseTest):
 		newCity = str(uuid.uuid4())
 		newState = str(uuid.uuid4())
 		newSkypeChatId = str(uuid.uuid4())
+		newSeasonYear = 2019
+		newSeasonMonth = 7
 
 		with self.ctx:
 			rv = self.app.post("/offices/{}".format(office["id"]), data = {
 				"city": newCity,
 				"state": newState,
-				"skypeChatId": newSkypeChatId
+				"skypeChatId": newSkypeChatId,
+				"seasonYear": newSeasonYear,
+				"seasonMonth": newSeasonMonth
 			}, follow_redirects = True)
 
 			updatedOffice = officeService.selectById(office["id"])
@@ -140,6 +148,8 @@ class TestOfficeController(BaseTest):
 			assert newCity == updatedOffice.city
 			assert newState == updatedOffice.state
 			assert newSkypeChatId == updatedOffice.skypeChatId
+			assert newSeasonYear == updatedOffice.seasonYear
+			assert newSeasonMonth == updatedOffice.seasonMonth
 
 	def test_officesUpdateNotFound(self):
 		self.office()

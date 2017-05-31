@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from flask import abort
 from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
+from pingpong.services.OfficeService import OfficeService
 from pingpong.services.PlayerService import PlayerService
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
@@ -11,6 +12,7 @@ from sqlalchemy import text
 import math
 
 playerService = PlayerService()
+officeService = OfficeService()
 
 class LeaderboardService(Service):
 
@@ -18,7 +20,7 @@ class LeaderboardService(Service):
 		app.logger.info("Querying Leaderboard Statistics by matchType=%s and season=%s", matchType, season)
 
 		players = playerService.select(officeId)
-		seasons, season, start, end = self.seasons(season)
+		seasons, season, start, end = self.seasons(season, officeId)
 
 		matches = self.matchesByMatchType(officeId, matchType, start, end)
 		times = self.times(officeId, matchType, start, end)
@@ -76,7 +78,7 @@ class LeaderboardService(Service):
 	def playerStats(self, player, season):
 		app.logger.debug("Querying player stats: playerId=%s season=%s", player.id, season)
 
-		seasons, season, start, end = self.seasons(season)
+		seasons, season, start, end = self.seasons(season, player.officeId)
 
 		matches = self.matchesByPlayer(player.id, start, end)
 		pointsFor = self.pointsForByPlayer(player.id, start, end)
@@ -917,7 +919,7 @@ class LeaderboardService(Service):
 		return data
 
 	def eloResult(self, officeId, matchId, playerId):
-		seasons, season, start, end = self.seasons(None)
+		seasons, season, start, end = self.seasons(None, officeId)
 		elo = self.elo(officeId, start, end)
 
 		# return specific elo for that match
@@ -930,10 +932,11 @@ class LeaderboardService(Service):
 
 		return None
 
-	def seasons(self, season):
+	def seasons(self, season, officeId):
 		app.logger.debug("Generating seasons with default season=%s", season)
 
-		begin = datetime(app.config["SEASON_START_YEAR"], app.config["SEASON_START_MONTH"], 1)
+		office = officeService.selectById(officeId)
+		begin = datetime(office.seasonYear, office.seasonMonth, 1)
 
 		index = 0
 		seasons = []

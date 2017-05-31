@@ -33,7 +33,8 @@ def set():
 	session["office"] = {
 		"id": int(office.id),
 		"city": office.city,
-		"state": office.state
+		"state": office.state,
+		"key": office.key
 	}
 
 	return redirect(util.paramForm("next", "/"))

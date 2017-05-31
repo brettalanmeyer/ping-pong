@@ -22,12 +22,16 @@ class OfficeForm(Form):
 			"name": "seasonYear",
 			"label": "Season Starting Year",
 			"required": True,
-			"type": "int"
+			"type": "int",
+			"min": 1000,
+			"max": 9999
 		}, {
 			"name": "seasonMonth",
 			"label": "Season Starting Month",
 			"required": True,
-			"type": "int"
+			"type": "int",
+			"min": 1,
+			"max": 12
 		}]
 
 	def load(self, office, form):

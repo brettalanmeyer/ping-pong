@@ -23,7 +23,7 @@ class TestOfficeForm(BaseTest):
 			errors = officeForm.getErrors()
 
 			assert hasErrors
-			assert len(errors) == 2
+			assert len(errors) == 4
 			for error in errors:
 				assert error["flashed"]
 
@@ -32,13 +32,15 @@ class TestOfficeForm(BaseTest):
 			form = {
 				"city": "",
 				"state": "",
-				"skypeChatId": ""
+				"skypeChatId": "",
+				"seasonYear": "",
+				"seasonMonth": ""
 			}
 			hasErrors = officeForm.validate(form)
 			errors = officeForm.getErrors()
 
 			assert hasErrors
-			assert len(errors) == 2
+			assert len(errors) == 4
 			for error in errors:
 				assert error["flashed"]
 
@@ -47,7 +49,9 @@ class TestOfficeForm(BaseTest):
 			form = {
 				"city": "Springfield",
 				"state": "Yes",
-				"skypeChatId": ""
+				"skypeChatId": "",
+				"seasonYear": "2015",
+				"seasonMonth": "4"
 			}
 			hasErrors = officeForm.validate(form)
 			errors = officeForm.getErrors()
