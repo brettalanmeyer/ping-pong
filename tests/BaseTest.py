@@ -36,6 +36,13 @@ class BaseTest(unittest.TestCase):
 	def tearDown(self):
 		pass
 
+	def createOffice(self):
+		return officeService.create({
+			"city": "Ames",
+			"state": "Iowa",
+			"skypeChatId": "123abc"
+		})
+
 	def office(self):
 		office = None
 
@@ -45,11 +52,7 @@ class BaseTest(unittest.TestCase):
 				if offices.count() > 0:
 					office = offices.first()
 				else:
-					office = officeService.create({
-						"city": "Ames",
-						"state": "Iowa",
-						"skypeChatId": "123abc"
-					})
+					office = self.createOffice()
 
 				data = {
 					"id": office.id,

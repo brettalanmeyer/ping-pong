@@ -21,9 +21,14 @@ class ScoreService(Service):
 		return self.select().count()
 
 	def selectById(self, id):
-		app.logger.info("Selecting match=%d", id)
+		app.logger.info("Selecting score=%d", id)
 
-		return db.session.query(ScoreModel).filter(ScoreModel.id == id).one()
+		scores = db.session.query(ScoreModel).filter(ScoreModel.id == id)
+
+		if scores.count() == 1:
+			return scores.one()
+
+		return None
 
 	def selectByMatch(self, match):
 		return self.selectByMatchId(match.id)
@@ -39,6 +44,8 @@ class ScoreService(Service):
 		db.session.commit()
 
 		app.logger.info("Scoring for match=%d team=%d game=%d", matchId, teamId, game)
+
+		return score
 
 	def selectLastScoreByMatchId(self, matchId):
 		scores = db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).order_by(ScoreModel.id.desc())
@@ -70,7 +77,7 @@ class ScoreService(Service):
 
 		return int(data.points)
 
-	def deleteByMatch(self, matchId):
+	def deleteByMatchId(self, matchId):
 		app.logger.info("Delete all scores for match=%d", matchId)
 
 		db.session.query(ScoreModel).filter(ScoreModel.matchId == matchId).delete()

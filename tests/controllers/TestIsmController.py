@@ -17,17 +17,17 @@ class TestIsmController(BaseTest):
 		rv = self.app.get("/isms")
 		assert rv.status == self.ok
 
-	def test_isms_json(self):
+	def test_ismsJson(self):
 		self.office()
 		rv = self.app.get("/isms.json")
 		assert rv.status == self.ok
 
-	def test_isms_new(self):
+	def test_ismsNew(self):
 		self.office()
 		rv = self.app.get("/isms/new")
 		assert rv.status == self.ok
 
-	def test_isms_create(self):
+	def test_ismsCreate(self):
 		self.office()
 		rv = self.app.post("/isms", data = {
 			"saying": "A New Saying",
@@ -36,7 +36,7 @@ class TestIsmController(BaseTest):
 		}, follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_isms_create_empty(self):
+	def test_ismsCreateEmpty(self):
 		self.office()
 		rv = self.app.post("/isms", data = {
 			"saying": "",
@@ -45,12 +45,12 @@ class TestIsmController(BaseTest):
 		})
 		assert rv.status == self.badRequest
 
-	def test_isms_create_null(self):
+	def test_ismsCreateNull(self):
 		self.office()
 		rv = self.app.post("/isms", data = {})
 		assert rv.status == self.badRequest
 
-	def test_isms_edit(self):
+	def test_ismsEdit(self):
 		office = self.office()
 		with self.ctx:
 			ism = ismService.select(office["id"]).first()
@@ -58,17 +58,17 @@ class TestIsmController(BaseTest):
 			rv = self.app.get("/isms/{}/edit".format(ism.id))
 			assert rv.status == self.ok
 
-	def test_isms_edit_not_found(self):
+	def test_ismsEditNotFound(self):
 		self.office()
 		with self.ctx:
 			rv = self.app.get("/isms/{}/edit".format(0))
 			assert rv.status == self.notFound
 
-	def test_isms_update(self):
+	def test_ismsUpdate(self):
 		office = self.office()
 		newSaying = "Another Saying"
 		newLeft = 4
-		newRight = 342
+		newRight = 42
 
 		with self.ctx:
 			ism = ismService.select(office["id"]).first()
@@ -85,13 +85,13 @@ class TestIsmController(BaseTest):
 			assert newLeft == updatedIsm.left
 			assert newRight == updatedIsm.right
 
-	def test_isms_update_not_found(self):
+	def test_ismsUpdateNotFound(self):
 		self.office()
 		with self.ctx:
 			rv = self.app.post("/isms/{}".format(0), data = {})
 			assert rv.status == self.notFound
 
-	def test_isms_update_empty(self):
+	def test_ismsUpdateEmpty(self):
 		office = self.office()
 		with self.ctx:
 			ism = ismService.select(office["id"]).first()
@@ -102,29 +102,29 @@ class TestIsmController(BaseTest):
 			}, follow_redirects = True)
 			assert rv.status == self.badRequest
 
-	def test_isms_update_null(self):
+	def test_ismsUpdateNull(self):
 		office = self.office()
 		with self.ctx:
 			ism = ismService.select(office["id"]).first()
 			rv = self.app.post("/isms/{}".format(ism.id), data = {}, follow_redirects = True)
 			assert rv.status == self.badRequest
 
-	def test_isms_approve_unauthenticated(self):
+	def test_ismsApproveUnauthenticated(self):
 		self.office()
 		rv = self.app.post("/isms/{}/approve".format(0), follow_redirects = False)
 		assert rv.status == self.found
 
-	def test_isms_reject_unauthenticated(self):
+	def test_ismsRejectUnauthenticated(self):
 		self.office()
 		rv = self.app.post("/isms/{}/reject".format(0), follow_redirects = False)
 		assert rv.status == self.found
 
-	def test_isms_delete_unauthenticated(self):
+	def test_ismsDeleteUnauthenticated(self):
 		self.office()
 		rv = self.app.post("/isms/{}/delete".format(0), follow_redirects = False)
 		assert rv.status == self.found
 
-	def test_isms_approve(self):
+	def test_ismsApprove(self):
 		office = self.office()
 		with self.ctx:
 			self.authenticate()
@@ -137,14 +137,14 @@ class TestIsmController(BaseTest):
 			assert rv.status == self.ok
 			assert ism.isApproved()
 
-	def test_isms_approve_not_found(self):
+	def test_ismsApproveNotFound(self):
 		self.office()
 		with self.ctx:
 			self.authenticate()
 			rv = self.app.post("/isms/{}/approve".format(0))
 			assert rv.status == self.notFound
 
-	def test_isms_reject(self):
+	def test_ismsReject(self):
 		office = self.office()
 		with self.ctx:
 			self.authenticate()
@@ -156,14 +156,14 @@ class TestIsmController(BaseTest):
 			assert rv.status == self.ok
 			assert not ism.isApproved()
 
-	def test_isms_reject_not_found(self):
+	def test_ismsRejectNotFound(self):
 		self.office()
 		with self.ctx:
 			self.authenticate()
 			rv = self.app.post("/isms/{}/reject".format(0))
 			assert rv.status == self.notFound
 
-	def test_isms_delete(self):
+	def test_ismsDelete(self):
 		office = self.office()
 		with self.ctx:
 			self.authenticate()
@@ -181,7 +181,7 @@ class TestIsmController(BaseTest):
 			deletedCount = ismService.select(office["id"]).count()
 			assert originalCount == deletedCount
 
-	def test_isms_delete_not_found(self):
+	def test_ismsDeleteNotFound(self):
 		self.office()
 		with self.ctx:
 			self.authenticate()

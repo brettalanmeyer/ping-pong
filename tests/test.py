@@ -23,11 +23,17 @@ from services.TestMatchService import TestMatchService
 from services.TestOfficeService import TestOfficeService
 from services.TestPagingService import TestPagingService
 from services.TestPlayerService import TestPlayerService
+from services.TestScoreService import TestScoreService
 from services.TestTeamService import TestTeamService
 
 from matchtypes.TestDoubles import TestDoubles
 from matchtypes.TestNines import TestNines
 from matchtypes.TestSingles import TestSingles
+
+from forms.TestFeedbackForm import TestFeedbackForm
+from forms.TestIsmForm import TestIsmForm
+from forms.TestOfficeForm import TestOfficeForm
+from forms.TestPlayerForm import TestPlayerForm
 
 from utils.TestUtil import TestUtil
 

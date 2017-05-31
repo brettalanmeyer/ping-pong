@@ -2,6 +2,7 @@ from BaseTest import BaseTest
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PlayerService import PlayerService
 from pingpong.services.TeamService import TeamService
+import json
 
 matchService = MatchService()
 playerService = PlayerService()
@@ -16,6 +17,14 @@ class TestTeamService(BaseTest):
 		match = self.createMatch(officeId);
 		return teamService.create(match.id)
 
+	def test_select(self):
+		office = self.office()
+
+		with self.ctx:
+			team = self.createTeam(office["id"])
+			teams = teamService.select()
+			assert teams.count() > 0
+
 	def test_selectById(self):
 		office = self.office()
 
@@ -23,6 +32,22 @@ class TestTeamService(BaseTest):
 			team = self.createTeam(office["id"])
 			newTeam = teamService.selectById(team.id)
 			assert team == newTeam
+
+	def test_selectByMatch(self):
+		office = self.office()
+
+		with self.ctx:
+			team = self.createTeam(office["id"])
+			teams = teamService.selectByMatch(team.match)
+			assert teams.count() == 1
+
+	def test_selectByMatchId(self):
+		office = self.office()
+
+		with self.ctx:
+			team = self.createTeam(office["id"])
+			teams = teamService.selectByMatchId(team.match.id)
+			assert teams.count() == 1
 
 	def test_create(self):
 		office = self.office()
@@ -71,3 +96,13 @@ class TestTeamService(BaseTest):
 			team = self.createTeam(office["id"])
 			teamService.lose(team)
 			assert not team.win
+
+	def test_serialize(self):
+		office = self.office()
+
+		with self.ctx:
+			team = self.createTeam(office["id"])
+			teams = teamService.select()
+			data = json.loads(teamService.serialize(teams))
+			assert teams.count() == len(data)
+

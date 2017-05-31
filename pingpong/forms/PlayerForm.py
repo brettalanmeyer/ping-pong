@@ -20,14 +20,16 @@ class PlayerForm(Form):
 	def validate(self, id, officeId, form):
 		Form.validate(self, form)
 
-		if id == None:
-			players = playerService.selectByName(officeId, form["name"])
-			self.foundNameError(players, form)
-		elif "name" in form:
-			players = playerService.selectByNameExcludingPlayer(officeId, id, form["name"])
-			self.foundNameError(players, form)
+		if not self.hasErrors:
 
-		self.flash()
+			if id == None:
+				players = playerService.selectByName(officeId, form["name"])
+				self.foundNameError(players, form)
+			else:
+				players = playerService.selectByNameExcludingPlayer(officeId, id, form["name"])
+				self.foundNameError(players, form)
+
+			self.flash()
 
 		return self.hasErrors
 

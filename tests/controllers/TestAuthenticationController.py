@@ -12,9 +12,21 @@ class TestAuthenticationController(BaseTest):
 		rv = self.app.get("/login")
 		assert rv.status == self.ok
 
-	def test_login_fail(self):
+	def test_loginFail(self):
 		self.office()
-		rv = self.app.post("/login")
+		rv = self.app.post("/login", data = {})
+		assert rv.status == self.unauthorized
+
+		rv = self.app.post("/login", data = { "username": "username" })
+		assert rv.status == self.unauthorized
+
+		rv = self.app.post("/login", data = { "password": "p@ssword" })
+		assert rv.status == self.unauthorized
+
+		rv = self.app.post("/login", data = { "username": "username", "password": "p@ssword" })
+		assert rv.status == self.unauthorized
+
+		rv = self.app.post("/login", data = { "username": "username", "password": self.password })
 		assert rv.status == self.unauthorized
 
 	def test_logout(self):

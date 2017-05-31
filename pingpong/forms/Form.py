@@ -94,3 +94,6 @@ class Form():
 			"message": message,
 			"flashed": False
 		}
+
+	def getErrors(self):
+		return self.errors
