@@ -134,8 +134,6 @@ class LeaderboardService(Service):
 			pointsAgainst = self.pointsAgainstByOpponent(pointsFor, player.id, result.playerId, start, end)
 			currentStreakData = self.selectTeamResultsByOpponent(player.id, result.playerId, start, end)
 
-			print(currentStreakData)
-
 			# points and win/loss are inverted because these stats show the player vs this opponent
 			stats[result.matchType]["matchups"].append({
 				"playerId": result.playerId,
@@ -830,20 +828,21 @@ class LeaderboardService(Service):
 		data = []
 
 		for result in results:
-			id1, result1, id2, result2 = result.record.split(",")
+			if result.record != None:
+				id1, result1, id2, result2 = result.record.split(",")
 
-			winner = int(id1)
-			loser = int(id2)
+				winner = int(id1)
+				loser = int(id2)
 
-			if result2 == "win":
-				winner = int(id2)
-				loser = int(id1)
+				if result2 == "win":
+					winner = int(id2)
+					loser = int(id1)
 
-			data.append({
-				"matchId": result.matchId,
-				"winner": winner,
-				"loser": loser
-			})
+				data.append({
+					"matchId": result.matchId,
+					"winner": winner,
+					"loser": loser
+				})
 
 		return data
 

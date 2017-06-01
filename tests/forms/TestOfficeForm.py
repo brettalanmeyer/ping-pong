@@ -64,10 +64,14 @@ class TestOfficeForm(BaseTest):
 			data = {
 				"city": "Springfield",
 				"state": "Yes",
-				"skypeChatId": "123abc"
+				"skypeChatId": "123abc",
+				"seasonYear": 2011,
+				"seasonMonth": 3
 			}
 			office = officeService.new()
 			officeForm.load(office, data)
 			assert office.city == data["city"]
 			assert office.state == data["state"]
 			assert office.skypeChatId == data["skypeChatId"]
+			assert office.seasonYear == data["seasonYear"]
+			assert office.seasonMonth == data["seasonMonth"]

@@ -61,6 +61,39 @@ class TestMatchController(BaseTest):
 		rv = self.app.get("/matches?season=1000000")
 		assert rv.status == self.notFound
 
+	def test_matchesSinglesOpponent(self):
+		office = self.office(True)
+		with self.ctx:
+			players = playerService.select(office["id"])
+			opponents = playerService.select(office["id"])
+
+			for idx, player in enumerate(players):
+				opponent = opponents[players.count() - idx - 1]
+				rv = self.app.get("/matches?playerId={}&opponentId={}&matchType=singles".format(player.id, opponent.id))
+				assert rv.status == self.ok
+
+	def test_matchesDoublesOpponent(self):
+		office = self.office(True)
+		with self.ctx:
+			players = playerService.select(office["id"])
+			opponents = playerService.select(office["id"])
+
+			for idx, player in enumerate(players):
+				opponent = opponents[players.count() - idx - 1]
+				rv = self.app.get("/matches?playerId={}&opponentId={}&matchType=doubles".format(player.id, opponent.id))
+				assert rv.status == self.ok
+
+	def test_matchesNinesOpponent(self):
+		office = self.office(True)
+		with self.ctx:
+			players = playerService.select(office["id"])
+			opponents = playerService.select(office["id"])
+
+			for idx, player in enumerate(players):
+				opponent = opponents[players.count() - idx - 1]
+				rv = self.app.get("/matches?playerId={}&opponentId={}&matchType=nines".format(player.id, opponent.id))
+				assert rv.status == self.ok
+
 	def test_singles(self):
 		office = self.office()
 		with self.ctx:

@@ -87,6 +87,7 @@ class TestUtil(BaseTest):
 			assert util.hasConfig("DEBUG")
 			assert util.hasConfig("ADMIN_USERNAME")
 			assert util.hasConfig("ADMIN_PASSWORD")
+			assert not util.hasConfig("TEST_CONFIG")
 			assert not util.hasConfig("asdf")
 			assert not util.hasConfig("qwer")
 

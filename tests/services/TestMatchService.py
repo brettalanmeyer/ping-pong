@@ -196,10 +196,3 @@ class TestMatchService(BaseTest):
 			match = self.createMatch(office["id"])
 			matchService.delete(match)
 			assert matchService.selectById(match.id) == None
-
-	def test_deleteAll(self):
-		office = self.office()
-
-		with self.ctx:
-			matchService.deleteAll()
-			assert matchService.selectCount(office["id"]) == 0

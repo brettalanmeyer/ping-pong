@@ -29,6 +29,8 @@ class BaseTest(unittest.TestCase):
 		app.config["ADMIN_USERNAME"] = "admin"
 		app.config["ADMIN_PASSWORD"] = "d63dc919e201d7bc4c825630d2cf25fdc93d4b2f0d46706d29038d01"
 
+		app.config["TEST_CONFIG"] = ""
+
 		self.ctx = app.app_context()
 		self.app = app.test_client()
 		self.request = app.test_request_context("http://localhost")
@@ -38,24 +40,31 @@ class BaseTest(unittest.TestCase):
 
 	def createOffice(self):
 		return officeService.create({
-			"city": "Ames",
+			"city": "Des Moines",
 			"state": "Iowa",
 			"skypeChatId": "123abc",
 			"seasonYear": "2017",
 			"seasonMonth": "1"
 		})
 
-	def office(self):
+	def office(self, primary = False):
 		office = None
 
 		with self.app:
 			with self.app.session_transaction() as sess:
-				offices = officeService.select()
+				if primary:
+					office = officeService.selectById(1)
 
-				if offices.count() > 0:
-					office = offices.first()
-				else:
-					office = self.createOffice()
+				if office == None:
+					offices = officeService.selectActive()
+
+					if offices.count() > 0:
+						for item in offices:
+							if item.id != 1:
+								office = item
+								break
+					else:
+						office = self.createOffice()
 
 				data = {
 					"id": office.id,

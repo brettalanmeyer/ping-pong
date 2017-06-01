@@ -70,6 +70,20 @@ class TestPlayerController(BaseTest):
 		})
 		assert rv.status == self.badRequest
 
+	def test_playersShow(self):
+		office = self.office()
+		with self.ctx:
+			player = self.createPlayer(office["id"])
+
+			rv = self.app.get("/players/{}".format(player.id))
+			assert rv.status == self.ok
+
+	def test_playersShowNotFound(self):
+		office = self.office()
+		with self.ctx:
+			rv = self.app.get("/players/0")
+			assert rv.status == self.notFound
+
 	def test_playersEdit(self):
 		office = self.office()
 		with self.ctx:
