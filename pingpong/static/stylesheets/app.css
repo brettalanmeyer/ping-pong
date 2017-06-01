@@ -404,17 +404,6 @@ a.link {
 	display: none;
 }
 
-.api-container a {
-	text-decoration: none;
-}
-
-.api-container pre {
-	tab-size: 4;
-	margin: 0;
-	padding: 5px 8px;
-	font-size: 12px;
-}
-
 .office-select {
 	width: 180px;
 	bottom: 4px;
@@ -426,8 +415,25 @@ a.link {
 	cursor: pointer;
 }
 
+.api-container a {
+	text-decoration: none;
+}
+
 .api-container section {
 	margin-bottom: 24px;
+	border: solid 1px #ccc;
+	border-radius: 3px;
+	padding: 12px;
+	background: #f4f4f4;
+}
+
+.api-container pre {
+	tab-size: 4;
+	margin: 0;
+	padding: 5px 8px;
+	font-size: 12px;
+	background: #f8f8f8;
+	border-radius: 3px;
 }
 
 .api-container .response {

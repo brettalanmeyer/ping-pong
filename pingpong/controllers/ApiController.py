@@ -141,7 +141,7 @@ def invalidKey():
 	return Response(json.dumps({ "success": False, "error": "Invalid api key" }), status = 401, mimetype = "application/json")
 
 def invalidButton():
-	return Response(json.dumps({ "success": False, "error": "Invalid button value" }), status = 401, mimetype = "application/json")
+	return Response(json.dumps({ "success": False, "error": "Invalid button value" }), status = 400, mimetype = "application/json")
 
 def validateButton(button):
 	if button not in matchService.colors:
