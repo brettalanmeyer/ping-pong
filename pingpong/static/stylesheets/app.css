@@ -410,8 +410,9 @@ a.link {
 
 .api-container pre {
 	tab-size: 4;
-	margin: 8px 0 20px;
-	padding: 7px 8px;
+	margin: 0;
+	padding: 5px 8px;
+	font-size: 12px;
 }
 
 .office-select {
@@ -423,4 +424,28 @@ a.link {
 
 .office-select .set-office-field {
 	cursor: pointer;
+}
+
+.api-container section {
+	margin-bottom: 24px;
+}
+
+.api-container .response {
+	margin: 8px 0 4px 0;
+}
+
+.api-container .response code {
+	color: #fff;
+	border-radius: 0;
+	font-weight: bold;
+}
+
+.api-container .response.success code {
+	background: rgb(117, 186, 36);
+	border: solid 1px rgb(109, 174, 34);
+}
+
+.api-container .response.error code {
+	background: rgb(236, 135, 2);
+	border: solid 1px rgb(220, 126, 2);
 }

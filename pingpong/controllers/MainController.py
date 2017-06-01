@@ -66,8 +66,9 @@ def beforeRequest():
 
 	if request.endpoint != "static":
 		if "office" not in session:
-			if not (request.endpoint.startswith("apiController") or request.endpoint == "mainController.favicon" or request.endpoint == "officeController.select" or request.endpoint == "officeController.set"):
-				return redirect(url_for("officeController.select"))
+			if request.endpoint != None:
+				if not (request.endpoint.startswith("apiController") or request.endpoint == "mainController.favicon" or request.endpoint == "officeController.select" or request.endpoint == "officeController.set"):
+					return redirect(url_for("officeController.select"))
 
 @mainController.after_app_request
 def afterRequest(response):

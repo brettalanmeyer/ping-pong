@@ -10,13 +10,15 @@
 		<a href="{{ url_for('apiController.index') }}">Ping Pong API</a>
 	</h1>
 
+	<section>
 
-	<code>GET</code>
-	<kbd>/api/players.json?key={% raw %}{key}{% endraw %}</kbd>
+		<code>GET</code>
+		<kbd>/api/players.json?key={% raw %}{key}{% endraw %}</kbd>
 
+		<div class="response success">Success Response <code>200</code> OK</div>
 <pre>[{
-	id: 1,
-	name: "Brett",
+	id: 161,
+	name: "Joey",
 	avatar: "d159f9f9-e19d-43bb-8d11-a167208bf5cf.gif",
 	extension: "gif",
 	avatarUrl: "/players/6153/avatar/d159f9f9-e19d-43bb-8d11-a167208bf5cf.gif",
@@ -25,9 +27,18 @@
 	modifiedAt: '2016-01-01 13:01:01'
 }]</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
+	<section>
 
 	<code>GET</code>
 	<kbd>/api/matches.json?key={% raw %}{key}{% endraw %}</kbd>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>[{
 	"id": 2770,
@@ -42,9 +53,18 @@
 	"createdAt": "2017-05-19 16:02:59"
 }]</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
+	<section>
 
 	<code>GET</code>
 	<kbd>/api/matches/{% raw %}{matchid}{% endraw %}.json?key={% raw %}{key}{% endraw %}</kbd>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>{
 	"id": 2765,
@@ -109,9 +129,25 @@
 	}]
 }</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	<div class="response error">Error Response <code>404</code> Not Found</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid match id"
+}</pre>
+
+	</section>
+	<section>
+
 
 	<code>GET</code>
 	<kbd>/api/isms.json?key={% raw %}{key}{% endraw %}</kbd>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>[{
 	"id": 1,
@@ -123,14 +159,26 @@
 	"modifiedAt": "2017-03-24 14:20:00"
 }]</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
+	<section>
+
 
 	<code>POST</code>
 	<kbd>/api/buttons/{% raw %}{button}{% endraw %}/score</kbd>
-	<p>
-		<code>button</code>
-		<samp>green, yellow, blue, red</samp>
-	</p>
 
+	<div class="response">Data Params</div>
+<pre>{
+	"button": [string:green|yellow|blue|red],
+	"key": [string:provided by administrator]
+}</pre>
+
+<div class="response success">Success Response <code>200</code> OK</div>
 <pre>{
 	"matchId": 123,
 	"action": "score",
@@ -139,13 +187,23 @@
 	"officeName": "Ames, Iowa"
 }</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
+	<section>
 
 	<code>POST</code>
 	<kbd>/api/buttons/{% raw %}{button}{% endraw %}/undo</kbd>
-	<p>
-		<code>button</code>
-		<samp>green, yellow, blue, red</samp>
-	</p>
+	<div class="response">Data Params</div>
+<pre>{
+	"button": [string:green|yellow|blue|red],
+	"key": [string:provided by administrator]
+}</pre>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>{
 	"matchId": 234,
@@ -154,6 +212,14 @@
 	"officeId": 1,
 	"officeName": "Ames, Iowa"
 }</pre>
+
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
 
 	</div>
 
