@@ -36,7 +36,11 @@
 
 						<td>{{ office.city }}, {{ office.state }}</td>
 						<td>{{ office.formatSeason() }}</td>
-						<td><code>{{ office.skypeChatId }}</code></td>
+						<td>
+							{% if office.skypeChatId %}
+								<code>{{ office.skypeChatId }}</code>
+							{% endif %}
+						</td>
 						<td><kbd>{{ office.key }}</kbd></td>
 
 						<td width="1">
