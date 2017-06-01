@@ -116,22 +116,6 @@ class PlayerService(Service):
 			db.session.rollback()
 			return player, False
 
-	def deleteAll(self):
-		app.logger.info("Deleting all players")
-
-		try:
-			players = self.select()
-			for player in players:
-				util.deleteAvatar(player.avatar)
-
-			db.session.query(PlayerModel).delete()
-			db.session.commit()
-			return True
-
-		except exc.SQLAlchemyError, error:
-			db.session.rollback()
-			return False
-
 	def serialize(self, players):
 		app.logger.info("Serializing players")
 

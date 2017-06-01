@@ -96,18 +96,6 @@ class IsmService(Service):
 			db.session.rollback()
 			return ism, False
 
-	def deleteAll(self):
-		app.logger.info("Deleting all isms")
-
-		try:
-			db.session.query(IsmModel).delete()
-			db.session.commit()
-			return True
-
-		except exc.SQLAlchemyError, error:
-			db.session.rollback()
-			return False
-
 	def serialize(self, isms):
 		app.logger.info("Serializing isms")
 

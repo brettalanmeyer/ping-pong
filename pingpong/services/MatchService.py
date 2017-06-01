@@ -186,18 +186,6 @@ class MatchService(Service):
 			db.session.rollback()
 			return match, False
 
-	def deleteAll(self):
-		app.logger.info("Deleting all matches")
-
-		try:
-			db.session.query(MatchModel).delete()
-			db.session.commit()
-			return True
-
-		except exc.SQLAlchemyError, error:
-			db.session.rollback()
-			return False
-
 	def serializeMatch(self, match):
 		app.logger.info("Serializing matchId=%d", match.id)
 

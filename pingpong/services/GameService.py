@@ -75,28 +75,3 @@ class GameService(Service):
 			return 0
 
 		return int(data.wins)
-
-	def serialize(self, games):
-		app.logger.info("Serializing games")
-
-		data = []
-
-		for game in games:
-			data.append({
-				"id": game.id,
-				"matchId": game.matchId,
-				"game": game.game,
-				"greenId": game.greenId,
-				"yellowId": game.yellowId,
-				"blueId": game.blueId,
-				"redId": game.redId,
-				"winner": game.winner,
-				"winnerScore": game.winnerScore,
-				"loser": game.loser,
-				"loserScore": game.loserScore,
-				"createdAt": game.createdAt,
-				"modifiedAt": game.modifiedAt,
-				"completedAt": game.completedAt
-			})
-
-		return json.dumps(data, default = util.jsonSerial)
