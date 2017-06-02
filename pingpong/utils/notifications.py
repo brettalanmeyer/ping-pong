@@ -21,7 +21,8 @@ def getRecipients(officeIds):
 				recipients.append(office.skypeChatId)
 
 	else:
-		recipients.append(officeIds)
+		office = officeService.selectById(officeIds)
+		recipients.append(office.skypeChatId)
 
 	return recipients
 

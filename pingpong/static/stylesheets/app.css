@@ -279,15 +279,15 @@ a.link {
 	text-align: center;
 }
 
-.matches-container .match-list > tbody > tr.active-match td {
+.matches-container .match-list > tbody > tr.active-match > td {
 	border-top: solid 3px #ccc;
 	border-bottom: solid 3px #ccc;
 }
 
-.matches-container .match-list > tbody > tr.active-match td:first-child {
+.matches-container .match-list > tbody > tr.active-match > td:first-child {
 	border-left: solid 3px #ccc;
 }
-.matches-container .match-list > tbody > tr.active-match td:last-child {
+.matches-container .match-list > tbody > tr.active-match > td:last-child {
 	border-right: solid 3px #ccc;
 }
 
