@@ -12,6 +12,7 @@ def bundleJavascripts():
 		"libraries/socket.io.min.js",
 		"libraries/stupidtable.min.js",
 		"javascripts/app.js",
+		"javascripts/hash-manager.js",
 		"javascripts/isms.js",
 		"javascripts/singles.js",
 		"javascripts/doubles.js",
@@ -19,6 +20,7 @@ def bundleJavascripts():
 		"javascripts/players.js",
 		"javascripts/smack-talk.js",
 		"javascripts/scoring-tools.js",
+		"javascripts/leaderboard.js",
 		filters = "jsmin",
 		output = ".webassets-cache/ping-pong.min.js"
 	)

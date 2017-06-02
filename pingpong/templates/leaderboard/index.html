@@ -34,9 +34,10 @@
 
 					<tr>
 
-						<th colspan="2"></th>
+						<th></th>
+						<th></th>
 
-						<th data-sort="string">
+						<th data-sort="string" data-label="player">
 							Player
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -44,7 +45,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="elo" title="ELO rating index">
+						<th data-sort="int" data-label="elo" class="elo" title="ELO rating index">
 							ELO
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -52,7 +53,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Number of matches played">
+						<th data-sort="int" data-label="matches" title="Number of matches played">
 							Matches
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -60,7 +61,7 @@
 							</div>
 						</th>
 
-						<th data-sort="float" class="win-percentage" title="Win percentage">
+						<th data-sort="float" data-label="win-percentage" class="win-percentage" title="Win percentage">
 							Win %
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -68,7 +69,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="points-for" title="Total points scored by player">
+						<th data-sort="int" data-label="points-for" class="points-for" title="Total points scored by player">
 							Points For
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -76,7 +77,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="points-against" title="Total points scored by opponent">
+						<th data-sort="int" data-label="points-against" class="points-against" title="Total points scored by opponent">
 							Points Against
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -84,7 +85,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Number of match wins">
+						<th data-sort="int" data-label="wins" title="Number of match wins">
 							Wins
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -92,7 +93,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Number of match losses">
+						<th data-sort="int" data-label="losses" title="Number of match losses">
 							Losses
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -100,7 +101,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Consecutive points scored">
+						<th data-sort="int" data-label="point-streak" title="Consecutive points scored">
 							Point Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -108,7 +109,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Most recent number of wins or losses">
+						<th data-sort="int" data-label="current-streak" title="Most recent number of wins or losses">
 							Current Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -116,7 +117,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Largest Winning Streak">
+						<th data-sort="int" data-label="best-streak" title="Largest Winning Streak">
 							Best Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -124,7 +125,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Largest Losing Streak">
+						<th data-sort="int" data-label="worst-streak" title="Largest Losing Streak">
 							Worst Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>

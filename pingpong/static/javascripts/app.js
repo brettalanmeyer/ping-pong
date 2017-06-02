@@ -1,35 +1,5 @@
 $(function(){
 
-	/*$.post("http://localhost:5000/api/buttons/green/score", { "key": "6ca60c6a-c103-4884-8d84-6444cec51939" }).done(function(response){
-		console.log(response);
-	});
-	$.post("http://localhost:5000/api/buttons/green/undo", { "key": "6ca60c6a-c103-4884-8d84-6444cec51939" }).done(function(response){
-		console.log(response);
-	});*/
-
-	$(".table-sortable").stupidtable();
-
-	$("#leaderboard.singles").find("th.elo").stupidsort("desc");
-	$("#leaderboard.doubles").find("th.win-percentage").stupidsort("desc");
-	$("#leaderboard.nines").find("th.win-percentage").stupidsort("desc");
-
-	$("#leaderboard").bind("aftertablesort", function(event, data){
-		var i = 1;
-		$(this).find("tbody").find("tr").each(function(){
-			$(this).find("td:first").html(i++);
-		});
-	});
-
-	$(".leaderboard-player-container .nav-tabs li").on("click", function(){
-		$(".leaderboard-player-container .nav-tabs li").removeClass("active");
-
-		var source = $(this);
-		source.addClass("active");
-
-		$(".leaderboard-player-container .opponent-table").addClass("hidden");
-		$(".leaderboard-player-container .opponent-table[data-matchtype=" + source.data("matchtype") + "]").removeClass("hidden");
-	}).first().trigger("click");
-
 	$("form.action-delete").on("submit", function(){
 		return confirm("Are you sure you want to delete this?");
 	});
