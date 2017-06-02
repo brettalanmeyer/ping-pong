@@ -12,11 +12,13 @@ playerService = PlayerService()
 class TestSingles(BaseTest):
 
 	def createMatch(self, numOfGames, randomize = True):
-		with self.request:
-			player1 = playerService.create({ "name": "Han" })
-			player2 = playerService.create({ "name": "Chewie" })
+		office = self.office()
 
-			match = matchService.create("singles")
+		with self.request:
+			player1 = playerService.create(office["id"], { "name": "Han" })
+			player2 = playerService.create(office["id"], { "name": "Chewie" })
+
+			match = matchService.create(office["id"], "singles")
 			matchService.updateGames(match.id, numOfGames)
 
 			singles.createTeams(match, [player1.id, player2.id], randomize)

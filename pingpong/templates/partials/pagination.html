@@ -4,66 +4,70 @@
 {% set matchType = request.args.get("matchType") %}
 {% set season = request.args.get("season") %}
 
-<div class="text-center">
+{% if  paging.pages > 0 %}
 
-	<ul class="pagination">
+	<div class="text-center">
 
-		{% if paging.page - 1 > 1 %}
-			<li>
-				<a href="{{ url_for('matchController.index', page = 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="First Page">
+		<ul class="pagination">
+
+			{% if paging.page - 1 > 1 %}
+				<li>
+					<a href="{{ url_for('matchController.index', page = 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="First Page">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+			{% else %}
+				<li class="disabled">
 					<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li>
-		{% else %}
-			<li class="disabled">
-				<span aria-hidden="true">&laquo;</span>
-			</li>
-		{% endif %}
-
-		{% if paging.page > 1 %}
-			<li>
-				<a href="{{ url_for('matchController.index', page = paging.page - 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Previous Page">
-					<span aria-hidden="true">&lsaquo;</span>
-				</a>
-			</li>
-		{% else %}
-			<li class="disabled">
-				<span aria-hidden="true">&lsaquo;</span>
-			</li>
-		{% endif %}
-
-		{% for i in range(1, paging.pages + 1): %}
-			{% if i >= paging.page - paging.width and i <= paging.page + paging.width %}
-				<li {% if paging.page == i %}class="active"{% endif %}>
-					<a href="{{ url_for('matchController.index', page = i, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Page {{ i }}">{{ i }}</a>
 				</li>
 			{% endif %}
-		{% endfor %}
 
-		{% if paging.page < paging.pages %}
-			<li>
-				<a href="{{ url_for('matchController.index', page = paging.page + 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Next Page">
+			{% if paging.page > 1 %}
+				<li>
+					<a href="{{ url_for('matchController.index', page = paging.page - 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Previous Page">
+						<span aria-hidden="true">&lsaquo;</span>
+					</a>
+				</li>
+			{% else %}
+				<li class="disabled">
+					<span aria-hidden="true">&lsaquo;</span>
+				</li>
+			{% endif %}
+
+			{% for i in range(1, paging.pages + 1): %}
+				{% if i >= paging.page - paging.width and i <= paging.page + paging.width %}
+					<li {% if paging.page == i %}class="active"{% endif %}>
+						<a href="{{ url_for('matchController.index', page = i, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Page {{ i }}">{{ i }}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+
+			{% if paging.page < paging.pages %}
+				<li>
+					<a href="{{ url_for('matchController.index', page = paging.page + 1, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Next Page">
+						<span aria-hidden="true">&rsaquo;</span>
+					</a>
+				</li>
+			{% else %}
+				<li class="disabled">
 					<span aria-hidden="true">&rsaquo;</span>
-				</a>
-			</li>
-		{% else %}
-			<li class="disabled">
-				<span aria-hidden="true">&rsaquo;</span>
-			</li>
-		{% endif %}
+				</li>
+			{% endif %}
 
-		{% if paging.page + 1 < paging.pages %}
-			<li>
-				<a href="{{ url_for('matchController.index', page = paging.pages, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Last Page">
+			{% if paging.page + 1 < paging.pages %}
+				<li>
+					<a href="{{ url_for('matchController.index', page = paging.pages, playerId = playerId, opponentId = opponentId, matchType = matchType, season = season ) }}" title="Last Page">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			{% else %}
+				<li class="disabled">
 					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
-		{% else %}
-			<li class="disabled">
-				<span aria-hidden="true">&raquo;</span>
-			</li>
-		{% endif %}
+				</li>
+			{% endif %}
 
-	</ul>
+		</ul>
 
-</div>
+	</div>
+
+{% endif %}

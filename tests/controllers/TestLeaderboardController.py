@@ -5,243 +5,303 @@ playerService = PlayerService()
 
 class TestLeaderboardController(BaseTest):
 
-	def create_player(self):
-		return playerService.create({ "name": "Orange Joe" })
-
 	def test_leaderboard(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_season_0(self):
+	def test_leaderboardSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_season_1(self):
+	def test_leaderboardSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_season_2(self):
+	def test_leaderboardSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_season_invalid(self):
+	def test_leaderboardSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_season_invalid_again(self):
+	def test_leaderboardSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_json(self):
+	def test_leaderboardJson(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard.json", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_json_season_0(self):
+	def test_leaderboardJsonSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard.json?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_json_season_1(self):
+	def test_leaderboardJsonSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard.json?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_json_season_2(self):
+	def test_leaderboardJsonSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard.json?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_json_season_invalid(self):
+	def test_leaderboardJsonSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard.json?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_json_season_invalid_again(self):
+	def test_leaderboardJsonSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard.json?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_singles(self):
+	def test_leaderboardSingles(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_season_0(self):
+	def test_leaderboardSinglesSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_season_1(self):
+	def test_leaderboardSinglesSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_season_2(self):
+	def test_leaderboardSinglesSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_season_invalid(self):
+	def test_leaderboardSinglesSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_singles_season_invalid_again(self):
+	def test_leaderboardSinglesSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_singles_json(self):
+	def test_leaderboardSinglesJson(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles.json", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_json_season_0(self):
+	def test_leaderboardSinglesJsonSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles.json?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_json_season_1(self):
+	def test_leaderboardSinglesJsonSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles.json?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_json_season_2(self):
+	def test_leaderboardSinglesJsonSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles.json?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_singles_json_season_invalid(self):
+	def test_leaderboardSinglesJsonSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles.json?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_singles_json_season_invalid_again(self):
+	def test_leaderboardSinglesJsonSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/singles.json?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_doubles(self):
+	def test_leaderboardDoubles(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_season_0(self):
+	def test_leaderboardDoublesSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_season_1(self):
+	def test_leaderboardDoublesSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_season_2(self):
+	def test_leaderboardDoublesSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_season_invalid(self):
+	def test_leaderboardDoublesSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_doubles_season_invalid_again(self):
+	def test_leaderboardDoublesSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_doubles_json(self):
+	def test_leaderboardDoublesJson(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles.json", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_json_season_0(self):
+	def test_leaderboardDoublesJsonSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles.json?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_json_season_1(self):
+	def test_leaderboardDoublesJsonSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles.json?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_json_season_2(self):
+	def test_leaderboardDoublesJsonSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles.json?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_doubles_json_season_invalid(self):
+	def test_leaderboardDoublesJsonSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles.json?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_doubles_json_season_invalid_again(self):
+	def test_leaderboardDoublesJsonSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/doubles.json?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_nines(self):
+	def test_leaderboardNines(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_season_0(self):
+	def test_leaderboardNinesSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_season_1(self):
+	def test_leaderboardNinesSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_season_2(self):
+	def test_leaderboardNinesSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_season_invalid(self):
+	def test_leaderboardNinesSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_nines_season_invalid_again(self):
+	def test_leaderboardNinesSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_nines_json(self):
+	def test_leaderboardNinesJson(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines.json", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_json_season_0(self):
+	def test_leaderboardNinesJsonSeason0(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines.json?season=0", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_json_season_1(self):
+	def test_leaderboardNinesJsonSeason1(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines.json?season=1", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_json_season_2(self):
+	def test_leaderboardNinesJsonSeason2(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines.json?season=2", follow_redirects = True)
 		assert rv.status == self.ok
 
-	def test_leaderboard_nines_json_season_invalid(self):
+	def test_leaderboardNinesJsonSeasonInvalid(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines.json?season=-1", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_nines_json_season_invalid_again(self):
+	def test_leaderboardNinesJsonSeasonInvalidAgain(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/nines.json?season=1000", follow_redirects = True)
 		assert rv.status == self.notFound
 
-	def test_leaderboard_player_not_found(self):
+	def test_leaderboardPlayerNotFound(self):
+		self.office(True)
 		rv = self.app.get("/leaderboard/players/")
 		assert rv.status == self.notFound
 
-	def test_leaderboard_player(self):
+	def test_leaderboardPlayer(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}".format(player.id))
-			assert rv.status == self.ok
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}".format(player.id))
+				assert rv.status == self.ok
 
-	def test_leaderboard_player_json(self):
+	def test_leaderboardPlayerJson(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}.json".format(player.id))
-			assert rv.status == self.ok
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}.json".format(player.id))
+				assert rv.status == self.ok
 
-	def test_leaderboard_player_season_0(self):
+	def test_leaderboardPlayerSeason0(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}?season=0".format(player.id))
-			assert rv.status == self.ok
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}?season=0".format(player.id))
+				assert rv.status == self.ok
 
-	def test_leaderboard_player_season_1(self):
+	def test_leaderboardPlayerSeason1(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}?season=1".format(player.id))
-			assert rv.status == self.ok
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}?season=1".format(player.id))
+				assert rv.status == self.ok
 
-	def test_leaderboard_player_season_2(self):
+	def test_leaderboardPlayerSeason2(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}?season=2".format(player.id))
-			assert rv.status == self.ok
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}?season=2".format(player.id))
+				assert rv.status == self.ok
 
-	def test_leaderboard_player_season__invalid(self):
+	def test_leaderboardPlayerSEASON_Invalid(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}?season=-1".format(player.id))
-			assert rv.status == self.notFound
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}?season=-1".format(player.id))
+				assert rv.status == self.notFound
 
-	def test_leaderboard_player_season__invalid_again(self):
+	def test_leaderboardPlayerSEASON_InvalidAgain(self):
+		office = self.office(True)
 		with self.ctx:
-			player = self.create_player()
-			rv = self.app.get("/leaderboard/players/{}?season=10000".format(player.id))
-			assert rv.status == self.notFound
+			players = playerService.select(office["id"])
+			for player in players:
+				rv = self.app.get("/leaderboard/players/{}?season=10000".format(player.id))
+				assert rv.status == self.notFound

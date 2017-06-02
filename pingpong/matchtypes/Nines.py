@@ -170,7 +170,7 @@ class Nines(BaseMatch):
 		player4 = match.teams[3].players[0]
 
 		message = '<a href="{}matches/{}">{}, {}, {} and {} are playing nines</a>'.format(request.url_root, match.id, player1.name, player2.name, player3.name, player4.name)
-		notifications.send(message)
+		notifications.send(message, match.officeId)
 
 	def playAgain(self, match, numOfGames, randomize):
 		game = match.games[0]
@@ -191,7 +191,7 @@ class Nines(BaseMatch):
 			# swap green and red
 			playerIds = [playerIds[3], playerIds[1], playerIds[2], playerIds[0]]
 
-		newMatch = matchService.create(self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType)
 		self.createTeams(newMatch, playerIds, False)
 		matchService.play(newMatch)
 
@@ -216,4 +216,4 @@ class Nines(BaseMatch):
 
 		message += '\n<a href="{}leaderboard/nines">Leaderboard Standings</a>'.format(request.url_root)
 
-		notifications.send(message)
+		notifications.send(message, match.officeId)

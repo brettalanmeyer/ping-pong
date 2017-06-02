@@ -17,11 +17,15 @@
 			{% endwith %}
 
 			<ul class="nav nav-tabs">
+
 				{% for item in matchTypes %}
+
 					<li role="presentation" class="{% if stats.matchType == item %}active{% endif %}">
 						<a href="{{ url_for('leaderboardController.index', matchType = item, season = stats.season) }}">{{ item.title() }}</a>
 					</li>
+
 				{% endfor %}
+
 			</ul>
 
 			<table id="leaderboard" class="leaderboard-table table table-sortable {{ stats.matchType }}">
@@ -33,7 +37,7 @@
 						<th></th>
 						<th></th>
 
-						<th data-sort="string">
+						<th data-sort="string" data-label="player">
 							Player
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -41,7 +45,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="elo" title="ELO rating index">
+						<th data-sort="int" data-label="elo" class="elo" title="ELO rating index">
 							ELO
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -49,7 +53,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Number of matches played">
+						<th data-sort="int" data-label="matches" title="Number of matches played">
 							Matches
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -57,7 +61,7 @@
 							</div>
 						</th>
 
-						<th data-sort="float" class="win-percentage" title="Win percentage">
+						<th data-sort="float" data-label="win-percentage" class="win-percentage" title="Win percentage">
 							Win %
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -65,7 +69,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="points-for" title="Total points scored by player">
+						<th data-sort="int" data-label="points-for" class="points-for" title="Total points scored by player">
 							Points For
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -73,7 +77,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" class="points-against" title="Total points scored by opponent">
+						<th data-sort="int" data-label="points-against" class="points-against" title="Total points scored by opponent">
 							Points Against
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -81,7 +85,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Number of match wins">
+						<th data-sort="int" data-label="wins" title="Number of match wins">
 							Wins
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -89,7 +93,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Number of match losses">
+						<th data-sort="int" data-label="losses" title="Number of match losses">
 							Losses
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -97,7 +101,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Consecutive points scored">
+						<th data-sort="int" data-label="point-streak" title="Consecutive points scored">
 							Point Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -105,7 +109,7 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Most recent number of wins or losses">
+						<th data-sort="int" data-label="current-streak" title="Most recent number of wins or losses">
 							Current Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
@@ -113,16 +117,16 @@
 							</div>
 						</th>
 
-						<th data-sort="int" title="Most Wins in a Row">
-							Most Wins
+						<th data-sort="int" data-label="best-streak" title="Largest Winning Streak">
+							Best Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
 								<span class="glyphicon glyphicon-chevron-down"></span>
 							</div>
 						</th>
 
-						<th data-sort="int" title="Most Losses in a Row">
-							Most Losses
+						<th data-sort="int" data-label="worst-streak" title="Largest Losing Streak">
+							Worst Streak
 							<div class="sorting-container">
 								<span class="glyphicon glyphicon-chevron-up"></span>
 								<span class="glyphicon glyphicon-chevron-down"></span>
@@ -138,19 +142,27 @@
 					{% set numPlayers = [] %}
 
 					{% for player in stats.players if not player.matches == 0 %}
+
 						{% with num = loop.index, player = player %}
 							{% include 'leaderboard/index-player.html' %}
 							{% if numPlayers.append('') %}{% endif %}
 						{% endwith %}
+
+					{% else %}
+
+						<tr>
+							<th colspan="13" class="text-center">No {{ stats.matchType }} matches found.</th>
+						</tr>
+
 					{% endfor %}
 
 				</tbody>
 
 				<tfoot>
+
 					<tr>
 
-						<th></th>
-						<th></th>
+						<th colspan="2"></td>
 						<th>Totals:</th>
 						<th class="elo"></th>
 						<th>{{ "{:,}".format(stats.totals["matches"]) }}</th>
@@ -159,17 +171,16 @@
 						<th class="points-against">{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
+						<th colspan="4"></td>
 
 					</tr>
 
 					{% for player in stats.players if player.matches == 0 %}
+
 						{% with num = numPlayers|count + loop.index, player = player %}
 							{% include 'leaderboard/index-player.html' %}
 						{% endwith %}
+
 					{% endfor %}
 
 				</tfoot>

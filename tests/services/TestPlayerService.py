@@ -7,49 +7,60 @@ playerService = PlayerService()
 class TestPlayerService(BaseTest):
 
 	def test_select(self):
+		office = self.office()
+
 		with self.ctx:
-			playerService.create({
+			playerService.create(office["id"], {
 				"name": "Bob"
 			})
 
-			players = playerService.select()
+			players = playerService.select(office["id"])
 			assert players.count() > 0
 
 	def test_selectCount(self):
+		office = self.office()
+
 		with self.ctx:
-			players = playerService.selectCount()
+			players = playerService.selectCount(office["id"])
 			assert players >= 0
 
 	def test_selectById(self):
+		office = self.office()
+
 		with self.ctx:
-			playerOne = playerService.select().first()
+			playerOne = playerService.select(office["id"]).first()
 			playerTwo = playerService.selectById(playerOne.id)
 			assert playerOne == playerTwo
 
 	def test_selectActive(self):
+		office = self.office()
+
 		with self.ctx:
-			players = playerService.selectActive()
+			players = playerService.selectActive(office["id"])
 
 			for player in players:
 				assert player.enabled
 
 	def test_selectByName(self):
+		office = self.office()
+
 		with self.ctx:
-			players = playerService.selectByName("Bob")
+			players = playerService.selectByName(office["id"], "Bob")
 			assert players.count() > 0
 
 			for player in players:
 				assert player.name == "Bob"
 
 	def test_selectByNameExcludingPlayer(self):
+		office = self.office()
 		name = str(uuid.uuid4())
 
 		with self.ctx:
-			p1 = playerService.create({ "name": name })
-			p2 = playerService.create({ "name": name })
-			p3 = playerService.create({ "name": name })
+			p1 = playerService.create(office["id"], { "name": name })
+			p2 = playerService.create(office["id"], { "name": name })
+			p3 = playerService.create(office["id"], { "name": name })
 
-			players = playerService.selectByNameExcludingPlayer(p1.id, name)
+			players = playerService.selectByNameExcludingPlayer(office["id"], p1.id, name)
 
 			assert players.count() == 2
 
@@ -60,16 +71,19 @@ class TestPlayerService(BaseTest):
 		with self.ctx:
 			player = playerService.new()
 			assert player.id == None
+			assert player.officeId == None
 			assert player.name == ""
 			assert player.enabled == True
 			assert player.createdAt == None
 			assert player.modifiedAt == None
 
 	def test_create(self):
+		office = self.office()
+
 		name = "This is a name"
 
 		with self.ctx:
-			player = playerService.create({
+			player = playerService.create(office["id"], {
 				"name": name
 			})
 
@@ -82,10 +96,11 @@ class TestPlayerService(BaseTest):
 			assert anotherPlayer.name == name
 
 	def test_update(self):
+		office = self.office()
 		name = str(uuid.uuid4())
 
 		with self.ctx:
-			player = playerService.select().first()
+			player = playerService.select(office["id"]).first()
 			oldName = player.name
 
 			updatedPlayer = playerService.update(player.id, {
@@ -96,15 +111,19 @@ class TestPlayerService(BaseTest):
 			assert updatedPlayer.name != oldName
 
 	def test_delete(self):
+		office = self.office()
+
 		with self.ctx:
-			player = playerService.create({ "name": "Bob" })
+			player = playerService.create(office["id"], { "name": "Bob" })
 			playerService.delete(player)
 			deletedPlayer = playerService.selectById(player.id)
 			assert deletedPlayer == None
 
 	def test_deleteById(self):
+		office = self.office()
+
 		with self.ctx:
-			player = playerService.create({ "name": "Bob" })
+			player = playerService.create(office["id"], { "name": "Bob" })
 			playerService.deleteById(player.id)
 			deletedPlayer = playerService.selectById(player.id)
 			assert deletedPlayer == None

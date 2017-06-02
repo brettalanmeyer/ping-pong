@@ -21,6 +21,10 @@ class TestUtil(BaseTest):
 			assert test4 == 9
 			assert test4 != "9"
 
+			test5 = util.param("test5", "9", "str")
+			assert test5 == "9"
+			assert test5 != 9
+
 	def test_paramForm(self):
 		with self.request:
 			test1 = util.paramForm("test1")
@@ -36,6 +40,10 @@ class TestUtil(BaseTest):
 			test4 = util.paramForm("test4", "9", "int")
 			assert test4 == 9
 			assert test4 != "9"
+
+			test5 = util.paramForm("test5", "9", "str")
+			assert test5 == "9"
+			assert test5 != 9
 
 	def test_jsonSerial(self):
 		assert json.dumps({}) == "{}"
@@ -79,6 +87,7 @@ class TestUtil(BaseTest):
 			assert util.hasConfig("DEBUG")
 			assert util.hasConfig("ADMIN_USERNAME")
 			assert util.hasConfig("ADMIN_PASSWORD")
+			assert not util.hasConfig("TEST_CONFIG")
 			assert not util.hasConfig("asdf")
 			assert not util.hasConfig("qwer")
 

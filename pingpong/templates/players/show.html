@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ player.name }}{% endblock %}
+
+{% block body %}
+
+	<div class="container player-show">
+
+		<h1>{{ player.name }}</h1>
+
+		{% with id = player.id, avatar = player.avatar %}
+			{% include 'partials/avatar.html' %}
+		{% endwith %}
+
+	</div>
+
+{% endblock %}

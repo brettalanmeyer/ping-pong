@@ -5,10 +5,11 @@ $(function(){
 	if(singles.exists()){
 
 		var matchId = singles.data("matchid");
+		var office = $("meta[name=office]").attr("content");
 
 		var socket = io.connect();
-		socket.on("response", update);
-		socket.on("smack-talk", smackTalk);
+		socket.on("response-" + office, update);
+		socket.on("smack-talk-" + office, smackTalk);
 
 		var set = $("[data-var=set");
 		var colors = ["green", "yellow"];

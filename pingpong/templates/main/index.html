@@ -25,6 +25,9 @@
 				<a href="{{ url_for('leaderboardController.index') }}">Leaderboard</a>
 				<a href="{{ url_for('matchController.index') }}">Matches</a>
 				<a href="{{ url_for('playerController.index') }}">Players</a>
+				{% if current_user.is_authenticated %}
+					<a href="{{ url_for('officeController.index') }}">Offices</a>
+				{% endif %}
 
 				<div class="links-horizontal">
 					<a href="{{ url_for('ismController.index') }}">Isms</a>

@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from flask import abort
 from flask import current_app as app
 from pingpong.models.PlayerModel import PlayerModel
+from pingpong.services.OfficeService import OfficeService
 from pingpong.services.PlayerService import PlayerService
 from pingpong.services.Service import Service
 from pingpong.utils import database as db
@@ -11,22 +12,23 @@ from sqlalchemy import text
 import math
 
 playerService = PlayerService()
+officeService = OfficeService()
 
 class LeaderboardService(Service):
 
-	def matchTypeStats(self, matchType, season):
+	def matchTypeStats(self, officeId, matchType, season):
 		app.logger.info("Querying Leaderboard Statistics by matchType=%s and season=%s", matchType, season)
 
-		players = db.session.query(PlayerModel).order_by(PlayerModel.name)
-		seasons, season, start, end = self.seasons(season)
+		players = playerService.select(officeId)
+		seasons, season, start, end = self.seasons(season, officeId)
 
-		matches = self.matchesByMatchType(matchType, start, end)
-		times = self.times(matchType, start, end)
-		pointsFor = self.pointsForByMatchType(matchType, start, end)
-		pointsAgainst = self.pointsAgainstByMatchType(pointsFor, matchType, start, end)
-		pointStreakData = self.selectMatchScoresByMatchType(matchType, start, end)
-		currentStreakData = self.selectTeamResultsByMatchType(matchType, start, end)
-		elo = self.elo(start, end)
+		matches = self.matchesByMatchType(officeId, matchType, start, end)
+		times = self.times(officeId, matchType, start, end)
+		pointsFor = self.pointsForByMatchType(officeId, matchType, start, end)
+		pointsAgainst = self.pointsAgainstByMatchType(officeId, pointsFor, matchType, start, end)
+		pointStreakData = self.selectMatchScoresByMatchType(officeId, matchType, start, end)
+		currentStreakData = self.selectTeamResultsByMatchType(officeId, matchType, start, end)
+		elo = self.elo(officeId, start, end)
 
 		stats = {
 			"matchType": matchType,
@@ -76,7 +78,7 @@ class LeaderboardService(Service):
 	def playerStats(self, player, season):
 		app.logger.debug("Querying player stats: playerId=%s season=%s", player.id, season)
 
-		seasons, season, start, end = self.seasons(season)
+		seasons, season, start, end = self.seasons(season, player.officeId)
 
 		matches = self.matchesByPlayer(player.id, start, end)
 		pointsFor = self.pointsForByPlayer(player.id, start, end)
@@ -132,8 +134,6 @@ class LeaderboardService(Service):
 			pointsAgainst = self.pointsAgainstByOpponent(pointsFor, player.id, result.playerId, start, end)
 			currentStreakData = self.selectTeamResultsByOpponent(player.id, result.playerId, start, end)
 
-			print(currentStreakData)
-
 			# points and win/loss are inverted because these stats show the player vs this opponent
 			stats[result.matchType]["matchups"].append({
 				"playerId": result.playerId,
@@ -154,7 +154,7 @@ class LeaderboardService(Service):
 
 		return stats
 
-	def matchesByMatchType(self, matchType, start, end):
+	def matchesByMatchType(self, officeId, matchType, start, end):
 		app.logger.debug("Querying matches by matchType=%s start=%s end=%s", matchType, start, end)
 
 		query = "\
@@ -165,6 +165,7 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
+				AND matches.officeId = :officeId\
 		"
 		if start != None:
 			query += " AND matches.completedAt >= :start "
@@ -174,7 +175,7 @@ class LeaderboardService(Service):
 		query += " GROUP BY players.id "
 
 		connection = db.session.connection()
-		matches = connection.execute(text(query), matchType = matchType, start = start, end = end)
+		matches = connection.execute(text(query), officeId = officeId, matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -222,7 +223,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def times(self, matchType, start, end):
+	def times(self, officeId, matchType, start, end):
 		app.logger.debug("Querying time played by matchType=%s start=%s end=%s", matchType, start, end)
 
 		query = "\
@@ -233,6 +234,7 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
+				AND matches.officeId = :officeId\
 		"
 
 		if start != None:
@@ -241,7 +243,7 @@ class LeaderboardService(Service):
 			query += " AND matches.completedAt < :end "
 
 		connection = db.session.connection()
-		times = connection.execute(text(query), matchType = matchType, start = start, end = end)
+		times = connection.execute(text(query), officeId = officeId, matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -253,7 +255,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsForByMatchType(self, matchType, start, end):
+	def pointsForByMatchType(self, officeId, matchType, start, end):
 		app.logger.debug("Querying points for by matchType=%s start=%s end=%s", matchType, start, end)
 
 		query = "\
@@ -265,6 +267,7 @@ class LeaderboardService(Service):
 			LEFT JOIN scores ON teams.id = scores.teamId AND matches.id = scores.matchId\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
+				AND matches.officeId = :officeId\
 		"
 
 		if start != None:
@@ -275,7 +278,7 @@ class LeaderboardService(Service):
 		query += " GROUP BY players.id "
 
 		connection = db.session.connection()
-		points = connection.execute(text(query), matchType = matchType, start = start, end = end)
+		points = connection.execute(text(query), officeId = officeId, matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -355,7 +358,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def pointsAgainstByMatchType(self, pointsFor, matchType, start, end):
+	def pointsAgainstByMatchType(self, officeId, pointsFor, matchType, start, end):
 		app.logger.debug("Querying points against by matchType=%s start=%s end=%s", matchType, start, end)
 
 		query = "\
@@ -366,6 +369,7 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
+				AND matches.officeId = :officeId\
 		"
 
 		if start != None:
@@ -376,7 +380,7 @@ class LeaderboardService(Service):
 		query += " GROUP BY players.id "
 
 		connection = db.session.connection()
-		matches = connection.execute(text(query), matchType = matchType, start = start, end = end)
+		matches = connection.execute(text(query), officeId = officeId, matchType = matchType, start = start, end = end)
 
 		data = {}
 
@@ -687,7 +691,7 @@ class LeaderboardService(Service):
 
 		return streak, wins, abs(losses)
 
-	def selectMatchScoresByMatchType(self, matchType, start, end):
+	def selectMatchScoresByMatchType(self, officeId, matchType, start, end):
 		app.logger.debug("Querying match scores by matchType=%s start=%s end=%s", matchType, start, end)
 
 		query = "\
@@ -697,6 +701,7 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON scores.matchId = matches.id\
 			WHERE matches.complete = 1\
 				AND matches.matchType = :matchType\
+				AND matches.officeId = :officeId\
 		"
 
 		if start != None:
@@ -707,7 +712,7 @@ class LeaderboardService(Service):
 		query += " GROUP BY scores.id "
 
 		connection = db.session.connection()
-		results = connection.execute(text(query), matchType = matchType, start = start, end = end)
+		results = connection.execute(text(query), officeId = officeId, matchType = matchType, start = start, end = end)
 
 		data = []
 
@@ -723,7 +728,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def selectTeamResultsByMatchType(self, matchType, start, end):
+	def selectTeamResultsByMatchType(self, officeId, matchType, start, end):
 		app.logger.debug("Querying team results by matchType=%s start=%s end=%s", matchType, start, end)
 
 		query  = "\
@@ -733,6 +738,7 @@ class LeaderboardService(Service):
 			LEFT JOIN matches ON teams.matchId = matches.id\
 			WHERE matches.matchType = :matchType\
 				AND matches.complete = 1\
+				AND matches.officeId = :officeId\
 		"
 
 		if start != None:
@@ -743,7 +749,7 @@ class LeaderboardService(Service):
 		query += " GROUP BY teams.id "
 
 		connection = db.session.connection()
-		results = connection.execute(text(query), matchType = matchType, start = start, end = end)
+		results = connection.execute(text(query), officeId = officeId, matchType = matchType, start = start, end = end)
 
 		data = []
 
@@ -793,7 +799,7 @@ class LeaderboardService(Service):
 
 		return data
 
-	def singlesResults(self, start, end):
+	def singlesResults(self, officeId, start, end):
 		app.logger.debug("Querying singles results start=%s end=%s", start, end)
 
 		query  = "\
@@ -804,6 +810,7 @@ class LeaderboardService(Service):
 			LEFT JOIN players ON teams_players.playerId = players.id\
 			WHERE matches.matchType = 'singles'\
 				AND matches.complete = 1\
+				AND matches.officeId = :officeId\
 		"
 
 		if start != None:
@@ -816,37 +823,38 @@ class LeaderboardService(Service):
 			ORDER BY matches.id\
 		"
 		connection = db.session.connection()
-		results = connection.execute(text(query), start = start, end = end)
+		results = connection.execute(text(query), officeId = officeId, start = start, end = end)
 
 		data = []
 
 		for result in results:
-			id1, result1, id2, result2 = result.record.split(",")
+			if result.record != None:
+				id1, result1, id2, result2 = result.record.split(",")
 
-			winner = int(id1)
-			loser = int(id2)
+				winner = int(id1)
+				loser = int(id2)
 
-			if result2 == "win":
-				winner = int(id2)
-				loser = int(id1)
+				if result2 == "win":
+					winner = int(id2)
+					loser = int(id1)
 
-			data.append({
-				"matchId": result.matchId,
-				"winner": winner,
-				"loser": loser
-			})
+				data.append({
+					"matchId": result.matchId,
+					"winner": winner,
+					"loser": loser
+				})
 
 		return data
 
-	def elo(self, start, end):
+	def elo(self, officeId, start, end):
 		app.logger.debug("Calculating ELO start=%s end=%s", start, end)
 
 		# ELO rating system
 		# https://en.wikipedia.org/wiki/Elo_rating_system
 		# https://metinmediamath.wordpress.com/2013/11/27/how-to-calculate-the-elo-rating-including-example/
 
-		results = self.singlesResults(start, end)
-		players = playerService.select()
+		results = self.singlesResults(officeId, start, end)
+		players = playerService.select(officeId)
 
 		data = {
 			"matches": {},
@@ -909,9 +917,9 @@ class LeaderboardService(Service):
 
 		return data
 
-	def eloResult(self, matchId, playerId):
-		seasons, season, start, end = self.seasons(None)
-		elo = self.elo(start, end)
+	def eloResult(self, officeId, matchId, playerId):
+		seasons, season, start, end = self.seasons(None, officeId)
+		elo = self.elo(officeId, start, end)
 
 		# return specific elo for that match
 		if matchId in elo["matches"] and playerId in elo["matches"][matchId]:
@@ -923,10 +931,11 @@ class LeaderboardService(Service):
 
 		return None
 
-	def seasons(self, season):
+	def seasons(self, season, officeId):
 		app.logger.debug("Generating seasons with default season=%s", season)
 
-		begin = datetime(app.config["SEASON_START_YEAR"], app.config["SEASON_START_MONTH"], 1)
+		office = officeService.selectById(officeId)
+		begin = datetime(office.seasonYear, office.seasonMonth, 1)
 
 		index = 0
 		seasons = []

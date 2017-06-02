@@ -7,6 +7,7 @@ class IsmModel(Base):
 	__tablename__ = "isms"
 
 	id = Column(Integer, primary_key = True)
+	officeId = Column(Integer, ForeignKey("offices.id"))
 	left = Column(Integer)
 	right = Column(Integer)
 	saying = Column(String)
@@ -14,7 +15,10 @@ class IsmModel(Base):
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 
-	def __init__(self, left, right, saying, approved, createdAt, modifiedAt):
+	office = relationship("OfficeModel")
+
+	def __init__(self, officeId, left, right, saying, approved, createdAt, modifiedAt):
+		self.officeId = officeId
 		self.left = left
 		self.right = right
 		self.saying = saying

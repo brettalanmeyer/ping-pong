@@ -10,23 +10,39 @@
 
 		<div class="row">
 
-			<div class="col-xs-2">
-				<p><strong>App Info</strong></p>
-				Players: {{ counts.numOfPlayers }}<br />
-				Matches: {{ counts.numOfMatches }}<br />
-				Games: {{ counts.numOfGames }}<br />
-				Scores: {{ counts.numOfScores }}<br />
-				Isms: {{ counts.numOfIsms }}<br />
-			</div>
-
-			<div class="col-xs-5">
+			<div class="col-xs-7">
 
 				<form action="{{ url_for('adminController.send_message') }}" method="POST">
 
-					<div class="form-group">
+					<div class="row">
 
-						<label for="field-message">Chat Group Message</label>
-						<textarea id="field-message" name="message" class="form-control" rows="3"></textarea>
+						<div class="col-xs-7">
+
+							<div class="form-group">
+
+								<label for="field-message">Chat Group Message</label>
+								<textarea id="field-message" name="message" class="form-control" rows="3"></textarea>
+
+							</div>
+
+						</div>
+
+						<div class="col-xs-5">
+
+							<strong>Recipients</strong>
+
+							<div class="checkbox">
+
+								{% for office in offices %}
+									<label for="office-field-{{ office.id }}">
+										<input type="checkbox" id="office-field-{{ office.id }}" name="officeId" value="{{ office.id }}">
+										{{ office.city }}, {{ office.state }}
+									</label>
+								{% endfor %}
+
+							</div>
+
+						</div>
 
 					</div>
 

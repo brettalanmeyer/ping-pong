@@ -46,8 +46,8 @@ ASSETS_DEBUG = False
 HOST = '0.0.0.0'
 PORT = 5010
 SECRET_KEY = ''
-LOG_FILE_APPLICATION = 'logs/app.log'
-LOG_FILE_ACCESS = 'logs/access.log'
+LOG_FILE_APPLICATION = 'storage/logs/app.log'
+LOG_FILE_ACCESS = 'storage/logs/access.log'
 LOG_ACCESS_FORMAT = '%(asctime)s %(process)d %(message)s'
 LOG_APP_FORMAT = '%(asctime)s %(levelname)s %(process)d %(message)s %(pathname)s:%(lineno)d:%(funcName)s()'
 LOG_WHEN = 'midnight'
@@ -56,8 +56,6 @@ LOG_BACKUP_COUNT = 14
 SKYPE_URL = ''
 ELO_K_VALUE = 32
 ELO_PERFORMANCE_RATING = 1500
-SEASON_START_YEAR = 2000
-SEASON_START_MONTH = 1
 ADMIN_USERNAME = ''
 ADMIN_PASSWORD = ''
 MAIL_SERVER = 'smtp.gmail.com'
@@ -68,10 +66,11 @@ MAIL_PASSWORD = ''
 MAIL_FROM_NAME = ''
 MAIL_FROM_EMAIL = ''
 MAIL_RECIPIENTS = ['']
+SESSION_TYPE = 'filesystem'
+SESSION_FILE_DIR = 'pingpong/storage/sessions'
 ```
 
 create dbconfig.cfg
-
 ```
 [db]
 mysql_username =
@@ -83,24 +82,6 @@ autocommit = False
 autoflush = False
 ```
 
-## Testing
-
-Run tests
-`python tests/test.py`
-
-Run coverage
-`coverage run --source=pingpong tests/test.py`
-
-Generate coverage report
-`coverage report -m`
-
-Generate html coverage report
-`coverage html`
-
-Run single class
-`cd test/
-`python -m unittest matchtypes.TestSingles`
-
 
 ## Raspberry pi
 
@@ -108,8 +89,9 @@ Run single class
 
 ## TODO
 
-* Add title attributes to skype messages
+* Move button controller to api controller
 * Multiple offices - generate an unexposed api key for each office that can only be given out by admin
+** how to clear session once an change has been made
 * Changelog page - add link to main page
 * Maybe say how many points winner of nines had left
 * Add avatars to skype messages as base 64 encoded
@@ -118,23 +100,6 @@ Run single class
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
 * manual entry of scores due to connection lost or otherwise
 
-Delegate Python Process
-	screen python run.py
-	Ctrl-a then d
-List Screen Processes
-	screen -ls
-Kill Screen Process
-	screen -X -S PID quit
+Raspberry pi resolution: 1184x624
 
-Raspberry pi resolution
-1184x624
-
-
-SELECT players.name, DATE(matches.createdAt) as date, SEC_TO_TIME(SUM(TIME_TO_SEC(matches.completedAt) - TIME_TO_SEC(matches.createdAt))) AS timediff, group_concat(matches.id) as matches
-FROM matches
-LEFT JOIN teams ON matches.id = teams.matchId
-LEFT JOIN teams_players ON teams.id = teams_players.teamId
-LEFT JOIN players ON teams_players.playerId = players.id
-WHERE matches.complete = 1 and matches.matchType = 'nines'
-GROUP BY YEAR(matches.createdAt), MONTH(matches.createdAt), Day(matches.createdAt), players.id
-ORDER BY date, players.name
+sudo systemctl restart|stop|enable|disable|start darts|ping-pong|skype-messenger

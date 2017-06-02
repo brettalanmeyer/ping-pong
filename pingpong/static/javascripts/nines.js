@@ -5,10 +5,11 @@ $(function(){
 	if(nines.exists()){
 
 		var matchId = nines.data("matchid");
+		var office = $("meta[name=office]").attr("content");
 
 		var socket = io.connect();
-		socket.on("response", update);
-		socket.on("smack-talk", smackTalk);
+		socket.on("response-" + office, update);
+		socket.on("smack-talk-" + office, smackTalk);
 
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};

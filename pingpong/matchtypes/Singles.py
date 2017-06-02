@@ -7,6 +7,7 @@ from pingpong.services.ScoreService import ScoreService
 from pingpong.services.TeamService import TeamService
 from pingpong.utils import notifications
 from pingpong.utils import util
+import random
 
 gameService = GameService()
 leaderboardService = LeaderboardService()
@@ -34,8 +35,8 @@ class Singles(BaseMatch):
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
 			"teams": {
-				"green": self.newPlayer(match.id, game.green.id),
-				"yellow": self.newPlayer(match.id, game.yellow.id)
+				"green": self.newPlayer(match.officeId, match.id, game.greenId),
+				"yellow": self.newPlayer(match.officeId, match.id, game.yellowId)
 			},
 			"points": 0
 		}
@@ -47,7 +48,7 @@ class Singles(BaseMatch):
 
 		return data
 
-	def newPlayer(self, matchId, playerId):
+	def newPlayer(self, officeId, matchId, playerId):
 		return {
 			"teamId": None,
 			"playerId": playerId,
@@ -57,7 +58,7 @@ class Singles(BaseMatch):
 			"serving": False,
 			"winner": False,
 			"games": [],
-			"elo": leaderboardService.eloResult(matchId, playerId)
+			"elo": leaderboardService.eloResult(officeId, matchId, playerId)
 		}
 
 	def setPlayerData(self, match, teams):
@@ -162,10 +163,10 @@ class Singles(BaseMatch):
 		return self.matchData(match)
 
 	def createTeams(self, match, data, randomize):
+		ids = map(int, data)
+
 		if randomize:
-			ids = util.shuffle(map(int, data))
-		else:
-			ids = map(int, data)
+			random.shuffle(ids)
 
 		team1 = teamService.createOnePlayer(match.id, ids[0])
 		team2 = teamService.createOnePlayer(match.id, ids[1])
@@ -189,16 +190,16 @@ class Singles(BaseMatch):
 
 		message = '<a href="{}matches/{}">{} is playing {} in a best of {}</a>'.format(request.url_root, match.id, player1.name, player2.name, match.numOfGames)
 
-		notifications.send(message)
+		notifications.send(message, match.officeId)
 
 	def playAgain(self, match, numOfGames, persistTeams):
 		game = match.games[0]
-		playerIds = [game.green.id, game.yellow.id]
+		playerIds = [game.yellowId, game.greenId]
 
-		newMatch = matchService.create(self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType)
 		newMatch.numOfGames = numOfGames
 		newMatch.game = 1
-		self.createTeams(newMatch, playerIds, True)
+		self.createTeams(newMatch, playerIds, False)
 		matchService.play(newMatch)
 
 		return newMatch
@@ -224,8 +225,8 @@ class Singles(BaseMatch):
 				loserScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
 
 		elo = "({}, {}{})"
-		winnerElo = leaderboardService.eloResult(match.id, winnerPlayer.id)
-		loserElo = leaderboardService.eloResult(match.id, losingPlayer.id)
+		winnerElo = leaderboardService.eloResult(match.officeId, match.id, winnerPlayer.id)
+		loserElo = leaderboardService.eloResult(match.officeId, match.id, losingPlayer.id)
 
 		message += winnerScores
 
@@ -239,4 +240,4 @@ class Singles(BaseMatch):
 
 		message += '\n<a href="{}leaderboard/singles">Leaderboard Standings</a>'.format(request.url_root)
 
-		notifications.send(message)
+		notifications.send(message, match.officeId)

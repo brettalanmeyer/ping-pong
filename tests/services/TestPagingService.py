@@ -9,21 +9,23 @@ class TestPagingService(BaseTest):
 
 	def test_defaultLimit(self):
 		pagingService = PagingService()
-		assert pagingService.limit == 25
+		assert pagingService.limit == 20
 
 	def test_limit(self):
 		pagingService = PagingService(17)
 		assert pagingService.limit == 17
 
 	def test_pagerSmall(self):
+		office = self.office()
+
 		with self.ctx:
 			pagingService = PagingService(2)
 
 			name = "Player {}".format(str(uuid.uuid4()))
 			for i in range(0, 10):
-				playerService.create({ "name": name })
+				playerService.create(office["id"], { "name": name })
 
-			players = playerService.selectByName(name)
+			players = playerService.selectByName(office["id"], name)
 
 			pagePlayers = pagingService.pager(players, 1)
 
@@ -34,14 +36,16 @@ class TestPagingService(BaseTest):
 			assert pagingService.pages == 5
 
 	def test_pagerLarge(self):
+		office = self.office()
+
 		with self.ctx:
 			pagingService = PagingService(12)
 
 			name = "Player {}".format(str(uuid.uuid4()))
 			for i in range(0, 77):
-				playerService.create({ "name": name })
+				playerService.create(office["id"], { "name": name })
 
-			players = playerService.selectByName(name)
+			players = playerService.selectByName(office["id"], name)
 
 			pagePlayers = pagingService.pager(players, 2)
 

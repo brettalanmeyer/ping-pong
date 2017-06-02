@@ -279,6 +279,18 @@ a.link {
 	text-align: center;
 }
 
+.matches-container .match-list > tbody > tr.active-match td {
+	border-top: solid 3px #ccc;
+	border-bottom: solid 3px #ccc;
+}
+
+.matches-container .match-list > tbody > tr.active-match td:first-child {
+	border-left: solid 3px #ccc;
+}
+.matches-container .match-list > tbody > tr.active-match td:last-child {
+	border-right: solid 3px #ccc;
+}
+
 .matches-container .score-cell {
 	padding: 4px 0;
 	width: 520px;
@@ -373,6 +385,9 @@ a.link {
 		width: 900px;
 	}
 	.matches-container {
+		width: 1020px;
+	}
+	.offices-container {
 		width: 1000px;
 	}
 }
@@ -389,12 +404,54 @@ a.link {
 	display: none;
 }
 
+.office-select {
+	width: 180px;
+	bottom: 4px;
+	left: 4px;
+	position: fixed;
+}
+
+.office-select .set-office-field {
+	cursor: pointer;
+}
+
 .api-container a {
 	text-decoration: none;
 }
 
+.api-container section {
+	margin-bottom: 24px;
+	border: solid 1px #ccc;
+	border-radius: 3px;
+	padding: 12px;
+	background: #f4f4f4;
+}
+
 .api-container pre {
 	tab-size: 4;
-	margin: 8px 0 20px;
-	padding: 7px 8px;
+	margin: 0;
+	padding: 5px 8px;
+	font-size: 12px;
+	background: #f8f8f8;
+	border-radius: 3px;
+}
+
+.api-container .response {
+	margin: 8px 0 4px 0;
+}
+
+.api-container .response code {
+	color: #fff;
+	border-radius: 0;
+	font-weight: bold;
+}
+
+.api-container .response.success code {
+	background: rgb(117, 186, 36);
+	border: solid 1px rgb(109, 174, 34);
+}
+
+.api-container .response.error code {
+	background: rgb(236, 135, 2);
+	border: solid 1px rgb(220, 126, 2);
 }

@@ -10,15 +10,15 @@ import json
 
 class PlayerService(Service):
 
-	def select(self):
+	def select(self, officeId):
 		app.logger.info("Selecting players")
 
-		return db.session.query(PlayerModel).order_by(PlayerModel.name)
+		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId).order_by(PlayerModel.name)
 
-	def selectCount(self):
+	def selectCount(self, officeId):
 		app.logger.info("Selecting number of players")
 
-		return self.select().count()
+		return self.select(officeId).count()
 
 	def selectById(self, id):
 		app.logger.info("Selecting player=%d", id)
@@ -30,28 +30,30 @@ class PlayerService(Service):
 
 		return players.one()
 
-	def	selectActive(self):
+	def	selectActive(self, officeId):
 		app.logger.info("Selecting active players")
 
-		return db.session.query(PlayerModel).filter(PlayerModel.enabled == 1).order_by(PlayerModel.name)
+		players = db.session.query(PlayerModel).filter(PlayerModel.enabled == 1, PlayerModel.officeId == officeId).order_by(PlayerModel.name)
 
-	def selectByName(self, name):
+		return players
+
+	def selectByName(self, officeId, name):
 		app.logger.info("Selecting player by name=%s", name)
 
-		return db.session.query(PlayerModel).filter_by(name = name)
+		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId).filter_by(name = name)
 
-	def selectByNameExcludingPlayer(self, id, name):
+	def selectByNameExcludingPlayer(self, officeId, id, name):
 		app.logger.info("Selecting player=%d not by name=%s", id, name)
 
-		return db.session.query(PlayerModel).filter(PlayerModel.id != id, PlayerModel.name == name)
+		return db.session.query(PlayerModel).filter(PlayerModel.officeId == officeId, PlayerModel.id != id, PlayerModel.name == name)
 
 	def new(self):
 		app.logger.info("New player")
 
-		return PlayerModel("", True, None, None)
+		return PlayerModel(None, "", True, None, None)
 
-	def create(self, form):
-		player = PlayerModel(form["name"], True, datetime.now(), datetime.now())
+	def create(self, officeId, form):
+		player = PlayerModel(officeId, form["name"], True, datetime.now(), datetime.now())
 		db.session.add(player)
 		db.session.commit()
 
@@ -79,7 +81,7 @@ class PlayerService(Service):
 		return player
 
 	def disable(self, player):
-		app.logger.info("Enabling player=%d", player.id)
+		app.logger.info("Disabling player=%d", player.id)
 
 		player.enabled = False
 		player.modifiedAt = datetime.now()
@@ -113,22 +115,6 @@ class PlayerService(Service):
 		except exc.SQLAlchemyError, error:
 			db.session.rollback()
 			return player, False
-
-	def deleteAll(self):
-		app.logger.info("Deleting all players")
-
-		try:
-			players = self.select()
-			for player in players:
-				util.deleteAvatar(player.avatar)
-
-			db.session.query(PlayerModel).delete()
-			db.session.commit()
-			return True
-
-		except exc.SQLAlchemyError, error:
-			db.session.rollback()
-			return False
 
 	def serialize(self, players):
 		app.logger.info("Serializing players")

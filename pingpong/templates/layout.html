@@ -14,6 +14,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		{% if "office" in session %}<meta name="office" content="{{ session.office.id }}">{% endif %}
 		{% if config.DEBUG_TOOLS %}<meta name="debug" content="true">{% endif %}
 
 		<title>Ping Pong{% if request.endpoint != "mainController.index" %} | {% endif %}{% block title %}{% endblock %}</title>
@@ -26,15 +27,17 @@
 	</head>
 	<body class="{{ request.endpoint|lower|replace('.', '-') }} {% if config.DEBUG_TOOLS %}debug{% endif %}">
 
-		{% if current_user.is_authenticated %}
-			<div class="authentication authenticated">
-				<a href="{{ url_for('adminController.index') }}">Administrator</a>
-				<a href="{{ url_for('authenticationController.logout', next = request.path) }}" class="link">Logout</a>
-			</div>
-		{% else %}
-			<div class="authentication unauthenticated">
-				<a href="{{ url_for('authenticationController.login', next = request.path) }}" class="link">Login</a>
-			</div>
+		{% if request.endpoint != 'officeController.select' %}
+			{% if current_user.is_authenticated %}
+				<div class="authentication authenticated">
+					<a href="{{ url_for('adminController.index') }}">Administrator</a>
+					<a href="{{ url_for('authenticationController.logout', next = request.path) }}" class="link">Logout</a>
+				</div>
+			{% else %}
+				<div class="authentication unauthenticated">
+					<a href="{{ url_for('authenticationController.login', next = request.path) }}" class="link">Login</a>
+				</div>
+			{% endif %}
 		{% endif %}
 
 		<header>
@@ -44,6 +47,10 @@
 		{% include 'partials/messages.html' %}
 
 		{% block body %}{% endblock %}
+
+		{% if not (request.endpoint.startswith('officeController') or request.endpoint.startswith('apiController')) %}
+			{% include 'offices/selector.html' %}
+		{% endif %}
 
 		{% assets "js_all" %}
 			<script type="text/javascript" src="{{ ASSET_URL }}"></script>

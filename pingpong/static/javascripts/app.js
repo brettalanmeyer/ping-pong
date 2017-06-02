@@ -1,28 +1,5 @@
 $(function(){
 
-	$(".table-sortable").stupidtable();
-
-	$("#leaderboard.singles").find("th.elo").stupidsort("desc");
-	$("#leaderboard.doubles").find("th.win-percentage").stupidsort("desc");
-	$("#leaderboard.nines").find("th.win-percentage").stupidsort("desc");
-
-	$("#leaderboard").bind("aftertablesort", function(event, data){
-		var i = 1;
-		$(this).find("tbody").find("tr").each(function(){
-			$(this).find("td:first").html(i++);
-		});
-	});
-
-	$(".leaderboard-player-container .nav-tabs li").on("click", function(){
-		$(".leaderboard-player-container .nav-tabs li").removeClass("active");
-
-		var source = $(this);
-		source.addClass("active");
-
-		$(".leaderboard-player-container .opponent-table").addClass("hidden");
-		$(".leaderboard-player-container .opponent-table[data-matchtype=" + source.data("matchtype") + "]").removeClass("hidden");
-	}).first().trigger("click");
-
 	$("form.action-delete").on("submit", function(){
 		return confirm("Are you sure you want to delete this?");
 	});
@@ -80,6 +57,12 @@ $(function(){
 		exists: function(){
 			return this.length > 0;
 		}
+	});
+
+	var setOfficeForm = $("#set-office-form");
+	var setOfficeField = $("#set-office-field");
+	setOfficeField.on("change", function(){
+		setOfficeForm.submit();
 	});
 
 });

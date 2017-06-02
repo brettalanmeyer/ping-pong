@@ -1,16 +1,16 @@
-<div id="scoring-tools" class="scoring-tools">
+<div id="scoring-tools" class="scoring-tools" data-key="{{ session.office.key }}">
 
-	<button class="team yellow score" data-color="yellow" data-action="{{ url_for('buttonController.score', button = 'yellow') }}">score</button>
-	<button class="team green score" data-color="green" data-action="{{ url_for('buttonController.score', button = 'green') }}">score</button>
+	<button class="team yellow score" data-color="yellow" data-action="{{ url_for('apiController.score', button = 'yellow') }}">score</button>
+	<button class="team green score" data-color="green" data-action="{{ url_for('apiController.score', button = 'green') }}">score</button>
 
-	<button class="team yellow undo" data-color="yellow" data-action="{{ url_for('buttonController.undo', button = 'yellow') }}">undo</button>
-	<button class="team green undo" data-color="green" data-action="{{ url_for('buttonController.undo', button = 'green') }}">undo</button>
+	<button class="team yellow undo" data-color="yellow" data-action="{{ url_for('apiController.undo', button = 'yellow') }}">undo</button>
+	<button class="team green undo" data-color="green" data-action="{{ url_for('apiController.undo', button = 'green') }}">undo</button>
 
-	<button class="team blue score" data-color="blue" data-action="{{ url_for('buttonController.score', button = 'blue') }}">score</button>
-	<button class="team red score" data-color="red" data-action="{{ url_for('buttonController.score', button = 'red') }}">score</button>
+	<button class="team blue score" data-color="blue" data-action="{{ url_for('apiController.score', button = 'blue') }}">score</button>
+	<button class="team red score" data-color="red" data-action="{{ url_for('apiController.score', button = 'red') }}">score</button>
 
-	<button class="team blue undo" data-color="blue" data-action="{{ url_for('buttonController.undo', button = 'blue') }}">undo</button>
-	<button class="team red undo" data-color="red" data-action="{{ url_for('buttonController.undo', button = 'red') }}">undo</button>
+	<button class="team blue undo" data-color="blue" data-action="{{ url_for('apiController.undo', button = 'blue') }}">undo</button>
+	<button class="team red undo" data-color="red" data-action="{{ url_for('apiController.undo', button = 'red') }}">undo</button>
 
 	<button class="random-score wide-action">random score</button>
 	<button class="random-undo wide-action">random undo</button>

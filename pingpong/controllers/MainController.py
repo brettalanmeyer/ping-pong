@@ -6,18 +6,22 @@ from flask import render_template
 from flask import request
 from flask import send_from_directory
 from flask import url_for
+from flask import session
+from datetime import datetime
 from pingpong.forms.FeedbackForm import FeedbackForm
-from pingpong.services.MatchService import MatchService
-from pingpong.services.ScoreService import ScoreService
 from pingpong.services.MailService import MailService
+from pingpong.services.MatchService import MatchService
+from pingpong.services.OfficeService import OfficeService
+from pingpong.services.ScoreService import ScoreService
 from pingpong.utils import database as db
 
 mainController = Blueprint("mainController", __name__)
 
-feedbackForm = FeedbackForm()
-mailService = MailService()
 matchService = MatchService()
 scoreService = ScoreService()
+feedbackForm = FeedbackForm()
+mailService = MailService()
+officeService = OfficeService()
 
 @mainController.route("/", methods = ["GET"])
 def index():
@@ -56,6 +60,15 @@ def send_feedback():
 @mainController.before_app_request
 def beforeRequest():
 	app.logger.access("%s \"%s %s\"", request.remote_addr, request.environ["REQUEST_METHOD"], request.url)
+
+	if "offices" not in session:
+		session["offices"] = officeService.load()
+
+	if request.endpoint != "static":
+		if "office" not in session:
+			if request.endpoint != None:
+				if not (request.endpoint.startswith("apiController") or request.endpoint == "mainController.favicon" or request.endpoint == "officeController.select" or request.endpoint == "officeController.set"):
+					return redirect(url_for("officeController.select"))
 
 @mainController.after_app_request
 def afterRequest(response):

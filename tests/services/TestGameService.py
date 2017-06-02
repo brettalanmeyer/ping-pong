@@ -12,7 +12,8 @@ teamService = TeamService()
 class TestGameService(BaseTest):
 
 	def createGame(self):
-		match = matchService.create("singles")
+		office = self.office()
+		match = matchService.create(office["id"], "singles")
 		return match, gameService.create(match.id, 1, None, None, None, None)
 
 	def test_select(self):
@@ -29,12 +30,14 @@ class TestGameService(BaseTest):
 			assert gameService.selectCount() >= 2
 
 	def test_create(self):
+		office = self.office()
+
 		with self.ctx:
-			match = matchService.create("singles")
-			green = playerService.create({ "name": "Joe" })
-			yellow = playerService.create({ "name": "Matt" })
-			blue = playerService.create({ "name": "Greg" })
-			red = playerService.create({ "name": "Jesus" })
+			match = matchService.create(office["id"], "singles")
+			green = playerService.create(office["id"], { "name": "Joe" })
+			yellow = playerService.create(office["id"], { "name": "Matt" })
+			blue = playerService.create(office["id"], { "name": "Greg" })
+			red = playerService.create(office["id"], { "name": "Jesus" })
 			game = gameService.create(match.id, 1, green.id, yellow.id, blue.id, red.id)
 
 			assert game.match.id == match.id
@@ -74,8 +77,10 @@ class TestGameService(BaseTest):
 			assert wins == 0
 
 	def test_getTeamWins(self):
+		office = self.office()
+
 		with self.ctx:
-			match = matchService.create("singles")
+			match = matchService.create(office["id"], "singles")
 			gameService.create(match.id, 1, None, None, None, None)
 			gameService.create(match.id, 2, None, None, None, None)
 			gameService.create(match.id, 3, None, None, None, None)

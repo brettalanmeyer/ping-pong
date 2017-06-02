@@ -5,26 +5,35 @@ from pingpong.app import app
 from pingpong.utils import database as db
 
 from controllers.TestAdminController import TestAdminController
+from controllers.TestApiButtonController import TestApiButtonController
 from controllers.TestApiController import TestApiController
 from controllers.TestAuthenticationController import TestAuthenticationController
-from controllers.TestButtonController import TestButtonController
 from controllers.TestErrorController import TestErrorController
 from controllers.TestIsmController import TestIsmController
 from controllers.TestLeaderboardController import TestLeaderboardController
 from controllers.TestMainController import TestMainController
 from controllers.TestMatchController import TestMatchController
+from controllers.TestOfficeController import TestOfficeController
 from controllers.TestPlayerController import TestPlayerController
 
 from services.TestGameService import TestGameService
 from services.TestIsmService import TestIsmService
+from services.TestMailService import TestMailService
 from services.TestMatchService import TestMatchService
+from services.TestOfficeService import TestOfficeService
 from services.TestPagingService import TestPagingService
 from services.TestPlayerService import TestPlayerService
+from services.TestScoreService import TestScoreService
 from services.TestTeamService import TestTeamService
 
 from matchtypes.TestDoubles import TestDoubles
 from matchtypes.TestNines import TestNines
 from matchtypes.TestSingles import TestSingles
+
+from forms.TestFeedbackForm import TestFeedbackForm
+from forms.TestIsmForm import TestIsmForm
+from forms.TestOfficeForm import TestOfficeForm
+from forms.TestPlayerForm import TestPlayerForm
 
 from utils.TestUtil import TestUtil
 

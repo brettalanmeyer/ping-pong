@@ -6,14 +6,15 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import session
 from flask import url_for
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
+from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
-from pingpong.matchtypes.MatchType import MatchType
 from pingpong.utils import util
 import json
 
@@ -32,12 +33,12 @@ def index():
 	matchType = util.param("matchType")
 
 	season = util.param("season", None, "int")
-	seasons, season, start, end = leaderboardService.seasons(season)
+	seasons, season, start, end = leaderboardService.seasons(season, session["office"]["id"])
 
-	players = playerService.select()
-	matches = matchService.selectCompleteOrReady(playerId, opponentId, matchType, start, end)
+	players = playerService.select(session["office"]["id"])
+	matches = matchService.selectCompleteOrReady(session["office"]["id"], playerId, opponentId, matchType, start, end)
 	pagedMatches = pagingService.pager(matches, page)
-	elo = leaderboardService.elo(start, end)
+	elo = leaderboardService.elo(session["office"]["id"], start, end)
 
 	return render_template("matches/index.html",
 		matches = pagedMatches,
@@ -59,7 +60,7 @@ def new():
 
 @matchController.route("/matches", methods = ["POST"])
 def create():
-	match = matchService.create(request.form["matchType"])
+	match = matchService.create(session["office"]["id"], request.form["matchType"])
 	matchType = MatchType(match)
 
 	if matchType.isNines():
@@ -71,8 +72,7 @@ def create():
 def games(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	return render_template("matches/num-of-games.html", match = match)
 
@@ -80,8 +80,7 @@ def games(id):
 def games_update(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchService.updateGames(id, request.form["numOfGames"])
 	return redirect(url_for("matchController.players", id = id))
@@ -90,20 +89,18 @@ def games_update(id):
 def players(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchType = MatchType(match)
 	instance = matchType.getMatchType()
-	players = playerService.selectActive()
+	players = playerService.selectActive(session["office"]["id"])
 	return render_template("matches/players.html", title = instance.label, matchType = instance, match = match, players = players)
 
 @matchController.route("/matches/<int:id>/players", methods = ["POST"])
 def players_create(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchType = MatchType(match)
 
@@ -119,8 +116,7 @@ def players_create(id):
 def show(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	data = MatchType(match).matchData()
 	return render_template(data["template"], data = data)
@@ -129,8 +125,7 @@ def show(id):
 def show_json(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	data = MatchType(match).matchData()
 	return Response(json.dumps(data, default = util.jsonSerial), status = 200, mimetype = "application/json")
@@ -139,8 +134,7 @@ def show_json(id):
 def again(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	matchType = MatchType(match)
 
@@ -158,8 +152,7 @@ def again(id):
 def undo(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	if match.ready:
 		matchType = MatchType(match)
@@ -172,8 +165,7 @@ def undo(id):
 def delete(id):
 	match = matchService.selectById(id)
 
-	if match == None:
-		abort(404)
+	exists(match)
 
 	match, success = matchService.delete(match)
 
@@ -193,7 +185,14 @@ def smack_talk(id):
 	message = util.paramForm("message", None)
 	if message != None and len(message) > 0:
 		data = { "message": message }
-		socketio.emit("smack-talk", data, broadcast = True)
+		socketio.emit("smack-talk-{}".format(session["office"]["id"]), data, broadcast = True)
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
 
 	return message
+
+def exists(match):
+	if match == None:
+		abort(404)
+
+	if match.office.id != session["office"]["id"]:
+		abort(404)

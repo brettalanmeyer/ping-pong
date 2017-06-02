@@ -132,7 +132,7 @@
 .avatar-leaderboard-player-container {
 	position: absolute;
 	top: -10px;
-	width: 110px;
+	width: 100px;
 	height: 80px;
 	text-align: center;
 }
@@ -152,4 +152,11 @@
 
 .opponent-matches {
 	margin-left: 8px;
+}
+
+
+.table > tbody > tr.active > td {
+	border: solid 1px #aaa;
+	border-left: none;
+	border-right: none;
 }

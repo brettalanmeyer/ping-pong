@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import Response
+from flask import session
 from flask import url_for
 from flask_login import current_user
 from pingpong.decorators.LoginRequired import loginRequired
@@ -19,18 +20,18 @@ ismForm = IsmForm()
 @ismController.route("/isms", methods = ["GET"])
 def index():
 	if current_user.is_authenticated:
-		isms = ismService.select()
+		isms = ismService.select(session["office"]["id"])
 	else:
-		isms = ismService.selectApproved()
+		isms = ismService.selectApproved(session["office"]["id"])
 
 	return render_template("isms/index.html", isms = isms)
 
 @ismController.route("/isms.json", methods = ["GET"])
 def index_json():
 	if current_user.is_authenticated:
-		isms = ismService.select()
+		isms = ismService.select(session["office"]["id"])
 	else:
-		isms = ismService.selectApproved()
+		isms = ismService.selectApproved(session["office"]["id"])
 
 	return Response(ismService.serialize(isms), status = 200, mimetype = "application/json")
 
@@ -48,7 +49,7 @@ def create():
 		ismForm.load(ism, request.form)
 		return render_template("isms/new.html", ism = ism), 400
 	else:
-		ism = ismService.create(request.form)
+		ism = ismService.create(session["office"]["id"], request.form)
 		flash("Ism '{}' has been successfully created.".format(ism.saying), "success")
 		return redirect(url_for("ismController.index"))
 

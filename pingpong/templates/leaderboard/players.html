@@ -90,7 +90,7 @@
 
 							<th></th>
 
-							<th data-sort="string">
+							<th data-sort="string" data-label="opponent">
 								Opponent
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -98,7 +98,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="matches">
 								Matches
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -106,7 +106,7 @@
 								</div>
 							</th>
 
-							<th data-sort="float">
+							<th data-sort="float" data-label="win-percentage">
 								Win %
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -114,7 +114,7 @@
 								</div>
 							</td>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="points">
 								Points
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -122,7 +122,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="opp-points">
 								Opp Points
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -130,7 +130,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="wins">
 								Wins
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -138,7 +138,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="opp-wins">
 								Opp Wins
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -146,7 +146,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="current-wins">
 								Current Wins
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -154,7 +154,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="win-streak">
 								Win Streak
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -162,7 +162,7 @@
 								</div>
 							</th>
 
-							<th data-sort="int">
+							<th data-sort="int" data-label="loss-streak">
 								Loss Streak
 								<div class="sorting-container">
 									<span class="glyphicon glyphicon-chevron-up"></span>
@@ -178,7 +178,7 @@
 
 						{% for matchup in stats[matchType].matchups %}
 
-							<tr class="matchup">
+							<tr class="matchup" data-id="{{ matchup.playerId }}">
 
 								<td class="avatar">
 									{% with id = matchup.playerId, avatar = matchup.playerAvatar, class = "avatar-leaderboard" %}

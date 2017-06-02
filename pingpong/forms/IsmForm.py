@@ -8,12 +8,14 @@ class IsmForm(Form):
 			"label": "Left",
 			"required": True,
 			"type": "int",
+			"max": 50,
 			"min": 0
 		}, {
 			"name": "right",
 			"label": "Right",
 			"required": True,
 			"type": "int",
+			"max": 50,
 			"min": 0
 		}, {
 			"name": "saying",

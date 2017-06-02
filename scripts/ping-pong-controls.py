@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import requests
 
-url = 'http://10.9.0.230:5010/buttons/{}/{}'
+url = 'http://10.9.0.230:5010/api/buttons/{}/{}'
 
 buttons = [{
   'color': 'green',
@@ -37,7 +37,7 @@ def undo(button):
 def post(action, button):
   try:
     resource = url.format(button, action)
-    requests.post(resource)
+    requests.post(resource, data = { 'key': '6ca60c6a-c103-4884-8d84-6444cec51939' })
     print(resource)
   except:
     print('Could not send request')

@@ -10,15 +10,15 @@
 		<a href="{{ url_for('apiController.index') }}">Ping Pong API</a>
 	</h1>
 
+	<section>
 
-	<a href="{{ url_for('apiController.players') }}" target="_blank">
 		<code>GET</code>
-		<kbd>{{ url_for('apiController.players') }}</kbd>
-	</a>
+		<kbd>/api/players.json?key={% raw %}{key}{% endraw %}</kbd>
 
+		<div class="response success">Success Response <code>200</code> OK</div>
 <pre>[{
-	id: 1,
-	name: "Brett",
+	id: 161,
+	name: "Joey",
 	avatar: "d159f9f9-e19d-43bb-8d11-a167208bf5cf.gif",
 	extension: "gif",
 	avatarUrl: "/players/6153/avatar/d159f9f9-e19d-43bb-8d11-a167208bf5cf.gif",
@@ -27,11 +27,18 @@
 	modifiedAt: '2016-01-01 13:01:01'
 }]</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
 
-	<a href="{{ url_for('apiController.matches') }}" target="_blank">
-		<code>GET</code>
-		<kbd>{{ url_for('apiController.matches') }}</kbd>
-	</a>
+	</section>
+	<section>
+
+	<code>GET</code>
+	<kbd>/api/matches.json?key={% raw %}{key}{% endraw %}</kbd>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>[{
 	"id": 2770,
@@ -46,9 +53,18 @@
 	"createdAt": "2017-05-19 16:02:59"
 }]</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
+	<section>
 
 	<code>GET</code>
-	<kbd>/api/matches/&lt;int:matchId&gt;.json</kbd>
+	<kbd>/api/matches/{% raw %}{matchid}{% endraw %}.json?key={% raw %}{key}{% endraw %}</kbd>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>{
 	"id": 2765,
@@ -113,59 +129,25 @@
 	}]
 }</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
 
-	<a href="{{ url_for('apiController.games') }}" target="_blank">
-		<code>GET</code>
-		<kbd>{{ url_for('apiController.games') }}</kbd>
-	</a>
+	<div class="response error">Error Response <code>404</code> Not Found</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid match id"
+}</pre>
 
-<pre>[{
-	"id": 4930,
-	"matchId": 1998,
-	"game": 1,
-	"greenId": 39,
-	"yellowId": 38,
-	"blueId": 40,
-	"redId": 41,
-	"winner": null,
-	"winnerScore": null,
-	"loser": null,
-	"loserScore": null,
-	"createdAt": "2017-03-24 09:23:55",
-	"modifiedAt": "2017-03-24 09:23:55"
-	"completedAt": null
-}]</pre>
+	</section>
+	<section>
 
 
 	<code>GET</code>
-	<kbd>/api/matches/&lt;int:matchId&gt;/teams.json</kbd>
-
-<pre>[{
-	"id": 3437,
-	"matchId": 1998,
-	"win": false,
-	"players": [
-		39,
-		41
-	]
-}]</pre>
-
-	<code>GET</code>
-	<kbd>/api/matches/&lt;int:matchId&gt;/scores.json</kbd>
-
-<pre>[{
-	"id": 153,
-	"matchId": 13,
-	"teamId": 12,
-	"game": 1,
-	"createdAt": "2017-03-24 09:26:49"
-}]</pre>
-
-
-	<a href="{{ url_for('apiController.isms') }}" target="_blank">
-		<code>GET</code>
-		<kbd>{{ url_for('apiController.isms') }}</kbd>
-	</a>
+	<kbd>/api/isms.json?key={% raw %}{key}{% endraw %}</kbd>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>[{
 	"id": 1,
@@ -175,29 +157,81 @@
 	"right": 11,
 	"createdAt": "2017-03-02 10:52:00",
 	"modifiedAt": "2017-03-24 14:20:00"
-},]</pre>
+}]</pre>
+
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	</section>
+	<section>
 
 
 	<code>POST</code>
-	<kbd>{{ url_for('buttonController.score', button = 'green') }}</kbd>
+	<kbd>/api/buttons/{% raw %}{button}{% endraw %}/score</kbd>
 
+	<div class="response">Data Params</div>
+<pre>{
+	"button": [string:green|yellow|blue|red],
+	"key": [string:provided by administrator]
+}</pre>
+
+<div class="response success">Success Response <code>200</code> OK</div>
 <pre>{
 	"matchId": 123,
 	"action": "score",
-	"button": "green"
-}
-</pre>
+	"button": "green",
+	"officeId": 1,
+	"officeName": "Ames, Iowa"
+}</pre>
 
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	<div class="response error">Error Response <code>400</code> Bad Request</div>
+<pre>{
+	"success": false,
+	"error": "Invalid button value"
+}</pre>
+
+	</section>
+	<section>
 
 	<code>POST</code>
-	<kbd>{{ url_for('buttonController.undo', button = 'green') }}</kbd>
+	<kbd>/api/buttons/{% raw %}{button}{% endraw %}/undo</kbd>
+	<div class="response">Data Params</div>
+<pre>{
+	"button": [string:green|yellow|blue|red],
+	"key": [string:provided by administrator]
+}</pre>
+	<div class="response success">Success Response <code>200</code> OK</div>
 
 <pre>{
 	"matchId": 234,
 	"action": "undo",
-	"button": "green"
-}
-</pre>
+	"button": "green",
+	"officeId": 1,
+	"officeName": "Ames, Iowa"
+}</pre>
+
+	<div class="response error">Error Response <code>401</code> Unauthorized</div>
+	<pre>{
+	"success": false,
+	"error": "Invalid api key"
+}</pre>
+
+	<div class="response error">Error Response <code>400</code> Bad Request</div>
+<pre>{
+	"success": false,
+	"error": "Invalid button value"
+}</pre>
+
+	</section>
 
 	</div>
 
