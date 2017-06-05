@@ -71,7 +71,16 @@
 										{% for player in team.players %}
 											<a href="/leaderboard/players/{{ player.id }}" title="View {{ player.name }}'s Statistics">
 												{% if team.hasWon() %}
-													<strong>{{ player.name }}</strong>
+													<strong>
+														{{ player.name }}
+
+														{% set ninesScore = [] %}
+														{% for score in team.scores %}
+															{% if ninesScore.append('') %}{% endif %}
+														{% endfor %}
+														({{ 9 - ninesScore|count }})
+													</strong>
+
 												{% else %}
 													{{ player.name }}
 												{% endif %}

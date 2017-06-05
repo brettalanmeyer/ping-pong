@@ -19,6 +19,7 @@ class TeamModel(Base):
 
 	match = relationship("MatchModel")
 	players = relationship("PlayerModel", secondary = associationTable)
+	scores = relationship("ScoreModel")
 
 	def __init__(self, matchId, createdAt, modifiedAt):
 		self.matchId = matchId

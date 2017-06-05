@@ -13,6 +13,7 @@ class ScoreModel(Base):
 	createdAt = Column(DateTime)
 
 	match = relationship("MatchModel")
+	team = relationship("TeamModel")
 
 	def __init__(self, matchId, teamId, game, createdAt):
 		self.matchId = matchId
