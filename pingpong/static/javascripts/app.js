@@ -72,9 +72,10 @@ function disableUndo(){
 }
 
 function enableUndo(){
+	var matchId = $("#singles, #doubles, #nines").data("matchid");
 	$(document).on("keypress", function(e){
 		if(e.which == 117){
-			$.post("/buttons/green/undo");
+			$.post("/matches/" + matchId + "/undo");
 		}
 	});
 }

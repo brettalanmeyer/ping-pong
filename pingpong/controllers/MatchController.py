@@ -156,9 +156,13 @@ def undo(id):
 
 	if match.ready:
 		matchType = MatchType(match)
-		matchType.undo(match, None)
+		data = matchType.undo(match, None)
 
-	return redirect(url_for("matchController.show", id = match.id))
+	if request.is_xhr:
+		socketio.emit("response-{}".format(match.officeId), data, broadcast = True)
+		return Response("", status = 200, mimetype = "application/json")
+	else:
+		return redirect(url_for("matchController.show", id = match.id))
 
 @matchController.route("/matches/<int:id>/delete", methods = ["POST"])
 @loginRequired("matchController.index")
