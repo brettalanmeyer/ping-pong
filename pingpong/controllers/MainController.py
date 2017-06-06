@@ -27,6 +27,7 @@ officeService = OfficeService()
 def index():
 	matches = matchService.selectComplete().count()
 	scores = scoreService.selectCount()
+	session["offices"] = officeService.load()
 	return render_template("main/index.html", matches = matches, scores = scores)
 
 @mainController.route("/favicon.ico")
