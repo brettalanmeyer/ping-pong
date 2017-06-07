@@ -1,0 +1,258 @@
+{% extends "layout.html" %}
+
+{% block title %}Change Log{% endblock %}
+
+{% block body %}
+
+	<div class="container change-log">
+
+		<h1>
+			<a href="{{ url_for('mainController.changeLog') }}">Change Log</a>
+		</h1>
+
+		<section>
+			<h2>Build 2.01</h2>
+			<time>06/07/2017</time>
+			<ul>
+				<li>Put number of points winner of nines has on match list</li>
+				<li>Reload offices on main page</li>
+				<li>Created changelog</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 2.00</h2>
+			<time>05/19/2017</time>
+			<ul>
+				<li>Offices crud</li>
+				<li>Multi Office support via sessions</li>
+				<li>Multi Office switcher</li>
+				<li>Scoring api to use office keys</li>
+				<li>Moved files to /storage</li>
+				<li>Filtered all entities by current officeId</li>
+				<li>Skype messenger to select from list of valid office skype ids</li>
+				<li>Office tests</li>
+				<li>Removed office selector from api and office pages</li>
+				<li>Feedback form tests</li>
+				<li>Finished api docs</li>
+				<li>Logged email messages</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.07</h2>
+			<time>05/19/2017</time>
+			<ul>
+				<li>Smack Talk</li>
+				<li>Skype notification admin form</li>
+				<li>Enable undo only for host device</li>
+				<li>Increased time sayings are displayed for</li>
+				<li>Api documentation and purposed routes</li>
+				<li>Fixed redirect paths</li>
+				<li>Api tests</li>
+				<li>Feedback form and mailer</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.06</h2>
+			<time>05/12/2017</time>
+			<ul>
+				<li>Filter matches by opponent</li>
+				<li>New random algorithm for nines</li>
+				<li>Show opponent matches for doubles and nines</li>
+				<li>Player page revamp</li>
+				<li>Moved players with 0 matches to below main section of stats</li>
+				<li>Added ELO values to match notifications</li>
+				<li>Set ELO to current season</li>
+				<li>Login/Logout redirects to page sent from</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.05</h2>
+			<time>05/02/2017</time>
+			<ul>
+				<li>More test coverage for players and isms</li>
+				<li>Added json date serializer</li>
+				<li>Serving and scoring tests</li>
+				<li>Player Avatars</li>
+				<li>Added avatars to leaderboard and player selection page</li>
+				<li>Added avatars to score boards</li>
+				<li>Prevented too many teams/players from being added to a match</li>
+				<li>Util tests</li>
+				<li>Win, loss, current streaks to leaderboard</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.04</h2>
+			<time>04/29/2017</time>
+			<ul>
+				<li>Service tests</li>
+				<li>Matchtype tests</li>
+				<li>Discrete error pages</li>
+				<li>Replaced all hardcoded urls with `url_for()`</li>
+				<li>Removed unused assets</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.03</h2>
+			<time>04/26/2017</time>
+			<ul>
+				<li>Authentication creds to config</li>
+				<li>Required auth for player and ism deletion</li>
+				<li>Check entity existance before deletion</li>
+				<li>Prod data copy</li>
+				<li>Enable/disable players through UI</li>
+				<li>Approve/Reject Isms</li>
+				<li>Controller test coverage</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.02</h2>
+			<time>04/25/2017</time>
+			<ul>
+				<li>Stat date filtering</li>
+				<li>Changed path vars to query params for match page</li>
+				<li>Date filtering for all stats</li>
+				<li>Seasons template</li>
+				<li>Match and leaderboard tests</li>
+				<li>Logged leaderboard service</li>
+				<li>Button color validation</li>
+				<li>Moved errors to ErrorController</li>
+				<li>New player notifications</li>
+				<li>Randomize teams upon match creation</li>
+				<li>Began service class tests</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.01</h2>
+			<time>04/19/2017</time>
+			<ul>
+				<li>ELO ranking system</li>
+				<li>404 pages</li>
+				<li>url param defaults</li>
+				<li>Flash messages for players and isms</li>
+				<li>Nines undo</li>
+				<li>Leaderboard table adjustments</li>
+				<li>Minor styling adjustments</li>
+				<li>Test cases</li>
+				<li>Undo score via 'U' key</li>
+				<li>Changed code charset to utf-8</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 1.00</h2>
+			<time>04/14/2017</time>
+			<ul>
+				<li>Skype notifications</li>
+				<li>Restructured app into Flask packages</li>
+				<li>Filter matches by players</li>
+				<li>Removed all audio components</li>
+				<li>Removed incomplete matches from list</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.08</h2>
+			<time>04/04/2017</time>
+			<ul>
+				<li>Player Statistics</li>
+				<li>Favicon</li>
+				<li>Table sorting</li>
+				<li>Streaks to leaderboard status</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.07</h2>
+			<time>03/28/2017</time>
+			<ul>
+				<li>Rules page</li>
+				<li>Create player from player selection page</li>
+				<li>Scoring sound effect</li>
+				<li>Removed option for selecting points to play to. Always goes to 21.</li>
+				<li>Added totals row for statistics.</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.06</h2>
+			<time>03/24/2017</time>
+			<ul>
+				<li>Restyled score boards</li>
+				<li>Ism text to speech</li>
+				<li>Color indictators on score board to help Dan navigate</li>
+				<li>Restyled player selection pages</li>
+				<li>Sound effects for various pages and events</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.05</h2>
+			<time>03/22/2017</time>
+			<ul>
+				<li>Leaderboard</li>
+				<li>Points Against</li>
+				<li>Stats Sorting</li>
+				<li>Pagination for matches</li>
+				<li>Play Again</li>
+				<li>Rotating logs</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.04</h2>
+			<time>03/1202017</time>
+			<ul>
+				<li>Respberry Pi GPIO script</li>
+				<li>Application Logging</li>
+				<li>App requirements file</li>
+				<li>Nines</li>
+				<li>Resturctured match types</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.03</h2>
+			<time>03/08/2017</time>
+			<ul>
+				<li>Doubles</li>
+				<li>Debug mode</li>
+				<li>Database config settings</li>
+				<li>Scoring and Undo</li>
+				<li>Winners</li>
+				<li>Isms</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.02</h2>
+			<time>02/23/2017</time>
+			<ul>
+				<li>Application restructure</li>
+				<li>New templates</li>
+				<li>Teams</li>
+				<li>Prevous Matches</li>
+				<li>Leaderboard</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Build 0.01</h2>
+			<time>05/18/2016</time>
+			<ul>
+				<li>Initial Commit</li>
+				<li>Entity relationships</li>
+				<li>Scoring and determine winners</li>
+			</ul>
+		</section>
+
+	</div>
+
+{% endblock %}

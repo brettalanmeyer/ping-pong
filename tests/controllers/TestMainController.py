@@ -12,9 +12,9 @@ class TestMainController(BaseTest):
 		rv = self.app.get("/rules")
 		assert rv.status == self.ok
 
-	def test_changes(self):
+	def test_changeLog(self):
 		self.office()
-		rv = self.app.get("/changes")
+		rv = self.app.get("/change-log")
 		assert rv.status == self.ok
 
 	def test_feedback(self):

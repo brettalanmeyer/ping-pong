@@ -455,3 +455,42 @@ a.link {
 	background: rgb(236, 135, 2);
 	border: solid 1px rgb(220, 126, 2);
 }
+
+.change-log-link {
+	position: fixed;
+	right: 12px;
+	bottom: 8px;
+	color: #aaa;
+}
+
+.change-log-link:hover,
+.change-log-link:focus,
+.change-log-link:active {
+	text-decoration: none;
+	color: #aaa;
+}
+
+.change-log {
+	width: 700px;
+}
+
+.change-log section {
+	border-top: solid 1px #ddd;
+	padding: 0 50px;
+}
+.change-log section h2 {
+	text-align: left;
+	font-size: 18px;
+	margin: 12px 0 4px;
+}
+
+.change-log section time {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.change-log section time::before {
+	content: 'Released - ';
+}
+
+.change-log section ul {}

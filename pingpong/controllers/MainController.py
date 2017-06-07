@@ -38,9 +38,9 @@ def favicon():
 def rules():
 	return render_template("main/rules.html")
 
-@mainController.route("/changes", methods = ["GET"])
-def changes():
-	return render_template("main/changes.html")
+@mainController.route("/change-log", methods = ["GET"])
+def changeLog():
+	return render_template("main/change-log.html")
 
 @mainController.route("/feedback", methods = ["GET"])
 def feedback():

@@ -89,12 +89,7 @@ autoflush = False
 
 ## TODO
 
-* Move button controller to api controller
-* Multiple offices - generate an unexposed api key for each office that can only be given out by admin
 ** how to clear session once an change has been made
-* Changelog page - add link to main page
-* Maybe say how many points winner of nines had left
-* Add avatars to skype messages as base 64 encoded
 * avatars on doubles score board
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
