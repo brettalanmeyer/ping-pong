@@ -15,12 +15,23 @@ function sayings(left, right){
 }
 
 function displaySaying(message){
-	if(message.length > 25){
+	ismContainer.removeClass("very-long long medium short small");
+
+	if(message.length > 500){
+		ismContainer.addClass("very-long");
+	} else if(message.length > 400){
 		ismContainer.addClass("long");
+	} else if(message.length > 300){
+		ismContainer.addClass("medium");
+	} else if(message.length > 200){
+		ismContainer.addClass("short");
+	} else if(message.length > 100){
+		console.log("small");
+		ismContainer.addClass("small");
 	}
 
 	ismContainer.html(message);
-	ismContainer.stop(true, true).fadeIn("slow").delay(4000).fadeOut("slow").removeClass("long");
+	ismContainer.stop(true, true).fadeIn("slow").delay(4000).fadeOut("slow");
 }
 
 $(function(){

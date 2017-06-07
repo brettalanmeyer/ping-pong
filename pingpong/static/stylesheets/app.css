@@ -356,6 +356,9 @@ a.link {
 	bottom: 0;
 	left: 0;
 	width: 100%;
+	max-width: 100%;
+	max-height: 100%;
+	overflow: hidden;
 	padding: 40px 10px;
 	background: rgba(240, 240, 240, 0.8);
 	font-size: 120px;
@@ -363,10 +366,26 @@ a.link {
 	display: none;
 }
 
-.ism-container.long {
-	font-size: 90px;
-	padding: 60px 10px;
+.ism-container.very-long {
+	font-size: 30px;
 }
+
+.ism-container.long {
+	font-size: 40px;
+}
+
+.ism-container.medium {
+	font-size: 50px;
+}
+
+.ism-container.short {
+	font-size: 60px;
+}
+
+.ism-container.small {
+	font-size: 50px;
+}
+
 
 @media (min-width: 768px) {
 	.container {
