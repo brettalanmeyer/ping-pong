@@ -31,14 +31,16 @@
 }
 
 .player-selector-container .player-list-columns {
-	column-count: 2;
+	column-count: 3;
 }
 
 .player-selector-container .player-list-columns .player {
 	break-inside: avoid-column;
 	margin-top: 4px;
-	padding: 4px 0 4px 23px;
+	padding: 8px;
 	position: relative;
+	height: 52px;
+	overflow: hidden;
 }
 
 .player-selector-container .player-list-columns .player:focus {

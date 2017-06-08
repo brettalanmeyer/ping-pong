@@ -5,7 +5,7 @@
 
 {% block body %}
 
-	<div id="players" class="player-selector-container container">
+	<div id="players" class="player-selector-container container-fluid">
 
 		<a class="btn btn-default btn-sm action" href="/players/new/matches/{{ match.id }}">
 			<span class="glyphicon glyphicon-star"></span>
@@ -23,7 +23,7 @@
 
 				{% for player in players %}
 
-					<button class="btn btn-default btn-lg btn-block player">
+					<button class="btn btn-default btn-lg btn-block player truncate">
 
 						{% with id = player.id, avatar = player.avatar, class = "avatar" %}
 							{% include 'partials/avatar.html' %}

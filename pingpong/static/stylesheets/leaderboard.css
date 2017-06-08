@@ -124,6 +124,11 @@
 	border-top: solid 2px #bbb;
 }
 
+.leaderboard-table a.player-name-link {
+	display: block;
+	max-width: 200px;
+}
+
 .avatar-leaderboard {
 	max-width: 50px;
 	max-height: 37px;
@@ -154,9 +159,43 @@
 	margin-left: 8px;
 }
 
-
 .table > tbody > tr.active > td {
 	border: solid 1px #aaa;
 	border-left: none;
 	border-right: none;
+}
+
+@media (max-width: 1400px) {
+	.leaderboard-container {
+		font-size: 11px;
+	}
+
+	.leaderboard-table a.player-name-link {
+		max-width: 90px;
+	}
+}
+
+@media (max-width: 1150px) {
+	.leaderboard-container {
+		font-size: 9px;
+	}
+
+	.table.table-sortable .sorting-container {
+		font-size: 6px;
+	}
+
+	.avatar-leaderboard {
+		max-width: 40px;
+		max-height: 33px;
+	}
+
+	.leaderboard-table a.player-name-link {
+		max-width: 70px;
+	}
+}
+
+@media (max-width: 900px) {
+	.table.table-sortable .sorting-container {
+		display: none;
+	}
 }

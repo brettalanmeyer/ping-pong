@@ -9,7 +9,7 @@
 	</td>
 
 	<td data-sort-value="{{ player.playerName }}">
-		<a href="{{ url_for('leaderboardController.players', id = player.playerId, season = stats.season) }}" class="link" title="View {{ player.playerName }}'s Statistics">
+		<a href="{{ url_for('leaderboardController.players', id = player.playerId, season = stats.season) }}" class="link player-name-link truncate" title="View {{ player.playerName }}'s Statistics">
 			{{ player.playerName }}
 		</a>
 	</td>
