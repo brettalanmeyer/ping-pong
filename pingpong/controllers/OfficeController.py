@@ -19,7 +19,8 @@ officeForm = OfficeForm()
 @officeController.route("/offices/select", methods = ["GET"])
 def select():
 	session["offices"] = officeService.load()
-	return render_template("offices/select.html")
+	next = util.param("next", "")
+	return render_template("offices/select.html", next = next)
 
 @officeController.route("/offices/set", methods = ["POST"])
 def set():

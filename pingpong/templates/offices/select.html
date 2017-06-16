@@ -10,6 +10,8 @@
 
 		<form action="{{ url_for('officeController.set') }}" method="POST">
 
+			<input type="hidden" name="next" value="{{ next }}" />
+
 			{% for office in session.offices %}
 
 				<button type="submit" name="officeId" value="{{ office.id }}" class="btn btn-default btn-lg btn-block">{{ office.city }}, {{ office.state }}</button>
