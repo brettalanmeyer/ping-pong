@@ -1,0 +1,39 @@
+
+.match-entry table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	margin: 24px 0;
+}
+
+.match-entry table tr:first-child td {
+	padding: 6px;
+	text-align: center;
+}
+
+.match-entry table td {
+	border-top: solid 1px #ccc;
+	border-bottom: solid 1px #ccc;
+}
+
+.match-entry table input {
+	padding: 0;
+	margin: 0;
+	display: block;
+	width: 100%;
+	border: none;
+	background: none;
+	padding: 2px;
+	margin: 5px 0;
+	border-left: solid 1px #ccc;
+}
+
+.match-entry .players {
+	column-count: 3;
+}
+
+.match-entry .players .player {
+	break-inside: avoid-column;
+	height: 17px;
+	margin: 0 0 6px 0;
+}

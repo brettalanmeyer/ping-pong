@@ -1,6 +1,9 @@
-from flask_assets import Environment, Bundle
+from flask_assets import Environment
+from flask_assets import Bundle
+import os
 
 def setupAssets(app):
+	createStorage()
 	assets = Environment(app)
 	assets.init_app(app)
 	assets.register("js_all", bundleJavascripts())
@@ -21,6 +24,7 @@ def bundleJavascripts():
 		"javascripts/smack-talk.js",
 		"javascripts/scoring-tools.js",
 		"javascripts/leaderboard.js",
+		"javascripts/match-entry.js",
 		filters = "jsmin",
 		output = ".webassets-cache/ping-pong.min.js"
 	)
@@ -35,6 +39,21 @@ def bundleStylesheets():
 		"stylesheets/debug.css",
 		"stylesheets/players.css",
 		"stylesheets/scoring-tools.css",
+		"stylesheets/match-entry.css",
 		filters = "cssmin",
 		output = ".webassets-cache/ping-pong.min.css"
 	)
+
+def createStorage():
+	dirs = [
+		"avatars",
+		"logs",
+		"sessions"
+	]
+	createDirectories(dirs)
+
+def createDirectories(directories):
+	for directory in directories:
+		path = "pingpong/storage/{}".format(directory)
+		if not os.path.exists(path):
+			os.makedirs(path)
