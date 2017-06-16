@@ -1,9 +1,8 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_socketio import SocketIO
 from flask_session import Session
-
+from flask_socketio import SocketIO
 from pingpong.utils import assets
 from pingpong.utils import logger
 
@@ -11,12 +10,11 @@ app = Flask(__name__)
 app.config.from_pyfile("../config.cfg")
 
 logger.setupLogging(app)
+
 assets.setupAssets(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-app.url_map.strict_slashes = False
 
 socketio = SocketIO()
 socketio.init_app(app)
@@ -26,6 +24,8 @@ mail.init_app(app)
 
 sess = Session()
 sess.init_app(app)
+
+app.url_map.strict_slashes = False
 
 from pingpong.controllers.AdminController import adminController
 from pingpong.controllers.ApiController import apiController

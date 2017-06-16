@@ -125,7 +125,7 @@
 }
 
 .leaderboard-table a.player-name-link {
-	display: block;
+	display: inline-block;
 	max-width: 200px;
 }
 
@@ -166,8 +166,15 @@
 }
 
 @media (max-width: 1400px) {
+	.leaderboard-table.table > thead > tr > th,
+	.leaderboard-table.table > tbody > tr > td {
+		padding: 4px;
+	}
+}
+
+@media (max-width: 1300px) {
 	.leaderboard-container {
-		font-size: 11px;
+		font-size: 12px;
 	}
 
 	.leaderboard-table a.player-name-link {
@@ -176,6 +183,11 @@
 }
 
 @media (max-width: 1150px) {
+	.leaderboard-table.table > thead > tr > th,
+	.leaderboard-table.table > tbody > tr > td {
+		padding: 4px 2px;
+	}
+
 	.leaderboard-container {
 		font-size: 9px;
 	}

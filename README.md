@@ -89,6 +89,8 @@ autoflush = False
 
 ## TODO
 
+* redirect for selecting office, links from skype
+* make leaderboard responsive
 ** how to clear session once an change has been made
 * avatars on doubles score board
 * Fix doubles opponent stats
