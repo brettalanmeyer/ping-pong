@@ -49,7 +49,7 @@ $(function(){
 			buildSets();
 		});
 
-		var cell = $('<td><input type="text" name=""></td>');
+		var cell = $('<td><input type="text" name="set"></td>');
 		var sets = $(".set-sets");
 		var team1 = $(".set-team1");
 		var team2 = $(".set-team2");
@@ -74,13 +74,16 @@ $(function(){
 					} else {
 						sets.append(cell.clone().html(i));
 
-						var cell1 = cell.clone();
+						team1.append(cell.clone());
+						team2.append(cell.clone());
+
+						/*var cell1 = cell.clone();
 						cell1.find("input").attr("name", "set-" + i);
 						team1.append(cell1);
 
 						var cell2 = cell.clone();
 						cell2.find("input").attr("name", "set-" + i);
-						team2.append(cell2);
+						team2.append(cell2);*/
 					}
 				}
 

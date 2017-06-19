@@ -10,20 +10,26 @@ from flask import session
 from flask import url_for
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
+from pingpong.forms.MatchEntryForm import MatchEntryForm
 from pingpong.matchtypes.MatchType import MatchType
+from pingpong.services.GameService import GameService
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
+from pingpong.services.ScoreService import ScoreService
 from pingpong.utils import util
 import json
 
 matchController = Blueprint("matchController", __name__)
 
-playerService = PlayerService()
+gameService = GameService()
+leaderboardService = LeaderboardService()
+matchEntryForm = MatchEntryForm()
 matchService = MatchService()
 pagingService = PagingService()
-leaderboardService = LeaderboardService()
+playerService = PlayerService()
+scoreService = ScoreService()
 
 @matchController.route("/matches", methods = ["GET"])
 def index():
@@ -173,6 +179,54 @@ def entry():
 @matchController.route("/matches/entry", methods = ["POST"])
 @loginRequired()
 def entry_create():
+	hasErrors = matchEntryForm.validate(request.form)
+
+	if hasErrors:
+		return entry(), 400
+
+	match = matchService.create(session["office"]["id"], request.form["matchType"])
+	matchType = MatchType(match)
+
+	matchService.updateGames(match.id, request.form["numOfGames"])
+	matchType.createTeams(match, request.form.getlist("playerId"), True)
+	matchType.play(match)
+
+	team1 = match.teams[0]
+	team2 = match.teams[1]
+
+	sets = request.form.getlist("set")
+
+	for i in range(0, match.numOfGames):
+		game = i + 1
+
+		matchService.updateGame(match.id, game)
+
+		player1Score = int(sets[i])
+		player2Score = int(sets[i + 5])
+
+		for j in range(0, player1Score):
+			scoreService.score(match.id, team1.id, game)
+
+		for k in range(0, player2Score):
+			scoreService.score(match.id, team2.id, game)
+
+		if player1Score > player2Score:
+			winner = team1
+			loser = team2
+			winnerScore = player1Score
+			loserScore = player2Score
+		else:
+			winner = team2
+			loser = team1
+			winnerScore = player2Score
+			loserScore = player1Score
+
+		gameService.complete(match.id, game, winner.id, winnerScore, loser.id, loserScore)
+
+	matchService.complete(match)
+
+	flash("Match entry has been successfully entered.", "success")
+
 	return redirect(url_for("matchController.index"))
 
 @matchController.route("/matches/<int:id>/delete", methods = ["POST"])
