@@ -88,7 +88,9 @@
 
 			<tr>
 
-				<td>&nbsp;</td>
+				<td>
+					<a href="{{ url_for('leaderboardController.index', matchType = 'doubles') }}" title="View Doubles Leaderboard">Leaderboard</a>
+				</td>
 
 				{% for i in range(1, data.numOfGames + 1) %}
 					<td>{{ i }}</td>

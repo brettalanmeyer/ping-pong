@@ -110,6 +110,10 @@
 	width: 330px;
 }
 
+.set-scores tr:first-child td:first-child {
+	font-size: 12px;
+}
+
 .set-score {
 	font-family: digital;
 	font-size: 28px;

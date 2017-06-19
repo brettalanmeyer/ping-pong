@@ -68,6 +68,8 @@ MAIL_FROM_EMAIL = ''
 MAIL_RECIPIENTS = ['']
 SESSION_TYPE = 'filesystem'
 SESSION_FILE_DIR = 'pingpong/storage/sessions'
+SESSION_FILE_THRESHOLD = 500
+PERMANENT_SESSION_LIFETIME = 31536000
 ```
 
 create dbconfig.cfg
@@ -89,8 +91,6 @@ autoflush = False
 
 ## TODO
 
-* redirect for selecting office, links from skype
-* make leaderboard responsive
 ** how to clear session once an change has been made
 * avatars on doubles score board
 * Fix doubles opponent stats
