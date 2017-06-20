@@ -212,7 +212,14 @@ class Nines(BaseMatch):
 		player3 = losingTeams[1].players[0]
 		player4 = losingTeams[2].players[0]
 
-		message = "<b>{}</b> defeated {}, {}, and {} in nines".format(player1.name, player2.name, player3.name, player4.name)
+		winnerPoints = 9
+		for score in winningTeam.scores:
+			winnerPoints = winnerPoints - 1
+
+		message = "<b>{} ({})</b> defeated {}, {}, and {} in Nines".format(player1.name, winnerPoints, player2.name, player3.name, player4.name)
+
+		if winnerPoints == 9:
+			message += "\n{} played a perfect match, but nobody really cares...".format(player1.name)
 
 		message += '\n<a href="{}leaderboard/nines">Leaderboard Standings</a>'.format(request.url_root)
 
