@@ -1,6 +1,6 @@
 
 <form action="{{ action }}" method="GET">
-	<select id="{{ id }}" name="season" class="season-filter form-control input-sm" autofocus {% if tabindex %}tabindex="{{ tabindex }}"{% endif %}>
+	<select id="{{ id }}" name="season" class="season-filter form-control input-sm" autofocus {% if tabindex %}tabindex="{{ tabindex }}"{% endif %} title="Change Season">
 		<option value="0" {% if season == -1 %}selected{% endif %}>All Seasons</option>
 
 		{% for item in seasons %}

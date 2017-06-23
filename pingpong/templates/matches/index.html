@@ -35,7 +35,7 @@
 		<a href="{{ url_for('matchController.index') }}" class="match-clear-filter btn btn-default" tabindex="5">Clear</a>
 
 		<h1 class="with-action">
-			<a href="{{ url_for('matchController.index') }}">{{ count }} Matches</a>
+			<a href="{{ url_for('matchController.index') }}">{{ "{:,}".format(count) }} Matches</a>
 		</h1>
 
 		<table class="table match-list {{ matchType }}">

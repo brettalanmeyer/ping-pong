@@ -9,9 +9,6 @@ html {
 
 body {
 	min-height: 100%;
-}
-
-body {
 	background: #f0f0f0;
 	color: #333;
 }
@@ -479,14 +476,7 @@ a.link {
 	position: fixed;
 	right: 12px;
 	bottom: 8px;
-	color: #aaa;
-}
-
-.change-log-link:hover,
-.change-log-link:focus,
-.change-log-link:active {
-	text-decoration: none;
-	color: #aaa;
+	color: #333;
 }
 
 .change-log {

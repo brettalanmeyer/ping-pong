@@ -2,6 +2,7 @@
 	width: 1100px;
 	margin: auto;
 	position: relative;
+	padding-bottom: 20px;
 }
 
 .leaderboard-player-container table {
@@ -52,6 +53,7 @@
 	width: 100%;
 	margin: auto;
 	position: relative;
+	padding-bottom: 20px;
 }
 
 .leaderboard-container .win-streak,
