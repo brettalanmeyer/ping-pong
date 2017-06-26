@@ -11,7 +11,7 @@ playerService = PlayerService()
 
 class TestSingles(BaseTest):
 
-	def createMatch(self, numOfGames, randomize = True):
+	def createMatch(self, numOfGames, randomize = True, playTo = 21):
 		office = self.office()
 
 		with self.request:
@@ -20,6 +20,7 @@ class TestSingles(BaseTest):
 
 			match = matchService.create(office["id"], "singles")
 			matchService.updateGames(match.id, numOfGames)
+			matchService.updatePlayTo(match.id, playTo)
 
 			singles.createTeams(match, [player1.id, player2.id], randomize)
 			singles.play(match)
@@ -219,7 +220,101 @@ class TestSingles(BaseTest):
 			assert newData["game"] == 1
 			assert newData["points"] == 0
 
-	def test_serving(self):
+	def test_serving11(self):
+		with self.request:
+			match = self.createMatch(1, True, 11)
+
+			# 0 - 2
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "green")
+
+			# 2 - 2
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "yellow")
+
+			# 4 - 2
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "blue")
+
+			# 4 - 4
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "red")
+
+			# 4 - 6
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "green")
+
+			# 6 - 6
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "yellow")
+
+			# 8 - 6
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "blue")
+
+			# 8 - 8
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert not data["teams"]["green"]["serving"]
+				assert data["teams"]["yellow"]["serving"]
+				singles.score(match, "red")
+
+			# 8 - 10
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "blue")
+
+			# 10 - 10
+			for i in range(0, 2):
+				data = singles.matchData(match)
+				assert data["teams"]["green"]["serving"]
+				assert not data["teams"]["yellow"]["serving"]
+				singles.score(match, "red")
+
+			# 11 - 10
+			singles.score(match, "yellow")
+			data = singles.matchData(match)
+			assert data["teams"]["green"]["serving"]
+
+			# 11 - 11
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 11 - 12
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+			# 11 - 14
+			singles.score(match, "green")
+			data = singles.matchData(match)
+			assert data["teams"]["yellow"]["serving"]
+
+	def test_serving21(self):
 		with self.request:
 			match = self.createMatch(1)
 

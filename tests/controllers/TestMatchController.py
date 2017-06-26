@@ -17,6 +17,7 @@ class TestMatchController(BaseTest):
 
 			match = matchService.create(matchId, "singles")
 			matchService.updateGames(match.id, 1)
+			matchService.updatePlayTo(match.id, 21)
 
 			singles.createTeams(match, [player1.id, player2.id], True)
 			singles.play(match)
@@ -101,6 +102,15 @@ class TestMatchController(BaseTest):
 			player2Id = playerService.create(office["id"], { "name": "Hutch" }).id
 
 		rv = self.app.post("/matches", data = { "matchType": "singles" })
+		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/play-to")
+		assert rv.status == self.found
+		assert match
+		assert matchId != None
+
+		rv = self.app.get("/matches/{}/play-to".format(matchId))
+		assert rv.status == self.ok
+
+		rv = self.app.post("/matches/{}/play-to".format(matchId), data = { "playTo": "21" })
 		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/num-of-games")
 		assert rv.status == self.found
 		assert match
@@ -150,6 +160,15 @@ class TestMatchController(BaseTest):
 			player4Id = playerService.create(office["id"], { "name": "Bender" }).id
 
 		rv = self.app.post("/matches", data = { "matchType": "doubles" })
+		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/play-to")
+		assert rv.status == self.found
+		assert match
+		assert matchId != None
+
+		rv = self.app.get("/matches/{}/play-to".format(matchId))
+		assert rv.status == self.ok
+
+		rv = self.app.post("/matches/{}/play-to".format(matchId), data = { "playTo": "21" })
 		match, matchId = self.redirects(rv, "\/matches\/(\d+)\/num-of-games")
 		assert rv.status == self.found
 		assert match

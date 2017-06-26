@@ -90,14 +90,16 @@ class TestMatchService(BaseTest):
 		with self.ctx:
 			singles = matchService.create(office["id"], "singles")
 			assert singles.matchType == "singles"
-			assert singles.playTo == 21
+			assert singles.playTo == None
+			assert singles.numOfGames == None
 			assert singles.game == 0
 			assert not singles.ready
 			assert not singles.complete
 
 			doubles = matchService.create(office["id"], "doubles")
 			assert doubles.matchType == "doubles"
-			assert doubles.playTo == 21
+			assert doubles.playTo == None
+			assert doubles.numOfGames == None
 			assert doubles.game == 0
 			assert not doubles.ready
 			assert not doubles.complete
@@ -105,6 +107,7 @@ class TestMatchService(BaseTest):
 			nines = matchService.create(office["id"], "nines")
 			assert nines.matchType == "nines"
 			assert nines.playTo == 9
+			assert nines.numOfGames == None
 			assert nines.game == 0
 			assert not nines.ready
 			assert not nines.complete
@@ -118,6 +121,16 @@ class TestMatchService(BaseTest):
 
 			matchService.updateGames(match.id, 5)
 			assert match.numOfGames == 5
+
+	def test_updatePlayTo(self):
+		office = self.office()
+
+		with self.ctx:
+			match = self.createMatch(office["id"])
+			assert match.playTo == None
+
+			matchService.updatePlayTo(match.id, 21)
+			assert match.playTo == 21
 
 	def test_updateGame(self):
 		office = self.office()

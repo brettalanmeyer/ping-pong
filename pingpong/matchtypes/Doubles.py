@@ -262,6 +262,7 @@ class Doubles(BaseMatch):
 
 		newMatch = matchService.create(match.officeId, self.matchType)
 		newMatch.numOfGames = numOfGames
+		newMatch.playTo = match.playTo
 		newMatch.game = 1
 		self.createTeams(newMatch, playerIds, randomize)
 		matchService.play(newMatch)

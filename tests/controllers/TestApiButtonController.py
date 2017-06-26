@@ -22,6 +22,7 @@ class TestApiButtonController(BaseTest):
 
 			match = matchService.create(officeId, "singles")
 			matchService.updateGames(match.id, 1)
+			matchService.updatePlayTo(match.id, 21)
 
 			singles.createTeams(match, [player1.id, player2.id], True)
 			singles.play(match)
@@ -37,6 +38,7 @@ class TestApiButtonController(BaseTest):
 
 			match = matchService.create(officeId, "doubles")
 			matchService.updateGames(match.id, 1)
+			matchService.updatePlayTo(match.id, 21)
 
 			doubles.createTeams(match, [player1.id, player2.id, player3.id, player4.id], True)
 			doubles.play(match)

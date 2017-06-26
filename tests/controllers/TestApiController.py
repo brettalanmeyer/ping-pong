@@ -18,6 +18,7 @@ class TestApiController(BaseTest):
 
 			match = matchService.create(officeId, "singles")
 			matchService.updateGames(match.id, 1)
+			matchService.updatePlayTo(match.id, 21)
 
 			singles.createTeams(match, [player1.id, player2.id], True)
 			singles.play(match)

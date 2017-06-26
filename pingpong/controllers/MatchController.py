@@ -199,17 +199,6 @@ def undo(id):
 	else:
 		return redirect(url_for("matchController.show", id = match.id))
 
-@matchController.route("/matches/entry", methods = ["GET"])
-@loginRequired()
-def entry():
-	players = playerService.selectActive(session["office"]["id"])
-	return render_template("matches/entry.html", players = players)
-
-@matchController.route("/matches/entry", methods = ["POST"])
-@loginRequired()
-def entry_create():
-	return redirect(url_for("matchController.index"))
-
 @matchController.route("/matches/<int:id>/delete", methods = ["POST"])
 @loginRequired("matchController.index")
 def delete(id):

@@ -22,6 +22,7 @@ class TestDoubles(BaseTest):
 
 			match = matchService.create(office["id"], "doubles")
 			matchService.updateGames(match.id, numOfGames)
+			matchService.updatePlayTo(match.id, 21)
 
 			doubles.createTeams(match, [player1.id, player2.id, player3.id, player4.id], randomize)
 			doubles.play(match)
