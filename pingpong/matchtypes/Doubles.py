@@ -44,7 +44,7 @@ class Doubles(BaseMatch):
 
 		data["points"] = self.setTeamData(match, data["players"], data["teams"])
 		self.determineWinner(match, data["teams"])
-		self.determineServe(data["points"], data["players"])
+		self.determineServe(data)
 
 		return data
 
@@ -117,26 +117,35 @@ class Doubles(BaseMatch):
 				"score": game.loserScore
 			})
 
-	def determineServe(self, points, players):
+	def determineServe(self, data):
+		points = data["points"]
+		players = data["players"]
 
-		# green serves first and swaps after serving is complete
-		if (points - 5) % 20 < 10:
-			green = players["green"]
-			red = players["red"]
-			players["green"] = red
-			players["red"] = green
+		swapEvery = 2
+		if data["playTo"] == 21:
+			swapEvery = 5
 
-		# blue serves second and swaps after serving is complete
-		if (points) % 20 >= 10:
-			yellow = players["yellow"]
-			blue = players["blue"]
-			players["yellow"] = blue
-			players["blue"] = yellow
+		if (points - swapEvery) % (swapEvery * 4) < (swapEvery * 2):
+			self.swapRedGreen(players)
+		if points % (swapEvery * 4) >= (swapEvery * 2):
+			self.swapBlueYellow(players)
 
-		if points % 10 < 5:
+		if points % (swapEvery * 2) < swapEvery:
 			players["green"]["serving"] = True
 		else:
 			players["blue"]["serving"] = True
+
+	def swapRedGreen(self, players):
+		green = players["green"]
+		red = players["red"]
+		players["green"] = red
+		players["red"] = green
+
+	def swapBlueYellow(self, players):
+		yellow = players["yellow"]
+		blue = players["blue"]
+		players["yellow"] = blue
+		players["blue"] = yellow
 
 	def determineGameWinner(self, match):
 		data = self.matchData(match)

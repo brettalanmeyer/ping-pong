@@ -91,8 +91,6 @@ autoflush = False
 
 ## TODO
 
-* pad bottom of page so office selector never interferes - maybe leaderboard pages
-** how to clear session once an change has been made
 * avatars on doubles score board
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)

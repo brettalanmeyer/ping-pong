@@ -10,6 +10,7 @@ from flask import session
 from flask import url_for
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
+from pingpong.forms.MatchForm import MatchForm
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
@@ -24,6 +25,7 @@ playerService = PlayerService()
 matchService = MatchService()
 pagingService = PagingService()
 leaderboardService = LeaderboardService()
+matchForm = MatchForm()
 
 @matchController.route("/matches", methods = ["GET"])
 def index():
@@ -60,12 +62,40 @@ def new():
 
 @matchController.route("/matches", methods = ["POST"])
 def create():
+	hasErrors = matchForm.validateNew(request.form)
+
+	if hasErrors:
+		return new(), 400
+
 	match = matchService.create(session["office"]["id"], request.form["matchType"])
 	matchType = MatchType(match)
 
 	if matchType.isNines():
 		return redirect(url_for("matchController.players", id = match.id))
 
+	return redirect(url_for("matchController.play_to", id = match.id))
+
+
+@matchController.route("/matches/<int:id>/play-to", methods = ["GET"])
+def play_to(id):
+	match = matchService.selectById(id)
+
+	exists(match)
+
+	return render_template("matches/play-to.html", match = match)
+
+@matchController.route("/matches/<int:id>/play-to", methods = ["POST"])
+def play_to_update(id):
+	match = matchService.selectById(id)
+
+	exists(match)
+
+	hasErrors = matchForm.validatePlayTo(request.form)
+
+	if hasErrors:
+		return play_to(id), 400
+
+	matchService.updatePlayTo(id, request.form["playTo"])
 	return redirect(url_for("matchController.games", id = match.id))
 
 @matchController.route("/matches/<int:id>/num-of-games", methods = ["GET"])
@@ -81,6 +111,11 @@ def games_update(id):
 	match = matchService.selectById(id)
 
 	exists(match)
+
+	hasErrors = matchForm.validateGames(request.form)
+
+	if hasErrors:
+		return games(id), 400
 
 	matchService.updateGames(id, request.form["numOfGames"])
 	return redirect(url_for("matchController.players", id = id))

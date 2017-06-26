@@ -264,7 +264,7 @@ a.link {
 }
 .matches-container .match-list > thead > tr > th:nth-child(2),
 .matches-container .match-list > tbody > tr > td:nth-child(2) {
-	width: 120px;
+	width: 80px;
 	text-align: center;
 }
 .matches-container .match-list > thead > tr > th:nth-child(3),

@@ -7,13 +7,14 @@
 
 	<div id="matches-num-of-games" class="container">
 
-		<h1>Best Of</h1>
+		<h1>Sets</h1>
 
-		<form action="/matches/{{ match.id }}/num-of-games" method="POST" class="option-form">
+		<form action="{{ url_for('matchController.games', id = match.id) }}" method="POST" class="option-form">
 
 			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="1">Best Of 1</button>
 			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="3">Best Of 3</button>
 			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="5">Best Of 5</button>
+			<button type="submit" class="btn btn-default btn-block" name="numOfGames" value="7">Best Of 7</button>
 
 		</form>
 

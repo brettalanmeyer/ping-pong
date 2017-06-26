@@ -113,9 +113,9 @@
 															{{ player.name }}
 														</a>
 
+															{% if match.id in elo["matches"] %}
 														<span class="elo-change">
 
-															{% if match.id in elo["matches"] %}
 																{% if player.id in elo["matches"][match.id] %}
 
 																	{% set eloCurrent = elo["matches"][match.id][player.id]["current"]|round|int %}
@@ -132,9 +132,9 @@
 																	{% endif %}
 
 																{% endif %}
-															{% endif %}
 
 														</span>
+															{% endif %}
 
 													{% endfor %}
 

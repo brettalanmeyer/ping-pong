@@ -109,7 +109,7 @@ class MatchService(Service):
 		db.session.commit()
 
 	def create(self, officeId, matchType):
-		playTo = 21
+		playTo = None
 		if matchType == "nines":
 			playTo = 9
 
@@ -118,6 +118,16 @@ class MatchService(Service):
 		db.session.commit()
 
 		app.logger.info("Creating match=%d", match.id)
+
+		return match
+
+	def updatePlayTo(self, id, playTo):
+		match = self.selectById(id)
+		match.playTo = playTo
+		match.modifiedAt = datetime.now()
+		db.session.commit()
+
+		app.logger.info("Updating match=%d playTo=%d", match.id, match.playTo)
 
 		return match
 

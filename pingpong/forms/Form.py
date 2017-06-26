@@ -87,6 +87,11 @@ class Form():
 
 		return True
 
+	def addError(self, field, message):
+		self.hasErrors = True
+		self.errors.append(self.error(field, message))
+		self.flash()
+
 	def error(self, field, message):
 		return {
 			"name": field["name"],

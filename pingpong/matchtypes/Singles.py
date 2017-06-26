@@ -97,24 +97,29 @@ class Singles(BaseMatch):
 			})
 
 	def determineServe(self, data):
+		green = data["teams"]["green"]
+		yellow = data["teams"]["yellow"]
 
-		# swap every 5 turns
-		if data["points"] % 10 < 5:
+		swapEvery = 2
+		if data["playTo"] == 21:
+			swapEvery = 5
+
+		if data["points"] % (swapEvery * 2) < swapEvery:
 			self.setServer(data, "green")
 		else:
 			self.setServer(data, "yellow")
 
 		# possible game point
-		if data["teams"]["green"]["points"] >= data["playTo"] - 1 or data["teams"]["yellow"]["points"] >= data["playTo"] - 1:
+		if green["points"] >= data["playTo"] - 1 or yellow["points"] >= data["playTo"] - 1:
 
 			# if teams are tied, revert to default serving
-			if data["teams"]["green"]["points"] == data["teams"]["yellow"]["points"]:
+			if green["points"] == yellow["points"]:
 				pass
 
-			elif data["teams"]["green"]["points"] > data["teams"]["yellow"]["points"]:
+			elif green["points"] > yellow["points"]:
 				self.setServer(data, "yellow")
 
-			elif data["teams"]["yellow"]["points"] > data["teams"]["green"]["points"]:
+			elif yellow["points"] > green["points"]:
 				self.setServer(data, "green")
 
 	def setServer(self, data, color):

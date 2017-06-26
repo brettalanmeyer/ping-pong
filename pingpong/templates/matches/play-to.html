@@ -1,0 +1,21 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Play Best Of{% endblock %}
+
+{% block body %}
+
+	<div id="matches-play-to" class="container">
+
+		<h1>Points</h1>
+
+		<form action="{{ url_for('matchController.play_to', id = match.id) }}" method="POST" class="option-form">
+
+			<button type="submit" class="btn btn-default btn-block" name="playTo" value="11">Play to 11</button>
+			<button type="submit" class="btn btn-default btn-block" name="playTo" value="21">Play to 21</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}
