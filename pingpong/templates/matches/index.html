@@ -143,9 +143,9 @@
 												{% for game in match.games %}
 
 													{% if game.winner == team.id %}
-														<td class="score winner">{{ game.winnerScore }}</td>
+														<td class="score winner">{{ game.getFormattedWinnerScore() }}</td>
 													{% elif game.loser == team.id %}
-														<td class="score loser">{{ game.loserScore }}</td>
+														<td class="score loser">{{ game.getFormattedLoserScore() }}</td>
 													{% endif %}
 
 												{% endfor %}

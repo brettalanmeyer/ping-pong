@@ -36,3 +36,9 @@ class GameModel(Base):
 		self.redId = redId
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
+
+	def getFormattedWinnerScore(self):
+		return str(self.winnerScore).zfill(2)
+
+	def getFormattedLoserScore(self):
+		return str(self.loserScore).zfill(2)

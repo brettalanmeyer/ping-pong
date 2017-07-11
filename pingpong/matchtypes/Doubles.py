@@ -285,11 +285,11 @@ class Doubles(BaseMatch):
 				continue
 
 			if game.winner == winningTeam.id:
-				winnerScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
-				loserScores += "{}\t\t\t".format(game.loserScore)
+				winnerScores += "<b>{}</b>\t\t\t".format(game.getFormattedWinnerScore())
+				loserScores += "{}\t\t\t".format(game.getFormattedLoserScore())
 			else:
-				winnerScores += "{}\t\t\t".format(game.loserScore)
-				loserScores += "<b>{}</b>\t\t\t".format(game.winnerScore)
+				winnerScores += "{}\t\t\t".format(game.getFormattedLoserScore())
+				loserScores += "<b>{}</b>\t\t\t".format(game.getFormattedWinnerScore())
 
 		message += winnerScores
 		message += loserScores
