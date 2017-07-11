@@ -503,7 +503,3 @@ a.link {
 }
 
 .change-log section ul {}
-
-.input-group.date .input-group-addon {
-	cursor: default;
-}

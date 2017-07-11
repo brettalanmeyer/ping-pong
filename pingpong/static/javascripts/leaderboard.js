@@ -81,53 +81,40 @@ $(function(){
 	});
 
 
-	var start = $("input[name=start]");
-	var end = $("input[name=end]");
-	var format = "MMM DD, YYYY H:mm A";
-	var dateTimePickerStart = $(".datetimepicker-start");
-	var dateTimePickerEnd = $(".datetimepicker-end");
-
-	dateTimePickerStart.datetimepicker({
-		showClear: true,
-		format: format
-	});
-
-	dateTimePickerEnd.datetimepicker({
-		useCurrent: false,
-		showClear: true,
-		format: format
-	});
-
-	dateTimePickerStart.on("dp.change", function (e) {
-		dateTimePickerEnd.data("DateTimePicker").minDate(e.date);
-		var momentStart = $(this).data("DateTimePicker").date();
-		if(momentStart != null){
-			start.val(momentStart.unix());
-		} else {
-			start.val("");
-		}
-	});
-
-	dateTimePickerEnd.on("dp.change", function (e) {
-		dateTimePickerStart.data("DateTimePicker").maxDate(e.date);
-		var momentEnd = $(this).data("DateTimePicker").date();
-		if(momentEnd != null){
-			end.val(momentEnd.unix());
-		} else {
-			end.val("");
-		}
-	});
-
-	dateTimePickerStart.data("DateTimePicker").date(moment(start.val(), "X").format(format));
-	dateTimePickerEnd.data("DateTimePicker").date(moment(end.val(), "X").format(format));
-
 	var seasonFilter = $("#season-filter");
 	var dateTimePicker = $("#leaderboard-datetimepicker");
-	var toggle = $("#leaderboard-datetimepicker-toggle");
-
-	toggle.on("click", function(){
+	$("#leaderboard-datetimepicker-toggle").on("click", function(){
 		seasonFilter.toggleClass("hidden");
 		dateTimePicker.toggleClass("hidden");
+	});
+
+	var format = "MMM DD, YYYY h:mm A";
+	var timePickers = $(".datetimepicker");
+
+	timePickers.datetimepicker({
+		showClear: true,
+		format: format
+	});
+
+	timePickers.on("dp.change", function(e){
+		var dateTimePicker = $(this);
+		var momentValue = dateTimePicker.data("DateTimePicker").date();
+		var input = $("input[name=" + dateTimePicker.data("type") + "]");
+		if(momentValue != null){
+			input.val(momentValue.unix());
+		} else {
+			input.val("");
+		}
+	});
+
+	timePickers.each(function(){
+		var dateTimePicker = $(this);
+		var input = $("input[name=" + dateTimePicker.data("type") + "]");
+		dateTimePicker.data("DateTimePicker").date(moment(input.val(), "X").format(format));
+	});
+
+	$(".clear-datetimepicker").on("click", function(){
+		timePickers.filter("[data-type=" + $(this).data("type") + "]").data("DateTimePicker").clear();
 	});
 
 });

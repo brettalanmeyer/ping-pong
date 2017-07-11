@@ -30,7 +30,7 @@
 				{% for item in matchTypes %}
 
 					<li role="presentation" class="{% if stats.matchType == item %}active{% endif %}">
-						<a href="{{ url_for('leaderboardController.index', matchType = item, season = stats.season) }}">{{ item.title() }}</a>
+						<a href="{{ url_for('leaderboardController.index', matchType = item, season = stats.season, start = startDateTime, end = endDateTime) }}">{{ item.title() }}</a>
 					</li>
 
 				{% endfor %}
