@@ -94,7 +94,6 @@ autoflush = False
 * avatars on doubles score board
 * Fix doubles opponent stats
 * Make method names consistent: deleteByMatch(match) or deleteByMatchId(id)
-* manual entry of scores due to connection lost or otherwise
 
 Raspberry pi resolution: 1184x624
 

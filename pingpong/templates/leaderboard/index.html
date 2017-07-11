@@ -12,8 +12,17 @@
 				<a href="{{ url_for('leaderboardController.index', season = stats.season) }}">Leaderboard</a>
 			</h1>
 
-			{% with id = "season-filter", action = url_for('leaderboardController.index', matchType = stats.matchType), season = stats.season, seasons = stats.seasons %}
+			{% with id = "season-filter",
+				action = url_for('leaderboardController.index', matchType = stats.matchType),
+				season = stats.season,
+				seasons = stats.seasons,
+				classes = ('hidden' if (startDateTime != None or endDateTime != None) else '') %}
 				{% include 'partials/seasons.html' %}
+			{% endwith %}
+
+			{% with action = url_for('leaderboardController.index', matchType = stats.matchType),
+				classes = ('hidden' if (startDateTime == None and endDateTime == None) else '') %}
+				{% include 'leaderboard/filter-toggle.html' %}
 			{% endwith %}
 
 			<ul class="nav nav-tabs">

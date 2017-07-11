@@ -14,6 +14,9 @@ def bundleJavascripts():
 		"libraries/jquery.min.js",
 		"libraries/socket.io.min.js",
 		"libraries/stupidtable.min.js",
+		"libraries/moment/moment.min.js",
+		"libraries/bootstrap/js/bootstrap.min.js",
+		"libraries/bootstrap-datetimepicker/bootstrap-datetimepicker.js",
 		"javascripts/app.js",
 		"javascripts/hash-manager.js",
 		"javascripts/isms.js",
@@ -31,6 +34,7 @@ def bundleJavascripts():
 
 def bundleStylesheets():
 	return Bundle(
+		"libraries/bootstrap-datetimepicker/bootstrap-datetimepicker.css",
 		"stylesheets/app.css",
 		"stylesheets/singles.css",
 		"stylesheets/doubles.css",

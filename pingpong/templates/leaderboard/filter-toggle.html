@@ -1,0 +1,31 @@
+<div id="leaderboard-datetimepicker-toggle" class="leaderboard-datetimepicker-toggle" title="Filter by Date/Time or Season">
+	<span class="glyphicon glyphicon-time"></span>
+</div>
+
+<div id="leaderboard-datetimepicker" class="leaderboard-datetimepicker {{ classes }}">
+	<form action="{{ action }}" method="GET">
+		<input type="hidden" name="start" value="{% if startDateTime != None %}{{ startDateTime }}{% endif %}" />
+		<input type="hidden" name="end" value="{% if endDateTime != None %}{{ endDateTime }}{% endif %}" />
+
+		<div class="form-group">
+			<div class="input-group date">
+				<input type="text" placeholder="Start Date..." class="form-control input-sm datetimepicker-start" />
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="input-group date">
+				<input type="text" placeholder="End Date..." class="form-control input-sm datetimepicker-end" />
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+			</div>
+		</div>
+
+		<button class="btn btn-sm btn-default">Go</button>
+
+	</form>
+</div>

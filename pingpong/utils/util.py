@@ -20,10 +20,13 @@ def param(name, default = None, paramType = None):
 		value = default
 
 	if value != None and paramType != None:
-		if paramType == "int":
-			value = int(value)
-		elif paramType == "str":
-			value = str(value)
+		try:
+			if paramType == "int":
+				value = int(value)
+			elif paramType == "str":
+				value = str(value)
+		except:
+			return None
 
 	return value
 

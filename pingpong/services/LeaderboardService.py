@@ -16,11 +16,11 @@ officeService = OfficeService()
 
 class LeaderboardService(Service):
 
-	def matchTypeStats(self, officeId, matchType, season):
+	def matchTypeStats(self, officeId, matchType, season, startDateTime, endDateTime):
 		app.logger.info("Querying Leaderboard Statistics by matchType=%s and season=%s", matchType, season)
 
 		players = playerService.select(officeId)
-		seasons, season, start, end = self.seasons(season, officeId)
+		seasons, season, start, end = self.seasons(season, officeId, startDateTime, endDateTime)
 
 		matches = self.matchesByMatchType(officeId, matchType, start, end)
 		times = self.times(officeId, matchType, start, end)
@@ -75,10 +75,10 @@ class LeaderboardService(Service):
 
 		return stats
 
-	def playerStats(self, player, season):
+	def playerStats(self, player, season, startDateTime, endDateTime):
 		app.logger.debug("Querying player stats: playerId=%s season=%s", player.id, season)
 
-		seasons, season, start, end = self.seasons(season, player.officeId)
+		seasons, season, start, end = self.seasons(season, player.officeId, startDateTime, endDateTime)
 
 		matches = self.matchesByPlayer(player.id, start, end)
 		pointsFor = self.pointsForByPlayer(player.id, start, end)
@@ -931,7 +931,7 @@ class LeaderboardService(Service):
 
 		return None
 
-	def seasons(self, season, officeId):
+	def seasons(self, season, officeId, startDateTime = None, endDateTime = None):
 		app.logger.debug("Generating seasons with default season=%s", season)
 
 		office = officeService.selectById(officeId)
@@ -958,6 +958,14 @@ class LeaderboardService(Service):
 				break
 
 			index += 1
+
+		if startDateTime != None or endDateTime != None:
+			if startDateTime != None:
+				startDateTime = datetime.fromtimestamp(startDateTime)
+			if endDateTime != None:
+				endDateTime = datetime.fromtimestamp(endDateTime)
+
+			return seasons, None, startDateTime, endDateTime
 
 		# default to latest or current season
 		if season == None:

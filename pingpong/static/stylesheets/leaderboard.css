@@ -1,5 +1,5 @@
 .leaderboard-player-container {
-	width: 1100px;
+	max-width: 1325px;
 	margin: auto;
 	position: relative;
 	padding-bottom: 20px;
@@ -108,7 +108,7 @@
 .leaderboard-container .season-filter,
 .leaderboard-player-container .season-filter {
 	position: absolute;
-	right: 0;
+	right: 32px;
 	top: 0;
 	width: 260px;
 }
@@ -212,4 +212,25 @@
 	.table.table-sortable .sorting-container {
 		display: none;
 	}
+}
+
+.leaderboard-datetimepicker-toggle {
+	position: absolute;
+	right: 0;
+	top: 1px;
+	cursor: pointer;
+	font-size: 24px;
+	color: #aaa;
+}
+
+.leaderboard-datetimepicker {
+	position: absolute;
+	right: 32px;
+	top: 0;
+}
+
+.leaderboard-datetimepicker .form-group {
+	float: left;
+	width: 190px;
+	margin-right: 6px;
 }
