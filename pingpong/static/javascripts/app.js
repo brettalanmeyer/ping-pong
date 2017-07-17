@@ -13,7 +13,7 @@ $(function(){
 	var matchTypeFilter = $("#matches-match-type-filter").on("change", matchesfilters);
 	var seasonFilter = $("#matches-season-filter").on("change", matchesfilters);
 	function matchesfilters(){
-		params = [];
+		var params = [];
 
 		var playerId = playerFilter.val();
 		var opponentId = opponentFilter.val();
@@ -66,6 +66,10 @@ $(function(){
 	});
 
 });
+
+function domain(){
+	return "http://" + document.domain + ":" + location.port
+}
 
 function disableUndo(){
 	$(document).unbind("keypress");

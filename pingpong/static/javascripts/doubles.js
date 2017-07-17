@@ -7,9 +7,12 @@ $(function(){
 		var matchId = doubles.data("matchid");
 		var office = $("meta[name=office]").attr("content");
 
-		var socket = io.connect();
+		var socket = io.connect(domain());
 		socket.on("response-" + office, update);
 		socket.on("smack-talk-" + office, smackTalk);
+		$(window).on("beforeunload", function(){
+			socket.close();
+		});
 
 		var set = $("[data-var=set");
 

@@ -7,9 +7,12 @@ $(function(){
 		var matchId = nines.data("matchid");
 		var office = $("meta[name=office]").attr("content");
 
-		var socket = io.connect();
+		var socket = io.connect(domain());
 		socket.on("response-" + office, update);
 		socket.on("smack-talk-" + office, smackTalk);
+		$(window).on("beforeunload", function(){
+			socket.close();
+		});
 
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};
