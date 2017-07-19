@@ -3,7 +3,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import Response
-from pingpong.app import socketio
+from pingpong.app import sio
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.IsmService import IsmService
 from pingpong.services.MatchService import MatchService
@@ -107,7 +107,7 @@ def score(button):
 				"matchId": newMatch.id
 			}
 
-	socketio.emit("response-{}".format(office.id), data, broadcast = True)
+	sio.emit("response-{}".format(office.id), data, broadcast = True)
 	return Response(json.dumps(response), status = 200, mimetype = "application/json")
 
 @apiController.route("/api/buttons/<path:button>/undo", methods = ["POST"])
@@ -134,7 +134,7 @@ def undo(button):
 		response["matchId"] = match.id
 		matchType = MatchType(match)
 		data = matchType.undo(match, button)
-	socketio.emit("response-{}".format(office.id), data, broadcast = True)
+	sio.emit("response-{}".format(office.id), data, broadcast = True)
 	return Response(json.dumps(response), status = 200, mimetype = "application/json")
 
 def invalidKey():

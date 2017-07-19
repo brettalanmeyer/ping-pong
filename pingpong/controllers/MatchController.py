@@ -8,7 +8,7 @@ from flask import request
 from flask import Response
 from flask import session
 from flask import url_for
-from pingpong.app import socketio
+from pingpong.app import sio
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.MatchForm import MatchForm
 from pingpong.matchtypes.MatchType import MatchType
@@ -194,7 +194,7 @@ def undo(id):
 		data = matchType.undo(match, None)
 
 	if request.is_xhr:
-		socketio.emit("response-{}".format(match.officeId), data, broadcast = True)
+		sio.emit("response-{}".format(match.officeId), data, broadcast = True)
 		return Response("", status = 200, mimetype = "application/json")
 	else:
 		return redirect(url_for("matchController.show", id = match.id))
@@ -224,7 +224,7 @@ def smack_talk(id):
 	message = util.paramForm("message", None)
 	if message != None and len(message) > 0:
 		data = { "message": message }
-		socketio.emit("smack-talk-{}".format(session["office"]["id"]), data, broadcast = True)
+		sio.emit("smack-talk-{}".format(session["office"]["id"]), data, broadcast = True)
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
 
 	return message
