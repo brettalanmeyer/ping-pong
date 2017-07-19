@@ -44,6 +44,8 @@ def paramForm(name, default = None, paramType = None):
 			value = int(value)
 		elif paramType == "str":
 			value = str(value)
+		elif paramType == "bool":
+			value = value in ("True", "true")
 
 	return value
 

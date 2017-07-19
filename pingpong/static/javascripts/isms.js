@@ -1,5 +1,7 @@
 var isms = [];
 var ismContainer;
+var ismQueue = [];
+var ismInProgress = false;
 
 function sayings(left, right){
 	shuffle(isms);
@@ -8,16 +10,36 @@ function sayings(left, right){
 		ism = isms[i];
 
 		if(ism.left == left && ism.right == right){
-			displaySaying(ism.saying);
+			addToSayingQueue(ism.saying, false);
 			break;
 		}
 	}
 }
 
-function displaySaying(message){
-	ismContainer.removeClass("very-long long medium short small");
+function addToSayingQueue(message, isImage){
+	ismQueue.unshift({
+		message: message,
+		isImage: isImage
+	});
+	displaySaying();
+}
 
-	if(message.length > 500){
+function displaySaying(){
+
+	if(ismInProgress || ismQueue.length == 0){
+		return;
+	}
+
+	var data = ismQueue.pop();
+	var message = data.message;
+	var isImage = data.isImage;
+
+	ismContainer.removeClass("image very-long long medium short small");
+
+	if(isImage){
+		ismContainer.addClass("image");
+		message = $("<img />").attr("src", message);
+	} else if(message.length > 500){
 		ismContainer.addClass("very-long");
 	} else if(message.length > 400){
 		ismContainer.addClass("long");
@@ -26,12 +48,17 @@ function displaySaying(message){
 	} else if(message.length > 200){
 		ismContainer.addClass("short");
 	} else if(message.length > 100){
-		console.log("small");
 		ismContainer.addClass("small");
 	}
 
+	ismInProgress = true;
 	ismContainer.html(message);
-	ismContainer.stop(true, true).fadeIn("slow").delay(4000).fadeOut("slow");
+	ismContainer.stop(true, true).fadeIn("slow").delay(4000).fadeOut("slow", function(){
+		setTimeout(function(){
+			ismInProgress = false;
+			displaySaying();
+		}, 50);
+	});
 }
 
 $(function(){

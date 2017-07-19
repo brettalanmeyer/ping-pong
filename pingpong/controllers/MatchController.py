@@ -2,6 +2,7 @@ from flask import abort
 from flask import Blueprint
 from flask import current_app as app
 from flask import flash
+from flask import escape
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -221,13 +222,19 @@ def delete(id):
 
 @matchController.route("/matches/<int:id>/smack-talk", methods = ["POST"])
 def smack_talk(id):
-	message = util.paramForm("message", None)
+	message = escape(util.paramForm("message", None))
+	isImage = util.paramForm("isImage", False, "bool")
+
 	if message != None and len(message) > 0:
-		data = { "message": message }
+		data = {
+			"message": message,
+			"isImage": isImage
+		}
+
 		socketio.emit("smack-talk-{}".format(session["office"]["id"]), data, broadcast = True)
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
 
-	return message
+	return Response(json.dumps(data), status = 200, mimetype = "application/json")
 
 def exists(match):
 	if match == None:

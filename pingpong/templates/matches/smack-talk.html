@@ -4,7 +4,14 @@
 
 	<form id="smack-talk-form" class="smack-talk-form form-inline" action="{{ url_for('matchController.smack_talk', id = data.matchId) }}" method="POST">
 
-		<input id="smack-talk-input" type="text" class="form-control" autocomplete="off" />
+		<input id="smack-talk-input" type="text" class="form-control" autocomplete="off" placeholder="Message or image url..." />
+
+		<div class="checkbox">
+			<label>
+				<input id="smack-talk-image" type="checkbox" name="image" autocomplete="off" /> Image
+			</label>
+		</div>
+
 		<button class="btn btn-default">Send</button>
 
 	</form>
