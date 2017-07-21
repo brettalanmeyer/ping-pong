@@ -982,3 +982,46 @@ class LeaderboardService(Service):
 		# invalid parameter
 		else:
 			abort(404)
+
+	def nines(self):
+
+		query = "\
+			SELECT color, COUNT(color) AS total\
+			FROM (\
+				SELECT\
+					matches.id as matchId,\
+					teams_players.playerId,\
+					(CASE\
+						WHEN games.greenId = teams_players.playerId THEN 'green'\
+						WHEN games.redId = teams_players.playerId THEN 'red'\
+						WHEN games.blueId = teams_players.playerId THEN 'blue'\
+						WHEN games.yellowId = teams_players.playerId THEN 'yellow'\
+					END) as color\
+					\
+				FROM teams\
+				LEFT JOIN matches ON teams.matchId = matches.id\
+				LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+				LEFT JOIN games ON matches.id = games.matchID\
+				WHERE matches.matchType = 'nines'\
+					AND matches.complete = 1\
+					AND teams.win = 1\
+			) colors\
+			GROUP BY color\
+		"
+
+		connection = db.session.connection()
+		colors = connection.execute(text(query))
+
+		data = {}
+		total = 0
+		for color in colors:
+			total = total + color.total
+			data[color.color] = {
+				"wins": color.total,
+				"percentage": 0.0
+			}
+
+		for color in data:
+			data[color]["percentage"] = float(data[color]["wins"]) / total * 100
+
+		return data
