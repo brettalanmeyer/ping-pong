@@ -222,14 +222,14 @@ def delete(id):
 
 @matchController.route("/matches/<int:id>/smack-talk", methods = ["POST"])
 def smack_talk(id):
-	message = escape(util.paramForm("message", None))
+	message = util.paramForm("message", None)
 	isImage = util.paramForm("isImage", False, "bool")
 
+	data = {}
+
 	if message != None and len(message) > 0:
-		data = {
-			"message": message,
-			"isImage": isImage
-		}
+		data["message"] = escape(message)
+		data["isImage"] = isImage
 
 		socketio.emit("smack-talk-{}".format(session["office"]["id"]), data, broadcast = True)
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)

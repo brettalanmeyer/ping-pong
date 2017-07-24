@@ -40,5 +40,7 @@ $(function(){
 });
 
 function smackTalk(data){
-	addToSayingQueue(data.message, data.isImage);
+	if(data["message"] != undefined && data["isImage"] != undefined){
+		addToSayingQueue(data.message, data.isImage);
+	}
 }
