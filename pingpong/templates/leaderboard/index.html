@@ -184,14 +184,6 @@
 
 					</tr>
 
-					{% for player in stats.players if player.matches == 0 %}
-
-						{% with num = numPlayers|count + loop.index, player = player %}
-							{% include 'leaderboard/index-player.html' %}
-						{% endwith %}
-
-					{% endfor %}
-
 				</tfoot>
 
 			</table>

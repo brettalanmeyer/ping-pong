@@ -983,21 +983,20 @@ class LeaderboardService(Service):
 		else:
 			abort(404)
 
-	def nines(self):
+	def ninesWinsByColor(self):
 
 		query = "\
 			SELECT color, COUNT(color) AS total\
 			FROM (\
 				SELECT\
-					matches.id as matchId,\
+					matches.id AS matchId,\
 					teams_players.playerId,\
 					(CASE\
 						WHEN games.greenId = teams_players.playerId THEN 'green'\
 						WHEN games.redId = teams_players.playerId THEN 'red'\
 						WHEN games.blueId = teams_players.playerId THEN 'blue'\
 						WHEN games.yellowId = teams_players.playerId THEN 'yellow'\
-					END) as color\
-					\
+					END) AS color\
 				FROM teams\
 				LEFT JOIN matches ON teams.matchId = matches.id\
 				LEFT JOIN teams_players ON teams.id = teams_players.teamId\
