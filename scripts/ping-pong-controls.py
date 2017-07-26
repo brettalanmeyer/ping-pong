@@ -65,5 +65,5 @@ def loop():
     input()
     time.sleep(.1)
 
-if _name_ == '__main__':
+if __name__ == '__main__':
   main()
