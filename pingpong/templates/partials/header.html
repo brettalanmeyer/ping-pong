@@ -1,0 +1,14 @@
+{% if request.endpoint != 'officeController.select' %}
+	<div class="authentication {% if not current_user.is_authenticated %}un{% endif %}authenticated">
+		{% if current_user.is_authenticated %}
+			<a href="{{ url_for('adminController.index') }}">Administrator</a>
+			<a href="{{ url_for('authenticationController.logout', next = request.path) }}" class="link">Logout</a>
+		{% else %}
+			<a href="{{ url_for('authenticationController.login', next = request.path) }}" class="link">Login</a>
+		{% endif %}
+	</div>
+{% endif %}
+
+<header>
+	<a href="{{ url_for('mainController.index') }}">Ping Pong</a>
+</header>

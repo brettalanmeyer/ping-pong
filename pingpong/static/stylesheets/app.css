@@ -35,6 +35,11 @@ header a:hover {
 	text-decoration: none;
 }
 
+header a .version {
+	font-family: Arial;
+	font-size: 10px;
+}
+
 h1.ping-pong {
 	font-size: 120px;
 	text-align: center;
@@ -419,7 +424,7 @@ a.link {
 		width: 1020px;
 	}
 	.offices-container {
-		width: 1000px;
+		width: 1200px;
 	}
 }
 
@@ -498,15 +503,8 @@ a.link {
 	border: solid 1px rgb(220, 126, 2);
 }
 
-.change-log-link {
-	position: fixed;
-	right: 12px;
-	bottom: 8px;
-	color: #333;
-}
-
 .change-log {
-	width: 700px;
+	width: 800px;
 }
 
 .change-log section {

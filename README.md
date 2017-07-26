@@ -40,6 +40,7 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 
 create config.cfg
 ```
+VERSION = 1.00
 DEBUG = True
 DEBUG_TOOLS = True
 ASSETS_DEBUG = False

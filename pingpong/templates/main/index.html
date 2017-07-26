@@ -18,6 +18,8 @@
 				{{ "{:,}".format(matches) }} matches played
 				|
 				{{ "{:,}".format(scores) }} balls served
+				|
+				<a href="{{ url_for('mainController.changeLog') }}" title="View Change Log">App Version {{ config["VERSION"] }}</a>
 			</div>
 
 			<div class="links">
@@ -42,7 +44,5 @@
 		</div>
 
 	</div>
-
-	<a href="/change-log" class="change-log-link">Change Log</a>
 
 {% endblock %}
