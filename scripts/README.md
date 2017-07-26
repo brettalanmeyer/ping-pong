@@ -25,5 +25,6 @@ Edit rc.local and add
 create config.cfg
 ```
 [api]
-key = apikey
+key = apiKey
+url = http://localhost:8080/api/buttons/{}/{}
 ```

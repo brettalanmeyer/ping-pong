@@ -5,10 +5,11 @@ import time
 
 config = ConfigParser.ConfigParser()
 config.read("config.cfg")
+
 apiKey = config.get("api", "key")
+url = config.get("api", "url")
 
 req = requests.session()
-url = 'http://10.9.0.230:5010/api/buttons/{}/{}'
 
 buttons = [{
   'color': 'green',
