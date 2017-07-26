@@ -2,6 +2,7 @@
 *.coverage
 /config.cfg
 /dbconfig.cfg
+/scripts/config.cfg
 /pingpong/static/.webassets-cache/
 /htmlcov
 /tests/pingpong/storage
