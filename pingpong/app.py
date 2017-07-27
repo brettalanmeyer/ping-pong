@@ -2,7 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_session import Session
-from flask_socketio import SocketIO
+
 from pingpong.utils import assets
 from pingpong.utils import logger
 
@@ -16,8 +16,13 @@ assets.setupAssets(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-socketio = SocketIO()
-socketio.init_app(app)
+if app.config["DEBUG"]:
+	from flask_socketio import SocketIO
+	socketio = SocketIO()
+	socketio.init_app(app)
+else:
+	import socketio as SocketIO
+	socketio = SocketIO.Server()
 
 mail = Mail()
 mail.init_app(app)

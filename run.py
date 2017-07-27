@@ -1,4 +1,5 @@
-from pingpong.app import app, socketio
+from pingpong.app import app
+from pingpong.app import socketio
 import sys
 
 def setEncoding():
@@ -7,4 +8,11 @@ def setEncoding():
 
 if __name__ == "__main__":
 	setEncoding()
-	socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = app.config["DEBUG"])
+
+	if app.config["DEBUG"]:
+		socketio.run(app, host = app.config["HOST"], port = app.config["PORT"], debug = True)
+	else:
+		import eventlet
+		import socketio as SocketIO
+		pingpongapp = SocketIO.Middleware(socketio, app)
+		eventlet.wsgi.server(eventlet.listen((app.config["HOST"], app.config["PORT"])), pingpongapp, debug = False)
