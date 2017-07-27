@@ -6,13 +6,25 @@ $(function(){
 
 		var matchId = nines.data("matchid");
 		var office = $("meta[name=office]").attr("content");
+		var disconnected = false;
 
 		var socket = io.connect(domain());
 		socket.on("response-" + office, update);
 		socket.on("smack-talk-" + office, smackTalk);
+		socket.on("disconnect", function(){
+			if(!disconnected){
+				$("#socket-disconnect").modal();
+				$.post("/matches/" + matchId + "/error");
+			}
+		});
 		$(window).on("beforeunload", function(){
+			disconnected = true;
 			socket.close();
 		});
+
+		setTimeout(function(){
+			socket.close();
+		}, 2000);
 
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};
