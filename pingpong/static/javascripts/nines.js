@@ -22,10 +22,6 @@ $(function(){
 			socket.close();
 		});
 
-		setTimeout(function(){
-			socket.close();
-		}, 2000);
-
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};
 		var scores = {};
