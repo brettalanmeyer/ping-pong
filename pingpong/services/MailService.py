@@ -4,6 +4,14 @@ from flask import current_app as app
 
 class MailService():
 
+	def sendError(self, message):
+		app.logger.info("Sending Error Email...")
+
+		subject = "Ping Pong App ERROR"
+		body = "Ping Pong App ERROR\nMessage: {}".format(message)
+		html = "<h2>Ping Pong App ERROR</h2><p>Message: {}".format(message)
+		self.send(subject, body, html)
+
 	def sendFeedback(self, name, email, message):
 		app.logger.info("Sending Feedback...")
 

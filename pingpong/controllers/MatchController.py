@@ -1,8 +1,8 @@
 from flask import abort
 from flask import Blueprint
 from flask import current_app as app
-from flask import flash
 from flask import escape
+from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -14,6 +14,7 @@ from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.MatchForm import MatchForm
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.LeaderboardService import LeaderboardService
+from pingpong.services.MailService import MailService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
@@ -27,6 +28,7 @@ matchService = MatchService()
 pagingService = PagingService()
 leaderboardService = LeaderboardService()
 matchForm = MatchForm()
+mailService = MailService()
 
 @matchController.route("/matches", methods = ["GET"])
 def index():
@@ -235,6 +237,11 @@ def smack_talk(id):
 		app.logger.info("Smack Talk: %s \"%s\"", request.remote_addr, message)
 
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
+
+@matchController.route("/matches/<int:id>/error", methods = ["POST"])
+def error(id):
+	mailService.sendError("Error for matchId: {}".format(id))
+	return "success"
 
 def exists(match):
 	if match == None:
