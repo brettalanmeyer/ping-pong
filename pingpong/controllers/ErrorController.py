@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import current_app as app
 from flask import render_template
 from flask import request
+from pingpong.utils import notifications
 
 errorController = Blueprint("errorController", __name__)
 
@@ -29,6 +30,9 @@ def not_found_show():
 def server_error(error):
 	app.logger.error(error)
 	app.logger.error(request.url)
+
+	notifications.mailError("An error has occurred")
+
 	return render_template("errors/500.html"), 500
 
 @errorController.route("/errors/server-error", methods = ["GET"])

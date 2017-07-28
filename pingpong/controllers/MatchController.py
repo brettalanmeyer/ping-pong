@@ -14,10 +14,10 @@ from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.MatchForm import MatchForm
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.LeaderboardService import LeaderboardService
-from pingpong.services.MailService import MailService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
 from pingpong.services.PlayerService import PlayerService
+from pingpong.utils import notifications
 from pingpong.utils import util
 import json
 
@@ -28,7 +28,6 @@ matchService = MatchService()
 pagingService = PagingService()
 leaderboardService = LeaderboardService()
 matchForm = MatchForm()
-mailService = MailService()
 
 @matchController.route("/matches", methods = ["GET"])
 def index():
@@ -240,7 +239,8 @@ def smack_talk(id):
 
 @matchController.route("/matches/<int:id>/error", methods = ["POST"])
 def error(id):
-	mailService.sendError("Error for matchId: {}".format(id))
+	if not app.config["DEBUG"]:
+		notifications.mailError("Error for matchId: {}".format(id))
 	return "success"
 
 def exists(match):

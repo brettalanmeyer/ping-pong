@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint
 from flask import current_app as app
 from flask import flash
@@ -5,22 +6,20 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
-from flask import url_for
 from flask import session
-from datetime import datetime
+from flask import url_for
 from pingpong.forms.FeedbackForm import FeedbackForm
-from pingpong.services.MailService import MailService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.OfficeService import OfficeService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.utils import database as db
+from pingpong.utils import notifications
 
 mainController = Blueprint("mainController", __name__)
 
 matchService = MatchService()
 scoreService = ScoreService()
 feedbackForm = FeedbackForm()
-mailService = MailService()
 officeService = OfficeService()
 
 @mainController.route("/", methods = ["GET"])
@@ -54,7 +53,7 @@ def send_feedback():
 		return render_template("main/feedback.html"), 400
 
 	else:
-		mailService.sendFeedback(request.form["name"], request.form["email"], request.form["message"])
+		notifications.mailFeedback(request.form["name"], request.form["email"], request.form["message"])
 		flash("Thank you for your feedback!", "success")
 		return redirect(url_for("mainController.index"))
 
