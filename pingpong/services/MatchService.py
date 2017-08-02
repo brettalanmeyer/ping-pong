@@ -164,6 +164,7 @@ class MatchService(Service):
 		app.logger.info("Play match=%d", match.id)
 
 	def incomplete(self, match):
+		match.ready = True
 		match.complete = False
 		match.modifiedAt = datetime.now()
 		match.completedAt = None

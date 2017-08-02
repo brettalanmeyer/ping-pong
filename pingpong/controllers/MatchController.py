@@ -9,6 +9,7 @@ from flask import request
 from flask import Response
 from flask import session
 from flask import url_for
+from flask_login import current_user
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.MatchForm import MatchForm
@@ -191,7 +192,7 @@ def undo(id):
 
 	exists(match)
 
-	if match.ready:
+	if match.ready or current_user.is_authenticated:
 		matchType = MatchType(match)
 		data = matchType.undo(match, None)
 
