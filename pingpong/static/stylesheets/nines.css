@@ -77,6 +77,32 @@
 	width: 25%;
 }
 
+.nines-container .score-board .percentage {
+	position: absolute;
+	font-size: 9px;
+	color: #bbb;
+}
+
+.nines-container .score-board:nth-child(1) .percentage {
+	bottom: 2px;
+	right: 3px;
+}
+
+.nines-container .score-board:nth-child(2) .percentage {
+	bottom: 2px;
+	left: 3px;
+}
+
+.nines-container .score-board:nth-child(3) .percentage {
+	top: 2px;
+	right: 3px;
+}
+
+.nines-container .score-board:nth-child(4) .percentage {
+	top: 2px;
+	left: 3px;
+}
+
 .nines-container .play-again {
 	padding-top: 24px;
 	clear: both;

@@ -21,11 +21,12 @@
 
 				<span class="name truncate" data-var="name" data-color="yellow">{{ data.players.yellow.playerName }}</span>
 				<span class="score" data-var="score" data-color="yellow">{{ data.players.yellow.points }}</span>
+				<span class="percentage" title="Yellow All Time Win Percentage">{{ "{:.2f}".format(data.players.yellow.colorPercentage) }}%</span>
 			</div>
 
 			<!-- Green -->
 			<div class="score-board {% if data.players.green.out %}out{% endif %}" data-var="board" data-color="green">
-				<div class="nines-avatar-container green">
+				<div class="nines-avatar-container">
 					{% with id = data.players.green.playerId, avatar = data.players.green.playerAvatar, class = "avatar-nines green" %}
 						{% include 'partials/avatar.html' %}
 					{% endwith %}
@@ -33,6 +34,7 @@
 
 				<span class="score" data-var="score" data-color="green">{{ data.players.green.points }}</span>
 				<span class="name truncate" data-var="name" data-color="green">{{ data.players.green.playerName }}</span>
+				<span class="percentage" title="Green All Time Win Percentage">{{ "{:.2f}".format(data.players.green.colorPercentage) }}%</span>
 			</div>
 
 			<!-- Blue -->
@@ -45,6 +47,7 @@
 
 				<span class="name truncate" data-var="name" data-color="blue">{{ data.players.blue.playerName }}</span>
 				<span class="score" data-var="score" data-color="blue">{{ data.players.blue.points }}</span>
+				<span class="percentage" title="Blue All Time Win Percentage">{{ "{:.2f}".format(data.players.blue.colorPercentage) }}%</span>
 			</div>
 
 			<!-- Red -->
@@ -57,6 +60,7 @@
 
 				<span class="score" data-var="score" data-color="red">{{ data.players.red.points }}</span>
 				<span class="name truncate" data-var="name" data-color="red">{{ data.players.red.playerName }}</span>
+				<span class="percentage" title="Red All Time Win Percentage">{{ "{:.2f}".format(data.players.red.colorPercentage) }}%</span>
 			</div>
 
 			<form id="play-again" method="POST" action="/matches/{{ data.matchId }}/play-again" class="play-again {% if not data.complete %}hidden{% endif %}">

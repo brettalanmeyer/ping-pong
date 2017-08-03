@@ -4,6 +4,7 @@ from pingpong.services.GameService import GameService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.ScoreService import ScoreService
 from pingpong.services.TeamService import TeamService
+from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.utils import notifications
 from pingpong.utils import util
 import random
@@ -12,6 +13,7 @@ gameService = GameService()
 matchService = MatchService()
 scoreService = ScoreService()
 teamService = TeamService()
+leaderboardService = LeaderboardService()
 
 class Nines(BaseMatch):
 
@@ -33,8 +35,13 @@ class Nines(BaseMatch):
 			"players": {}
 		}
 
+		colorWins = leaderboardService.ninesWinsByColor()
+
 		for color in self.colors:
 			data["players"][color] = self.newPlayer(getattr(game, color).id)
+			data["players"][color]["colorWins"] = colorWins[color]["wins"]
+			data["players"][color]["colorPercentage"] = colorWins[color]["percentage"]
+
 
 		self.setPlayerData(match, data["players"])
 		self.swapPlayers(data["players"])
