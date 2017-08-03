@@ -1,0 +1,7 @@
+{% if eloChange > 0 %}
+	<span class="elo-change positive">(+{{ eloChange|round|int }})</span>
+{% elif eloChange < 0 %}
+	<span class="elo-change negative">({{ eloChange|round|int }})</span>
+{% else %}
+	<span class="elo-change">({{ eloChange|round|int }})</span>
+{% endif %}

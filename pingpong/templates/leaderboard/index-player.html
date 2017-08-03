@@ -17,13 +17,9 @@
 	<td data-sort-value="{{ player.elo.current }}" class="elo">
 		{{ player.elo.current|round|int }}
 
-		{% if player.elo.change > 0 %}
-			<span class="elo-change positive">(+{{ player.elo.change|round|int }})</span>
-		{% elif player.elo.change < 0 %}
-			<span class="elo-change negative">({{ player.elo.change|round|int }})</span>
-		{% else %}
-			<span class="elo-change">({{ player.elo.change|round|int }})</span>
-		{% endif %}
+		{% with eloChange = player.elo.change %}
+			{% include 'partials/elo.html' %}
+		{% endwith %}
 	</td>
 
 	<td data-sort-value="{{ player.matches }}">

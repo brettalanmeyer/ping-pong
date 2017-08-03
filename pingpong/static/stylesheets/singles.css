@@ -184,3 +184,15 @@
 	margin: auto;
 	z-index: -100;
 }
+
+.singles-container .elo-change {
+	display: inline-block;
+}
+
+.singles-container .elo-change.positive {
+	color: green;
+}
+
+.singles-container .elo-change.negative {
+	color: red;
+}

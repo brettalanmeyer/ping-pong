@@ -46,8 +46,14 @@ $(function(){
 		};
 
 		var elo = {
-			green: $("[data-color=green][data-var=elo]"),
-			yellow: $("[data-color=yellow][data-var=elo]")
+			green: {
+				current: $("[data-color=green][data-var=elo]").find(".elo-current"),
+				change: $("[data-color=green][data-var=elo]").find(".elo-change")
+			},
+			yellow: {
+				current: $("[data-color=yellow][data-var=elo]").find(".elo-current"),
+				change: $("[data-color=yellow][data-var=elo]").find(".elo-change")
+			}
 		};
 
 		function update(data){
@@ -110,7 +116,9 @@ $(function(){
 				}
 
 				if(team.elo != null){
-					elo[color].html(parseInt(Math.round(team.elo.current)));
+					elo[color]["current"].html(parseInt(Math.round(team.elo.current)));
+					elo[color]["change"].html("(" + (team.elo.change > 0 ? "+" : "") + parseInt(Math.round(team.elo.change)) + ")");
+					elo[color]["change"].removeClass("negative positive").addClass(team.elo.change > 0 ? "positive" : "negative");
 				}
 			}
 
