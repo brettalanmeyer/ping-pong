@@ -224,11 +224,11 @@ class Singles(BaseMatch):
 				continue
 
 			if game.winner == winningTeam.id:
-				winnerScores += "<b>{}</b>\t\t\t".format(game.getFormattedWinnerScore())
-				loserScores += "{}\t\t\t".format(game.getFormattedLoserScore())
+				winnerScores += "<b>{}</b> \t".format(game.getFormattedWinnerScore())
+				loserScores += "{} \t".format(game.getFormattedLoserScore())
 			else:
-				winnerScores += "{}\t\t\t".format(game.getFormattedLoserScore())
-				loserScores += "<b>{}</b>\t\t\t".format(game.getFormattedWinnerScore())
+				winnerScores += "{} \t".format(game.getFormattedLoserScore())
+				loserScores += "<b>{}</b> \t".format(game.getFormattedWinnerScore())
 
 		elo = "({}, {}{})"
 		winnerElo = leaderboardService.eloResult(match.officeId, match.id, winnerPlayer.id)
