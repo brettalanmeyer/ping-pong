@@ -22,6 +22,8 @@ $(function(){
 			socket.close();
 		});
 
+		var scoreAudio = new PingPongSound("boing.wav", "bump.wav", "picking-up.wav", "coin.wav", "spring-jump.wav");
+
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};
 		var scores = {};
@@ -51,6 +53,8 @@ $(function(){
 				$("#undo").removeClass("hidden");
 			}
 
+			var playSound = false;
+
 			for(var i = 0; i < colors.length; i++){
 				var color = colors[i];
 
@@ -63,6 +67,7 @@ $(function(){
 
 				if(previousScore != nextScore){
 					playerNames[color].addClass("scored");
+					playSound = true;
 				}
 
 				if(data.players[color].playerAvatar){
@@ -82,6 +87,8 @@ $(function(){
 					playerNames[color].removeClass("scored");
 				}
 			}, 2000);
+
+			scoreAudio.play(playSound);
 		}
 
 		enableUndo();

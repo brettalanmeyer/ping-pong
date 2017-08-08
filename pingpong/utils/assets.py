@@ -19,6 +19,7 @@ def bundleJavascripts():
 		"libraries/bootstrap-datetimepicker/bootstrap-datetimepicker.js",
 		"javascripts/app.js",
 		"javascripts/hash-manager.js",
+		"javascripts/ping-pong-sound.js",
 		"javascripts/isms.js",
 		"javascripts/singles.js",
 		"javascripts/doubles.js",
