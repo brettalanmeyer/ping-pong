@@ -13,6 +13,7 @@ from flask_login import current_user
 from pingpong.app import socketio
 from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.MatchForm import MatchForm
+from pingpong.forms.MatchPlayerForm import MatchPlayerForm
 from pingpong.matchtypes.MatchType import MatchType
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
@@ -29,6 +30,7 @@ matchService = MatchService()
 pagingService = PagingService()
 leaderboardService = LeaderboardService()
 matchForm = MatchForm()
+matchPlayerForm = MatchPlayerForm()
 
 @matchController.route("/matches", methods = ["GET"])
 def index():
@@ -77,7 +79,6 @@ def create():
 		return redirect(url_for("matchController.players", id = match.id))
 
 	return redirect(url_for("matchController.play_to", id = match.id))
-
 
 @matchController.route("/matches/<int:id>/play-to", methods = ["GET"])
 def play_to(id):
@@ -142,13 +143,19 @@ def players_create(id):
 
 	matchType = MatchType(match)
 
-	if not match.hasTeams():
-		matchType.createTeams(match, request.form.getlist("playerId"), True)
+	hasErrors = matchPlayerForm.validate(matchType, request.form)
 
-	if not match.isReady():
-		matchType.play(match)
+	if hasErrors:
+		return players(id)
 
-	return redirect(url_for("matchController.show", id = id))
+	else:
+		if not match.hasTeams():
+			matchType.createTeams(match, request.form.getlist("playerId"), True)
+
+		if not match.isReady():
+			matchType.play(match)
+
+		return redirect(url_for("matchController.show", id = id))
 
 @matchController.route("/matches/<int:id>", methods = ["GET"])
 def show(id):
