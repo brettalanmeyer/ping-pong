@@ -1,8 +1,11 @@
 function PingPongSound(){
+
 	this.audioFiles = [];
 
 	for(var i in arguments){
-		this.audioFiles.push(new Audio("/static/audio/" + arguments[i]));
+		var audio = new Audio("/static/audio/" + arguments[i]);
+		audio.load();
+		this.audioFiles.push(audio);
 	}
 
 	this.play = function(playSound){
@@ -11,9 +14,10 @@ function PingPongSound(){
 		}
 
 		if(playSound){
-			var i = randRange(0, this.audioFiles.length - 1);
-			this.audioFiles[i].currentTime = 0;
-			this.audioFiles[i].play();
+			var index = randRange(0, this.audioFiles.length - 1);
+			var audio = this.audioFiles[index];
+			audio.currentTime = 0;
+			audio.play();
 		}
 	}
 

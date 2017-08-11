@@ -22,7 +22,7 @@ $(function(){
 			socket.close();
 		});
 
-		var scoreAudio = new PingPongSound("boing.wav", "bump.wav", "picking-up.wav", "coin.wav", "spring-jump.wav");
+		var scoreAudio = new PingPongSound("boing.wav", "bump.wav", "picking-up.wav", "coin.wav", "spring-jump.wav", "pacman-chomp.wav");
 
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};
