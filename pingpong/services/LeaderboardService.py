@@ -28,6 +28,7 @@ class LeaderboardService(Service):
 		pointsAgainst = self.pointsAgainstByMatchType(officeId, pointsFor, matchType, start, end)
 		pointStreakData = self.selectMatchScoresByMatchType(officeId, matchType, start, end)
 		currentStreakData = self.selectTeamResultsByMatchType(officeId, matchType, start, end)
+		ninesPlayersColor = self.ninesPlayersColor(officeId, start, end)
 		elo = self.elo(officeId, start, end)
 
 		stats = {
@@ -68,7 +69,8 @@ class LeaderboardService(Service):
 					"current": playerElo["current"],
 					"previous": playerElo["previous"],
 					"change": playerElo["change"]
-				}
+				},
+				"nines": ninesPlayersColor[player.id]
 			})
 
 		stats["totals"] = self.totals(stats["players"])
@@ -1022,5 +1024,75 @@ class LeaderboardService(Service):
 
 		for color in data:
 			data[color]["percentage"] = float(data[color]["wins"]) / total * 100
+
+		return data
+
+	def ninesPlayersColor(self, officeId, start, end):
+
+		query = "\
+			SELECT \
+				games.matchId,\
+				games.greenId as green,\
+				games.yellowId as yellow,\
+				games.blueId as blue,\
+				games.redId as red,\
+			(CASE\
+					WHEN games.greenId = teams_players.playerId THEN 'green'\
+					WHEN games.redId = teams_players.playerId THEN 'red'\
+					WHEN games.blueId = teams_players.playerId THEN 'blue'\
+					WHEN games.yellowId = teams_players.playerId THEN 'yellow'\
+				END) AS color\
+			FROM games\
+			LEFT JOIN matches ON games.matchId = matches.id\
+			LEFT JOIN teams ON games.winner = teams.id\
+			LEFT JOIN teams_players ON teams.id = teams_players.teamId\
+			WHERE matches.matchType = 'nines' AND matches.complete = 1\
+		"
+
+		if start != None:
+			query += " AND matches.completedAt >= :start "
+		if end != None:
+			query += " AND matches.completedAt < :end "
+
+		connection = db.session.connection()
+		results = connection.execute(text(query), officeId = officeId, start = start, end = end)
+
+		players = playerService.select(officeId)
+
+		data = {}
+
+		for player in players:
+			data[player.id] = {}
+
+			for color in self.colors:
+				data[player.id][color] = {
+					"wins": 0,
+					"total": 0,
+					"percentage": 0
+				}
+
+		for result in results:
+			data[result.green]["green"]["total"] = data[result.green]["green"]["total"] + 1
+			data[result.red]["red"]["total"] = data[result.red]["red"]["total"] + 1
+			data[result.blue]["blue"]["total"] = data[result.blue]["blue"]["total"] + 1
+			data[result.yellow]["yellow"]["total"] = data[result.yellow]["yellow"]["total"] + 1
+
+			if result.color == "green":
+				data[result.green]["green"]["wins"] = data[result.green]["green"]["wins"] + 1
+			elif result.color == "red":
+				data[result.red]["red"]["wins"] = data[result.red]["red"]["wins"] + 1
+			elif result.color == "blue":
+				data[result.blue]["blue"]["wins"] = data[result.blue]["blue"]["wins"] + 1
+			elif result.color == "yellow":
+				data[result.yellow]["yellow"]["wins"] = data[result.yellow]["yellow"]["wins"] + 1
+
+		for playerId in data:
+			player = data[playerId]
+
+			for color in self.colors:
+				playerColor = player[color]
+
+				if playerColor["total"] > 0:
+					playerColor["percentage"] = float(playerColor["wins"]) / float(playerColor["total"]) * 100
 
 		return data

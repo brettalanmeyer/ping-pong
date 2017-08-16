@@ -57,4 +57,21 @@
 	<td data-sort-value="{{ player.streaks.wins }}">{{ player.streaks.wins }}</td>
 	<td data-sort-value="{{ player.streaks.losses }}">{{ player.streaks.losses }}</td>
 
+	<td class="colors color-container">
+
+		{% for color in player.nines %}
+
+			<div class="color" title="{{ player.playerName }} has won {{ player.nines[color].wins }} out of {{ player.nines[color].total }} matches ({{ "{:.3f}".format(player.nines[color].percentage) }}%) as {{ color }}">
+				<span class="swatch {{ color }}"></span>
+				<span class="text">
+					{{ player.nines[color].wins }} / {{ player.nines[color].total }}&nbsp;&nbsp;
+					{{ "{:.3f}".format(player.nines[color].percentage) }}%
+				</span>
+			</div>
+
+		{% endfor %}
+
+	</td>
+
 </tr>
+

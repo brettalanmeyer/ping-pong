@@ -77,11 +77,13 @@
 	padding-left: 8px;
 }
 
-.leaderboard-container .table .elo {
+.leaderboard-container .table .elo,
+.leaderboard-container .table .colors {
 	display: none;
 }
 
-.leaderboard-container .table.singles .elo {
+.leaderboard-container .table.singles .elo,
+.leaderboard-container .table.nines .colors {
 	display: table-cell;
 }
 
@@ -233,4 +235,60 @@
 	float: left;
 	width: 190px;
 	margin-right: 6px;
+}
+
+.leaderboard-container .table.nines .color-container {
+	padding: 0;
+	cursor: pointer;
+}
+
+.leaderboard-container .table.nines .color-container.open {
+	padding: 6px 0 8px 0;
+}
+
+.leaderboard-container .table.nines .color-container .color {
+	display: block;
+	float: left;
+}
+
+.leaderboard-container .table.nines .color-container.open .color {
+	float: none;
+}
+
+.leaderboard-container .table.nines .color-container .color .text {
+	display: none;
+}
+
+.leaderboard-container .table.nines .color-container.open .color .text {
+	display: inline;
+	position: relative;
+	bottom: 3px;
+	padding-left: 6px;
+}
+
+.leaderboard-container .table.nines .color-container .swatch {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	border-radius: 3px;
+	margin: 0 1px;
+	position: relative;
+	top: 3px;
+	border: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-container .table.nines .color-container .swatch.yellow {
+	background: yellow;
+}
+
+.leaderboard-container .table.nines .color-container .swatch.blue {
+	background: blue;
+}
+
+.leaderboard-container .table.nines .color-container .swatch.red {
+	background: red;
+}
+
+.leaderboard-container .table.nines .color-container .swatch.green {
+	background: green;
 }

@@ -80,6 +80,9 @@ $(function(){
 
 	});
 
+	$("#leaderboard").find("td.color-container").on("click", function(){
+		$(this).toggleClass("open");
+	});
 
 	var seasonFilter = $("#season-filter");
 	var dateTimePicker = $("#leaderboard-datetimepicker");
