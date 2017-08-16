@@ -74,11 +74,7 @@
 													<strong>
 														{{ player.name }}
 
-														{% set ninesScore = [] %}
-														{% for score in team.scores %}
-															{% if ninesScore.append('') %}{% endif %}
-														{% endfor %}
-														({{ 9 - ninesScore|count }})
+														({{ match.games[0].winnerScore }})
 													</strong>
 
 												{% else %}
