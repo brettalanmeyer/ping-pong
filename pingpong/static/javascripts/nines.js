@@ -13,8 +13,9 @@ $(function(){
 		socket.on("smack-talk-" + office, smackTalk);
 		socket.on("disconnect", function(){
 			if(!disconnected){
-				$("#socket-disconnect").modal();
-				$.post("/matches/" + matchId + "/error");
+				setTimeout(function(){
+					location.reload();
+				}, 500);
 			}
 		});
 		$(window).on("beforeunload", function(){

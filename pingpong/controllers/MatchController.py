@@ -245,12 +245,6 @@ def smack_talk(id):
 
 	return Response(json.dumps(data), status = 200, mimetype = "application/json")
 
-@matchController.route("/matches/<int:id>/error", methods = ["POST"])
-def error(id):
-	if not app.config["DEBUG"]:
-		notifications.mailError("Error for matchId: {}".format(id))
-	return "success"
-
 def exists(match):
 	if match == None:
 		abort(404)
