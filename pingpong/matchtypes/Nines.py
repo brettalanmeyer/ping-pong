@@ -148,7 +148,9 @@ class Nines(BaseMatch):
 		hasWinner = False
 
 		for color in self.colors:
-			if data["players"][color]["winner"]:
+			player = data["players"][color]
+			if player["winner"]:
+				gameService.complete(match.id, 0, player["teamId"], player["points"], None, None)
 				matchService.complete(match)
 				hasWinner = True
 				break
