@@ -28,7 +28,7 @@ class GameService(Service):
 
 		return game
 
-	def complete(self, matchId, game, winner, winnerScore, loser, loserScore):
+	def complete(self, matchId, game, winner, winnerScore, loser, loserScore, completedAt = None):
 		app.logger.info("Setting matchId=%d and game=%d as complete", matchId, game)
 
 		existingGame = db.session.query(GameModel).filter_by(matchId = matchId, game = game).one()
@@ -37,7 +37,12 @@ class GameService(Service):
 		existingGame.loser = loser
 		existingGame.loserScore = loserScore
 		existingGame.modifiedAt = datetime.now()
-		existingGame.completedAt = datetime.now()
+
+		if completedAt == None:
+			existingGame.completedAt = datetime.now()
+		else:
+			existingGame.completedAt = completedAt
+
 		db.session.commit()
 
 		return existingGame

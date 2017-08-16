@@ -15,6 +15,7 @@ from pingpong.decorators.LoginRequired import loginRequired
 from pingpong.forms.MatchForm import MatchForm
 from pingpong.forms.MatchPlayerForm import MatchPlayerForm
 from pingpong.matchtypes.MatchType import MatchType
+from pingpong.services.GameService import GameService
 from pingpong.services.LeaderboardService import LeaderboardService
 from pingpong.services.MatchService import MatchService
 from pingpong.services.PagingService import PagingService
@@ -26,6 +27,7 @@ import json
 matchController = Blueprint("matchController", __name__)
 
 playerService = PlayerService()
+gameService = GameService()
 matchService = MatchService()
 pagingService = PagingService()
 leaderboardService = LeaderboardService()
@@ -251,3 +253,24 @@ def exists(match):
 
 	if match.office.id != session["office"]["id"]:
 		abort(404)
+
+@matchController.route("/matches/update-nines", methods = ["GET"])
+def update_nines():
+	matches = matchService.selectCompleteOrReady(session["office"]["id"], None, None, 'nines', None, None)
+
+	for match in matches:
+		data = MatchType(match).matchData()
+
+		for color in data["players"]:
+
+			player = data["players"][color]
+
+			if player["winner"]:
+				matchId = data["matchId"]
+				completedAt = data["completedAt"]
+				winner = player["teamId"]
+				winnerScore = player["points"]
+
+				gameService.complete(matchId, 0, winner, winnerScore, None, None, completedAt)
+
+	return ""
