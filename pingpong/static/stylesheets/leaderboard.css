@@ -260,10 +260,10 @@
 }
 
 .leaderboard-container .table.nines .color-container.open .color .text {
-	display: inline;
+	display: inline-block;
 	position: relative;
 	bottom: 3px;
-	padding-left: 6px;
+	width: 60px;
 }
 
 .leaderboard-container .table.nines .color-container .swatch {

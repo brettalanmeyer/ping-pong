@@ -64,7 +64,9 @@
 			<div class="color" title="{{ player.playerName }} has won {{ player.nines[color].wins }} out of {{ player.nines[color].total }} matches ({{ "{:.3f}".format(player.nines[color].percentage) }}%) as {{ color }}">
 				<span class="swatch {{ color }}"></span>
 				<span class="text">
-					{{ player.nines[color].wins }} / {{ player.nines[color].total }}&nbsp;&nbsp;
+					{{ player.nines[color].wins }} / {{ player.nines[color].total }}
+				</span>
+				<span class="text">
 					{{ "{:.3f}".format(player.nines[color].percentage) }}%
 				</span>
 			</div>
