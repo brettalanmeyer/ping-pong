@@ -99,3 +99,4 @@ autoflush = False
 Raspberry pi resolution: 1184x624
 
 sudo systemctl restart|stop|enable|disable|start darts|ping-pong|skype-messenger
+
