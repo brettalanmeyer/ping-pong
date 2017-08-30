@@ -23,7 +23,27 @@ $(function(){
 			socket.close();
 		});
 
-		var scoreAudio = new PingPongSound("boing.wav", "bump.wav", "picking-up.wav", "coin.wav", "spring-jump.wav", "pacman-chomp.wav");
+		var scoreAudio = new PingPongSound(
+			"boing.wav",
+			"bump.wav",
+			"picking-up.wav",
+			"coin.wav",
+			"spring-jump.wav",
+			"pacman-chomp.wav"
+		);
+
+		var courtesyAudio = new PingPongSound(
+			"courtesy01.mp3",
+			"courtesy02.mp3",
+			"courtesy03.mp3",
+			"courtesy04.mp3",
+			"courtesy05.mp3",
+			"courtesy06.mp3",
+			"courtesy07.mp3",
+			"courtesy08.mp3",
+			"courtesy09.mp3",
+			"courtesy10.mp3"
+		);
 
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};
@@ -54,7 +74,8 @@ $(function(){
 				$("#undo").removeClass("hidden");
 			}
 
-			var playSound = false;
+			var playScore = false;
+			var playCourtesy = false;
 
 			for(var i = 0; i < colors.length; i++){
 				var color = colors[i];
@@ -68,7 +89,9 @@ $(function(){
 
 				if(previousScore != nextScore){
 					playerNames[color].addClass("scored");
-					playSound = true;
+
+					playCourtesy = (nextScore == 1);
+					playScore = !playCourtesy;
 				}
 
 				if(data.players[color].playerAvatar){
@@ -89,7 +112,8 @@ $(function(){
 				}
 			}, 2000);
 
-			scoreAudio.play(playSound);
+			scoreAudio.play(playScore);
+			courtesyAudio.play(playCourtesy);
 		}
 
 		enableUndo();
