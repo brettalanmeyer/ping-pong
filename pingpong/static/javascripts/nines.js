@@ -32,18 +32,15 @@ $(function(){
 			"pacman-chomp.wav"
 		);
 
-		var courtesyAudio = new PingPongSound(
-			"courtesy01.mp3",
-			"courtesy02.mp3",
-			"courtesy03.mp3",
-			"courtesy04.mp3",
-			"courtesy05.mp3",
-			"courtesy06.mp3",
-			"courtesy07.mp3",
-			"courtesy08.mp3",
-			"courtesy09.mp3",
-			"courtesy10.mp3"
-		);
+		var courtesyAudio;
+		$.get("/courtesies.json").done(function(data){
+			var courtesyAudioFiles = [];
+			for(var i in data){
+				courtesyAudioFiles.push(data[i]["path"]);
+			}
+
+			courtesyAudio = new PingPongSound(...courtesyAudioFiles);
+		});
 
 		var colors = ["green", "yellow", "blue", "red"];
 		var playerNames = {};

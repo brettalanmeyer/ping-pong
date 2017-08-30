@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block title %}Courtesies{% endblock %}
+
+{% block body %}
+
+	<div id="courtesies" class="container">
+
+		<a class="btn btn-default btn-sm action" href="{{ url_for('courtesyController.new') }}">
+			<span class="glyphicon glyphicon-star"></span>
+			Create Courtesy
+		</a>
+
+		<h1 class="with-action">
+			<a href="{{ url_for('courtesyController.index') }}">Courtesies</a>
+		</h1>
+
+		<table class="table table-condensed">
+
+			<tbody>
+
+				{% for courtesy in courtesies %}
+
+					<tr>
+
+						<td>{{ courtesy.text }}</td>
+
+						<td width="1">
+							{% if courtesy.file != None %}
+								<button class="btn btn-default btn-sm play-ism">
+									<span class="glyphicon glyphicon-play"></span>
+
+									<audio preload="none">
+										<source src="/static/audio/courtesies/{{ courtesy.file }}" type="audio/mpeg">
+									</audio>
+								</button>
+							{% endif %}
+						</td>
+
+						<td width="1">
+							<a href="{{ url_for('courtesyController.edit', id = courtesy.id) }}" class="btn btn-default btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span>
+								Edit
+							</a>
+						</td>
+
+						{% if current_user.is_authenticated %}
+							<td width="1">
+								{% if courtesy.approved %}
+									<form action="{{ url_for('courtesyController.reject', id = courtesy.id) }}" method="POST">
+										<button class="btn btn-success btn-sm btn-block">
+											<span class="glyphicon glyphicon glyphicon-ok"></span>
+											Approved
+										</button>
+									</form>
+								{% else %}
+									<form action="{{ url_for('courtesyController.approve', id = courtesy.id) }}" method="POST">
+										<button class="btn btn-warning btn-sm btn-block">
+											<span class="glyphicon glyphicon glyphicon-ban-circle"></span>
+											Rejected
+										</button>
+									</form>
+								{% endif %}
+							</td>
+
+							<td width="1">
+								<form action="{{ url_for('courtesyController.delete', id = courtesy.id) }}" method="POST" class="action-delete">
+									<button class="btn btn-danger btn-sm">
+										<span class="glyphicon glyphicon-trash"></span>
+										Delete
+									</button>
+								</form>
+							</td>
+						{% endif %}
+
+					</tr>
+
+				{% else %}
+
+					<tr>
+
+						<td colspan="10" class="text-center">No courtesies found.</td>
+
+					</tr>
+
+				{% endfor %}
+
+			</tbody>
+
+		</table>
+
+	</div>
+
+{% endblock %}

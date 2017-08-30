@@ -171,9 +171,25 @@ a.link {
 	width: 25%;
 	border: solid 1px #ccc;
 	border-right: none;
+	border-bottom: none;
 }
 
-.main-container .links .links-horizontal a:first-child {
+.main-container .links .links-horizontal a:last-child {
+	border-right: solid 1px #ccc;
+}
+
+.main-container .links .links-horizontal:last-child a {
+	border-bottom: solid 1px #ccc;
+}
+
+.main-container .links .links-horizontal:last-child a:first-child {
+	border-bottom-left-radius: 6px;
+}
+.main-container .links .links-horizontal:last-child a:last-child {
+	border-bottom-right-radius: 6px;
+}
+
+/*.main-container .links .links-horizontal a:first-child {
 	border-radius: 0;
 	border-bottom-left-radius: 6px;
 }
@@ -182,18 +198,19 @@ a.link {
 	border-radius: 0;
 	border-right: solid 1px #ccc;
 	border-bottom-right-radius: 6px;
-}
-
+}*/
+/*
 .main-container .links a:first-child {
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 }
+
 .main-container .links a:last-child {
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
 	border-bottom-width: 1px;
 }
-
+*/
 .main-container .links a:hover {
 	background: #e6e6e6;
 }

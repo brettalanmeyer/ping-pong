@@ -32,6 +32,7 @@ from pingpong.controllers.ApiController import apiController
 from pingpong.controllers.AuthenticationController import authenticationController
 from pingpong.controllers.ErrorController import errorController
 from pingpong.controllers.IsmController import ismController
+from pingpong.controllers.CourtesyController import courtesyController
 from pingpong.controllers.LeaderboardController import leaderboardController
 from pingpong.controllers.MainController import mainController
 from pingpong.controllers.MatchController import matchController
@@ -43,6 +44,7 @@ app.register_blueprint(apiController)
 app.register_blueprint(authenticationController)
 app.register_blueprint(errorController)
 app.register_blueprint(ismController)
+app.register_blueprint(courtesyController)
 app.register_blueprint(leaderboardController)
 app.register_blueprint(mainController)
 app.register_blueprint(matchController)

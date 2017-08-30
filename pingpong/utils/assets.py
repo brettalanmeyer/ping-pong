@@ -29,6 +29,7 @@ def bundleJavascripts():
 		"javascripts/scoring-tools.js",
 		"javascripts/leaderboard.js",
 		"javascripts/match-entry.js",
+		"javascripts/courtesies.js",
 		filters = "jsmin",
 		output = ".webassets-cache/ping-pong.min.js"
 	)

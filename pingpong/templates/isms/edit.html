@@ -12,10 +12,6 @@
 			<a href="{{ url_for('ismController.edit', id = ism.id) }}">Update Ism</a>
 		</h1>
 
-		{% if error %}
-			<div class="alert alert-danger">That name is already taken. Please specify a unique name.</div>
-		{% endif %}
-
 		<form action="{{ url_for('ismController.update', id = ism.id) }}" method="POST">
 
 			{% include 'isms/_form.html' %}

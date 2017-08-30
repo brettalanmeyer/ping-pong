@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Create Courtesy{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<h1>
+			<a href="{{ url_for('courtesyController.index') }}">Courtesies</a>
+			/
+			<a href="{{ url_for('courtesyController.new') }}">Create Courtesy</a>
+		</h1>
+
+		<form action="{{ url_for('courtesyController.create') }}" method="POST">
+
+			{% include 'courtesies/_form.html' %}
+
+			<button class="btn btn-default">Create Courtesy</button>
+
+		</form>
+
+	</div>
+
+{% endblock %}
