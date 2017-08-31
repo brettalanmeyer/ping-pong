@@ -58,8 +58,15 @@
 }
 
 .players-container .player-name {
-	width: 200px;
 	text-align: center;
+}
+
+.players-container .player-name a {
+	display: inline-block;
+	max-width: 300px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .players-container .player-stats {

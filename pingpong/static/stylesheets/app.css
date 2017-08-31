@@ -42,6 +42,7 @@ header a .version {
 
 h1.ping-pong {
 	font-size: 120px;
+	line-height: 128px;
 	text-align: center;
 	font-family: digital;
 	margin: 0;
@@ -160,6 +161,19 @@ a.link {
 	font-size: 22px;
 }
 
+.main-container .links > a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.main-container .links > .links-horizontal:first-child a:first-child {
+	border-top-left-radius: 4px;
+}
+
+.main-container .links > .links-horizontal:first-child a:last-child {
+	border-top-right-radius: 4px;
+}
+
 .main-container .links .links-horizontal {
 	overflow: hidden;
 	display: table;
@@ -183,34 +197,12 @@ a.link {
 }
 
 .main-container .links .links-horizontal:last-child a:first-child {
-	border-bottom-left-radius: 6px;
+	border-bottom-left-radius: 4px;
 }
 .main-container .links .links-horizontal:last-child a:last-child {
-	border-bottom-right-radius: 6px;
+	border-bottom-right-radius: 4px;
 }
 
-/*.main-container .links .links-horizontal a:first-child {
-	border-radius: 0;
-	border-bottom-left-radius: 6px;
-}
-
-.main-container .links .links-horizontal a:last-child {
-	border-radius: 0;
-	border-right: solid 1px #ccc;
-	border-bottom-right-radius: 6px;
-}*/
-/*
-.main-container .links a:first-child {
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
-}
-
-.main-container .links a:last-child {
-	border-bottom-left-radius: 6px;
-	border-bottom-right-radius: 6px;
-	border-bottom-width: 1px;
-}
-*/
 .main-container .links a:hover {
 	background: #e6e6e6;
 }

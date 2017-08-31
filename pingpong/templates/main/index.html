@@ -15,10 +15,7 @@
 			</h1>
 
 			<div class="text-center matches-played">
-				{{ "{:,}".format(matches) }} matches played
-				|
-				{{ "{:,}".format(scores) }} balls served
-				|
+				{{ "{:,} matches played | {:,} balls served |".format(matches, scores) }}
 				<a href="{{ url_for('mainController.changeLog') }}" title="View Change Log">App Version {{ config["VERSION"] }}</a>
 			</div>
 
@@ -26,17 +23,14 @@
 
 				<a href="{{ url_for('matchController.new') }}">New Match</a>
 				<a href="{{ url_for('leaderboardController.index') }}">Leaderboard</a>
+				<a href="{{ url_for('matchController.index') }}">Matches</a>
 
 				{% if current_user.is_authenticated %}
 					<a href="{{ url_for('officeController.index') }}">Offices</a>
 				{% endif %}
 
 				<div class="links-horizontal">
-					<a href="{{ url_for('matchController.index') }}">Matches</a>
 					<a href="{{ url_for('playerController.index') }}">Players</a>
-				</div>
-
-				<div class="links-horizontal">
 					<a href="{{ url_for('ismController.index') }}">Isms</a>
 					<a href="{{ url_for('courtesyController.index') }}">Courtesies</a>
 				</div>

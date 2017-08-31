@@ -10,7 +10,8 @@ class PlayerForm(Form):
 			"name": "name",
 			"label": "Name",
 			"required": True,
-			"type": "string"
+			"type": "string",
+			"maxlength": 257
 		}]
 
 	def load(self, player, form):

@@ -21,7 +21,8 @@ class IsmForm(Form):
 			"name": "saying",
 			"label": "Saying",
 			"required": True,
-			"type": "string"
+			"type": "string",
+			"maxlength": 255
 		}]
 
 	def load(self, ism, form):

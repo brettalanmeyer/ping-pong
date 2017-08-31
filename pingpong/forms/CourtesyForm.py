@@ -7,7 +7,8 @@ class CourtesyForm(Form):
 			"name": "text",
 			"label": "Text",
 			"required": True,
-			"type": "string"
+			"type": "string",
+			"maxlength": 255
 		}]
 
 	def load(self, ism, form):

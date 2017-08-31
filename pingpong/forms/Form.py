@@ -23,6 +23,8 @@ class Form():
 					self.validateMin(field, form)
 					self.validateMax(field, form)
 
+				self.validateMaxlength(field, form)
+
 		self.flash()
 
 		return self.hasErrors
@@ -81,6 +83,18 @@ class Form():
 
 			if value > field["max"]:
 				message = "'{}' must be a value less than or equal to {}.".format(field["label"], field["max"])
+				self.hasErrors = True
+				self.errors.append(self.error(field, message))
+				return False
+
+		return True
+
+	def validateMaxlength(self, field, form):
+		if "maxlength" in field:
+			value = form[field["name"]]
+
+			if len(value) > field["maxlength"]:
+				message = "'{}' cannot be longer than {} characters.".format(field["label"], field["maxlength"])
 				self.hasErrors = True
 				self.errors.append(self.error(field, message))
 				return False
