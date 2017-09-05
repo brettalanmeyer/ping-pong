@@ -24,6 +24,12 @@
 					<tr>
 
 						<td>{{ courtesy.text }}</td>
+						<td>{{ courtesy.getLanguageLabel() }}</td>
+						<td>
+							{% if courtesy.slow %}
+								Slow
+							{% endif %}
+						</td>
 
 						<td width="1">
 							{% if courtesy.file != None %}
@@ -46,7 +52,7 @@
 
 						{% if current_user.is_authenticated %}
 							<td width="1">
-								{% if courtesy.approved %}
+								{% if courtesy.isApproved() %}
 									<form action="{{ url_for('courtesyController.reject', id = courtesy.id) }}" method="POST">
 										<button class="btn btn-success btn-sm btn-block">
 											<span class="glyphicon glyphicon glyphicon-ok"></span>

@@ -40,14 +40,14 @@ class CourtesyService(Service):
 	def new(self):
 		app.logger.info("New courtesy")
 
-		return CourtesyModel(None, "", None, False, None, None)
+		return CourtesyModel(None, "", "en-us", False, None, False, None, None)
 
 	def create(self, officeId, form):
-		courtesy = CourtesyModel(officeId, form["text"], None, True, datetime.now(), datetime.now())
+		courtesy = CourtesyModel(officeId, form["text"], form["language"], form["slow"], None, True, datetime.now(), datetime.now())
 		db.session.add(courtesy)
 		db.session.commit()
 
-		app.logger.info("Creating courtesy=%d text=%d", courtesy.id, courtesy.text)
+		app.logger.info("Creating courtesy=%d text=%s", courtesy.id, courtesy.text)
 
 		courtesy.file = self.generateAudio(courtesy)
 		db.session.commit()
@@ -57,12 +57,14 @@ class CourtesyService(Service):
 	def update(self, id, form):
 		courtesy = self.selectById(id)
 		courtesy.text = form["text"]
+		courtesy.language = form["language"]
+		courtesy.slow = form["slow"]
 		courtesy.approved = True
 		courtesy.modifiedAt = datetime.now()
 		courtesy.file = self.generateAudio(courtesy)
 		db.session.commit()
 
-		app.logger.info("Updating courtesy=%d text=%d", courtesy.id, courtesy.text)
+		app.logger.info("Updating courtesy=%d text=%s", courtesy.id, courtesy.text)
 
 		return courtesy
 
@@ -142,7 +144,7 @@ class CourtesyService(Service):
 			os.remove(oldPath)
 
 		app.logger.info("Generating courtesy audio file")
-		tts = gTTS(text = courtesy.text, lang = "en-us")
+		tts = gTTS(text = courtesy.text, lang = courtesy.language, slow = courtesy.isSlow())
 		tts.save(newPath)
 
 		return newFile

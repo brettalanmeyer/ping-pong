@@ -4,3 +4,22 @@
 	<input id="text-field" name="text" value="{{ courtesy.text }}" class="form-control" autocomplete="off" maxlength="255" autofocus />
 
 </div>
+
+<div class="form-group">
+
+	<label for="language-field">Langauge</label>
+	<select id="language-field" class="form-control" name="language">
+		{% for language in courtesy.getLanguages() %}
+			<option value="{{ language.value }}" {% if courtesy.language == language.value %}selected="selected"{% endif %}>{{ language.label }}</option>
+		{% endfor %}
+	</select>
+</div>
+
+<div class="form-group" style="max-width: 150px;">
+
+	<label for="slow-field">Make Speech Slow</label>
+	<select id="slow-field" class="form-control" name="slow">
+		<option value="1" {% if courtesy.slow == 1 %}selected="selected"{% endif %}>Yes</option>
+		<option value="0" {% if courtesy.slow == 0 %}selected="selected"{% endif %}>No</option>
+	</select>
+</div>
