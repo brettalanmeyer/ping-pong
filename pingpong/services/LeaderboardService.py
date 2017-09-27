@@ -75,6 +75,60 @@ class LeaderboardService(Service):
 
 		stats["totals"] = self.totals(stats["players"])
 
+
+
+
+
+		# =================================================================================== #
+
+		if matchType == "nines":
+
+			playerMatchBehind = {}
+
+			asdf = []
+
+			for player in stats["players"]:
+				asdf.append({
+					"wins": player["wins"],
+					"total": player["matches"],
+					"percentage": player["percentage"],
+					"playerId": player["playerId"],
+					"matchesBehind": None
+				})
+
+			newlist = sorted(asdf, key = lambda k:k["percentage"], reverse = True)
+
+
+			for idx, val in enumerate(newlist):
+				playerId = int(newlist[idx]["playerId"])
+				playerMatchBehind[playerId] = None
+
+				if idx == 0:
+					playerMatchBehind[playerId] = 0
+				else:
+
+					wins = float(val["wins"])
+					total = float(val["total"])
+
+					if newlist[idx - 1]["total"] > 0:
+						percentage = float(newlist[idx - 1]["wins"]) / float(newlist[idx - 1]["total"])
+						# playerMatchBehind[playerId] = (wins - (percentage * total)) / (percentage - 1) * -1
+						playerMatchBehind[playerId] = (((percentage * total) - wins) / (1.0 - percentage))
+
+			for player in stats["players"]:
+				if player["playerId"] in playerMatchBehind:
+					player["matchesBehind"] = playerMatchBehind[player["playerId"]]
+
+		# =================================================================================== #
+
+
+
+
+
+
+
+
+
 		return stats
 
 	def playerStats(self, player, season, startDateTime, endDateTime):

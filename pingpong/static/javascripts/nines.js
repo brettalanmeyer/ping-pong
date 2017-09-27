@@ -32,9 +32,12 @@ $(function(){
 			"pacman-chomp.wav"
 		);
 
+		var suddenDeathAudio = new PingPongSound("impressive.mp3", "laughing.mp3", "outstanding.mp3");
+		var lastPointAudio = new PingPongSound("finish-him.mp3", "brutal.mp3");
+
 		var courtesyAudio;
+		var courtesyAudioFiles = [];
 		$.get("/courtesies.json").done(function(data){
-			var courtesyAudioFiles = [];
 			for(var i in data){
 				courtesyAudioFiles.push(data[i]["path"]);
 			}
@@ -73,6 +76,8 @@ $(function(){
 
 			var playScore = false;
 			var playCourtesy = false;
+			var suddenDeath = true;
+			var points =[];
 
 			for(var i = 0; i < colors.length; i++){
 				var color = colors[i];
@@ -100,6 +105,12 @@ $(function(){
 				} else {
 					avatars[color].attr("src", "/static/images/silhouette-" + randRange(1, 7) + ".png");
 				}
+
+				if(nextScore != 1){
+					suddenDeath = false;
+				}
+
+				points.push(nextScore);
 			}
 
 			setTimeout(function(){
@@ -109,8 +120,16 @@ $(function(){
 				}
 			}, 2000);
 
-			scoreAudio.play(playScore);
-			courtesyAudio.play(playCourtesy);
+			lastPoint = (points.filter(c => c === 0).length == 2 && points.filter(c => c === 1).length == 2);
+
+			if(lastPoint){
+				lastPointAudio.play();
+			} else if(suddenDeath){
+				suddenDeathAudio.play();
+			} else {
+				scoreAudio.play(playScore);
+				courtesyAudio.play(playCourtesy);
+			}
 		}
 
 		enableUndo();
