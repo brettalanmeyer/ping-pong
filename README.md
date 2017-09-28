@@ -99,3 +99,6 @@ autoflush = False
 Raspberry pi resolution: 1184x624
 
 sudo systemctl restart|stop|enable|disable|start darts|ping-pong|skype-messenger
+
+
+http://www.soundboard.com/sb/Mortal_Kombat_Sounds
