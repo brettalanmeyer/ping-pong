@@ -34,6 +34,7 @@ $(function(){
 
 		var suddenDeathAudio = new PingPongSound("impressive.mp3", "laughing.mp3", "outstanding.mp3");
 		var lastPointAudio = new PingPongSound("finish-him.mp3", "brutal.mp3");
+		var flawlessVictoryAudio = new PingPongSound("flawless-victory.mp3");
 
 		var courtesyAudio;
 		var courtesyAudioFiles = [];
@@ -76,7 +77,6 @@ $(function(){
 
 			var playScore = false;
 			var playCourtesy = false;
-			var suddenDeath = true;
 			var points =[];
 
 			for(var i = 0; i < colors.length; i++){
@@ -106,10 +106,6 @@ $(function(){
 					avatars[color].attr("src", "/static/images/silhouette-" + randRange(1, 7) + ".png");
 				}
 
-				if(nextScore != 1){
-					suddenDeath = false;
-				}
-
 				points.push(nextScore);
 			}
 
@@ -120,11 +116,15 @@ $(function(){
 				}
 			}, 2000);
 
-			lastPoint = (points.filter(c => c === 0).length == 2 && points.filter(c => c === 1).length == 2);
+			var fourPlayerSuddenDeath = (points.filter(c => c === 1).length == 4);
+			var twoPlayerSuddenDeath = (points.filter(c => c === 0).length == 2 && points.filter(c => c === 1).length == 2);
+			var flawlessVictory = (data.complete && points.filter(c => c === 9).length == 1);
 
-			if(lastPoint){
+			if(flawlessVictory){
+				flawlessVictoryAudio.play();
+			} else if(twoPlayerSuddenDeath){
 				lastPointAudio.play();
-			} else if(suddenDeath){
+			} else if(fourPlayerSuddenDeath){
 				suddenDeathAudio.play();
 			} else {
 				scoreAudio.play(playScore);
