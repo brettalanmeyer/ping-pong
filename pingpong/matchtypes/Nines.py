@@ -39,8 +39,8 @@ class Nines(BaseMatch):
 
 		for color in self.colors:
 			data["players"][color] = self.newPlayer(getattr(game, color).id)
-			data["players"][color]["colorWins"] = colorWins[color]["wins"]
-			data["players"][color]["colorPercentage"] = colorWins[color]["percentage"]
+			data["players"][color]["colorWins"] = colorWins[color]["wins"] if color in colorWins else 0
+			data["players"][color]["colorPercentage"] = colorWins[color]["percentage"] if color in colorWins else 0
 
 
 		self.setPlayerData(match, data["players"])
