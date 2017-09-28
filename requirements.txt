@@ -13,3 +13,4 @@ Flask-Testing
 Flask-Mail
 coverage
 Flask-Session
+gTTS==1.2.2
