@@ -46,14 +46,6 @@
 		{{ player.losses }}
 	</td>
 
-	{% if stats.matchType == "nines" %}
-		<td data-sort-value="{{ player.matchesBehind|int }}">
-			{% if player.matchesBehind != None %}
-				{{ player.matchesBehind|int }}
-			{% endif %}
-		</td>
-	{% endif %}
-
 	<td data-sort-value="{{ player.pointStreak }}">
 		{{ player.pointStreak }}
 	</td>

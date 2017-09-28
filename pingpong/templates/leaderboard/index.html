@@ -110,16 +110,6 @@
 							</div>
 						</th>
 
-						{% if stats.matchType == "nines" %}
-							<th data-sort="float" data-label="matches-behind" data-sort-default="desc" class="matches-behind" title="Number of Matches Behind">
-								Behind
-								<div class="sorting-container">
-									<span class="glyphicon glyphicon-chevron-up"></span>
-									<span class="glyphicon glyphicon-chevron-down"></span>
-								</div>
-							</th>
-						{% endif %}
-
 						<th data-sort="int" data-label="point-streak" data-sort-default="desc" title="Consecutive points scored">
 							Point Streak
 							<div class="sorting-container">
@@ -194,9 +184,6 @@
 						<th class="points-against">{{ "{:,}".format(stats.totals["pointsAgainst"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["wins"]) }}</th>
 						<th>{{ "{:,}".format(stats.totals["losses"]) }}</th>
-						{% if stats.matchType == "nines" %}
-							<th></th>
-						{% endif %}
 						<th colspan="5"></td>
 
 					</tr>
