@@ -985,7 +985,7 @@ class LeaderboardService(Service):
 		else:
 			abort(404)
 
-	def ninesWinsByColor(self):
+	def ninesWinsByColor(self, match):
 
 		query = "\
 			SELECT color, COUNT(color) AS total\
@@ -1006,12 +1006,16 @@ class LeaderboardService(Service):
 				WHERE matches.matchType = 'nines'\
 					AND matches.complete = 1\
 					AND teams.win = 1\
+					AND matches.completedAt >= :start\
+					AND matches.completedAt < :end\
 			) colors\
 			GROUP BY color\
 		"
 
 		connection = db.session.connection()
-		colors = connection.execute(text(query))
+
+		seasons, season, start, end = self.seasons(None, match.officeId)
+		colors = connection.execute(text(query), start = start, end = end)
 
 		data = {}
 		total = 0

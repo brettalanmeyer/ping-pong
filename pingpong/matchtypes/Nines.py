@@ -35,7 +35,7 @@ class Nines(BaseMatch):
 			"players": {}
 		}
 
-		colorWins = leaderboardService.ninesWinsByColor()
+		colorWins = leaderboardService.ninesWinsByColor(match)
 
 		for color in self.colors:
 			data["players"][color] = self.newPlayer(getattr(game, color).id)
