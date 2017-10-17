@@ -47,6 +47,15 @@ $(function(){
 			south: $("[data-team=south][data-var=score")
 		};
 
+		var scoreAudio = new PingPongSound(
+			"boing.wav",
+			"bump.wav",
+			"picking-up.wav",
+			"coin.wav",
+			"spring-jump.wav",
+			"pacman-chomp.wav"
+		);
+
 		function update(data){
 			if(data == null) return;
 			if(data.matchId != matchId) return;
@@ -72,6 +81,7 @@ $(function(){
 				scores[team].html(pad(data.teams[team].points));
 				if(previousScore != nextScore){
 					scores[team].addClass("scored");
+					scoreAudio.play();
 				}
 			}
 			setTimeout(function(){

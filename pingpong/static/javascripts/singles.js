@@ -57,6 +57,15 @@ $(function(){
 			}
 		};
 
+		var scoreAudio = new PingPongSound(
+			"boing.wav",
+			"bump.wav",
+			"picking-up.wav",
+			"coin.wav",
+			"spring-jump.wav",
+			"pacman-chomp.wav"
+		);
+
 		function update(data){
 			if(data == null) return;
 			if(data.matchId != matchId) return;
@@ -79,6 +88,7 @@ $(function(){
 				scores[color].html(pad(data.teams[color].points));
 				if(previousScore != nextScore){
 					scores[color].parent(".score-board").addClass("scored");
+					scoreAudio.play();
 				}
 			}
 			setTimeout(function(){
