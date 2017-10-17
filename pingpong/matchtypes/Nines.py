@@ -32,7 +32,8 @@ class Nines(BaseMatch):
 			"ready": match.isReady(),
 			"createdAt": util.date(match.createdAt),
 			"completedAt": util.date(match.completedAt),
-			"players": {}
+			"players": {},
+			"matchNum": match.matchNum
 		}
 
 		colorWins = leaderboardService.ninesWinsByColor(match)
@@ -200,7 +201,7 @@ class Nines(BaseMatch):
 			# swap green and red
 			playerIds = [playerIds[3], playerIds[1], playerIds[2], playerIds[0]]
 
-		newMatch = matchService.create(match.officeId, self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType, match.matchNum)
 		self.createTeams(newMatch, playerIds, False)
 		matchService.play(newMatch)
 

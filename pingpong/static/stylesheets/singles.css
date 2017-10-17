@@ -196,3 +196,10 @@
 .singles-container .elo-change.negative {
 	color: red;
 }
+
+.singles-container .match-number {
+	position: absolute;
+	top: 14px;
+	right: 80px;
+	font-size: 28px;
+}

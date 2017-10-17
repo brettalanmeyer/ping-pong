@@ -108,12 +108,12 @@ class MatchService(Service):
 		update(MatchModel).where(MatchModel.id != id).values(ready = False)
 		db.session.commit()
 
-	def create(self, officeId, matchType):
+	def create(self, officeId, matchType, matchNum = 0):
 		playTo = None
 		if matchType == "nines":
 			playTo = 9
 
-		match = MatchModel(officeId, matchType, playTo, 0, False, False, datetime.now(), datetime.now())
+		match = MatchModel(officeId, matchType, playTo, 0, False, False, matchNum + 1, datetime.now(), datetime.now())
 		db.session.add(match)
 		db.session.commit()
 

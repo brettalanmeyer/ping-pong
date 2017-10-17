@@ -14,6 +14,7 @@ class MatchModel(Base):
 	game = Column(Integer)
 	ready = Column(Integer)
 	complete = Column(Integer)
+	matchNum = Column(Integer)
 	createdAt = Column(DateTime)
 	modifiedAt = Column(DateTime)
 	completedAt = Column(DateTime)
@@ -24,13 +25,14 @@ class MatchModel(Base):
 	games = relationship("GameModel", cascade = "all, delete-orphan")
 	scores = relationship("ScoreModel", cascade = "all, delete-orphan")
 
-	def __init__(self, officeId, matchType, playTo, game, ready, complete, createdAt, modifiedAt):
+	def __init__(self, officeId, matchType, playTo, game, ready, complete, matchNum, createdAt, modifiedAt):
 		self.officeId = officeId
 		self.matchType = matchType
 		self.playTo = playTo
 		self.game = game
 		self.ready = ready
 		self.complete = complete
+		self.matchNum = matchNum
 		self.createdAt = createdAt
 		self.modifiedAt = modifiedAt
 

@@ -38,7 +38,8 @@ class Singles(BaseMatch):
 				"green": self.newPlayer(match.officeId, match.id, game.greenId),
 				"yellow": self.newPlayer(match.officeId, match.id, game.yellowId)
 			},
-			"points": 0
+			"points": 0,
+			"matchNum": match.matchNum
 		}
 
 		self.setPlayerData(match, data["teams"])
@@ -201,7 +202,7 @@ class Singles(BaseMatch):
 		game = match.games[0]
 		playerIds = [game.yellowId, game.greenId]
 
-		newMatch = matchService.create(match.officeId, self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType, match.matchNum)
 		newMatch.numOfGames = numOfGames
 		newMatch.playTo = match.playTo
 		newMatch.game = 1

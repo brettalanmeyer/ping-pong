@@ -36,7 +36,8 @@ class Doubles(BaseMatch):
 				"south": self.newTeam()
 			},
 			"players": {},
-			"points": 0
+			"points": 0,
+			"matchNum": match.matchNum
 		}
 
 		for color in self.colors:
@@ -260,7 +261,7 @@ class Doubles(BaseMatch):
 		# put in this order so if teams are not randomized, they will at least swap sides
 		playerIds = [game.yellow.id, game.green.id, game.red.id, game.blue.id]
 
-		newMatch = matchService.create(match.officeId, self.matchType)
+		newMatch = matchService.create(match.officeId, self.matchType, match.matchNum)
 		newMatch.numOfGames = numOfGames
 		newMatch.playTo = match.playTo
 		newMatch.game = 1
