@@ -47,3 +47,12 @@ class MatchModel(Base):
 
 	def hasGames(self):
 		return len(self.games) > 0
+
+	def isSingles(self):
+		return self.matchType == "singles"
+
+	def isDoubles(self):
+		return self.matchType == "doubles"
+
+	def isNines(self):
+		return self.matchType == "nines"

@@ -309,6 +309,12 @@ a.link {
 	border-right: solid 3px #ccc;
 }
 
+.matches-container .match-list .match-number {
+	font-size: 8px;
+	position: relative;
+	bottom: 1px;
+}
+
 .matches-container .score-cell {
 	padding: 4px 0;
 	width: 520px;

@@ -60,11 +60,16 @@
 						<tr {% if match.isReady() and not match.isComplete() %}class="active-match" title="Active Match"{% endif %}>
 
 							<td>{{ "{:%b %d, %Y %I:%M %p} ".format(match.createdAt) }}</td>
-							<td>{{ match.matchType.title() }}</td>
+							<td>
+								{{ match.matchType.title() }}
+								{% if match.isNines() %}
+									<span class="match-number">{{ match.matchNum }}</span>
+								{% endif %}
+							</td>
 
 							<td class="score-cell">
 
-								{% if match.matchType == "nines" %}
+								{% if match.isNines() %}
 
 									{% for team in match.teams %}
 
