@@ -87,3 +87,7 @@
 	margin: 20px auto;
 	max-width: 100%;
 }
+
+.players-container .table td {
+	height: 150px;
+}
