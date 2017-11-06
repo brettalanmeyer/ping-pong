@@ -40,9 +40,9 @@ Install app dependencies by running `sudo pip install -r requirements.txt`
 
 create config.cfg
 ```
-VERSION = 1.00
-DEBUG = True
-DEBUG_TOOLS = True
+VERSION = 2.21
+DEBUG = False
+DEBUG_TOOLS = False
 ASSETS_DEBUG = False
 HOST = '0.0.0.0'
 PORT = 5010
@@ -64,27 +64,22 @@ MAIL_PORT = 465
 MAIL_USE_SSL = True
 MAIL_USERNAME = ''
 MAIL_PASSWORD = ''
-MAIL_FROM_NAME = ''
+MAIL_FROM_NAME = 'XPX Ping Pong App'
 MAIL_FROM_EMAIL = ''
 MAIL_RECIPIENTS = ['']
 SESSION_TYPE = 'filesystem'
 SESSION_FILE_DIR = 'pingpong/storage/sessions'
 SESSION_FILE_THRESHOLD = 500
 PERMANENT_SESSION_LIFETIME = 31536000
+IMAGES_URL = '/image-cache'
+DB_USERNAME = ''
+DB_PASSWORD = ''
+DB_HOST = 'localhost'
+DB_DATABASE = 'pingpong'
+DB_POOL_RECYCLE = 3600
+DB_AUTOCOMMIT = False
+DB_AUTOFLUSH = False
 ```
-
-create dbconfig.cfg
-```
-[db]
-mysql_username =
-mysql_password =
-mysql_host =
-mysql_database =
-pool_recycle = 3600
-autocommit = False
-autoflush = False
-```
-
 
 ## Raspberry pi
 
